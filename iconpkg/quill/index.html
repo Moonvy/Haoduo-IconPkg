@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>quill - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>quill <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(140)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('quill:activity')" title="Click to copy">
+            <hd-icon icon="quill:activity"></hd-icon>
+            <span class="name">activity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:add')" title="Click to copy">
+            <hd-icon icon="quill:add"></hd-icon>
+            <span class="name">add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:alarm')" title="Click to copy">
+            <hd-icon icon="quill:alarm"></hd-icon>
+            <span class="name">alarm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:alt')" title="Click to copy">
+            <hd-icon icon="quill:alt"></hd-icon>
+            <span class="name">alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:arrow-down')" title="Click to copy">
+            <hd-icon icon="quill:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:arrow-left')" title="Click to copy">
+            <hd-icon icon="quill:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:arrow-right')" title="Click to copy">
+            <hd-icon icon="quill:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:arrow-up')" title="Click to copy">
+            <hd-icon icon="quill:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:at')" title="Click to copy">
+            <hd-icon icon="quill:at"></hd-icon>
+            <span class="name">at</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:attachment')" title="Click to copy">
+            <hd-icon icon="quill:attachment"></hd-icon>
+            <span class="name">attachment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:breather')" title="Click to copy">
+            <hd-icon icon="quill:breather"></hd-icon>
+            <span class="name">breather</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:broadcast')" title="Click to copy">
+            <hd-icon icon="quill:broadcast"></hd-icon>
+            <span class="name">broadcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:calendar')" title="Click to copy">
+            <hd-icon icon="quill:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:calendar-add')" title="Click to copy">
+            <hd-icon icon="quill:calendar-add"></hd-icon>
+            <span class="name">calendar-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:calendar-more')" title="Click to copy">
+            <hd-icon icon="quill:calendar-more"></hd-icon>
+            <span class="name">calendar-more</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:calendar-someday')" title="Click to copy">
+            <hd-icon icon="quill:calendar-someday"></hd-icon>
+            <span class="name">calendar-someday</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:catchup')" title="Click to copy">
+            <hd-icon icon="quill:catchup"></hd-icon>
+            <span class="name">catchup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:chat')" title="Click to copy">
+            <hd-icon icon="quill:chat"></hd-icon>
+            <span class="name">chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:checkmark')" title="Click to copy">
+            <hd-icon icon="quill:checkmark"></hd-icon>
+            <span class="name">checkmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:checkmark-double')" title="Click to copy">
+            <hd-icon icon="quill:checkmark-double"></hd-icon>
+            <span class="name">checkmark-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:checkmark-todo')" title="Click to copy">
+            <hd-icon icon="quill:checkmark-todo"></hd-icon>
+            <span class="name">checkmark-todo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:chevron-down')" title="Click to copy">
+            <hd-icon icon="quill:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:chevron-left')" title="Click to copy">
+            <hd-icon icon="quill:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:chevron-right')" title="Click to copy">
+            <hd-icon icon="quill:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:chevron-up')" title="Click to copy">
+            <hd-icon icon="quill:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:clock')" title="Click to copy">
+            <hd-icon icon="quill:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:cloudia')" title="Click to copy">
+            <hd-icon icon="quill:cloudia"></hd-icon>
+            <span class="name">cloudia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:cog')" title="Click to copy">
+            <hd-icon icon="quill:cog"></hd-icon>
+            <span class="name">cog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:cog-alt')" title="Click to copy">
+            <hd-icon icon="quill:cog-alt"></hd-icon>
+            <span class="name">cog-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:collapse')" title="Click to copy">
+            <hd-icon icon="quill:collapse"></hd-icon>
+            <span class="name">collapse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:command')" title="Click to copy">
+            <hd-icon icon="quill:command"></hd-icon>
+            <span class="name">command</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:compose')" title="Click to copy">
+            <hd-icon icon="quill:compose"></hd-icon>
+            <span class="name">compose</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:creditcard')" title="Click to copy">
+            <hd-icon icon="quill:creditcard"></hd-icon>
+            <span class="name">creditcard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:desktop')" title="Click to copy">
+            <hd-icon icon="quill:desktop"></hd-icon>
+            <span class="name">desktop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:discard')" title="Click to copy">
+            <hd-icon icon="quill:discard"></hd-icon>
+            <span class="name">discard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:download')" title="Click to copy">
+            <hd-icon icon="quill:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:earth')" title="Click to copy">
+            <hd-icon icon="quill:earth"></hd-icon>
+            <span class="name">earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:escape')" title="Click to copy">
+            <hd-icon icon="quill:escape"></hd-icon>
+            <span class="name">escape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:expand')" title="Click to copy">
+            <hd-icon icon="quill:expand"></hd-icon>
+            <span class="name">expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:eye')" title="Click to copy">
+            <hd-icon icon="quill:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:eye-closed')" title="Click to copy">
+            <hd-icon icon="quill:eye-closed"></hd-icon>
+            <span class="name">eye-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:filter')" title="Click to copy">
+            <hd-icon icon="quill:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:focus')" title="Click to copy">
+            <hd-icon icon="quill:focus"></hd-icon>
+            <span class="name">focus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder')" title="Click to copy">
+            <hd-icon icon="quill:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder-add')" title="Click to copy">
+            <hd-icon icon="quill:folder-add"></hd-icon>
+            <span class="name">folder-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder-archive')" title="Click to copy">
+            <hd-icon icon="quill:folder-archive"></hd-icon>
+            <span class="name">folder-archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder-download')" title="Click to copy">
+            <hd-icon icon="quill:folder-download"></hd-icon>
+            <span class="name">folder-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder-drafts')" title="Click to copy">
+            <hd-icon icon="quill:folder-drafts"></hd-icon>
+            <span class="name">folder-drafts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder-list')" title="Click to copy">
+            <hd-icon icon="quill:folder-list"></hd-icon>
+            <span class="name">folder-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder-open')" title="Click to copy">
+            <hd-icon icon="quill:folder-open"></hd-icon>
+            <span class="name">folder-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder-put')" title="Click to copy">
+            <hd-icon icon="quill:folder-put"></hd-icon>
+            <span class="name">folder-put</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder-spam')" title="Click to copy">
+            <hd-icon icon="quill:folder-spam"></hd-icon>
+            <span class="name">folder-spam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder-todo')" title="Click to copy">
+            <hd-icon icon="quill:folder-todo"></hd-icon>
+            <span class="name">folder-todo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:folder-trash')" title="Click to copy">
+            <hd-icon icon="quill:folder-trash"></hd-icon>
+            <span class="name">folder-trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:force-batch')" title="Click to copy">
+            <hd-icon icon="quill:force-batch"></hd-icon>
+            <span class="name">force-batch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:formatting')" title="Click to copy">
+            <hd-icon icon="quill:formatting"></hd-icon>
+            <span class="name">formatting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:forward')" title="Click to copy">
+            <hd-icon icon="quill:forward"></hd-icon>
+            <span class="name">forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:fullscreen')" title="Click to copy">
+            <hd-icon icon="quill:fullscreen"></hd-icon>
+            <span class="name">fullscreen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:gift')" title="Click to copy">
+            <hd-icon icon="quill:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:hamburger')" title="Click to copy">
+            <hd-icon icon="quill:hamburger"></hd-icon>
+            <span class="name">hamburger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:hamburger-sidebar')" title="Click to copy">
+            <hd-icon icon="quill:hamburger-sidebar"></hd-icon>
+            <span class="name">hamburger-sidebar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:inbox')" title="Click to copy">
+            <hd-icon icon="quill:inbox"></hd-icon>
+            <span class="name">inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:inbox-add')" title="Click to copy">
+            <hd-icon icon="quill:inbox-add"></hd-icon>
+            <span class="name">inbox-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:inbox-double')" title="Click to copy">
+            <hd-icon icon="quill:inbox-double"></hd-icon>
+            <span class="name">inbox-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:inbox-list')" title="Click to copy">
+            <hd-icon icon="quill:inbox-list"></hd-icon>
+            <span class="name">inbox-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:inbox-newsletter')" title="Click to copy">
+            <hd-icon icon="quill:inbox-newsletter"></hd-icon>
+            <span class="name">inbox-newsletter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:info')" title="Click to copy">
+            <hd-icon icon="quill:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:inline-down')" title="Click to copy">
+            <hd-icon icon="quill:inline-down"></hd-icon>
+            <span class="name">inline-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:inline-left')" title="Click to copy">
+            <hd-icon icon="quill:inline-left"></hd-icon>
+            <span class="name">inline-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:inline-right')" title="Click to copy">
+            <hd-icon icon="quill:inline-right"></hd-icon>
+            <span class="name">inline-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:inline-up')" title="Click to copy">
+            <hd-icon icon="quill:inline-up"></hd-icon>
+            <span class="name">inline-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:jump')" title="Click to copy">
+            <hd-icon icon="quill:jump"></hd-icon>
+            <span class="name">jump</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:jump-alt')" title="Click to copy">
+            <hd-icon icon="quill:jump-alt"></hd-icon>
+            <span class="name">jump-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:label')" title="Click to copy">
+            <hd-icon icon="quill:label"></hd-icon>
+            <span class="name">label</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:label-mini')" title="Click to copy">
+            <hd-icon icon="quill:label-mini"></hd-icon>
+            <span class="name">label-mini</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:link')" title="Click to copy">
+            <hd-icon icon="quill:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:link-out')" title="Click to copy">
+            <hd-icon icon="quill:link-out"></hd-icon>
+            <span class="name">link-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:list')" title="Click to copy">
+            <hd-icon icon="quill:list"></hd-icon>
+            <span class="name">list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:loading-spin')" title="Click to copy">
+            <hd-icon icon="quill:loading-spin"></hd-icon>
+            <span class="name">loading-spin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:lock')" title="Click to copy">
+            <hd-icon icon="quill:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:lock-window')" title="Click to copy">
+            <hd-icon icon="quill:lock-window"></hd-icon>
+            <span class="name">lock-window</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:mail')" title="Click to copy">
+            <hd-icon icon="quill:mail"></hd-icon>
+            <span class="name">mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:mail-list')" title="Click to copy">
+            <hd-icon icon="quill:mail-list"></hd-icon>
+            <span class="name">mail-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:mail-open')" title="Click to copy">
+            <hd-icon icon="quill:mail-open"></hd-icon>
+            <span class="name">mail-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:mail-plus')" title="Click to copy">
+            <hd-icon icon="quill:mail-plus"></hd-icon>
+            <span class="name">mail-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:mail-subbed')" title="Click to copy">
+            <hd-icon icon="quill:mail-subbed"></hd-icon>
+            <span class="name">mail-subbed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:mail-unsub')" title="Click to copy">
+            <hd-icon icon="quill:mail-unsub"></hd-icon>
+            <span class="name">mail-unsub</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:markdown')" title="Click to copy">
+            <hd-icon icon="quill:markdown"></hd-icon>
+            <span class="name">markdown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:meatballs-h')" title="Click to copy">
+            <hd-icon icon="quill:meatballs-h"></hd-icon>
+            <span class="name">meatballs-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:meatballs-v')" title="Click to copy">
+            <hd-icon icon="quill:meatballs-v"></hd-icon>
+            <span class="name">meatballs-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:moon')" title="Click to copy">
+            <hd-icon icon="quill:moon"></hd-icon>
+            <span class="name">moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:mute')" title="Click to copy">
+            <hd-icon icon="quill:mute"></hd-icon>
+            <span class="name">mute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:notifications')" title="Click to copy">
+            <hd-icon icon="quill:notifications"></hd-icon>
+            <span class="name">notifications</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:nuclear')" title="Click to copy">
+            <hd-icon icon="quill:nuclear"></hd-icon>
+            <span class="name">nuclear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:off')" title="Click to copy">
+            <hd-icon icon="quill:off"></hd-icon>
+            <span class="name">off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:outbox')" title="Click to copy">
+            <hd-icon icon="quill:outbox"></hd-icon>
+            <span class="name">outbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:paper')" title="Click to copy">
+            <hd-icon icon="quill:paper"></hd-icon>
+            <span class="name">paper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:pause')" title="Click to copy">
+            <hd-icon icon="quill:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:phone')" title="Click to copy">
+            <hd-icon icon="quill:phone"></hd-icon>
+            <span class="name">phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:pin')" title="Click to copy">
+            <hd-icon icon="quill:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:play')" title="Click to copy">
+            <hd-icon icon="quill:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:print-alt')" title="Click to copy">
+            <hd-icon icon="quill:print-alt"></hd-icon>
+            <span class="name">print-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:printer')" title="Click to copy">
+            <hd-icon icon="quill:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:queue')" title="Click to copy">
+            <hd-icon icon="quill:queue"></hd-icon>
+            <span class="name">queue</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:remind')" title="Click to copy">
+            <hd-icon icon="quill:remind"></hd-icon>
+            <span class="name">remind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:reply')" title="Click to copy">
+            <hd-icon icon="quill:reply"></hd-icon>
+            <span class="name">reply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:reply-all')" title="Click to copy">
+            <hd-icon icon="quill:reply-all"></hd-icon>
+            <span class="name">reply-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:search')" title="Click to copy">
+            <hd-icon icon="quill:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:search-alt')" title="Click to copy">
+            <hd-icon icon="quill:search-alt"></hd-icon>
+            <span class="name">search-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:send')" title="Click to copy">
+            <hd-icon icon="quill:send"></hd-icon>
+            <span class="name">send</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:send-cancelled')" title="Click to copy">
+            <hd-icon icon="quill:send-cancelled"></hd-icon>
+            <span class="name">send-cancelled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:send-later')" title="Click to copy">
+            <hd-icon icon="quill:send-later"></hd-icon>
+            <span class="name">send-later</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:send-stop')" title="Click to copy">
+            <hd-icon icon="quill:send-stop"></hd-icon>
+            <span class="name">send-stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:share')" title="Click to copy">
+            <hd-icon icon="quill:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:sign')" title="Click to copy">
+            <hd-icon icon="quill:sign"></hd-icon>
+            <span class="name">sign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:signature')" title="Click to copy">
+            <hd-icon icon="quill:signature"></hd-icon>
+            <span class="name">signature</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:skip')" title="Click to copy">
+            <hd-icon icon="quill:skip"></hd-icon>
+            <span class="name">skip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:snooze-month')" title="Click to copy">
+            <hd-icon icon="quill:snooze-month"></hd-icon>
+            <span class="name">snooze-month</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:snooze-tomorrow')" title="Click to copy">
+            <hd-icon icon="quill:snooze-tomorrow"></hd-icon>
+            <span class="name">snooze-tomorrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:snooze-week')" title="Click to copy">
+            <hd-icon icon="quill:snooze-week"></hd-icon>
+            <span class="name">snooze-week</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:snooze-weekend')" title="Click to copy">
+            <hd-icon icon="quill:snooze-weekend"></hd-icon>
+            <span class="name">snooze-weekend</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:sort')" title="Click to copy">
+            <hd-icon icon="quill:sort"></hd-icon>
+            <span class="name">sort</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:sort-alt')" title="Click to copy">
+            <hd-icon icon="quill:sort-alt"></hd-icon>
+            <span class="name">sort-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:sound')" title="Click to copy">
+            <hd-icon icon="quill:sound"></hd-icon>
+            <span class="name">sound</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:stack')" title="Click to copy">
+            <hd-icon icon="quill:stack"></hd-icon>
+            <span class="name">stack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:stack-alt')" title="Click to copy">
+            <hd-icon icon="quill:stack-alt"></hd-icon>
+            <span class="name">stack-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:star')" title="Click to copy">
+            <hd-icon icon="quill:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:stopwatch')" title="Click to copy">
+            <hd-icon icon="quill:stopwatch"></hd-icon>
+            <span class="name">stopwatch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:sun')" title="Click to copy">
+            <hd-icon icon="quill:sun"></hd-icon>
+            <span class="name">sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:text-center')" title="Click to copy">
+            <hd-icon icon="quill:text-center"></hd-icon>
+            <span class="name">text-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:text-justify')" title="Click to copy">
+            <hd-icon icon="quill:text-justify"></hd-icon>
+            <span class="name">text-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:text-left')" title="Click to copy">
+            <hd-icon icon="quill:text-left"></hd-icon>
+            <span class="name">text-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:text-right')" title="Click to copy">
+            <hd-icon icon="quill:text-right"></hd-icon>
+            <span class="name">text-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:to-do')" title="Click to copy">
+            <hd-icon icon="quill:to-do"></hd-icon>
+            <span class="name">to-do</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:user-happy')" title="Click to copy">
+            <hd-icon icon="quill:user-happy"></hd-icon>
+            <span class="name">user-happy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:user-neutral')" title="Click to copy">
+            <hd-icon icon="quill:user-neutral"></hd-icon>
+            <span class="name">user-neutral</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:user-sad')" title="Click to copy">
+            <hd-icon icon="quill:user-sad"></hd-icon>
+            <span class="name">user-sad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:vip')" title="Click to copy">
+            <hd-icon icon="quill:vip"></hd-icon>
+            <span class="name">vip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:warning')" title="Click to copy">
+            <hd-icon icon="quill:warning"></hd-icon>
+            <span class="name">warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('quill:warning-alt')" title="Click to copy">
+            <hd-icon icon="quill:warning-alt"></hd-icon>
+            <span class="name">warning-alt</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

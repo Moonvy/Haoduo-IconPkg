@@ -1,0 +1,15 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAAB4okZAVkYRRqqPFB5WCNzeKJbRDaDR7RUZxRzdEYkVkJmRCVUZWZHJTRzNXGYJjVkBFhIAlvOBZ0D2hfeFQUfBkIHBLwFZgsZ4zsIAWUCCAMuCZwBDwcETQEBAh9FFgEKBhYezgECCwIOFiMB1QIXBC6xAfAMPwwEBEQJAlkBWSZgA6GsUl11D5kbRJ8jkqC9VR75jbmTuu7PbY1ZFNeVLuJfO+0e8mnSIdnW7R4d9oKEvo5lM7ttUhLwD7Zx+GG9BcXSLiO9X31ufvNgBR8OAMOowTBUvPybAW5RtfO0Z68CI+5jmqfmu8gU+/ffPDFw/Ne2c/gKa3QtyFRiLor5XiUZ8ZaLMQPs+A2/fTGfIO1GNvHSuRteubVEnLy+A8u7MbVNG5jmDPAYJfBiQtwb6CZ2Nbq/qxprajElsimoK+v91mGrh4gH2upMVmRBkom4KZY7TcGXWwpKZNxgpupBpDA17PNdaMSYXqMRXt73d7zQKtqAYjerF+Iu9Eu2FzjTWL5Syyd2j10A4SK78J8NU2BUR/KNpeytaSs1LOwh5qmaqlDO+gz9iuYzahw5yRiSnum2Y9hrcOfwrX4WCxI99Xu5hxtrP02yoVGs45oVISF4rQLAEAM5ZUkQAICAAAJIhAAAAAAAAgAAABBkYXNoaWNvbnMtMDEuc3ZnAAAAEGRhc2hpY29ucy0wMi5zdmf/////AAAAAgAAAFdFVEQEEEUABAEAFBRUEAUAAQQAQBEUQFAUAEUAFUBAERABQVAEVVUAEQEEFUQAEUAEAAAVEEQEBRFVEFFQQUEBQBURAERVQFEVEEUQUQBAUFEUVEEUFAAAAAAA";
+
+const chunks = {
+  "dashicons-01.svg": new URL("./dashicons-01.svg", import.meta.url).href,
+  "dashicons-02.svg": new URL("./dashicons-02.svg", import.meta.url).href
+};
+
+register('dashicons', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gis - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>gis <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(367)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('gis:360')" title="Click to copy">
+            <hd-icon icon="gis:360"></hd-icon>
+            <span class="name">360</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:3dtiles-file')" title="Click to copy">
+            <hd-icon icon="gis:3dtiles-file"></hd-icon>
+            <span class="name">3dtiles-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:3dtiles-web')" title="Click to copy">
+            <hd-icon icon="gis:3dtiles-web"></hd-icon>
+            <span class="name">3dtiles-web</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:arrow')" title="Click to copy">
+            <hd-icon icon="gis:arrow"></hd-icon>
+            <span class="name">arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:arrow-o')" title="Click to copy">
+            <hd-icon icon="gis:arrow-o"></hd-icon>
+            <span class="name">arrow-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:azimuth')" title="Click to copy">
+            <hd-icon icon="gis:azimuth"></hd-icon>
+            <span class="name">azimuth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:bbox')" title="Click to copy">
+            <hd-icon icon="gis:bbox"></hd-icon>
+            <span class="name">bbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:bbox-alt')" title="Click to copy">
+            <hd-icon icon="gis:bbox-alt"></hd-icon>
+            <span class="name">bbox-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:bicycle')" title="Click to copy">
+            <hd-icon icon="gis:bicycle"></hd-icon>
+            <span class="name">bicycle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:bookmark-poi')" title="Click to copy">
+            <hd-icon icon="gis:bookmark-poi"></hd-icon>
+            <span class="name">bookmark-poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:bookmark-poi-b')" title="Click to copy">
+            <hd-icon icon="gis:bookmark-poi-b"></hd-icon>
+            <span class="name">bookmark-poi-b</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:buffer')" title="Click to copy">
+            <hd-icon icon="gis:buffer"></hd-icon>
+            <span class="name">buffer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:bus-map')" title="Click to copy">
+            <hd-icon icon="gis:bus-map"></hd-icon>
+            <span class="name">bus-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:cadastre-map')" title="Click to copy">
+            <hd-icon icon="gis:cadastre-map"></hd-icon>
+            <span class="name">cadastre-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:car')" title="Click to copy">
+            <hd-icon icon="gis:car"></hd-icon>
+            <span class="name">car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:circle')" title="Click to copy">
+            <hd-icon icon="gis:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:circle-o')" title="Click to copy">
+            <hd-icon icon="gis:circle-o"></hd-icon>
+            <span class="name">circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:color')" title="Click to copy">
+            <hd-icon icon="gis:color"></hd-icon>
+            <span class="name">color</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:compare-map')" title="Click to copy">
+            <hd-icon icon="gis:compare-map"></hd-icon>
+            <span class="name">compare-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:compass')" title="Click to copy">
+            <hd-icon icon="gis:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:compass-alt')" title="Click to copy">
+            <hd-icon icon="gis:compass-alt"></hd-icon>
+            <span class="name">compass-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:compass-alt-o')" title="Click to copy">
+            <hd-icon icon="gis:compass-alt-o"></hd-icon>
+            <span class="name">compass-alt-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:compass-needle')" title="Click to copy">
+            <hd-icon icon="gis:compass-needle"></hd-icon>
+            <span class="name">compass-needle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:compass-rose')" title="Click to copy">
+            <hd-icon icon="gis:compass-rose"></hd-icon>
+            <span class="name">compass-rose</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:compass-rose-n')" title="Click to copy">
+            <hd-icon icon="gis:compass-rose-n"></hd-icon>
+            <span class="name">compass-rose-n</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:contour-map')" title="Click to copy">
+            <hd-icon icon="gis:contour-map"></hd-icon>
+            <span class="name">contour-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:convex-hull')" title="Click to copy">
+            <hd-icon icon="gis:convex-hull"></hd-icon>
+            <span class="name">convex-hull</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:coord-grid')" title="Click to copy">
+            <hd-icon icon="gis:coord-grid"></hd-icon>
+            <span class="name">coord-grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:coord-system')" title="Click to copy">
+            <hd-icon icon="gis:coord-system"></hd-icon>
+            <span class="name">coord-system</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:coord-system-3d')" title="Click to copy">
+            <hd-icon icon="gis:coord-system-3d"></hd-icon>
+            <span class="name">coord-system-3d</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:coord-system-3d-alt')" title="Click to copy">
+            <hd-icon icon="gis:coord-system-3d-alt"></hd-icon>
+            <span class="name">coord-system-3d-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:coord-system-alt')" title="Click to copy">
+            <hd-icon icon="gis:coord-system-alt"></hd-icon>
+            <span class="name">coord-system-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:copy-line')" title="Click to copy">
+            <hd-icon icon="gis:copy-line"></hd-icon>
+            <span class="name">copy-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:copy-point')" title="Click to copy">
+            <hd-icon icon="gis:copy-point"></hd-icon>
+            <span class="name">copy-point</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:copy-poly')" title="Click to copy">
+            <hd-icon icon="gis:copy-poly"></hd-icon>
+            <span class="name">copy-poly</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:csw')" title="Click to copy">
+            <hd-icon icon="gis:csw"></hd-icon>
+            <span class="name">csw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:cube-3d')" title="Click to copy">
+            <hd-icon icon="gis:cube-3d"></hd-icon>
+            <span class="name">cube-3d</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:difference')" title="Click to copy">
+            <hd-icon icon="gis:difference"></hd-icon>
+            <span class="name">difference</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:dilatation')" title="Click to copy">
+            <hd-icon icon="gis:dilatation"></hd-icon>
+            <span class="name">dilatation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:direct')" title="Click to copy">
+            <hd-icon icon="gis:direct"></hd-icon>
+            <span class="name">direct</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:direction')" title="Click to copy">
+            <hd-icon icon="gis:direction"></hd-icon>
+            <span class="name">direction</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:directions')" title="Click to copy">
+            <hd-icon icon="gis:directions"></hd-icon>
+            <span class="name">directions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:drone')" title="Click to copy">
+            <hd-icon icon="gis:drone"></hd-icon>
+            <span class="name">drone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth')" title="Click to copy">
+            <hd-icon icon="gis:earth"></hd-icon>
+            <span class="name">earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-america')" title="Click to copy">
+            <hd-icon icon="gis:earth-america"></hd-icon>
+            <span class="name">earth-america</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-america-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-america-o"></hd-icon>
+            <span class="name">earth-america-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-asia')" title="Click to copy">
+            <hd-icon icon="gis:earth-asia"></hd-icon>
+            <span class="name">earth-asia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-asia-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-asia-o"></hd-icon>
+            <span class="name">earth-asia-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-atlantic')" title="Click to copy">
+            <hd-icon icon="gis:earth-atlantic"></hd-icon>
+            <span class="name">earth-atlantic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-atlantic-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-atlantic-o"></hd-icon>
+            <span class="name">earth-atlantic-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-australia')" title="Click to copy">
+            <hd-icon icon="gis:earth-australia"></hd-icon>
+            <span class="name">earth-australia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-australia-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-australia-o"></hd-icon>
+            <span class="name">earth-australia-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-euro-africa')" title="Click to copy">
+            <hd-icon icon="gis:earth-euro-africa"></hd-icon>
+            <span class="name">earth-euro-africa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-euro-africa-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-euro-africa-o"></hd-icon>
+            <span class="name">earth-euro-africa-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-gear')" title="Click to copy">
+            <hd-icon icon="gis:earth-gear"></hd-icon>
+            <span class="name">earth-gear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-net')" title="Click to copy">
+            <hd-icon icon="gis:earth-net"></hd-icon>
+            <span class="name">earth-net</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-net-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-net-o"></hd-icon>
+            <span class="name">earth-net-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-network')" title="Click to copy">
+            <hd-icon icon="gis:earth-network"></hd-icon>
+            <span class="name">earth-network</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-network-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-network-o"></hd-icon>
+            <span class="name">earth-network-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-north')" title="Click to copy">
+            <hd-icon icon="gis:earth-north"></hd-icon>
+            <span class="name">earth-north</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-north-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-north-o"></hd-icon>
+            <span class="name">earth-north-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-o"></hd-icon>
+            <span class="name">earth-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-pacific')" title="Click to copy">
+            <hd-icon icon="gis:earth-pacific"></hd-icon>
+            <span class="name">earth-pacific</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-pacific-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-pacific-o"></hd-icon>
+            <span class="name">earth-pacific-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-south')" title="Click to copy">
+            <hd-icon icon="gis:earth-south"></hd-icon>
+            <span class="name">earth-south</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:earth-south-o')" title="Click to copy">
+            <hd-icon icon="gis:earth-south-o"></hd-icon>
+            <span class="name">earth-south-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:erosion')" title="Click to copy">
+            <hd-icon icon="gis:erosion"></hd-icon>
+            <span class="name">erosion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:esri-json-file')" title="Click to copy">
+            <hd-icon icon="gis:esri-json-file"></hd-icon>
+            <span class="name">esri-json-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:extent')" title="Click to copy">
+            <hd-icon icon="gis:extent"></hd-icon>
+            <span class="name">extent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:extent-alt')" title="Click to copy">
+            <hd-icon icon="gis:extent-alt"></hd-icon>
+            <span class="name">extent-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:finish')" title="Click to copy">
+            <hd-icon icon="gis:finish"></hd-icon>
+            <span class="name">finish</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flab-b-o')" title="Click to copy">
+            <hd-icon icon="gis:flab-b-o"></hd-icon>
+            <span class="name">flab-b-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flag')" title="Click to copy">
+            <hd-icon icon="gis:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flag-b')" title="Click to copy">
+            <hd-icon icon="gis:flag-b"></hd-icon>
+            <span class="name">flag-b</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flag-finish')" title="Click to copy">
+            <hd-icon icon="gis:flag-finish"></hd-icon>
+            <span class="name">flag-finish</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flag-finish-b-o')" title="Click to copy">
+            <hd-icon icon="gis:flag-finish-b-o"></hd-icon>
+            <span class="name">flag-finish-b-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flag-o')" title="Click to copy">
+            <hd-icon icon="gis:flag-o"></hd-icon>
+            <span class="name">flag-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flag-start')" title="Click to copy">
+            <hd-icon icon="gis:flag-start"></hd-icon>
+            <span class="name">flag-start</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flag-start-b')" title="Click to copy">
+            <hd-icon icon="gis:flag-start-b"></hd-icon>
+            <span class="name">flag-start-b</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flag-start-b-o')" title="Click to copy">
+            <hd-icon icon="gis:flag-start-b-o"></hd-icon>
+            <span class="name">flag-start-b-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flag-start-o')" title="Click to copy">
+            <hd-icon icon="gis:flag-start-o"></hd-icon>
+            <span class="name">flag-start-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flip-h')" title="Click to copy">
+            <hd-icon icon="gis:flip-h"></hd-icon>
+            <span class="name">flip-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flip-v')" title="Click to copy">
+            <hd-icon icon="gis:flip-v"></hd-icon>
+            <span class="name">flip-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:flow-map')" title="Click to copy">
+            <hd-icon icon="gis:flow-map"></hd-icon>
+            <span class="name">flow-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:folder-globe')" title="Click to copy">
+            <hd-icon icon="gis:folder-globe"></hd-icon>
+            <span class="name">folder-globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:folder-globe-o')" title="Click to copy">
+            <hd-icon icon="gis:folder-globe-o"></hd-icon>
+            <span class="name">folder-globe-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:folder-map')" title="Click to copy">
+            <hd-icon icon="gis:folder-map"></hd-icon>
+            <span class="name">folder-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:folder-maps')" title="Click to copy">
+            <hd-icon icon="gis:folder-maps"></hd-icon>
+            <span class="name">folder-maps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:folder-poi')" title="Click to copy">
+            <hd-icon icon="gis:folder-poi"></hd-icon>
+            <span class="name">folder-poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:folder-poi-o')" title="Click to copy">
+            <hd-icon icon="gis:folder-poi-o"></hd-icon>
+            <span class="name">folder-poi-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:folder-pois')" title="Click to copy">
+            <hd-icon icon="gis:folder-pois"></hd-icon>
+            <span class="name">folder-pois</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:full-screen')" title="Click to copy">
+            <hd-icon icon="gis:full-screen"></hd-icon>
+            <span class="name">full-screen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:geojson-file')" title="Click to copy">
+            <hd-icon icon="gis:geojson-file"></hd-icon>
+            <span class="name">geojson-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe')" title="Click to copy">
+            <hd-icon icon="gis:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-alt')" title="Click to copy">
+            <hd-icon icon="gis:globe-alt"></hd-icon>
+            <span class="name">globe-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-alt-o')" title="Click to copy">
+            <hd-icon icon="gis:globe-alt-o"></hd-icon>
+            <span class="name">globe-alt-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-earth')" title="Click to copy">
+            <hd-icon icon="gis:globe-earth"></hd-icon>
+            <span class="name">globe-earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-earth-alt')" title="Click to copy">
+            <hd-icon icon="gis:globe-earth-alt"></hd-icon>
+            <span class="name">globe-earth-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-favorite')" title="Click to copy">
+            <hd-icon icon="gis:globe-favorite"></hd-icon>
+            <span class="name">globe-favorite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-gear')" title="Click to copy">
+            <hd-icon icon="gis:globe-gear"></hd-icon>
+            <span class="name">globe-gear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-o')" title="Click to copy">
+            <hd-icon icon="gis:globe-o"></hd-icon>
+            <span class="name">globe-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-options')" title="Click to copy">
+            <hd-icon icon="gis:globe-options"></hd-icon>
+            <span class="name">globe-options</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-poi')" title="Click to copy">
+            <hd-icon icon="gis:globe-poi"></hd-icon>
+            <span class="name">globe-poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-share')" title="Click to copy">
+            <hd-icon icon="gis:globe-share"></hd-icon>
+            <span class="name">globe-share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-shield')" title="Click to copy">
+            <hd-icon icon="gis:globe-shield"></hd-icon>
+            <span class="name">globe-shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-smiley')" title="Click to copy">
+            <hd-icon icon="gis:globe-smiley"></hd-icon>
+            <span class="name">globe-smiley</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-star')" title="Click to copy">
+            <hd-icon icon="gis:globe-star"></hd-icon>
+            <span class="name">globe-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-user')" title="Click to copy">
+            <hd-icon icon="gis:globe-user"></hd-icon>
+            <span class="name">globe-user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:globe-users')" title="Click to copy">
+            <hd-icon icon="gis:globe-users"></hd-icon>
+            <span class="name">globe-users</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:gnss')" title="Click to copy">
+            <hd-icon icon="gis:gnss"></hd-icon>
+            <span class="name">gnss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:gnss-antenna')" title="Click to copy">
+            <hd-icon icon="gis:gnss-antenna"></hd-icon>
+            <span class="name">gnss-antenna</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:gpx-file')" title="Click to copy">
+            <hd-icon icon="gis:gpx-file"></hd-icon>
+            <span class="name">gpx-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:grid')" title="Click to copy">
+            <hd-icon icon="gis:grid"></hd-icon>
+            <span class="name">grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:height-map')" title="Click to copy">
+            <hd-icon icon="gis:height-map"></hd-icon>
+            <span class="name">height-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:help-larrow')" title="Click to copy">
+            <hd-icon icon="gis:help-larrow"></hd-icon>
+            <span class="name">help-larrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:help-rarrow')" title="Click to copy">
+            <hd-icon icon="gis:help-rarrow"></hd-icon>
+            <span class="name">help-rarrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:hex-map')" title="Click to copy">
+            <hd-icon icon="gis:hex-map"></hd-icon>
+            <span class="name">hex-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:hiker')" title="Click to copy">
+            <hd-icon icon="gis:hiker"></hd-icon>
+            <span class="name">hiker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:home')" title="Click to copy">
+            <hd-icon icon="gis:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:hydro-map')" title="Click to copy">
+            <hd-icon icon="gis:hydro-map"></hd-icon>
+            <span class="name">hydro-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:i3s-file')" title="Click to copy">
+            <hd-icon icon="gis:i3s-file"></hd-icon>
+            <span class="name">i3s-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:i3s-web')" title="Click to copy">
+            <hd-icon icon="gis:i3s-web"></hd-icon>
+            <span class="name">i3s-web</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:intersection')" title="Click to copy">
+            <hd-icon icon="gis:intersection"></hd-icon>
+            <span class="name">intersection</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:kml-file')" title="Click to copy">
+            <hd-icon icon="gis:kml-file"></hd-icon>
+            <span class="name">kml-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:landcover-map')" title="Click to copy">
+            <hd-icon icon="gis:landcover-map"></hd-icon>
+            <span class="name">landcover-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer')" title="Click to copy">
+            <hd-icon icon="gis:layer"></hd-icon>
+            <span class="name">layer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-2-add-o')" title="Click to copy">
+            <hd-icon icon="gis:layer-2-add-o"></hd-icon>
+            <span class="name">layer-2-add-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-2-rm-o')" title="Click to copy">
+            <hd-icon icon="gis:layer-2-rm-o"></hd-icon>
+            <span class="name">layer-2-rm-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-add')" title="Click to copy">
+            <hd-icon icon="gis:layer-add"></hd-icon>
+            <span class="name">layer-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-add-o')" title="Click to copy">
+            <hd-icon icon="gis:layer-add-o"></hd-icon>
+            <span class="name">layer-add-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-alt')" title="Click to copy">
+            <hd-icon icon="gis:layer-alt"></hd-icon>
+            <span class="name">layer-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-alt-add-o')" title="Click to copy">
+            <hd-icon icon="gis:layer-alt-add-o"></hd-icon>
+            <span class="name">layer-alt-add-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-alt-edit')" title="Click to copy">
+            <hd-icon icon="gis:layer-alt-edit"></hd-icon>
+            <span class="name">layer-alt-edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-alt-o')" title="Click to copy">
+            <hd-icon icon="gis:layer-alt-o"></hd-icon>
+            <span class="name">layer-alt-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-alt-poi')" title="Click to copy">
+            <hd-icon icon="gis:layer-alt-poi"></hd-icon>
+            <span class="name">layer-alt-poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-alt-rm-o')" title="Click to copy">
+            <hd-icon icon="gis:layer-alt-rm-o"></hd-icon>
+            <span class="name">layer-alt-rm-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-alt-x-o')" title="Click to copy">
+            <hd-icon icon="gis:layer-alt-x-o"></hd-icon>
+            <span class="name">layer-alt-x-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-contour')" title="Click to copy">
+            <hd-icon icon="gis:layer-contour"></hd-icon>
+            <span class="name">layer-contour</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-down')" title="Click to copy">
+            <hd-icon icon="gis:layer-down"></hd-icon>
+            <span class="name">layer-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-download')" title="Click to copy">
+            <hd-icon icon="gis:layer-download"></hd-icon>
+            <span class="name">layer-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-edit')" title="Click to copy">
+            <hd-icon icon="gis:layer-edit"></hd-icon>
+            <span class="name">layer-edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-height')" title="Click to copy">
+            <hd-icon icon="gis:layer-height"></hd-icon>
+            <span class="name">layer-height</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-hydro')" title="Click to copy">
+            <hd-icon icon="gis:layer-hydro"></hd-icon>
+            <span class="name">layer-hydro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-landcover')" title="Click to copy">
+            <hd-icon icon="gis:layer-landcover"></hd-icon>
+            <span class="name">layer-landcover</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-o')" title="Click to copy">
+            <hd-icon icon="gis:layer-o"></hd-icon>
+            <span class="name">layer-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-poi')" title="Click to copy">
+            <hd-icon icon="gis:layer-poi"></hd-icon>
+            <span class="name">layer-poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-rm')" title="Click to copy">
+            <hd-icon icon="gis:layer-rm"></hd-icon>
+            <span class="name">layer-rm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-rm-o')" title="Click to copy">
+            <hd-icon icon="gis:layer-rm-o"></hd-icon>
+            <span class="name">layer-rm-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-road')" title="Click to copy">
+            <hd-icon icon="gis:layer-road"></hd-icon>
+            <span class="name">layer-road</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-stack')" title="Click to copy">
+            <hd-icon icon="gis:layer-stack"></hd-icon>
+            <span class="name">layer-stack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-stack-o')" title="Click to copy">
+            <hd-icon icon="gis:layer-stack-o"></hd-icon>
+            <span class="name">layer-stack-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-stat')" title="Click to copy">
+            <hd-icon icon="gis:layer-stat"></hd-icon>
+            <span class="name">layer-stat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-stat-alt')" title="Click to copy">
+            <hd-icon icon="gis:layer-stat-alt"></hd-icon>
+            <span class="name">layer-stat-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-up')" title="Click to copy">
+            <hd-icon icon="gis:layer-up"></hd-icon>
+            <span class="name">layer-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layer-upload')" title="Click to copy">
+            <hd-icon icon="gis:layer-upload"></hd-icon>
+            <span class="name">layer-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layers')" title="Click to copy">
+            <hd-icon icon="gis:layers"></hd-icon>
+            <span class="name">layers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layers-o')" title="Click to copy">
+            <hd-icon icon="gis:layers-o"></hd-icon>
+            <span class="name">layers-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:layers-poi')" title="Click to copy">
+            <hd-icon icon="gis:layers-poi"></hd-icon>
+            <span class="name">layers-poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:location')" title="Click to copy">
+            <hd-icon icon="gis:location"></hd-icon>
+            <span class="name">location</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:location-arrow')" title="Click to copy">
+            <hd-icon icon="gis:location-arrow"></hd-icon>
+            <span class="name">location-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:location-arrow-o')" title="Click to copy">
+            <hd-icon icon="gis:location-arrow-o"></hd-icon>
+            <span class="name">location-arrow-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:location-man')" title="Click to copy">
+            <hd-icon icon="gis:location-man"></hd-icon>
+            <span class="name">location-man</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:location-man-alt')" title="Click to copy">
+            <hd-icon icon="gis:location-man-alt"></hd-icon>
+            <span class="name">location-man-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:location-on')" title="Click to copy">
+            <hd-icon icon="gis:location-on"></hd-icon>
+            <span class="name">location-on</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:location-poi')" title="Click to copy">
+            <hd-icon icon="gis:location-poi"></hd-icon>
+            <span class="name">location-poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:location-poi-o')" title="Click to copy">
+            <hd-icon icon="gis:location-poi-o"></hd-icon>
+            <span class="name">location-poi-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:magnify-map')" title="Click to copy">
+            <hd-icon icon="gis:magnify-map"></hd-icon>
+            <span class="name">magnify-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map')" title="Click to copy">
+            <hd-icon icon="gis:map"></hd-icon>
+            <span class="name">map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-add')" title="Click to copy">
+            <hd-icon icon="gis:map-add"></hd-icon>
+            <span class="name">map-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-book')" title="Click to copy">
+            <hd-icon icon="gis:map-book"></hd-icon>
+            <span class="name">map-book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-bookmark')" title="Click to copy">
+            <hd-icon icon="gis:map-bookmark"></hd-icon>
+            <span class="name">map-bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-control')" title="Click to copy">
+            <hd-icon icon="gis:map-control"></hd-icon>
+            <span class="name">map-control</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-edit')" title="Click to copy">
+            <hd-icon icon="gis:map-edit"></hd-icon>
+            <span class="name">map-edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-extent')" title="Click to copy">
+            <hd-icon icon="gis:map-extent"></hd-icon>
+            <span class="name">map-extent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-favorite')" title="Click to copy">
+            <hd-icon icon="gis:map-favorite"></hd-icon>
+            <span class="name">map-favorite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-legend')" title="Click to copy">
+            <hd-icon icon="gis:map-legend"></hd-icon>
+            <span class="name">map-legend</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-legend-o')" title="Click to copy">
+            <hd-icon icon="gis:map-legend-o"></hd-icon>
+            <span class="name">map-legend-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-lock')" title="Click to copy">
+            <hd-icon icon="gis:map-lock"></hd-icon>
+            <span class="name">map-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-o')" title="Click to copy">
+            <hd-icon icon="gis:map-o"></hd-icon>
+            <span class="name">map-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-options')" title="Click to copy">
+            <hd-icon icon="gis:map-options"></hd-icon>
+            <span class="name">map-options</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-options-alt')" title="Click to copy">
+            <hd-icon icon="gis:map-options-alt"></hd-icon>
+            <span class="name">map-options-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-play')" title="Click to copy">
+            <hd-icon icon="gis:map-play"></hd-icon>
+            <span class="name">map-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-poi')" title="Click to copy">
+            <hd-icon icon="gis:map-poi"></hd-icon>
+            <span class="name">map-poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-print')" title="Click to copy">
+            <hd-icon icon="gis:map-print"></hd-icon>
+            <span class="name">map-print</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-rm')" title="Click to copy">
+            <hd-icon icon="gis:map-rm"></hd-icon>
+            <span class="name">map-rm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-route')" title="Click to copy">
+            <hd-icon icon="gis:map-route"></hd-icon>
+            <span class="name">map-route</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-search')" title="Click to copy">
+            <hd-icon icon="gis:map-search"></hd-icon>
+            <span class="name">map-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-send')" title="Click to copy">
+            <hd-icon icon="gis:map-send"></hd-icon>
+            <span class="name">map-send</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-share')" title="Click to copy">
+            <hd-icon icon="gis:map-share"></hd-icon>
+            <span class="name">map-share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-share-alt')" title="Click to copy">
+            <hd-icon icon="gis:map-share-alt"></hd-icon>
+            <span class="name">map-share-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-smiley')" title="Click to copy">
+            <hd-icon icon="gis:map-smiley"></hd-icon>
+            <span class="name">map-smiley</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-star')" title="Click to copy">
+            <hd-icon icon="gis:map-star"></hd-icon>
+            <span class="name">map-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-stat')" title="Click to copy">
+            <hd-icon icon="gis:map-stat"></hd-icon>
+            <span class="name">map-stat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-tag')" title="Click to copy">
+            <hd-icon icon="gis:map-tag"></hd-icon>
+            <span class="name">map-tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-tags')" title="Click to copy">
+            <hd-icon icon="gis:map-tags"></hd-icon>
+            <span class="name">map-tags</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-time')" title="Click to copy">
+            <hd-icon icon="gis:map-time"></hd-icon>
+            <span class="name">map-time</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-unlock')" title="Click to copy">
+            <hd-icon icon="gis:map-unlock"></hd-icon>
+            <span class="name">map-unlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-user')" title="Click to copy">
+            <hd-icon icon="gis:map-user"></hd-icon>
+            <span class="name">map-user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:map-users')" title="Click to copy">
+            <hd-icon icon="gis:map-users"></hd-icon>
+            <span class="name">map-users</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:measure')" title="Click to copy">
+            <hd-icon icon="gis:measure"></hd-icon>
+            <span class="name">measure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:measure-area')" title="Click to copy">
+            <hd-icon icon="gis:measure-area"></hd-icon>
+            <span class="name">measure-area</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:measure-area-alt')" title="Click to copy">
+            <hd-icon icon="gis:measure-area-alt"></hd-icon>
+            <span class="name">measure-area-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:measure-line')" title="Click to copy">
+            <hd-icon icon="gis:measure-line"></hd-icon>
+            <span class="name">measure-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:modify-line')" title="Click to copy">
+            <hd-icon icon="gis:modify-line"></hd-icon>
+            <span class="name">modify-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:modify-poly')" title="Click to copy">
+            <hd-icon icon="gis:modify-poly"></hd-icon>
+            <span class="name">modify-poly</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:modify-poly-o')" title="Click to copy">
+            <hd-icon icon="gis:modify-poly-o"></hd-icon>
+            <span class="name">modify-poly-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:mosaic')" title="Click to copy">
+            <hd-icon icon="gis:mosaic"></hd-icon>
+            <span class="name">mosaic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:move')" title="Click to copy">
+            <hd-icon icon="gis:move"></hd-icon>
+            <span class="name">move</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:move-alt')" title="Click to copy">
+            <hd-icon icon="gis:move-alt"></hd-icon>
+            <span class="name">move-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:multipoint')" title="Click to copy">
+            <hd-icon icon="gis:multipoint"></hd-icon>
+            <span class="name">multipoint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:mvt')" title="Click to copy">
+            <hd-icon icon="gis:mvt"></hd-icon>
+            <span class="name">mvt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:network')" title="Click to copy">
+            <hd-icon icon="gis:network"></hd-icon>
+            <span class="name">network</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:network-o')" title="Click to copy">
+            <hd-icon icon="gis:network-o"></hd-icon>
+            <span class="name">network-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:north-arrow')" title="Click to copy">
+            <hd-icon icon="gis:north-arrow"></hd-icon>
+            <span class="name">north-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:north-arrow-n')" title="Click to copy">
+            <hd-icon icon="gis:north-arrow-n"></hd-icon>
+            <span class="name">north-arrow-n</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:offset')" title="Click to copy">
+            <hd-icon icon="gis:offset"></hd-icon>
+            <span class="name">offset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:openls')" title="Click to copy">
+            <hd-icon icon="gis:openls"></hd-icon>
+            <span class="name">openls</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:pedestrian')" title="Click to copy">
+            <hd-icon icon="gis:pedestrian"></hd-icon>
+            <span class="name">pedestrian</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:phone-map')" title="Click to copy">
+            <hd-icon icon="gis:phone-map"></hd-icon>
+            <span class="name">phone-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:phone-route')" title="Click to copy">
+            <hd-icon icon="gis:phone-route"></hd-icon>
+            <span class="name">phone-route</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:phone-route-alt')" title="Click to copy">
+            <hd-icon icon="gis:phone-route-alt"></hd-icon>
+            <span class="name">phone-route-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:phone-route-alt-r')" title="Click to copy">
+            <hd-icon icon="gis:phone-route-alt-r"></hd-icon>
+            <span class="name">phone-route-alt-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:photogrammetry')" title="Click to copy">
+            <hd-icon icon="gis:photogrammetry"></hd-icon>
+            <span class="name">photogrammetry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:pin')" title="Click to copy">
+            <hd-icon icon="gis:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:pin-earth')" title="Click to copy">
+            <hd-icon icon="gis:pin-earth"></hd-icon>
+            <span class="name">pin-earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:pirate-map')" title="Click to copy">
+            <hd-icon icon="gis:pirate-map"></hd-icon>
+            <span class="name">pirate-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:pirate-poi')" title="Click to copy">
+            <hd-icon icon="gis:pirate-poi"></hd-icon>
+            <span class="name">pirate-poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi')" title="Click to copy">
+            <hd-icon icon="gis:poi"></hd-icon>
+            <span class="name">poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-alt')" title="Click to copy">
+            <hd-icon icon="gis:poi-alt"></hd-icon>
+            <span class="name">poi-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-alt-o')" title="Click to copy">
+            <hd-icon icon="gis:poi-alt-o"></hd-icon>
+            <span class="name">poi-alt-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-earth')" title="Click to copy">
+            <hd-icon icon="gis:poi-earth"></hd-icon>
+            <span class="name">poi-earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-favorite')" title="Click to copy">
+            <hd-icon icon="gis:poi-favorite"></hd-icon>
+            <span class="name">poi-favorite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-favorite-o')" title="Click to copy">
+            <hd-icon icon="gis:poi-favorite-o"></hd-icon>
+            <span class="name">poi-favorite-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-home')" title="Click to copy">
+            <hd-icon icon="gis:poi-home"></hd-icon>
+            <span class="name">poi-home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-home-o')" title="Click to copy">
+            <hd-icon icon="gis:poi-home-o"></hd-icon>
+            <span class="name">poi-home-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-info')" title="Click to copy">
+            <hd-icon icon="gis:poi-info"></hd-icon>
+            <span class="name">poi-info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-info-o')" title="Click to copy">
+            <hd-icon icon="gis:poi-info-o"></hd-icon>
+            <span class="name">poi-info-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-map')" title="Click to copy">
+            <hd-icon icon="gis:poi-map"></hd-icon>
+            <span class="name">poi-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-map-o')" title="Click to copy">
+            <hd-icon icon="gis:poi-map-o"></hd-icon>
+            <span class="name">poi-map-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-o')" title="Click to copy">
+            <hd-icon icon="gis:poi-o"></hd-icon>
+            <span class="name">poi-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-slash')" title="Click to copy">
+            <hd-icon icon="gis:poi-slash"></hd-icon>
+            <span class="name">poi-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:poi-slash-o')" title="Click to copy">
+            <hd-icon icon="gis:poi-slash-o"></hd-icon>
+            <span class="name">poi-slash-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:point')" title="Click to copy">
+            <hd-icon icon="gis:point"></hd-icon>
+            <span class="name">point</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:pois')" title="Click to copy">
+            <hd-icon icon="gis:pois"></hd-icon>
+            <span class="name">pois</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:pois-o')" title="Click to copy">
+            <hd-icon icon="gis:pois-o"></hd-icon>
+            <span class="name">pois-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:polygon')" title="Click to copy">
+            <hd-icon icon="gis:polygon"></hd-icon>
+            <span class="name">polygon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:polygon-hole')" title="Click to copy">
+            <hd-icon icon="gis:polygon-hole"></hd-icon>
+            <span class="name">polygon-hole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:polygon-hole-o')" title="Click to copy">
+            <hd-icon icon="gis:polygon-hole-o"></hd-icon>
+            <span class="name">polygon-hole-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:polygon-hole-pt')" title="Click to copy">
+            <hd-icon icon="gis:polygon-hole-pt"></hd-icon>
+            <span class="name">polygon-hole-pt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:polygon-o')" title="Click to copy">
+            <hd-icon icon="gis:polygon-o"></hd-icon>
+            <span class="name">polygon-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:polygon-o-dash')" title="Click to copy">
+            <hd-icon icon="gis:polygon-o-dash"></hd-icon>
+            <span class="name">polygon-o-dash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:polygon-pt')" title="Click to copy">
+            <hd-icon icon="gis:polygon-pt"></hd-icon>
+            <span class="name">polygon-pt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:polyline')" title="Click to copy">
+            <hd-icon icon="gis:polyline"></hd-icon>
+            <span class="name">polyline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:polyline-dash')" title="Click to copy">
+            <hd-icon icon="gis:polyline-dash"></hd-icon>
+            <span class="name">polyline-dash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:polyline-pt')" title="Click to copy">
+            <hd-icon icon="gis:polyline-pt"></hd-icon>
+            <span class="name">polyline-pt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:position')" title="Click to copy">
+            <hd-icon icon="gis:position"></hd-icon>
+            <span class="name">position</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:position-man')" title="Click to copy">
+            <hd-icon icon="gis:position-man"></hd-icon>
+            <span class="name">position-man</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:position-o')" title="Click to copy">
+            <hd-icon icon="gis:position-o"></hd-icon>
+            <span class="name">position-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:profile')" title="Click to copy">
+            <hd-icon icon="gis:profile"></hd-icon>
+            <span class="name">profile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:profile-o')" title="Click to copy">
+            <hd-icon icon="gis:profile-o"></hd-icon>
+            <span class="name">profile-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:proj-conic')" title="Click to copy">
+            <hd-icon icon="gis:proj-conic"></hd-icon>
+            <span class="name">proj-conic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:proj-geo')" title="Click to copy">
+            <hd-icon icon="gis:proj-geo"></hd-icon>
+            <span class="name">proj-geo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:proj-point')" title="Click to copy">
+            <hd-icon icon="gis:proj-point"></hd-icon>
+            <span class="name">proj-point</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:proj-square')" title="Click to copy">
+            <hd-icon icon="gis:proj-square"></hd-icon>
+            <span class="name">proj-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:proj-stereo')" title="Click to copy">
+            <hd-icon icon="gis:proj-stereo"></hd-icon>
+            <span class="name">proj-stereo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:proj-utm')" title="Click to copy">
+            <hd-icon icon="gis:proj-utm"></hd-icon>
+            <span class="name">proj-utm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:pushpin')" title="Click to copy">
+            <hd-icon icon="gis:pushpin"></hd-icon>
+            <span class="name">pushpin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:pyramid')" title="Click to copy">
+            <hd-icon icon="gis:pyramid"></hd-icon>
+            <span class="name">pyramid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:rectangle')" title="Click to copy">
+            <hd-icon icon="gis:rectangle"></hd-icon>
+            <span class="name">rectangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:rectangle-o')" title="Click to copy">
+            <hd-icon icon="gis:rectangle-o"></hd-icon>
+            <span class="name">rectangle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:rectangle-pt')" title="Click to copy">
+            <hd-icon icon="gis:rectangle-pt"></hd-icon>
+            <span class="name">rectangle-pt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:regular-shape')" title="Click to copy">
+            <hd-icon icon="gis:regular-shape"></hd-icon>
+            <span class="name">regular-shape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:regular-shape-o')" title="Click to copy">
+            <hd-icon icon="gis:regular-shape-o"></hd-icon>
+            <span class="name">regular-shape-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:regular-shape-pt')" title="Click to copy">
+            <hd-icon icon="gis:regular-shape-pt"></hd-icon>
+            <span class="name">regular-shape-pt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:revers')" title="Click to copy">
+            <hd-icon icon="gis:revers"></hd-icon>
+            <span class="name">revers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:road-map')" title="Click to copy">
+            <hd-icon icon="gis:road-map"></hd-icon>
+            <span class="name">road-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:rotate')" title="Click to copy">
+            <hd-icon icon="gis:rotate"></hd-icon>
+            <span class="name">rotate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:route')" title="Click to copy">
+            <hd-icon icon="gis:route"></hd-icon>
+            <span class="name">route</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:route-end')" title="Click to copy">
+            <hd-icon icon="gis:route-end"></hd-icon>
+            <span class="name">route-end</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:route-start')" title="Click to copy">
+            <hd-icon icon="gis:route-start"></hd-icon>
+            <span class="name">route-start</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:satellite')" title="Click to copy">
+            <hd-icon icon="gis:satellite"></hd-icon>
+            <span class="name">satellite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:satellite-earth')" title="Click to copy">
+            <hd-icon icon="gis:satellite-earth"></hd-icon>
+            <span class="name">satellite-earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:scale')" title="Click to copy">
+            <hd-icon icon="gis:scale"></hd-icon>
+            <span class="name">scale</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:scale-poly')" title="Click to copy">
+            <hd-icon icon="gis:scale-poly"></hd-icon>
+            <span class="name">scale-poly</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:screen-dub')" title="Click to copy">
+            <hd-icon icon="gis:screen-dub"></hd-icon>
+            <span class="name">screen-dub</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:screen-dub-o')" title="Click to copy">
+            <hd-icon icon="gis:screen-dub-o"></hd-icon>
+            <span class="name">screen-dub-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:screen-dub1')" title="Click to copy">
+            <hd-icon icon="gis:screen-dub1"></hd-icon>
+            <span class="name">screen-dub1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:screen-dub2')" title="Click to copy">
+            <hd-icon icon="gis:screen-dub2"></hd-icon>
+            <span class="name">screen-dub2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:screen-mag')" title="Click to copy">
+            <hd-icon icon="gis:screen-mag"></hd-icon>
+            <span class="name">screen-mag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:screen-mag-alt')" title="Click to copy">
+            <hd-icon icon="gis:screen-mag-alt"></hd-icon>
+            <span class="name">screen-mag-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:screen-mag-o')" title="Click to copy">
+            <hd-icon icon="gis:screen-mag-o"></hd-icon>
+            <span class="name">screen-mag-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:screen-split-h')" title="Click to copy">
+            <hd-icon icon="gis:screen-split-h"></hd-icon>
+            <span class="name">screen-split-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:screen-split-v')" title="Click to copy">
+            <hd-icon icon="gis:screen-split-v"></hd-icon>
+            <span class="name">screen-split-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-address')" title="Click to copy">
+            <hd-icon icon="gis:search-address"></hd-icon>
+            <span class="name">search-address</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-attribtues')" title="Click to copy">
+            <hd-icon icon="gis:search-attribtues"></hd-icon>
+            <span class="name">search-attribtues</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-coord')" title="Click to copy">
+            <hd-icon icon="gis:search-coord"></hd-icon>
+            <span class="name">search-coord</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-country')" title="Click to copy">
+            <hd-icon icon="gis:search-country"></hd-icon>
+            <span class="name">search-country</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-data')" title="Click to copy">
+            <hd-icon icon="gis:search-data"></hd-icon>
+            <span class="name">search-data</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-feature')" title="Click to copy">
+            <hd-icon icon="gis:search-feature"></hd-icon>
+            <span class="name">search-feature</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-globe')" title="Click to copy">
+            <hd-icon icon="gis:search-globe"></hd-icon>
+            <span class="name">search-globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-globe-alt')" title="Click to copy">
+            <hd-icon icon="gis:search-globe-alt"></hd-icon>
+            <span class="name">search-globe-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-home')" title="Click to copy">
+            <hd-icon icon="gis:search-home"></hd-icon>
+            <span class="name">search-home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-layer')" title="Click to copy">
+            <hd-icon icon="gis:search-layer"></hd-icon>
+            <span class="name">search-layer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-map')" title="Click to copy">
+            <hd-icon icon="gis:search-map"></hd-icon>
+            <span class="name">search-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-poi')" title="Click to copy">
+            <hd-icon icon="gis:search-poi"></hd-icon>
+            <span class="name">search-poi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:search-propertie')" title="Click to copy">
+            <hd-icon icon="gis:search-propertie"></hd-icon>
+            <span class="name">search-propertie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:select-extent')" title="Click to copy">
+            <hd-icon icon="gis:select-extent"></hd-icon>
+            <span class="name">select-extent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:shape-file')" title="Click to copy">
+            <hd-icon icon="gis:shape-file"></hd-icon>
+            <span class="name">shape-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:signpost')" title="Click to copy">
+            <hd-icon icon="gis:signpost"></hd-icon>
+            <span class="name">signpost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:simplify')" title="Click to copy">
+            <hd-icon icon="gis:simplify"></hd-icon>
+            <span class="name">simplify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:skeletonize')" title="Click to copy">
+            <hd-icon icon="gis:skeletonize"></hd-icon>
+            <span class="name">skeletonize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:sld')" title="Click to copy">
+            <hd-icon icon="gis:sld"></hd-icon>
+            <span class="name">sld</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:snap')" title="Click to copy">
+            <hd-icon icon="gis:snap"></hd-icon>
+            <span class="name">snap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:snap-ortho')" title="Click to copy">
+            <hd-icon icon="gis:snap-ortho"></hd-icon>
+            <span class="name">snap-ortho</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:sos')" title="Click to copy">
+            <hd-icon icon="gis:sos"></hd-icon>
+            <span class="name">sos</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:split')" title="Click to copy">
+            <hd-icon icon="gis:split"></hd-icon>
+            <span class="name">split</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:split-line')" title="Click to copy">
+            <hd-icon icon="gis:split-line"></hd-icon>
+            <span class="name">split-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:split-polygon')" title="Click to copy">
+            <hd-icon icon="gis:split-polygon"></hd-icon>
+            <span class="name">split-polygon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:sps')" title="Click to copy">
+            <hd-icon icon="gis:sps"></hd-icon>
+            <span class="name">sps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:square')" title="Click to copy">
+            <hd-icon icon="gis:square"></hd-icon>
+            <span class="name">square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:square-o')" title="Click to copy">
+            <hd-icon icon="gis:square-o"></hd-icon>
+            <span class="name">square-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:square-pt')" title="Click to copy">
+            <hd-icon icon="gis:square-pt"></hd-icon>
+            <span class="name">square-pt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:start')" title="Click to copy">
+            <hd-icon icon="gis:start"></hd-icon>
+            <span class="name">start</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:start-o')" title="Click to copy">
+            <hd-icon icon="gis:start-o"></hd-icon>
+            <span class="name">start-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:statistic-map')" title="Click to copy">
+            <hd-icon icon="gis:statistic-map"></hd-icon>
+            <span class="name">statistic-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:step')" title="Click to copy">
+            <hd-icon icon="gis:step"></hd-icon>
+            <span class="name">step</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:step-o')" title="Click to copy">
+            <hd-icon icon="gis:step-o"></hd-icon>
+            <span class="name">step-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:story-map')" title="Click to copy">
+            <hd-icon icon="gis:story-map"></hd-icon>
+            <span class="name">story-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:story-map-o')" title="Click to copy">
+            <hd-icon icon="gis:story-map-o"></hd-icon>
+            <span class="name">story-map-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:story-maps')" title="Click to copy">
+            <hd-icon icon="gis:story-maps"></hd-icon>
+            <span class="name">story-maps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:swipe-map-h')" title="Click to copy">
+            <hd-icon icon="gis:swipe-map-h"></hd-icon>
+            <span class="name">swipe-map-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:swipe-map-v')" title="Click to copy">
+            <hd-icon icon="gis:swipe-map-v"></hd-icon>
+            <span class="name">swipe-map-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:sym-difference')" title="Click to copy">
+            <hd-icon icon="gis:sym-difference"></hd-icon>
+            <span class="name">sym-difference</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:tacheometer')" title="Click to copy">
+            <hd-icon icon="gis:tacheometer"></hd-icon>
+            <span class="name">tacheometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:tag')" title="Click to copy">
+            <hd-icon icon="gis:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:tag-o')" title="Click to copy">
+            <hd-icon icon="gis:tag-o"></hd-icon>
+            <span class="name">tag-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:tags')" title="Click to copy">
+            <hd-icon icon="gis:tags"></hd-icon>
+            <span class="name">tags</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:tags-o')" title="Click to copy">
+            <hd-icon icon="gis:tags-o"></hd-icon>
+            <span class="name">tags-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:theodolite')" title="Click to copy">
+            <hd-icon icon="gis:theodolite"></hd-icon>
+            <span class="name">theodolite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:time-map')" title="Click to copy">
+            <hd-icon icon="gis:time-map"></hd-icon>
+            <span class="name">time-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:timer')" title="Click to copy">
+            <hd-icon icon="gis:timer"></hd-icon>
+            <span class="name">timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:tjs')" title="Click to copy">
+            <hd-icon icon="gis:tjs"></hd-icon>
+            <span class="name">tjs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:topography')" title="Click to copy">
+            <hd-icon icon="gis:topography"></hd-icon>
+            <span class="name">topography</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:topojson-file')" title="Click to copy">
+            <hd-icon icon="gis:topojson-file"></hd-icon>
+            <span class="name">topojson-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:translate')" title="Click to copy">
+            <hd-icon icon="gis:translate"></hd-icon>
+            <span class="name">translate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:translate-x')" title="Click to copy">
+            <hd-icon icon="gis:translate-x"></hd-icon>
+            <span class="name">translate-x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:translate-y')" title="Click to copy">
+            <hd-icon icon="gis:translate-y"></hd-icon>
+            <span class="name">translate-y</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:triangle-map')" title="Click to copy">
+            <hd-icon icon="gis:triangle-map"></hd-icon>
+            <span class="name">triangle-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:union')" title="Click to copy">
+            <hd-icon icon="gis:union"></hd-icon>
+            <span class="name">union</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:voronoi-map')" title="Click to copy">
+            <hd-icon icon="gis:voronoi-map"></hd-icon>
+            <span class="name">voronoi-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:wcps')" title="Click to copy">
+            <hd-icon icon="gis:wcps"></hd-icon>
+            <span class="name">wcps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:wcs')" title="Click to copy">
+            <hd-icon icon="gis:wcs"></hd-icon>
+            <span class="name">wcs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:weather-map')" title="Click to copy">
+            <hd-icon icon="gis:weather-map"></hd-icon>
+            <span class="name">weather-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:wfs')" title="Click to copy">
+            <hd-icon icon="gis:wfs"></hd-icon>
+            <span class="name">wfs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:wfs-t')" title="Click to copy">
+            <hd-icon icon="gis:wfs-t"></hd-icon>
+            <span class="name">wfs-t</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:wmc')" title="Click to copy">
+            <hd-icon icon="gis:wmc"></hd-icon>
+            <span class="name">wmc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:wms')" title="Click to copy">
+            <hd-icon icon="gis:wms"></hd-icon>
+            <span class="name">wms</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:wmts')" title="Click to copy">
+            <hd-icon icon="gis:wmts"></hd-icon>
+            <span class="name">wmts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:world-folder')" title="Click to copy">
+            <hd-icon icon="gis:world-folder"></hd-icon>
+            <span class="name">world-folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:world-folder-o')" title="Click to copy">
+            <hd-icon icon="gis:world-folder-o"></hd-icon>
+            <span class="name">world-folder-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:world-map')" title="Click to copy">
+            <hd-icon icon="gis:world-map"></hd-icon>
+            <span class="name">world-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:world-map-alt')" title="Click to copy">
+            <hd-icon icon="gis:world-map-alt"></hd-icon>
+            <span class="name">world-map-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:world-map-alt-o')" title="Click to copy">
+            <hd-icon icon="gis:world-map-alt-o"></hd-icon>
+            <span class="name">world-map-alt-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:wps')" title="Click to copy">
+            <hd-icon icon="gis:wps"></hd-icon>
+            <span class="name">wps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:xyz')" title="Click to copy">
+            <hd-icon icon="gis:xyz"></hd-icon>
+            <span class="name">xyz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:zoom-in')" title="Click to copy">
+            <hd-icon icon="gis:zoom-in"></hd-icon>
+            <span class="name">zoom-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gis:zoom-out')" title="Click to copy">
+            <hd-icon icon="gis:zoom-out"></hd-icon>
+            <span class="name">zoom-out</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

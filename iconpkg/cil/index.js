@@ -1,0 +1,16 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAAC/4kZAjIYcRqQGKsLWDliNkJ1QAJUh1UyM0xWOKczR0VIiXUYdoR6QVpSFnoWOCdJpjYSUoVWcyh1YGJlVkZTMWZUJINXNAZYcAFYUwELtgHfAgEBQTKKBRAKAQQDk48CVzX+AeIB91ICCSZNCbcBA/IYUBQqXyssAZwDkgjnAwKMAw0EJR6eLGYUzAQBGgKdCxER1R2tAQkW1wMGEQEougsLkwFFWxZ9BAMNFwUyBw4uCbsEwQEPBAoCWQIyM4wMyCrU4v6/EVOECUOHoJY6yJKTIzES0ne2Xo9+XNZ1OeuHPtefARkk0qwnpoTb5iUdHTE7afvuexLBwibY072ZeiFrZYQOLDhJlzTS4ioB6SHI2rBw5Ky+XFwvPOshafr3nfm2ywduUzVde3CIW+ZoJJi8nkQMNSm/HiLHWx7sPMHiewsLcUmW1znicUToxe5KqA+293QHD9cOcpC+ZMDDGzO9gmwarjsLp2+D59ivJc8wueW8QIOKFHp70Hb++dU2SFZpigP5iZQdvdrftpD3gRqDxEb5/obmL88VkQiw6i5TGozvJL6StF9lLVEqDYFSBZDvQjShmwko4vytvUprm52L4H4qHAdsJ6uT/nspQ0fEPmCM182+baxPYecB+dUdAg0fMMnf6QF9v3PSSWsgxa489Aos8/tpVCsGLscdwJ0771+U6v02aUYtEe935i3YR2mxAzh0QJLss526L9pCanc/YElss0tWpUhI2t+w9ozWugtCPzZcv4fk7J8MHY7EsQkHXSQ/5p+4vHOs1zIGkpX7tbo5vdO/vL/LvEkDuyjkU6cfLdeB8SkDbvJo1sEjtxu3SjBLbUCwMZNOe+vzNBmGflZomCEOK//SyegfPOHKfxfIP6QicDTGHHLJaxEaEhQquVKsqYCt8qKWx+a+TmAPHUwtB07zjA5sz4MdBK0AwxFWTQvVQVc3opUhlZNQUNo4IQb6dsyLZesH4PTxBaHmXOJ7FovIOm1xYcV/Ek8QDZCIAAgEIoAHSIENggAAAAAAAwAAAApjaWwtMDEuc3ZnAAAACmNpbC0wMi5zdmcAAAAKY2lsLTAzLnN2Z/////8AAAACAAAAjRIUWQFSqoUpUgmJqVUUURYJpQUhVqlAFWqVGYUWQmUYQSCoIAJaFIImYFCSCpVQQKGJEmSEmgIEEEAVZCBCgYCZIqVWUlVGgohCCiWGUomKFIChIGVgIpEJAaKGQkAFClEkEFAmGhaWFlBWIEVkoYZghGFICpECWAVViBWpVFmWVhoYgKVRJKUAZaKIAQAAAAA=";
+
+const chunks = {
+  "cil-01.svg": new URL("./cil-01.svg", import.meta.url).href,
+  "cil-02.svg": new URL("./cil-02.svg", import.meta.url).href,
+  "cil-03.svg": new URL("./cil-03.svg", import.meta.url).href
+};
+
+register('cil', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

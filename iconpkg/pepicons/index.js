@@ -1,0 +1,16 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAACS4kZAawYVhq1gGZjWCtyFhMGJLNoVldyQ0InVGdWwkQzWIWEV1lmI5czMlU1JXLGY2oTlnZhNzZzWFQCDwkGMAEGy1+MBR4HDRYEHwcJmwUCDSMpCpEBIgHTfgsKsQgtBv0CBqsBSg2KBCsXLBSgEwQBIwQHBC8CJd4oAVlqEAIVtgwN4wQUDQKIAQEEvAICWQGsLUs+vITONLnbjCq+N7tpiJKdNtlO9aDYyGXMxBt6FM+B3sWHCwqzxcUn3fSoqtZpuya31Ytp7AcGcW+pVT4t50lRoCzBJSLOuoWB63VsAwULxEaYAjCVFL7cDpVWEmX5w4FDutalbfLyTXIt1fjBEoRUGFnXi8o/dA8aplvoiItL/GC/ha02i/RUOJ9KApINKPA/lc73p/t1At/ojAJ1JQCSK4cUyO6BFTYRsAlg07kWc41IfJ17saKmT/NIn2rYM2zQ/hy+wceUYNQBODS98HbG4WQBPiD1NQNgiNXsal2eNvKfR1oOfhvhdK8VjeZS0ZvVFTQQ8YXeZK6M4wvBMjvOp8ok73XGxT0LigpYI1QMtVYdhL4LfudP1YSE0ETyz3OUxec6Eq4IdR0r5NdaSGeD+RczDTUW5phRza3MazYYQCF2DmyIwMrRMq+MMCQI/rXPue15GN2/yySToYQq5lAx2QB8nNwQtA9fQlBGC5SnoNQHMWO/yPbOcf3hR0Yhz6NCvsHpsEoTX929KBpNI5p0jKhKjbTzdZhvNLRHWtCw1o6sfyZq5ol2qeZLqAHEABQAjIIBQgAAAAAAAwAAAA9wZXBpY29ucy0wMS5zdmcAAAAPcGVwaWNvbnMtMDIuc3ZnAAAAD3BlcGljb25zLTAzLnN2Z/////8AAAACAAAAawhSlFCECIQRBBQFAERRUQBEYBABABERAVBFAAQRWEERQEERRRhVUVARFBRBUUEhUUUQFZFEEAESQEUVFEaBEAEQVFRUAVVRJVRRZFYkQUlYEVaBUVBKQEFBVQBRQFRVBCBBABWBVWYFABBVAAAAAA==";
+
+const chunks = {
+  "pepicons-01.svg": new URL("./pepicons-01.svg", import.meta.url).href,
+  "pepicons-02.svg": new URL("./pepicons-02.svg", import.meta.url).href,
+  "pepicons-03.svg": new URL("./pepicons-03.svg", import.meta.url).href
+};
+
+register('pepicons', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

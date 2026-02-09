@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cuida - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>cuida <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(182)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('cuida:alert-outline')" title="Click to copy">
+            <hd-icon icon="cuida:alert-outline"></hd-icon>
+            <span class="name">alert-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:ambulance-outline')" title="Click to copy">
+            <hd-icon icon="cuida:ambulance-outline"></hd-icon>
+            <span class="name">ambulance-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:arrow-down-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:arrow-down-circle-outline"></hd-icon>
+            <span class="name">arrow-down-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:arrow-down-outline')" title="Click to copy">
+            <hd-icon icon="cuida:arrow-down-outline"></hd-icon>
+            <span class="name">arrow-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:arrow-left-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:arrow-left-circle-outline"></hd-icon>
+            <span class="name">arrow-left-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:arrow-left-outline')" title="Click to copy">
+            <hd-icon icon="cuida:arrow-left-outline"></hd-icon>
+            <span class="name">arrow-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:arrow-right-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:arrow-right-circle-outline"></hd-icon>
+            <span class="name">arrow-right-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:arrow-right-outline')" title="Click to copy">
+            <hd-icon icon="cuida:arrow-right-outline"></hd-icon>
+            <span class="name">arrow-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:arrow-up-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:arrow-up-circle-outline"></hd-icon>
+            <span class="name">arrow-up-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:arrow-up-outline')" title="Click to copy">
+            <hd-icon icon="cuida:arrow-up-outline"></hd-icon>
+            <span class="name">arrow-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:at-outline')" title="Click to copy">
+            <hd-icon icon="cuida:at-outline"></hd-icon>
+            <span class="name">at-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:attachment-clip-outline')" title="Click to copy">
+            <hd-icon icon="cuida:attachment-clip-outline"></hd-icon>
+            <span class="name">attachment-clip-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:bed-outiline')" title="Click to copy">
+            <hd-icon icon="cuida:bed-outiline"></hd-icon>
+            <span class="name">bed-outiline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:block-outline')" title="Click to copy">
+            <hd-icon icon="cuida:block-outline"></hd-icon>
+            <span class="name">block-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:bolt-outline')" title="Click to copy">
+            <hd-icon icon="cuida:bolt-outline"></hd-icon>
+            <span class="name">bolt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:bookmark-outline')" title="Click to copy">
+            <hd-icon icon="cuida:bookmark-outline"></hd-icon>
+            <span class="name">bookmark-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:box-outline')" title="Click to copy">
+            <hd-icon icon="cuida:box-outline"></hd-icon>
+            <span class="name">box-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:briefcase-outline')" title="Click to copy">
+            <hd-icon icon="cuida:briefcase-outline"></hd-icon>
+            <span class="name">briefcase-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:building-outline')" title="Click to copy">
+            <hd-icon icon="cuida:building-outline"></hd-icon>
+            <span class="name">building-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:bullet-list-outline')" title="Click to copy">
+            <hd-icon icon="cuida:bullet-list-outline"></hd-icon>
+            <span class="name">bullet-list-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:bullseye-outline')" title="Click to copy">
+            <hd-icon icon="cuida:bullseye-outline"></hd-icon>
+            <span class="name">bullseye-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:calendar-clear-outline')" title="Click to copy">
+            <hd-icon icon="cuida:calendar-clear-outline"></hd-icon>
+            <span class="name">calendar-clear-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:calendar-outline')" title="Click to copy">
+            <hd-icon icon="cuida:calendar-outline"></hd-icon>
+            <span class="name">calendar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:caret-down-outline')" title="Click to copy">
+            <hd-icon icon="cuida:caret-down-outline"></hd-icon>
+            <span class="name">caret-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:caret-left-outline')" title="Click to copy">
+            <hd-icon icon="cuida:caret-left-outline"></hd-icon>
+            <span class="name">caret-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:caret-right-outline')" title="Click to copy">
+            <hd-icon icon="cuida:caret-right-outline"></hd-icon>
+            <span class="name">caret-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:caret-up-outline')" title="Click to copy">
+            <hd-icon icon="cuida:caret-up-outline"></hd-icon>
+            <span class="name">caret-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:chart-column-outline')" title="Click to copy">
+            <hd-icon icon="cuida:chart-column-outline"></hd-icon>
+            <span class="name">chart-column-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:chatbubble-outline')" title="Click to copy">
+            <hd-icon icon="cuida:chatbubble-outline"></hd-icon>
+            <span class="name">chatbubble-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:chatbubbles-outline')" title="Click to copy">
+            <hd-icon icon="cuida:chatbubbles-outline"></hd-icon>
+            <span class="name">chatbubbles-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:check-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:check-circle-outline"></hd-icon>
+            <span class="name">check-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:check-outline')" title="Click to copy">
+            <hd-icon icon="cuida:check-outline"></hd-icon>
+            <span class="name">check-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:checkbox-checked-outlined')" title="Click to copy">
+            <hd-icon icon="cuida:checkbox-checked-outlined"></hd-icon>
+            <span class="name">checkbox-checked-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:checkbox-unchecked-outlined')" title="Click to copy">
+            <hd-icon icon="cuida:checkbox-unchecked-outlined"></hd-icon>
+            <span class="name">checkbox-unchecked-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:clipboard-outline')" title="Click to copy">
+            <hd-icon icon="cuida:clipboard-outline"></hd-icon>
+            <span class="name">clipboard-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:clipboard-text-outline')" title="Click to copy">
+            <hd-icon icon="cuida:clipboard-text-outline"></hd-icon>
+            <span class="name">clipboard-text-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:clock-outline')" title="Click to copy">
+            <hd-icon icon="cuida:clock-outline"></hd-icon>
+            <span class="name">clock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:copy-outline')" title="Click to copy">
+            <hd-icon icon="cuida:copy-outline"></hd-icon>
+            <span class="name">copy-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:dashboard-outline')" title="Click to copy">
+            <hd-icon icon="cuida:dashboard-outline"></hd-icon>
+            <span class="name">dashboard-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:divider-outline')" title="Click to copy">
+            <hd-icon icon="cuida:divider-outline"></hd-icon>
+            <span class="name">divider-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:document-outline')" title="Click to copy">
+            <hd-icon icon="cuida:document-outline"></hd-icon>
+            <span class="name">document-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:document-text-outline')" title="Click to copy">
+            <hd-icon icon="cuida:document-text-outline"></hd-icon>
+            <span class="name">document-text-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:document-texts-outline')" title="Click to copy">
+            <hd-icon icon="cuida:document-texts-outline"></hd-icon>
+            <span class="name">document-texts-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:download-cloud-outline')" title="Click to copy">
+            <hd-icon icon="cuida:download-cloud-outline"></hd-icon>
+            <span class="name">download-cloud-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:download-outline')" title="Click to copy">
+            <hd-icon icon="cuida:download-outline"></hd-icon>
+            <span class="name">download-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:dropdown-outline')" title="Click to copy">
+            <hd-icon icon="cuida:dropdown-outline"></hd-icon>
+            <span class="name">dropdown-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:edit-outline')" title="Click to copy">
+            <hd-icon icon="cuida:edit-outline"></hd-icon>
+            <span class="name">edit-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:expand-outline')" title="Click to copy">
+            <hd-icon icon="cuida:expand-outline"></hd-icon>
+            <span class="name">expand-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:figma-logo-outline')" title="Click to copy">
+            <hd-icon icon="cuida:figma-logo-outline"></hd-icon>
+            <span class="name">figma-logo-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:filter-outline')" title="Click to copy">
+            <hd-icon icon="cuida:filter-outline"></hd-icon>
+            <span class="name">filter-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:fire-outline')" title="Click to copy">
+            <hd-icon icon="cuida:fire-outline"></hd-icon>
+            <span class="name">fire-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:flag-outline')" title="Click to copy">
+            <hd-icon icon="cuida:flag-outline"></hd-icon>
+            <span class="name">flag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:folder-open-outline')" title="Click to copy">
+            <hd-icon icon="cuida:folder-open-outline"></hd-icon>
+            <span class="name">folder-open-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:folder-outline')" title="Click to copy">
+            <hd-icon icon="cuida:folder-outline"></hd-icon>
+            <span class="name">folder-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:framer-logo-outline')" title="Click to copy">
+            <hd-icon icon="cuida:framer-logo-outline"></hd-icon>
+            <span class="name">framer-logo-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:funnel-outline')" title="Click to copy">
+            <hd-icon icon="cuida:funnel-outline"></hd-icon>
+            <span class="name">funnel-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:github-logo-outline')" title="Click to copy">
+            <hd-icon icon="cuida:github-logo-outline"></hd-icon>
+            <span class="name">github-logo-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:gitlab-logo-outline')" title="Click to copy">
+            <hd-icon icon="cuida:gitlab-logo-outline"></hd-icon>
+            <span class="name">gitlab-logo-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:grid-outline')" title="Click to copy">
+            <hd-icon icon="cuida:grid-outline"></hd-icon>
+            <span class="name">grid-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:hashtag-outline')" title="Click to copy">
+            <hd-icon icon="cuida:hashtag-outline"></hd-icon>
+            <span class="name">hashtag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:heading1-outline')" title="Click to copy">
+            <hd-icon icon="cuida:heading1-outline"></hd-icon>
+            <span class="name">heading1-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:heading2-outline')" title="Click to copy">
+            <hd-icon icon="cuida:heading2-outline"></hd-icon>
+            <span class="name">heading2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:heading3-outline')" title="Click to copy">
+            <hd-icon icon="cuida:heading3-outline"></hd-icon>
+            <span class="name">heading3-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:headphone-outline')" title="Click to copy">
+            <hd-icon icon="cuida:headphone-outline"></hd-icon>
+            <span class="name">headphone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:headset-outline')" title="Click to copy">
+            <hd-icon icon="cuida:headset-outline"></hd-icon>
+            <span class="name">headset-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:heart-rate-outline')" title="Click to copy">
+            <hd-icon icon="cuida:heart-rate-outline"></hd-icon>
+            <span class="name">heart-rate-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:help-outline')" title="Click to copy">
+            <hd-icon icon="cuida:help-outline"></hd-icon>
+            <span class="name">help-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:history-outline')" title="Click to copy">
+            <hd-icon icon="cuida:history-outline"></hd-icon>
+            <span class="name">history-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:home-outline')" title="Click to copy">
+            <hd-icon icon="cuida:home-outline"></hd-icon>
+            <span class="name">home-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:image-outline')" title="Click to copy">
+            <hd-icon icon="cuida:image-outline"></hd-icon>
+            <span class="name">image-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:info-outline')" title="Click to copy">
+            <hd-icon icon="cuida:info-outline"></hd-icon>
+            <span class="name">info-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:key-outline')" title="Click to copy">
+            <hd-icon icon="cuida:key-outline"></hd-icon>
+            <span class="name">key-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:lamp-on-outline')" title="Click to copy">
+            <hd-icon icon="cuida:lamp-on-outline"></hd-icon>
+            <span class="name">lamp-on-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:lamp-outline')" title="Click to copy">
+            <hd-icon icon="cuida:lamp-outline"></hd-icon>
+            <span class="name">lamp-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:layers-outline')" title="Click to copy">
+            <hd-icon icon="cuida:layers-outline"></hd-icon>
+            <span class="name">layers-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:lifebuoy-outline')" title="Click to copy">
+            <hd-icon icon="cuida:lifebuoy-outline"></hd-icon>
+            <span class="name">lifebuoy-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:link-outline')" title="Click to copy">
+            <hd-icon icon="cuida:link-outline"></hd-icon>
+            <span class="name">link-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:list-outline')" title="Click to copy">
+            <hd-icon icon="cuida:list-outline"></hd-icon>
+            <span class="name">list-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:loading-left-outline')" title="Click to copy">
+            <hd-icon icon="cuida:loading-left-outline"></hd-icon>
+            <span class="name">loading-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:loading-right-outline')" title="Click to copy">
+            <hd-icon icon="cuida:loading-right-outline"></hd-icon>
+            <span class="name">loading-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:lock-outline')" title="Click to copy">
+            <hd-icon icon="cuida:lock-outline"></hd-icon>
+            <span class="name">lock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:login-outline')" title="Click to copy">
+            <hd-icon icon="cuida:login-outline"></hd-icon>
+            <span class="name">login-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:logout-outline')" title="Click to copy">
+            <hd-icon icon="cuida:logout-outline"></hd-icon>
+            <span class="name">logout-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:long-text-outline')" title="Click to copy">
+            <hd-icon icon="cuida:long-text-outline"></hd-icon>
+            <span class="name">long-text-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:loop-outline')" title="Click to copy">
+            <hd-icon icon="cuida:loop-outline"></hd-icon>
+            <span class="name">loop-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:mail-outline')" title="Click to copy">
+            <hd-icon icon="cuida:mail-outline"></hd-icon>
+            <span class="name">mail-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:map-outline')" title="Click to copy">
+            <hd-icon icon="cuida:map-outline"></hd-icon>
+            <span class="name">map-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:map-pin-outline')" title="Click to copy">
+            <hd-icon icon="cuida:map-pin-outline"></hd-icon>
+            <span class="name">map-pin-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:maximize-outline')" title="Click to copy">
+            <hd-icon icon="cuida:maximize-outline"></hd-icon>
+            <span class="name">maximize-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:medicine-outline')" title="Click to copy">
+            <hd-icon icon="cuida:medicine-outline"></hd-icon>
+            <span class="name">medicine-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:menu-outline')" title="Click to copy">
+            <hd-icon icon="cuida:menu-outline"></hd-icon>
+            <span class="name">menu-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:minimize-outline')" title="Click to copy">
+            <hd-icon icon="cuida:minimize-outline"></hd-icon>
+            <span class="name">minimize-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:minus-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:minus-circle-outline"></hd-icon>
+            <span class="name">minus-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:minus-outline')" title="Click to copy">
+            <hd-icon icon="cuida:minus-outline"></hd-icon>
+            <span class="name">minus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:monitor-outline')" title="Click to copy">
+            <hd-icon icon="cuida:monitor-outline"></hd-icon>
+            <span class="name">monitor-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:moon-outline')" title="Click to copy">
+            <hd-icon icon="cuida:moon-outline"></hd-icon>
+            <span class="name">moon-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:more-horizontal-outline')" title="Click to copy">
+            <hd-icon icon="cuida:more-horizontal-outline"></hd-icon>
+            <span class="name">more-horizontal-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:more-vertical-outline')" title="Click to copy">
+            <hd-icon icon="cuida:more-vertical-outline"></hd-icon>
+            <span class="name">more-vertical-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:mouse-outline')" title="Click to copy">
+            <hd-icon icon="cuida:mouse-outline"></hd-icon>
+            <span class="name">mouse-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:move-outline')" title="Click to copy">
+            <hd-icon icon="cuida:move-outline"></hd-icon>
+            <span class="name">move-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:notification-bell-outline')" title="Click to copy">
+            <hd-icon icon="cuida:notification-bell-outline"></hd-icon>
+            <span class="name">notification-bell-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:notification-bell-timer-outline')" title="Click to copy">
+            <hd-icon icon="cuida:notification-bell-timer-outline"></hd-icon>
+            <span class="name">notification-bell-timer-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:number-outline')" title="Click to copy">
+            <hd-icon icon="cuida:number-outline"></hd-icon>
+            <span class="name">number-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:open-book-outline')" title="Click to copy">
+            <hd-icon icon="cuida:open-book-outline"></hd-icon>
+            <span class="name">open-book-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:open-in-new-tab-outline')" title="Click to copy">
+            <hd-icon icon="cuida:open-in-new-tab-outline"></hd-icon>
+            <span class="name">open-in-new-tab-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:package-outline')" title="Click to copy">
+            <hd-icon icon="cuida:package-outline"></hd-icon>
+            <span class="name">package-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:paragraph-outline')" title="Click to copy">
+            <hd-icon icon="cuida:paragraph-outline"></hd-icon>
+            <span class="name">paragraph-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:pause-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:pause-circle-outline"></hd-icon>
+            <span class="name">pause-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:pause-outline')" title="Click to copy">
+            <hd-icon icon="cuida:pause-outline"></hd-icon>
+            <span class="name">pause-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:phone-outline')" title="Click to copy">
+            <hd-icon icon="cuida:phone-outline"></hd-icon>
+            <span class="name">phone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:pie-chart-outline')" title="Click to copy">
+            <hd-icon icon="cuida:pie-chart-outline"></hd-icon>
+            <span class="name">pie-chart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:pin-fill')" title="Click to copy">
+            <hd-icon icon="cuida:pin-fill"></hd-icon>
+            <span class="name">pin-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:pin-outline')" title="Click to copy">
+            <hd-icon icon="cuida:pin-outline"></hd-icon>
+            <span class="name">pin-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:play-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:play-circle-outline"></hd-icon>
+            <span class="name">play-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:play-outline')" title="Click to copy">
+            <hd-icon icon="cuida:play-outline"></hd-icon>
+            <span class="name">play-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:plus-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:plus-circle-outline"></hd-icon>
+            <span class="name">plus-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:plus-outline')" title="Click to copy">
+            <hd-icon icon="cuida:plus-outline"></hd-icon>
+            <span class="name">plus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:power-outline')" title="Click to copy">
+            <hd-icon icon="cuida:power-outline"></hd-icon>
+            <span class="name">power-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:printer-outline')" title="Click to copy">
+            <hd-icon icon="cuida:printer-outline"></hd-icon>
+            <span class="name">printer-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:radar-outline')" title="Click to copy">
+            <hd-icon icon="cuida:radar-outline"></hd-icon>
+            <span class="name">radar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:refresh-outline')" title="Click to copy">
+            <hd-icon icon="cuida:refresh-outline"></hd-icon>
+            <span class="name">refresh-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:rendo-outline')" title="Click to copy">
+            <hd-icon icon="cuida:rendo-outline"></hd-icon>
+            <span class="name">rendo-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:reorder-outline')" title="Click to copy">
+            <hd-icon icon="cuida:reorder-outline"></hd-icon>
+            <span class="name">reorder-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:rotate-left-outline')" title="Click to copy">
+            <hd-icon icon="cuida:rotate-left-outline"></hd-icon>
+            <span class="name">rotate-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:rotate-right-outline')" title="Click to copy">
+            <hd-icon icon="cuida:rotate-right-outline"></hd-icon>
+            <span class="name">rotate-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:sample-container-outline')" title="Click to copy">
+            <hd-icon icon="cuida:sample-container-outline"></hd-icon>
+            <span class="name">sample-container-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:scope-outline')" title="Click to copy">
+            <hd-icon icon="cuida:scope-outline"></hd-icon>
+            <span class="name">scope-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:search-outline')" title="Click to copy">
+            <hd-icon icon="cuida:search-outline"></hd-icon>
+            <span class="name">search-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:settings-outline')" title="Click to copy">
+            <hd-icon icon="cuida:settings-outline"></hd-icon>
+            <span class="name">settings-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:share-outline')" title="Click to copy">
+            <hd-icon icon="cuida:share-outline"></hd-icon>
+            <span class="name">share-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:shield-alert-outline')" title="Click to copy">
+            <hd-icon icon="cuida:shield-alert-outline"></hd-icon>
+            <span class="name">shield-alert-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:shield-outline')" title="Click to copy">
+            <hd-icon icon="cuida:shield-outline"></hd-icon>
+            <span class="name">shield-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:shield-tick-outline')" title="Click to copy">
+            <hd-icon icon="cuida:shield-tick-outline"></hd-icon>
+            <span class="name">shield-tick-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:short-text-outline')" title="Click to copy">
+            <hd-icon icon="cuida:short-text-outline"></hd-icon>
+            <span class="name">short-text-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:shrink-outline')" title="Click to copy">
+            <hd-icon icon="cuida:shrink-outline"></hd-icon>
+            <span class="name">shrink-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:shuffle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:shuffle-outline"></hd-icon>
+            <span class="name">shuffle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:sidebar-collapse-outline')" title="Click to copy">
+            <hd-icon icon="cuida:sidebar-collapse-outline"></hd-icon>
+            <span class="name">sidebar-collapse-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:sidebar-expand-outline')" title="Click to copy">
+            <hd-icon icon="cuida:sidebar-expand-outline"></hd-icon>
+            <span class="name">sidebar-expand-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:single-select-outline')" title="Click to copy">
+            <hd-icon icon="cuida:single-select-outline"></hd-icon>
+            <span class="name">single-select-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:sliders-outline')" title="Click to copy">
+            <hd-icon icon="cuida:sliders-outline"></hd-icon>
+            <span class="name">sliders-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:sort-ascending-duotone')" title="Click to copy">
+            <hd-icon icon="cuida:sort-ascending-duotone"></hd-icon>
+            <span class="name">sort-ascending-duotone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:sort-descending-duotone')" title="Click to copy">
+            <hd-icon icon="cuida:sort-descending-duotone"></hd-icon>
+            <span class="name">sort-descending-duotone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:sparks-outline')" title="Click to copy">
+            <hd-icon icon="cuida:sparks-outline"></hd-icon>
+            <span class="name">sparks-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:star-outline')" title="Click to copy">
+            <hd-icon icon="cuida:star-outline"></hd-icon>
+            <span class="name">star-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:stethoscope-outline')" title="Click to copy">
+            <hd-icon icon="cuida:stethoscope-outline"></hd-icon>
+            <span class="name">stethoscope-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:stop-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:stop-circle-outline"></hd-icon>
+            <span class="name">stop-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:subtask-outline')" title="Click to copy">
+            <hd-icon icon="cuida:subtask-outline"></hd-icon>
+            <span class="name">subtask-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:sun-outline')" title="Click to copy">
+            <hd-icon icon="cuida:sun-outline"></hd-icon>
+            <span class="name">sun-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:swap-horizontal-arrows-outline')" title="Click to copy">
+            <hd-icon icon="cuida:swap-horizontal-arrows-outline"></hd-icon>
+            <span class="name">swap-horizontal-arrows-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:swap-vertical-arrows-outline')" title="Click to copy">
+            <hd-icon icon="cuida:swap-vertical-arrows-outline"></hd-icon>
+            <span class="name">swap-vertical-arrows-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:syringe-outline')" title="Click to copy">
+            <hd-icon icon="cuida:syringe-outline"></hd-icon>
+            <span class="name">syringe-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:tag-outline')" title="Click to copy">
+            <hd-icon icon="cuida:tag-outline"></hd-icon>
+            <span class="name">tag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:test-tube-outline')" title="Click to copy">
+            <hd-icon icon="cuida:test-tube-outline"></hd-icon>
+            <span class="name">test-tube-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:text-outline')" title="Click to copy">
+            <hd-icon icon="cuida:text-outline"></hd-icon>
+            <span class="name">text-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:ticket-outline')" title="Click to copy">
+            <hd-icon icon="cuida:ticket-outline"></hd-icon>
+            <span class="name">ticket-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:totem-outline')" title="Click to copy">
+            <hd-icon icon="cuida:totem-outline"></hd-icon>
+            <span class="name">totem-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:translate-outline')" title="Click to copy">
+            <hd-icon icon="cuida:translate-outline"></hd-icon>
+            <span class="name">translate-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:trash-outline')" title="Click to copy">
+            <hd-icon icon="cuida:trash-outline"></hd-icon>
+            <span class="name">trash-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:trending-down-outline')" title="Click to copy">
+            <hd-icon icon="cuida:trending-down-outline"></hd-icon>
+            <span class="name">trending-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:trending-up-outline')" title="Click to copy">
+            <hd-icon icon="cuida:trending-up-outline"></hd-icon>
+            <span class="name">trending-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:trophy-outline')" title="Click to copy">
+            <hd-icon icon="cuida:trophy-outline"></hd-icon>
+            <span class="name">trophy-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:tube-outline')" title="Click to copy">
+            <hd-icon icon="cuida:tube-outline"></hd-icon>
+            <span class="name">tube-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:tv-outline')" title="Click to copy">
+            <hd-icon icon="cuida:tv-outline"></hd-icon>
+            <span class="name">tv-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:undo-outline')" title="Click to copy">
+            <hd-icon icon="cuida:undo-outline"></hd-icon>
+            <span class="name">undo-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:unfold-horizontal-outline')" title="Click to copy">
+            <hd-icon icon="cuida:unfold-horizontal-outline"></hd-icon>
+            <span class="name">unfold-horizontal-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:unfold-vertical-outline')" title="Click to copy">
+            <hd-icon icon="cuida:unfold-vertical-outline"></hd-icon>
+            <span class="name">unfold-vertical-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:unlock-outline')" title="Click to copy">
+            <hd-icon icon="cuida:unlock-outline"></hd-icon>
+            <span class="name">unlock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:upload-cloud-outline')" title="Click to copy">
+            <hd-icon icon="cuida:upload-cloud-outline"></hd-icon>
+            <span class="name">upload-cloud-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:upload-outline')" title="Click to copy">
+            <hd-icon icon="cuida:upload-outline"></hd-icon>
+            <span class="name">upload-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:user-add-outline')" title="Click to copy">
+            <hd-icon icon="cuida:user-add-outline"></hd-icon>
+            <span class="name">user-add-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:user-outline')" title="Click to copy">
+            <hd-icon icon="cuida:user-outline"></hd-icon>
+            <span class="name">user-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:user-remove-outline')" title="Click to copy">
+            <hd-icon icon="cuida:user-remove-outline"></hd-icon>
+            <span class="name">user-remove-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:users-outline')" title="Click to copy">
+            <hd-icon icon="cuida:users-outline"></hd-icon>
+            <span class="name">users-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:videocam-outline')" title="Click to copy">
+            <hd-icon icon="cuida:videocam-outline"></hd-icon>
+            <span class="name">videocam-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:visibility-off-outline')" title="Click to copy">
+            <hd-icon icon="cuida:visibility-off-outline"></hd-icon>
+            <span class="name">visibility-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:visibility-on-outline')" title="Click to copy">
+            <hd-icon icon="cuida:visibility-on-outline"></hd-icon>
+            <span class="name">visibility-on-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:volume-1-outline')" title="Click to copy">
+            <hd-icon icon="cuida:volume-1-outline"></hd-icon>
+            <span class="name">volume-1-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:volume-2-outline')" title="Click to copy">
+            <hd-icon icon="cuida:volume-2-outline"></hd-icon>
+            <span class="name">volume-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:warning-outline')" title="Click to copy">
+            <hd-icon icon="cuida:warning-outline"></hd-icon>
+            <span class="name">warning-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:weight-outline')" title="Click to copy">
+            <hd-icon icon="cuida:weight-outline"></hd-icon>
+            <span class="name">weight-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:x-circle-outline')" title="Click to copy">
+            <hd-icon icon="cuida:x-circle-outline"></hd-icon>
+            <span class="name">x-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cuida:x-outline')" title="Click to copy">
+            <hd-icon icon="cuida:x-outline"></hd-icon>
+            <span class="name">x-outline</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

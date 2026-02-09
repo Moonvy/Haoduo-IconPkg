@@ -1,0 +1,2988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gg - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>gg <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(704)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('gg:abstract')" title="Click to copy">
+            <hd-icon icon="gg:abstract"></hd-icon>
+            <span class="name">abstract</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:add')" title="Click to copy">
+            <hd-icon icon="gg:add"></hd-icon>
+            <span class="name">add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:add-r')" title="Click to copy">
+            <hd-icon icon="gg:add-r"></hd-icon>
+            <span class="name">add-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:adidas')" title="Click to copy">
+            <hd-icon icon="gg:adidas"></hd-icon>
+            <span class="name">adidas</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:airplane')" title="Click to copy">
+            <hd-icon icon="gg:airplane"></hd-icon>
+            <span class="name">airplane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:alarm')" title="Click to copy">
+            <hd-icon icon="gg:alarm"></hd-icon>
+            <span class="name">alarm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:album')" title="Click to copy">
+            <hd-icon icon="gg:album"></hd-icon>
+            <span class="name">album</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:align-bottom')" title="Click to copy">
+            <hd-icon icon="gg:align-bottom"></hd-icon>
+            <span class="name">align-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:align-center')" title="Click to copy">
+            <hd-icon icon="gg:align-center"></hd-icon>
+            <span class="name">align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:align-left')" title="Click to copy">
+            <hd-icon icon="gg:align-left"></hd-icon>
+            <span class="name">align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:align-middle')" title="Click to copy">
+            <hd-icon icon="gg:align-middle"></hd-icon>
+            <span class="name">align-middle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:align-right')" title="Click to copy">
+            <hd-icon icon="gg:align-right"></hd-icon>
+            <span class="name">align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:align-top')" title="Click to copy">
+            <hd-icon icon="gg:align-top"></hd-icon>
+            <span class="name">align-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:anchor')" title="Click to copy">
+            <hd-icon icon="gg:anchor"></hd-icon>
+            <span class="name">anchor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:apple-watch')" title="Click to copy">
+            <hd-icon icon="gg:apple-watch"></hd-icon>
+            <span class="name">apple-watch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrange-back')" title="Click to copy">
+            <hd-icon icon="gg:arrange-back"></hd-icon>
+            <span class="name">arrange-back</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrange-front')" title="Click to copy">
+            <hd-icon icon="gg:arrange-front"></hd-icon>
+            <span class="name">arrange-front</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-align-h')" title="Click to copy">
+            <hd-icon icon="gg:arrow-align-h"></hd-icon>
+            <span class="name">arrow-align-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-align-v')" title="Click to copy">
+            <hd-icon icon="gg:arrow-align-v"></hd-icon>
+            <span class="name">arrow-align-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-bottom-left')" title="Click to copy">
+            <hd-icon icon="gg:arrow-bottom-left"></hd-icon>
+            <span class="name">arrow-bottom-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-bottom-left-o')" title="Click to copy">
+            <hd-icon icon="gg:arrow-bottom-left-o"></hd-icon>
+            <span class="name">arrow-bottom-left-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-bottom-left-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-bottom-left-r"></hd-icon>
+            <span class="name">arrow-bottom-left-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-bottom-right')" title="Click to copy">
+            <hd-icon icon="gg:arrow-bottom-right"></hd-icon>
+            <span class="name">arrow-bottom-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-bottom-right-o')" title="Click to copy">
+            <hd-icon icon="gg:arrow-bottom-right-o"></hd-icon>
+            <span class="name">arrow-bottom-right-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-bottom-right-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-bottom-right-r"></hd-icon>
+            <span class="name">arrow-bottom-right-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-down')" title="Click to copy">
+            <hd-icon icon="gg:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-down-o')" title="Click to copy">
+            <hd-icon icon="gg:arrow-down-o"></hd-icon>
+            <span class="name">arrow-down-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-down-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-down-r"></hd-icon>
+            <span class="name">arrow-down-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-left')" title="Click to copy">
+            <hd-icon icon="gg:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-left-o')" title="Click to copy">
+            <hd-icon icon="gg:arrow-left-o"></hd-icon>
+            <span class="name">arrow-left-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-left-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-left-r"></hd-icon>
+            <span class="name">arrow-left-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-down')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-down"></hd-icon>
+            <span class="name">arrow-long-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-down-c')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-down-c"></hd-icon>
+            <span class="name">arrow-long-down-c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-down-e')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-down-e"></hd-icon>
+            <span class="name">arrow-long-down-e</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-down-l')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-down-l"></hd-icon>
+            <span class="name">arrow-long-down-l</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-down-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-down-r"></hd-icon>
+            <span class="name">arrow-long-down-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-left')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-left"></hd-icon>
+            <span class="name">arrow-long-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-left-c')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-left-c"></hd-icon>
+            <span class="name">arrow-long-left-c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-left-e')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-left-e"></hd-icon>
+            <span class="name">arrow-long-left-e</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-left-l')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-left-l"></hd-icon>
+            <span class="name">arrow-long-left-l</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-left-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-left-r"></hd-icon>
+            <span class="name">arrow-long-left-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-right')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-right"></hd-icon>
+            <span class="name">arrow-long-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-right-c')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-right-c"></hd-icon>
+            <span class="name">arrow-long-right-c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-right-e')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-right-e"></hd-icon>
+            <span class="name">arrow-long-right-e</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-right-l')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-right-l"></hd-icon>
+            <span class="name">arrow-long-right-l</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-right-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-right-r"></hd-icon>
+            <span class="name">arrow-long-right-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-up')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-up"></hd-icon>
+            <span class="name">arrow-long-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-up-c')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-up-c"></hd-icon>
+            <span class="name">arrow-long-up-c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-up-e')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-up-e"></hd-icon>
+            <span class="name">arrow-long-up-e</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-up-l')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-up-l"></hd-icon>
+            <span class="name">arrow-long-up-l</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-long-up-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-long-up-r"></hd-icon>
+            <span class="name">arrow-long-up-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-right')" title="Click to copy">
+            <hd-icon icon="gg:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-right-o')" title="Click to copy">
+            <hd-icon icon="gg:arrow-right-o"></hd-icon>
+            <span class="name">arrow-right-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-right-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-right-r"></hd-icon>
+            <span class="name">arrow-right-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-top-left')" title="Click to copy">
+            <hd-icon icon="gg:arrow-top-left"></hd-icon>
+            <span class="name">arrow-top-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-top-left-o')" title="Click to copy">
+            <hd-icon icon="gg:arrow-top-left-o"></hd-icon>
+            <span class="name">arrow-top-left-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-top-left-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-top-left-r"></hd-icon>
+            <span class="name">arrow-top-left-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-top-right')" title="Click to copy">
+            <hd-icon icon="gg:arrow-top-right"></hd-icon>
+            <span class="name">arrow-top-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-top-right-o')" title="Click to copy">
+            <hd-icon icon="gg:arrow-top-right-o"></hd-icon>
+            <span class="name">arrow-top-right-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-top-right-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-top-right-r"></hd-icon>
+            <span class="name">arrow-top-right-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-up')" title="Click to copy">
+            <hd-icon icon="gg:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-up-o')" title="Click to copy">
+            <hd-icon icon="gg:arrow-up-o"></hd-icon>
+            <span class="name">arrow-up-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrow-up-r')" title="Click to copy">
+            <hd-icon icon="gg:arrow-up-r"></hd-icon>
+            <span class="name">arrow-up-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-breake-h')" title="Click to copy">
+            <hd-icon icon="gg:arrows-breake-h"></hd-icon>
+            <span class="name">arrows-breake-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-breake-v')" title="Click to copy">
+            <hd-icon icon="gg:arrows-breake-v"></hd-icon>
+            <span class="name">arrows-breake-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-exchange')" title="Click to copy">
+            <hd-icon icon="gg:arrows-exchange"></hd-icon>
+            <span class="name">arrows-exchange</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-exchange-alt')" title="Click to copy">
+            <hd-icon icon="gg:arrows-exchange-alt"></hd-icon>
+            <span class="name">arrows-exchange-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-exchange-alt-v')" title="Click to copy">
+            <hd-icon icon="gg:arrows-exchange-alt-v"></hd-icon>
+            <span class="name">arrows-exchange-alt-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-exchange-v')" title="Click to copy">
+            <hd-icon icon="gg:arrows-exchange-v"></hd-icon>
+            <span class="name">arrows-exchange-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-expand-down-left')" title="Click to copy">
+            <hd-icon icon="gg:arrows-expand-down-left"></hd-icon>
+            <span class="name">arrows-expand-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-expand-down-right')" title="Click to copy">
+            <hd-icon icon="gg:arrows-expand-down-right"></hd-icon>
+            <span class="name">arrows-expand-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-expand-left')" title="Click to copy">
+            <hd-icon icon="gg:arrows-expand-left"></hd-icon>
+            <span class="name">arrows-expand-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-expand-left-alt')" title="Click to copy">
+            <hd-icon icon="gg:arrows-expand-left-alt"></hd-icon>
+            <span class="name">arrows-expand-left-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-expand-right')" title="Click to copy">
+            <hd-icon icon="gg:arrows-expand-right"></hd-icon>
+            <span class="name">arrows-expand-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-expand-right-alt')" title="Click to copy">
+            <hd-icon icon="gg:arrows-expand-right-alt"></hd-icon>
+            <span class="name">arrows-expand-right-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-expand-up-left')" title="Click to copy">
+            <hd-icon icon="gg:arrows-expand-up-left"></hd-icon>
+            <span class="name">arrows-expand-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-expand-up-right')" title="Click to copy">
+            <hd-icon icon="gg:arrows-expand-up-right"></hd-icon>
+            <span class="name">arrows-expand-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-h')" title="Click to copy">
+            <hd-icon icon="gg:arrows-h"></hd-icon>
+            <span class="name">arrows-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-h-alt')" title="Click to copy">
+            <hd-icon icon="gg:arrows-h-alt"></hd-icon>
+            <span class="name">arrows-h-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-merge-alt-h')" title="Click to copy">
+            <hd-icon icon="gg:arrows-merge-alt-h"></hd-icon>
+            <span class="name">arrows-merge-alt-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-merge-alt-v')" title="Click to copy">
+            <hd-icon icon="gg:arrows-merge-alt-v"></hd-icon>
+            <span class="name">arrows-merge-alt-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-scroll-h')" title="Click to copy">
+            <hd-icon icon="gg:arrows-scroll-h"></hd-icon>
+            <span class="name">arrows-scroll-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-scroll-v')" title="Click to copy">
+            <hd-icon icon="gg:arrows-scroll-v"></hd-icon>
+            <span class="name">arrows-scroll-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-shrink-h')" title="Click to copy">
+            <hd-icon icon="gg:arrows-shrink-h"></hd-icon>
+            <span class="name">arrows-shrink-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-shrink-v')" title="Click to copy">
+            <hd-icon icon="gg:arrows-shrink-v"></hd-icon>
+            <span class="name">arrows-shrink-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-v')" title="Click to copy">
+            <hd-icon icon="gg:arrows-v"></hd-icon>
+            <span class="name">arrows-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:arrows-v-alt')" title="Click to copy">
+            <hd-icon icon="gg:arrows-v-alt"></hd-icon>
+            <span class="name">arrows-v-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:assign')" title="Click to copy">
+            <hd-icon icon="gg:assign"></hd-icon>
+            <span class="name">assign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:asterisk')" title="Click to copy">
+            <hd-icon icon="gg:asterisk"></hd-icon>
+            <span class="name">asterisk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:atlasian')" title="Click to copy">
+            <hd-icon icon="gg:atlasian"></hd-icon>
+            <span class="name">atlasian</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:attachment')" title="Click to copy">
+            <hd-icon icon="gg:attachment"></hd-icon>
+            <span class="name">attachment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:attribution')" title="Click to copy">
+            <hd-icon icon="gg:attribution"></hd-icon>
+            <span class="name">attribution</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:awards')" title="Click to copy">
+            <hd-icon icon="gg:awards"></hd-icon>
+            <span class="name">awards</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:backspace')" title="Click to copy">
+            <hd-icon icon="gg:backspace"></hd-icon>
+            <span class="name">backspace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:band-aid')" title="Click to copy">
+            <hd-icon icon="gg:band-aid"></hd-icon>
+            <span class="name">band-aid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:battery')" title="Click to copy">
+            <hd-icon icon="gg:battery"></hd-icon>
+            <span class="name">battery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:battery-empty')" title="Click to copy">
+            <hd-icon icon="gg:battery-empty"></hd-icon>
+            <span class="name">battery-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:battery-full')" title="Click to copy">
+            <hd-icon icon="gg:battery-full"></hd-icon>
+            <span class="name">battery-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:bee')" title="Click to copy">
+            <hd-icon icon="gg:bee"></hd-icon>
+            <span class="name">bee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:bell')" title="Click to copy">
+            <hd-icon icon="gg:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:bitbucket')" title="Click to copy">
+            <hd-icon icon="gg:bitbucket"></hd-icon>
+            <span class="name">bitbucket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:block')" title="Click to copy">
+            <hd-icon icon="gg:block"></hd-icon>
+            <span class="name">block</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:bmw')" title="Click to copy">
+            <hd-icon icon="gg:bmw"></hd-icon>
+            <span class="name">bmw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:board')" title="Click to copy">
+            <hd-icon icon="gg:board"></hd-icon>
+            <span class="name">board</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:bolt')" title="Click to copy">
+            <hd-icon icon="gg:bolt"></hd-icon>
+            <span class="name">bolt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:bookmark')" title="Click to copy">
+            <hd-icon icon="gg:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:border-all')" title="Click to copy">
+            <hd-icon icon="gg:border-all"></hd-icon>
+            <span class="name">border-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:border-bottom')" title="Click to copy">
+            <hd-icon icon="gg:border-bottom"></hd-icon>
+            <span class="name">border-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:border-left')" title="Click to copy">
+            <hd-icon icon="gg:border-left"></hd-icon>
+            <span class="name">border-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:border-right')" title="Click to copy">
+            <hd-icon icon="gg:border-right"></hd-icon>
+            <span class="name">border-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:border-style-dashed')" title="Click to copy">
+            <hd-icon icon="gg:border-style-dashed"></hd-icon>
+            <span class="name">border-style-dashed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:border-style-dotted')" title="Click to copy">
+            <hd-icon icon="gg:border-style-dotted"></hd-icon>
+            <span class="name">border-style-dotted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:border-style-solid')" title="Click to copy">
+            <hd-icon icon="gg:border-style-solid"></hd-icon>
+            <span class="name">border-style-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:border-top')" title="Click to copy">
+            <hd-icon icon="gg:border-top"></hd-icon>
+            <span class="name">border-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:bot')" title="Click to copy">
+            <hd-icon icon="gg:bot"></hd-icon>
+            <span class="name">bot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:bowl')" title="Click to copy">
+            <hd-icon icon="gg:bowl"></hd-icon>
+            <span class="name">bowl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:box')" title="Click to copy">
+            <hd-icon icon="gg:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:boy')" title="Click to copy">
+            <hd-icon icon="gg:boy"></hd-icon>
+            <span class="name">boy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:brackets')" title="Click to copy">
+            <hd-icon icon="gg:brackets"></hd-icon>
+            <span class="name">brackets</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:briefcase')" title="Click to copy">
+            <hd-icon icon="gg:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:browse')" title="Click to copy">
+            <hd-icon icon="gg:browse"></hd-icon>
+            <span class="name">browse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:browser')" title="Click to copy">
+            <hd-icon icon="gg:browser"></hd-icon>
+            <span class="name">browser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:brush')" title="Click to copy">
+            <hd-icon icon="gg:brush"></hd-icon>
+            <span class="name">brush</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:bulb')" title="Click to copy">
+            <hd-icon icon="gg:bulb"></hd-icon>
+            <span class="name">bulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:c-plus-plus')" title="Click to copy">
+            <hd-icon icon="gg:c-plus-plus"></hd-icon>
+            <span class="name">c-plus-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:calculator')" title="Click to copy">
+            <hd-icon icon="gg:calculator"></hd-icon>
+            <span class="name">calculator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:calendar')" title="Click to copy">
+            <hd-icon icon="gg:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:calendar-dates')" title="Click to copy">
+            <hd-icon icon="gg:calendar-dates"></hd-icon>
+            <span class="name">calendar-dates</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:calendar-due')" title="Click to copy">
+            <hd-icon icon="gg:calendar-due"></hd-icon>
+            <span class="name">calendar-due</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:calendar-next')" title="Click to copy">
+            <hd-icon icon="gg:calendar-next"></hd-icon>
+            <span class="name">calendar-next</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:calendar-today')" title="Click to copy">
+            <hd-icon icon="gg:calendar-today"></hd-icon>
+            <span class="name">calendar-today</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:calendar-two')" title="Click to copy">
+            <hd-icon icon="gg:calendar-two"></hd-icon>
+            <span class="name">calendar-two</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:calibrate')" title="Click to copy">
+            <hd-icon icon="gg:calibrate"></hd-icon>
+            <span class="name">calibrate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:camera')" title="Click to copy">
+            <hd-icon icon="gg:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:cap')" title="Click to copy">
+            <hd-icon icon="gg:cap"></hd-icon>
+            <span class="name">cap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:captions')" title="Click to copy">
+            <hd-icon icon="gg:captions"></hd-icon>
+            <span class="name">captions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:card-clubs')" title="Click to copy">
+            <hd-icon icon="gg:card-clubs"></hd-icon>
+            <span class="name">card-clubs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:card-diamonds')" title="Click to copy">
+            <hd-icon icon="gg:card-diamonds"></hd-icon>
+            <span class="name">card-diamonds</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:card-hearts')" title="Click to copy">
+            <hd-icon icon="gg:card-hearts"></hd-icon>
+            <span class="name">card-hearts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:card-spades')" title="Click to copy">
+            <hd-icon icon="gg:card-spades"></hd-icon>
+            <span class="name">card-spades</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:carousel')" title="Click to copy">
+            <hd-icon icon="gg:carousel"></hd-icon>
+            <span class="name">carousel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:cast')" title="Click to copy">
+            <hd-icon icon="gg:cast"></hd-icon>
+            <span class="name">cast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chanel')" title="Click to copy">
+            <hd-icon icon="gg:chanel"></hd-icon>
+            <span class="name">chanel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chart')" title="Click to copy">
+            <hd-icon icon="gg:chart"></hd-icon>
+            <span class="name">chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:check')" title="Click to copy">
+            <hd-icon icon="gg:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:check-o')" title="Click to copy">
+            <hd-icon icon="gg:check-o"></hd-icon>
+            <span class="name">check-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:check-r')" title="Click to copy">
+            <hd-icon icon="gg:check-r"></hd-icon>
+            <span class="name">check-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-down')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-down"></hd-icon>
+            <span class="name">chevron-double-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-down-o')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-down-o"></hd-icon>
+            <span class="name">chevron-double-down-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-down-r')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-down-r"></hd-icon>
+            <span class="name">chevron-double-down-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-left')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-left"></hd-icon>
+            <span class="name">chevron-double-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-left-o')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-left-o"></hd-icon>
+            <span class="name">chevron-double-left-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-left-r')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-left-r"></hd-icon>
+            <span class="name">chevron-double-left-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-right')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-right"></hd-icon>
+            <span class="name">chevron-double-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-right-o')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-right-o"></hd-icon>
+            <span class="name">chevron-double-right-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-right-r')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-right-r"></hd-icon>
+            <span class="name">chevron-double-right-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-up')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-up"></hd-icon>
+            <span class="name">chevron-double-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-up-o')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-up-o"></hd-icon>
+            <span class="name">chevron-double-up-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-double-up-r')" title="Click to copy">
+            <hd-icon icon="gg:chevron-double-up-r"></hd-icon>
+            <span class="name">chevron-double-up-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-down')" title="Click to copy">
+            <hd-icon icon="gg:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-down-o')" title="Click to copy">
+            <hd-icon icon="gg:chevron-down-o"></hd-icon>
+            <span class="name">chevron-down-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-down-r')" title="Click to copy">
+            <hd-icon icon="gg:chevron-down-r"></hd-icon>
+            <span class="name">chevron-down-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-left')" title="Click to copy">
+            <hd-icon icon="gg:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-left-o')" title="Click to copy">
+            <hd-icon icon="gg:chevron-left-o"></hd-icon>
+            <span class="name">chevron-left-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-left-r')" title="Click to copy">
+            <hd-icon icon="gg:chevron-left-r"></hd-icon>
+            <span class="name">chevron-left-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-right')" title="Click to copy">
+            <hd-icon icon="gg:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-right-o')" title="Click to copy">
+            <hd-icon icon="gg:chevron-right-o"></hd-icon>
+            <span class="name">chevron-right-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-right-r')" title="Click to copy">
+            <hd-icon icon="gg:chevron-right-r"></hd-icon>
+            <span class="name">chevron-right-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-up')" title="Click to copy">
+            <hd-icon icon="gg:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-up-o')" title="Click to copy">
+            <hd-icon icon="gg:chevron-up-o"></hd-icon>
+            <span class="name">chevron-up-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:chevron-up-r')" title="Click to copy">
+            <hd-icon icon="gg:chevron-up-r"></hd-icon>
+            <span class="name">chevron-up-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:circleci')" title="Click to copy">
+            <hd-icon icon="gg:circleci"></hd-icon>
+            <span class="name">circleci</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:clapper-board')" title="Click to copy">
+            <hd-icon icon="gg:clapper-board"></hd-icon>
+            <span class="name">clapper-board</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:clipboard')" title="Click to copy">
+            <hd-icon icon="gg:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:close')" title="Click to copy">
+            <hd-icon icon="gg:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:close-o')" title="Click to copy">
+            <hd-icon icon="gg:close-o"></hd-icon>
+            <span class="name">close-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:close-r')" title="Click to copy">
+            <hd-icon icon="gg:close-r"></hd-icon>
+            <span class="name">close-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:cloud')" title="Click to copy">
+            <hd-icon icon="gg:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:code')" title="Click to copy">
+            <hd-icon icon="gg:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:code-climate')" title="Click to copy">
+            <hd-icon icon="gg:code-climate"></hd-icon>
+            <span class="name">code-climate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:code-slash')" title="Click to copy">
+            <hd-icon icon="gg:code-slash"></hd-icon>
+            <span class="name">code-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:coffee')" title="Click to copy">
+            <hd-icon icon="gg:coffee"></hd-icon>
+            <span class="name">coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:collage')" title="Click to copy">
+            <hd-icon icon="gg:collage"></hd-icon>
+            <span class="name">collage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:color-bucket')" title="Click to copy">
+            <hd-icon icon="gg:color-bucket"></hd-icon>
+            <span class="name">color-bucket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:color-picker')" title="Click to copy">
+            <hd-icon icon="gg:color-picker"></hd-icon>
+            <span class="name">color-picker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:comedy-central')" title="Click to copy">
+            <hd-icon icon="gg:comedy-central"></hd-icon>
+            <span class="name">comedy-central</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:comment')" title="Click to copy">
+            <hd-icon icon="gg:comment"></hd-icon>
+            <span class="name">comment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:community')" title="Click to copy">
+            <hd-icon icon="gg:community"></hd-icon>
+            <span class="name">community</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:components')" title="Click to copy">
+            <hd-icon icon="gg:components"></hd-icon>
+            <span class="name">components</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:compress')" title="Click to copy">
+            <hd-icon icon="gg:compress"></hd-icon>
+            <span class="name">compress</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:compress-left')" title="Click to copy">
+            <hd-icon icon="gg:compress-left"></hd-icon>
+            <span class="name">compress-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:compress-right')" title="Click to copy">
+            <hd-icon icon="gg:compress-right"></hd-icon>
+            <span class="name">compress-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:compress-v')" title="Click to copy">
+            <hd-icon icon="gg:compress-v"></hd-icon>
+            <span class="name">compress-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:controller')" title="Click to copy">
+            <hd-icon icon="gg:controller"></hd-icon>
+            <span class="name">controller</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:copy')" title="Click to copy">
+            <hd-icon icon="gg:copy"></hd-icon>
+            <span class="name">copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:copyright')" title="Click to copy">
+            <hd-icon icon="gg:copyright"></hd-icon>
+            <span class="name">copyright</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-double-down-left')" title="Click to copy">
+            <hd-icon icon="gg:corner-double-down-left"></hd-icon>
+            <span class="name">corner-double-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-double-down-right')" title="Click to copy">
+            <hd-icon icon="gg:corner-double-down-right"></hd-icon>
+            <span class="name">corner-double-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-double-left-down')" title="Click to copy">
+            <hd-icon icon="gg:corner-double-left-down"></hd-icon>
+            <span class="name">corner-double-left-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-double-left-up')" title="Click to copy">
+            <hd-icon icon="gg:corner-double-left-up"></hd-icon>
+            <span class="name">corner-double-left-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-double-right-down')" title="Click to copy">
+            <hd-icon icon="gg:corner-double-right-down"></hd-icon>
+            <span class="name">corner-double-right-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-double-right-up')" title="Click to copy">
+            <hd-icon icon="gg:corner-double-right-up"></hd-icon>
+            <span class="name">corner-double-right-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-double-up-left')" title="Click to copy">
+            <hd-icon icon="gg:corner-double-up-left"></hd-icon>
+            <span class="name">corner-double-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-double-up-right')" title="Click to copy">
+            <hd-icon icon="gg:corner-double-up-right"></hd-icon>
+            <span class="name">corner-double-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-down-left')" title="Click to copy">
+            <hd-icon icon="gg:corner-down-left"></hd-icon>
+            <span class="name">corner-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-down-right')" title="Click to copy">
+            <hd-icon icon="gg:corner-down-right"></hd-icon>
+            <span class="name">corner-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-left-down')" title="Click to copy">
+            <hd-icon icon="gg:corner-left-down"></hd-icon>
+            <span class="name">corner-left-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-left-up')" title="Click to copy">
+            <hd-icon icon="gg:corner-left-up"></hd-icon>
+            <span class="name">corner-left-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-right-down')" title="Click to copy">
+            <hd-icon icon="gg:corner-right-down"></hd-icon>
+            <span class="name">corner-right-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-right-up')" title="Click to copy">
+            <hd-icon icon="gg:corner-right-up"></hd-icon>
+            <span class="name">corner-right-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-up-left')" title="Click to copy">
+            <hd-icon icon="gg:corner-up-left"></hd-icon>
+            <span class="name">corner-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:corner-up-right')" title="Click to copy">
+            <hd-icon icon="gg:corner-up-right"></hd-icon>
+            <span class="name">corner-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:credit-card')" title="Click to copy">
+            <hd-icon icon="gg:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:crop')" title="Click to copy">
+            <hd-icon icon="gg:crop"></hd-icon>
+            <span class="name">crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:cross')" title="Click to copy">
+            <hd-icon icon="gg:cross"></hd-icon>
+            <span class="name">cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:crowdfire')" title="Click to copy">
+            <hd-icon icon="gg:crowdfire"></hd-icon>
+            <span class="name">crowdfire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:crown')" title="Click to copy">
+            <hd-icon icon="gg:crown"></hd-icon>
+            <span class="name">crown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:danger')" title="Click to copy">
+            <hd-icon icon="gg:danger"></hd-icon>
+            <span class="name">danger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dark-mode')" title="Click to copy">
+            <hd-icon icon="gg:dark-mode"></hd-icon>
+            <span class="name">dark-mode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:data')" title="Click to copy">
+            <hd-icon icon="gg:data"></hd-icon>
+            <span class="name">data</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:database')" title="Click to copy">
+            <hd-icon icon="gg:database"></hd-icon>
+            <span class="name">database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:debug')" title="Click to copy">
+            <hd-icon icon="gg:debug"></hd-icon>
+            <span class="name">debug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:designmodo')" title="Click to copy">
+            <hd-icon icon="gg:designmodo"></hd-icon>
+            <span class="name">designmodo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:desktop')" title="Click to copy">
+            <hd-icon icon="gg:desktop"></hd-icon>
+            <span class="name">desktop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:details-less')" title="Click to copy">
+            <hd-icon icon="gg:details-less"></hd-icon>
+            <span class="name">details-less</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:details-more')" title="Click to copy">
+            <hd-icon icon="gg:details-more"></hd-icon>
+            <span class="name">details-more</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dialpad')" title="Click to copy">
+            <hd-icon icon="gg:dialpad"></hd-icon>
+            <span class="name">dialpad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dice-1')" title="Click to copy">
+            <hd-icon icon="gg:dice-1"></hd-icon>
+            <span class="name">dice-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dice-2')" title="Click to copy">
+            <hd-icon icon="gg:dice-2"></hd-icon>
+            <span class="name">dice-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dice-3')" title="Click to copy">
+            <hd-icon icon="gg:dice-3"></hd-icon>
+            <span class="name">dice-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dice-4')" title="Click to copy">
+            <hd-icon icon="gg:dice-4"></hd-icon>
+            <span class="name">dice-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dice-5')" title="Click to copy">
+            <hd-icon icon="gg:dice-5"></hd-icon>
+            <span class="name">dice-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dice-6')" title="Click to copy">
+            <hd-icon icon="gg:dice-6"></hd-icon>
+            <span class="name">dice-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:digitalocean')" title="Click to copy">
+            <hd-icon icon="gg:digitalocean"></hd-icon>
+            <span class="name">digitalocean</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:disc')" title="Click to copy">
+            <hd-icon icon="gg:disc"></hd-icon>
+            <span class="name">disc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:display-flex')" title="Click to copy">
+            <hd-icon icon="gg:display-flex"></hd-icon>
+            <span class="name">display-flex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:display-fullwidth')" title="Click to copy">
+            <hd-icon icon="gg:display-fullwidth"></hd-icon>
+            <span class="name">display-fullwidth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:display-grid')" title="Click to copy">
+            <hd-icon icon="gg:display-grid"></hd-icon>
+            <span class="name">display-grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:display-spacing')" title="Click to copy">
+            <hd-icon icon="gg:display-spacing"></hd-icon>
+            <span class="name">display-spacing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:distribute-horizontal')" title="Click to copy">
+            <hd-icon icon="gg:distribute-horizontal"></hd-icon>
+            <span class="name">distribute-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:distribute-vertical')" title="Click to copy">
+            <hd-icon icon="gg:distribute-vertical"></hd-icon>
+            <span class="name">distribute-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dock-bottom')" title="Click to copy">
+            <hd-icon icon="gg:dock-bottom"></hd-icon>
+            <span class="name">dock-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dock-left')" title="Click to copy">
+            <hd-icon icon="gg:dock-left"></hd-icon>
+            <span class="name">dock-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dock-right')" title="Click to copy">
+            <hd-icon icon="gg:dock-right"></hd-icon>
+            <span class="name">dock-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dock-window')" title="Click to copy">
+            <hd-icon icon="gg:dock-window"></hd-icon>
+            <span class="name">dock-window</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dolby')" title="Click to copy">
+            <hd-icon icon="gg:dolby"></hd-icon>
+            <span class="name">dolby</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dollar')" title="Click to copy">
+            <hd-icon icon="gg:dollar"></hd-icon>
+            <span class="name">dollar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:dribbble')" title="Click to copy">
+            <hd-icon icon="gg:dribbble"></hd-icon>
+            <span class="name">dribbble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:drive')" title="Click to copy">
+            <hd-icon icon="gg:drive"></hd-icon>
+            <span class="name">drive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:drop')" title="Click to copy">
+            <hd-icon icon="gg:drop"></hd-icon>
+            <span class="name">drop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:drop-invert')" title="Click to copy">
+            <hd-icon icon="gg:drop-invert"></hd-icon>
+            <span class="name">drop-invert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:drop-opacity')" title="Click to copy">
+            <hd-icon icon="gg:drop-opacity"></hd-icon>
+            <span class="name">drop-opacity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:duplicate')" title="Click to copy">
+            <hd-icon icon="gg:duplicate"></hd-icon>
+            <span class="name">duplicate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-black-point')" title="Click to copy">
+            <hd-icon icon="gg:edit-black-point"></hd-icon>
+            <span class="name">edit-black-point</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-contrast')" title="Click to copy">
+            <hd-icon icon="gg:edit-contrast"></hd-icon>
+            <span class="name">edit-contrast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-exposure')" title="Click to copy">
+            <hd-icon icon="gg:edit-exposure"></hd-icon>
+            <span class="name">edit-exposure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-fade')" title="Click to copy">
+            <hd-icon icon="gg:edit-fade"></hd-icon>
+            <span class="name">edit-fade</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-flip-h')" title="Click to copy">
+            <hd-icon icon="gg:edit-flip-h"></hd-icon>
+            <span class="name">edit-flip-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-flip-v')" title="Click to copy">
+            <hd-icon icon="gg:edit-flip-v"></hd-icon>
+            <span class="name">edit-flip-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-highlight')" title="Click to copy">
+            <hd-icon icon="gg:edit-highlight"></hd-icon>
+            <span class="name">edit-highlight</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-markup')" title="Click to copy">
+            <hd-icon icon="gg:edit-markup"></hd-icon>
+            <span class="name">edit-markup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-mask')" title="Click to copy">
+            <hd-icon icon="gg:edit-mask"></hd-icon>
+            <span class="name">edit-mask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-noise')" title="Click to copy">
+            <hd-icon icon="gg:edit-noise"></hd-icon>
+            <span class="name">edit-noise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-shadows')" title="Click to copy">
+            <hd-icon icon="gg:edit-shadows"></hd-icon>
+            <span class="name">edit-shadows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-straight')" title="Click to copy">
+            <hd-icon icon="gg:edit-straight"></hd-icon>
+            <span class="name">edit-straight</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:edit-unmask')" title="Click to copy">
+            <hd-icon icon="gg:edit-unmask"></hd-icon>
+            <span class="name">edit-unmask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:eject')" title="Click to copy">
+            <hd-icon icon="gg:eject"></hd-icon>
+            <span class="name">eject</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:enter')" title="Click to copy">
+            <hd-icon icon="gg:enter"></hd-icon>
+            <span class="name">enter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:erase')" title="Click to copy">
+            <hd-icon icon="gg:erase"></hd-icon>
+            <span class="name">erase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:ereader')" title="Click to copy">
+            <hd-icon icon="gg:ereader"></hd-icon>
+            <span class="name">ereader</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:ericsson')" title="Click to copy">
+            <hd-icon icon="gg:ericsson"></hd-icon>
+            <span class="name">ericsson</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:ethernet')" title="Click to copy">
+            <hd-icon icon="gg:ethernet"></hd-icon>
+            <span class="name">ethernet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:euro')" title="Click to copy">
+            <hd-icon icon="gg:euro"></hd-icon>
+            <span class="name">euro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:eventbrite')" title="Click to copy">
+            <hd-icon icon="gg:eventbrite"></hd-icon>
+            <span class="name">eventbrite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:expand')" title="Click to copy">
+            <hd-icon icon="gg:expand"></hd-icon>
+            <span class="name">expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:export')" title="Click to copy">
+            <hd-icon icon="gg:export"></hd-icon>
+            <span class="name">export</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:extension')" title="Click to copy">
+            <hd-icon icon="gg:extension"></hd-icon>
+            <span class="name">extension</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:extension-add')" title="Click to copy">
+            <hd-icon icon="gg:extension-add"></hd-icon>
+            <span class="name">extension-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:extension-alt')" title="Click to copy">
+            <hd-icon icon="gg:extension-alt"></hd-icon>
+            <span class="name">extension-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:extension-remove')" title="Click to copy">
+            <hd-icon icon="gg:extension-remove"></hd-icon>
+            <span class="name">extension-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:external')" title="Click to copy">
+            <hd-icon icon="gg:external"></hd-icon>
+            <span class="name">external</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:eye')" title="Click to copy">
+            <hd-icon icon="gg:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:eye-alt')" title="Click to copy">
+            <hd-icon icon="gg:eye-alt"></hd-icon>
+            <span class="name">eye-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:facebook')" title="Click to copy">
+            <hd-icon icon="gg:facebook"></hd-icon>
+            <span class="name">facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:feed')" title="Click to copy">
+            <hd-icon icon="gg:feed"></hd-icon>
+            <span class="name">feed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:figma')" title="Click to copy">
+            <hd-icon icon="gg:figma"></hd-icon>
+            <span class="name">figma</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:file')" title="Click to copy">
+            <hd-icon icon="gg:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:file-add')" title="Click to copy">
+            <hd-icon icon="gg:file-add"></hd-icon>
+            <span class="name">file-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:file-document')" title="Click to copy">
+            <hd-icon icon="gg:file-document"></hd-icon>
+            <span class="name">file-document</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:file-remove')" title="Click to copy">
+            <hd-icon icon="gg:file-remove"></hd-icon>
+            <span class="name">file-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:film')" title="Click to copy">
+            <hd-icon icon="gg:film"></hd-icon>
+            <span class="name">film</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:filters')" title="Click to copy">
+            <hd-icon icon="gg:filters"></hd-icon>
+            <span class="name">filters</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:flag')" title="Click to copy">
+            <hd-icon icon="gg:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:flag-alt')" title="Click to copy">
+            <hd-icon icon="gg:flag-alt"></hd-icon>
+            <span class="name">flag-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:folder')" title="Click to copy">
+            <hd-icon icon="gg:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:folder-add')" title="Click to copy">
+            <hd-icon icon="gg:folder-add"></hd-icon>
+            <span class="name">folder-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:folder-remove')" title="Click to copy">
+            <hd-icon icon="gg:folder-remove"></hd-icon>
+            <span class="name">folder-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:font-height')" title="Click to copy">
+            <hd-icon icon="gg:font-height"></hd-icon>
+            <span class="name">font-height</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:font-spacing')" title="Click to copy">
+            <hd-icon icon="gg:font-spacing"></hd-icon>
+            <span class="name">font-spacing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-bold')" title="Click to copy">
+            <hd-icon icon="gg:format-bold"></hd-icon>
+            <span class="name">format-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-center')" title="Click to copy">
+            <hd-icon icon="gg:format-center"></hd-icon>
+            <span class="name">format-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-color')" title="Click to copy">
+            <hd-icon icon="gg:format-color"></hd-icon>
+            <span class="name">format-color</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-heading')" title="Click to copy">
+            <hd-icon icon="gg:format-heading"></hd-icon>
+            <span class="name">format-heading</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-indent-decrease')" title="Click to copy">
+            <hd-icon icon="gg:format-indent-decrease"></hd-icon>
+            <span class="name">format-indent-decrease</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-indent-increase')" title="Click to copy">
+            <hd-icon icon="gg:format-indent-increase"></hd-icon>
+            <span class="name">format-indent-increase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-italic')" title="Click to copy">
+            <hd-icon icon="gg:format-italic"></hd-icon>
+            <span class="name">format-italic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-justify')" title="Click to copy">
+            <hd-icon icon="gg:format-justify"></hd-icon>
+            <span class="name">format-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-left')" title="Click to copy">
+            <hd-icon icon="gg:format-left"></hd-icon>
+            <span class="name">format-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-line-height')" title="Click to copy">
+            <hd-icon icon="gg:format-line-height"></hd-icon>
+            <span class="name">format-line-height</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-right')" title="Click to copy">
+            <hd-icon icon="gg:format-right"></hd-icon>
+            <span class="name">format-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-separator')" title="Click to copy">
+            <hd-icon icon="gg:format-separator"></hd-icon>
+            <span class="name">format-separator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-slash')" title="Click to copy">
+            <hd-icon icon="gg:format-slash"></hd-icon>
+            <span class="name">format-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-strike')" title="Click to copy">
+            <hd-icon icon="gg:format-strike"></hd-icon>
+            <span class="name">format-strike</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-text')" title="Click to copy">
+            <hd-icon icon="gg:format-text"></hd-icon>
+            <span class="name">format-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-underline')" title="Click to copy">
+            <hd-icon icon="gg:format-underline"></hd-icon>
+            <span class="name">format-underline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:format-uppercase')" title="Click to copy">
+            <hd-icon icon="gg:format-uppercase"></hd-icon>
+            <span class="name">format-uppercase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:framer')" title="Click to copy">
+            <hd-icon icon="gg:framer"></hd-icon>
+            <span class="name">framer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:games')" title="Click to copy">
+            <hd-icon icon="gg:games"></hd-icon>
+            <span class="name">games</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:gender-female')" title="Click to copy">
+            <hd-icon icon="gg:gender-female"></hd-icon>
+            <span class="name">gender-female</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:gender-male')" title="Click to copy">
+            <hd-icon icon="gg:gender-male"></hd-icon>
+            <span class="name">gender-male</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:ghost')" title="Click to copy">
+            <hd-icon icon="gg:ghost"></hd-icon>
+            <span class="name">ghost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:ghost-character')" title="Click to copy">
+            <hd-icon icon="gg:ghost-character"></hd-icon>
+            <span class="name">ghost-character</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:gift')" title="Click to copy">
+            <hd-icon icon="gg:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:girl')" title="Click to copy">
+            <hd-icon icon="gg:girl"></hd-icon>
+            <span class="name">girl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:git-branch')" title="Click to copy">
+            <hd-icon icon="gg:git-branch"></hd-icon>
+            <span class="name">git-branch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:git-commit')" title="Click to copy">
+            <hd-icon icon="gg:git-commit"></hd-icon>
+            <span class="name">git-commit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:git-fork')" title="Click to copy">
+            <hd-icon icon="gg:git-fork"></hd-icon>
+            <span class="name">git-fork</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:git-pull')" title="Click to copy">
+            <hd-icon icon="gg:git-pull"></hd-icon>
+            <span class="name">git-pull</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:gitter')" title="Click to copy">
+            <hd-icon icon="gg:gitter"></hd-icon>
+            <span class="name">gitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:glass')" title="Click to copy">
+            <hd-icon icon="gg:glass"></hd-icon>
+            <span class="name">glass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:glass-alt')" title="Click to copy">
+            <hd-icon icon="gg:glass-alt"></hd-icon>
+            <span class="name">glass-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:globe')" title="Click to copy">
+            <hd-icon icon="gg:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:globe-alt')" title="Click to copy">
+            <hd-icon icon="gg:globe-alt"></hd-icon>
+            <span class="name">globe-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:google')" title="Click to copy">
+            <hd-icon icon="gg:google"></hd-icon>
+            <span class="name">google</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:google-tasks')" title="Click to copy">
+            <hd-icon icon="gg:google-tasks"></hd-icon>
+            <span class="name">google-tasks</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:gym')" title="Click to copy">
+            <hd-icon icon="gg:gym"></hd-icon>
+            <span class="name">gym</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:hashtag')" title="Click to copy">
+            <hd-icon icon="gg:hashtag"></hd-icon>
+            <span class="name">hashtag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:headset')" title="Click to copy">
+            <hd-icon icon="gg:headset"></hd-icon>
+            <span class="name">headset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:heart')" title="Click to copy">
+            <hd-icon icon="gg:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:hello')" title="Click to copy">
+            <hd-icon icon="gg:hello"></hd-icon>
+            <span class="name">hello</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:home')" title="Click to copy">
+            <hd-icon icon="gg:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:home-alt')" title="Click to copy">
+            <hd-icon icon="gg:home-alt"></hd-icon>
+            <span class="name">home-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:home-screen')" title="Click to copy">
+            <hd-icon icon="gg:home-screen"></hd-icon>
+            <span class="name">home-screen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:icecream')" title="Click to copy">
+            <hd-icon icon="gg:icecream"></hd-icon>
+            <span class="name">icecream</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:if-design')" title="Click to copy">
+            <hd-icon icon="gg:if-design"></hd-icon>
+            <span class="name">if-design</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:image')" title="Click to copy">
+            <hd-icon icon="gg:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:import')" title="Click to copy">
+            <hd-icon icon="gg:import"></hd-icon>
+            <span class="name">import</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:inbox')" title="Click to copy">
+            <hd-icon icon="gg:inbox"></hd-icon>
+            <span class="name">inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:indie-hackers')" title="Click to copy">
+            <hd-icon icon="gg:indie-hackers"></hd-icon>
+            <span class="name">indie-hackers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:infinity')" title="Click to copy">
+            <hd-icon icon="gg:infinity"></hd-icon>
+            <span class="name">infinity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:info')" title="Click to copy">
+            <hd-icon icon="gg:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:inpicture')" title="Click to copy">
+            <hd-icon icon="gg:inpicture"></hd-icon>
+            <span class="name">inpicture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:insert-after')" title="Click to copy">
+            <hd-icon icon="gg:insert-after"></hd-icon>
+            <span class="name">insert-after</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:insert-after-o')" title="Click to copy">
+            <hd-icon icon="gg:insert-after-o"></hd-icon>
+            <span class="name">insert-after-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:insert-after-r')" title="Click to copy">
+            <hd-icon icon="gg:insert-after-r"></hd-icon>
+            <span class="name">insert-after-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:insert-before')" title="Click to copy">
+            <hd-icon icon="gg:insert-before"></hd-icon>
+            <span class="name">insert-before</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:insert-before-o')" title="Click to copy">
+            <hd-icon icon="gg:insert-before-o"></hd-icon>
+            <span class="name">insert-before-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:insert-before-r')" title="Click to copy">
+            <hd-icon icon="gg:insert-before-r"></hd-icon>
+            <span class="name">insert-before-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:insights')" title="Click to copy">
+            <hd-icon icon="gg:insights"></hd-icon>
+            <span class="name">insights</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:instagram')" title="Click to copy">
+            <hd-icon icon="gg:instagram"></hd-icon>
+            <span class="name">instagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:internal')" title="Click to copy">
+            <hd-icon icon="gg:internal"></hd-icon>
+            <span class="name">internal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:key')" title="Click to copy">
+            <hd-icon icon="gg:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:keyboard')" title="Click to copy">
+            <hd-icon icon="gg:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:keyhole')" title="Click to copy">
+            <hd-icon icon="gg:keyhole"></hd-icon>
+            <span class="name">keyhole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:laptop')" title="Click to copy">
+            <hd-icon icon="gg:laptop"></hd-icon>
+            <span class="name">laptop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:lastpass')" title="Click to copy">
+            <hd-icon icon="gg:lastpass"></hd-icon>
+            <span class="name">lastpass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:layout-grid')" title="Click to copy">
+            <hd-icon icon="gg:layout-grid"></hd-icon>
+            <span class="name">layout-grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:layout-grid-small')" title="Click to copy">
+            <hd-icon icon="gg:layout-grid-small"></hd-icon>
+            <span class="name">layout-grid-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:layout-list')" title="Click to copy">
+            <hd-icon icon="gg:layout-list"></hd-icon>
+            <span class="name">layout-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:layout-pin')" title="Click to copy">
+            <hd-icon icon="gg:layout-pin"></hd-icon>
+            <span class="name">layout-pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:linear')" title="Click to copy">
+            <hd-icon icon="gg:linear"></hd-icon>
+            <span class="name">linear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:link')" title="Click to copy">
+            <hd-icon icon="gg:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:list')" title="Click to copy">
+            <hd-icon icon="gg:list"></hd-icon>
+            <span class="name">list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:list-tree')" title="Click to copy">
+            <hd-icon icon="gg:list-tree"></hd-icon>
+            <span class="name">list-tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:live-photo')" title="Click to copy">
+            <hd-icon icon="gg:live-photo"></hd-icon>
+            <span class="name">live-photo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:loadbar')" title="Click to copy">
+            <hd-icon icon="gg:loadbar"></hd-icon>
+            <span class="name">loadbar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:loadbar-alt')" title="Click to copy">
+            <hd-icon icon="gg:loadbar-alt"></hd-icon>
+            <span class="name">loadbar-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:loadbar-doc')" title="Click to copy">
+            <hd-icon icon="gg:loadbar-doc"></hd-icon>
+            <span class="name">loadbar-doc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:loadbar-sound')" title="Click to copy">
+            <hd-icon icon="gg:loadbar-sound"></hd-icon>
+            <span class="name">loadbar-sound</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:lock')" title="Click to copy">
+            <hd-icon icon="gg:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:lock-unlock')" title="Click to copy">
+            <hd-icon icon="gg:lock-unlock"></hd-icon>
+            <span class="name">lock-unlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:log-in')" title="Click to copy">
+            <hd-icon icon="gg:log-in"></hd-icon>
+            <span class="name">log-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:log-off')" title="Click to copy">
+            <hd-icon icon="gg:log-off"></hd-icon>
+            <span class="name">log-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:log-out')" title="Click to copy">
+            <hd-icon icon="gg:log-out"></hd-icon>
+            <span class="name">log-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:loupe')" title="Click to copy">
+            <hd-icon icon="gg:loupe"></hd-icon>
+            <span class="name">loupe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:magnet')" title="Click to copy">
+            <hd-icon icon="gg:magnet"></hd-icon>
+            <span class="name">magnet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:mail')" title="Click to copy">
+            <hd-icon icon="gg:mail"></hd-icon>
+            <span class="name">mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:mail-forward')" title="Click to copy">
+            <hd-icon icon="gg:mail-forward"></hd-icon>
+            <span class="name">mail-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:mail-open')" title="Click to copy">
+            <hd-icon icon="gg:mail-open"></hd-icon>
+            <span class="name">mail-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:mail-reply')" title="Click to copy">
+            <hd-icon icon="gg:mail-reply"></hd-icon>
+            <span class="name">mail-reply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:math-divide')" title="Click to copy">
+            <hd-icon icon="gg:math-divide"></hd-icon>
+            <span class="name">math-divide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:math-equal')" title="Click to copy">
+            <hd-icon icon="gg:math-equal"></hd-icon>
+            <span class="name">math-equal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:math-minus')" title="Click to copy">
+            <hd-icon icon="gg:math-minus"></hd-icon>
+            <span class="name">math-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:math-percent')" title="Click to copy">
+            <hd-icon icon="gg:math-percent"></hd-icon>
+            <span class="name">math-percent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:math-plus')" title="Click to copy">
+            <hd-icon icon="gg:math-plus"></hd-icon>
+            <span class="name">math-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:maximize')" title="Click to copy">
+            <hd-icon icon="gg:maximize"></hd-icon>
+            <span class="name">maximize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:maximize-alt')" title="Click to copy">
+            <hd-icon icon="gg:maximize-alt"></hd-icon>
+            <span class="name">maximize-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:maze')" title="Click to copy">
+            <hd-icon icon="gg:maze"></hd-icon>
+            <span class="name">maze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:media-live')" title="Click to copy">
+            <hd-icon icon="gg:media-live"></hd-icon>
+            <span class="name">media-live</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:media-podcast')" title="Click to copy">
+            <hd-icon icon="gg:media-podcast"></hd-icon>
+            <span class="name">media-podcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu')" title="Click to copy">
+            <hd-icon icon="gg:menu"></hd-icon>
+            <span class="name">menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-boxed')" title="Click to copy">
+            <hd-icon icon="gg:menu-boxed"></hd-icon>
+            <span class="name">menu-boxed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-cake')" title="Click to copy">
+            <hd-icon icon="gg:menu-cake"></hd-icon>
+            <span class="name">menu-cake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-cheese')" title="Click to copy">
+            <hd-icon icon="gg:menu-cheese"></hd-icon>
+            <span class="name">menu-cheese</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-grid-o')" title="Click to copy">
+            <hd-icon icon="gg:menu-grid-o"></hd-icon>
+            <span class="name">menu-grid-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-grid-r')" title="Click to copy">
+            <hd-icon icon="gg:menu-grid-r"></hd-icon>
+            <span class="name">menu-grid-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-hotdog')" title="Click to copy">
+            <hd-icon icon="gg:menu-hotdog"></hd-icon>
+            <span class="name">menu-hotdog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-left')" title="Click to copy">
+            <hd-icon icon="gg:menu-left"></hd-icon>
+            <span class="name">menu-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-left-alt')" title="Click to copy">
+            <hd-icon icon="gg:menu-left-alt"></hd-icon>
+            <span class="name">menu-left-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-motion')" title="Click to copy">
+            <hd-icon icon="gg:menu-motion"></hd-icon>
+            <span class="name">menu-motion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-oreos')" title="Click to copy">
+            <hd-icon icon="gg:menu-oreos"></hd-icon>
+            <span class="name">menu-oreos</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-right')" title="Click to copy">
+            <hd-icon icon="gg:menu-right"></hd-icon>
+            <span class="name">menu-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-right-alt')" title="Click to copy">
+            <hd-icon icon="gg:menu-right-alt"></hd-icon>
+            <span class="name">menu-right-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:menu-round')" title="Click to copy">
+            <hd-icon icon="gg:menu-round"></hd-icon>
+            <span class="name">menu-round</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:merge-horizontal')" title="Click to copy">
+            <hd-icon icon="gg:merge-horizontal"></hd-icon>
+            <span class="name">merge-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:merge-vertical')" title="Click to copy">
+            <hd-icon icon="gg:merge-vertical"></hd-icon>
+            <span class="name">merge-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:mic')" title="Click to copy">
+            <hd-icon icon="gg:mic"></hd-icon>
+            <span class="name">mic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:microbit')" title="Click to copy">
+            <hd-icon icon="gg:microbit"></hd-icon>
+            <span class="name">microbit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:microsoft')" title="Click to copy">
+            <hd-icon icon="gg:microsoft"></hd-icon>
+            <span class="name">microsoft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:mini-player')" title="Click to copy">
+            <hd-icon icon="gg:mini-player"></hd-icon>
+            <span class="name">mini-player</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:minimize')" title="Click to copy">
+            <hd-icon icon="gg:minimize"></hd-icon>
+            <span class="name">minimize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:minimize-alt')" title="Click to copy">
+            <hd-icon icon="gg:minimize-alt"></hd-icon>
+            <span class="name">minimize-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:modem')" title="Click to copy">
+            <hd-icon icon="gg:modem"></hd-icon>
+            <span class="name">modem</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:monday')" title="Click to copy">
+            <hd-icon icon="gg:monday"></hd-icon>
+            <span class="name">monday</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:moon')" title="Click to copy">
+            <hd-icon icon="gg:moon"></hd-icon>
+            <span class="name">moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:more')" title="Click to copy">
+            <hd-icon icon="gg:more"></hd-icon>
+            <span class="name">more</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:more-alt')" title="Click to copy">
+            <hd-icon icon="gg:more-alt"></hd-icon>
+            <span class="name">more-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:more-o')" title="Click to copy">
+            <hd-icon icon="gg:more-o"></hd-icon>
+            <span class="name">more-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:more-r')" title="Click to copy">
+            <hd-icon icon="gg:more-r"></hd-icon>
+            <span class="name">more-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:more-vertical')" title="Click to copy">
+            <hd-icon icon="gg:more-vertical"></hd-icon>
+            <span class="name">more-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:more-vertical-alt')" title="Click to copy">
+            <hd-icon icon="gg:more-vertical-alt"></hd-icon>
+            <span class="name">more-vertical-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:more-vertical-o')" title="Click to copy">
+            <hd-icon icon="gg:more-vertical-o"></hd-icon>
+            <span class="name">more-vertical-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:more-vertical-r')" title="Click to copy">
+            <hd-icon icon="gg:more-vertical-r"></hd-icon>
+            <span class="name">more-vertical-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:mouse')" title="Click to copy">
+            <hd-icon icon="gg:mouse"></hd-icon>
+            <span class="name">mouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:move-down')" title="Click to copy">
+            <hd-icon icon="gg:move-down"></hd-icon>
+            <span class="name">move-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:move-left')" title="Click to copy">
+            <hd-icon icon="gg:move-left"></hd-icon>
+            <span class="name">move-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:move-right')" title="Click to copy">
+            <hd-icon icon="gg:move-right"></hd-icon>
+            <span class="name">move-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:move-task')" title="Click to copy">
+            <hd-icon icon="gg:move-task"></hd-icon>
+            <span class="name">move-task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:move-up')" title="Click to copy">
+            <hd-icon icon="gg:move-up"></hd-icon>
+            <span class="name">move-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:music')" title="Click to copy">
+            <hd-icon icon="gg:music"></hd-icon>
+            <span class="name">music</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:music-note')" title="Click to copy">
+            <hd-icon icon="gg:music-note"></hd-icon>
+            <span class="name">music-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:music-speaker')" title="Click to copy">
+            <hd-icon icon="gg:music-speaker"></hd-icon>
+            <span class="name">music-speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:nametag')" title="Click to copy">
+            <hd-icon icon="gg:nametag"></hd-icon>
+            <span class="name">nametag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:notes')" title="Click to copy">
+            <hd-icon icon="gg:notes"></hd-icon>
+            <span class="name">notes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:notifications')" title="Click to copy">
+            <hd-icon icon="gg:notifications"></hd-icon>
+            <span class="name">notifications</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:npm')" title="Click to copy">
+            <hd-icon icon="gg:npm"></hd-icon>
+            <span class="name">npm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:oculus')" title="Click to copy">
+            <hd-icon icon="gg:oculus"></hd-icon>
+            <span class="name">oculus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:open-collective')" title="Click to copy">
+            <hd-icon icon="gg:open-collective"></hd-icon>
+            <span class="name">open-collective</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:options')" title="Click to copy">
+            <hd-icon icon="gg:options"></hd-icon>
+            <span class="name">options</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:organisation')" title="Click to copy">
+            <hd-icon icon="gg:organisation"></hd-icon>
+            <span class="name">organisation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:overflow')" title="Click to copy">
+            <hd-icon icon="gg:overflow"></hd-icon>
+            <span class="name">overflow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pacman')" title="Click to copy">
+            <hd-icon icon="gg:pacman"></hd-icon>
+            <span class="name">pacman</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:password')" title="Click to copy">
+            <hd-icon icon="gg:password"></hd-icon>
+            <span class="name">password</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:path-back')" title="Click to copy">
+            <hd-icon icon="gg:path-back"></hd-icon>
+            <span class="name">path-back</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:path-crop')" title="Click to copy">
+            <hd-icon icon="gg:path-crop"></hd-icon>
+            <span class="name">path-crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:path-divide')" title="Click to copy">
+            <hd-icon icon="gg:path-divide"></hd-icon>
+            <span class="name">path-divide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:path-exclude')" title="Click to copy">
+            <hd-icon icon="gg:path-exclude"></hd-icon>
+            <span class="name">path-exclude</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:path-front')" title="Click to copy">
+            <hd-icon icon="gg:path-front"></hd-icon>
+            <span class="name">path-front</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:path-intersect')" title="Click to copy">
+            <hd-icon icon="gg:path-intersect"></hd-icon>
+            <span class="name">path-intersect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:path-outline')" title="Click to copy">
+            <hd-icon icon="gg:path-outline"></hd-icon>
+            <span class="name">path-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:path-trim')" title="Click to copy">
+            <hd-icon icon="gg:path-trim"></hd-icon>
+            <span class="name">path-trim</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:path-unite')" title="Click to copy">
+            <hd-icon icon="gg:path-unite"></hd-icon>
+            <span class="name">path-unite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:patreon')" title="Click to copy">
+            <hd-icon icon="gg:patreon"></hd-icon>
+            <span class="name">patreon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:paypal')" title="Click to copy">
+            <hd-icon icon="gg:paypal"></hd-icon>
+            <span class="name">paypal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pen')" title="Click to copy">
+            <hd-icon icon="gg:pen"></hd-icon>
+            <span class="name">pen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pentagon-bottom-left')" title="Click to copy">
+            <hd-icon icon="gg:pentagon-bottom-left"></hd-icon>
+            <span class="name">pentagon-bottom-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pentagon-bottom-right')" title="Click to copy">
+            <hd-icon icon="gg:pentagon-bottom-right"></hd-icon>
+            <span class="name">pentagon-bottom-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pentagon-down')" title="Click to copy">
+            <hd-icon icon="gg:pentagon-down"></hd-icon>
+            <span class="name">pentagon-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pentagon-left')" title="Click to copy">
+            <hd-icon icon="gg:pentagon-left"></hd-icon>
+            <span class="name">pentagon-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pentagon-right')" title="Click to copy">
+            <hd-icon icon="gg:pentagon-right"></hd-icon>
+            <span class="name">pentagon-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pentagon-top-left')" title="Click to copy">
+            <hd-icon icon="gg:pentagon-top-left"></hd-icon>
+            <span class="name">pentagon-top-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pentagon-top-right')" title="Click to copy">
+            <hd-icon icon="gg:pentagon-top-right"></hd-icon>
+            <span class="name">pentagon-top-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pentagon-up')" title="Click to copy">
+            <hd-icon icon="gg:pentagon-up"></hd-icon>
+            <span class="name">pentagon-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:performance')" title="Click to copy">
+            <hd-icon icon="gg:performance"></hd-icon>
+            <span class="name">performance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pexels')" title="Click to copy">
+            <hd-icon icon="gg:pexels"></hd-icon>
+            <span class="name">pexels</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:phone')" title="Click to copy">
+            <hd-icon icon="gg:phone"></hd-icon>
+            <span class="name">phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:photoscan')" title="Click to copy">
+            <hd-icon icon="gg:photoscan"></hd-icon>
+            <span class="name">photoscan</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:piano')" title="Click to copy">
+            <hd-icon icon="gg:piano"></hd-icon>
+            <span class="name">piano</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pill')" title="Click to copy">
+            <hd-icon icon="gg:pill"></hd-icon>
+            <span class="name">pill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pin')" title="Click to copy">
+            <hd-icon icon="gg:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pin-alt')" title="Click to copy">
+            <hd-icon icon="gg:pin-alt"></hd-icon>
+            <span class="name">pin-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pin-bottom')" title="Click to copy">
+            <hd-icon icon="gg:pin-bottom"></hd-icon>
+            <span class="name">pin-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pin-top')" title="Click to copy">
+            <hd-icon icon="gg:pin-top"></hd-icon>
+            <span class="name">pin-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-backwards')" title="Click to copy">
+            <hd-icon icon="gg:play-backwards"></hd-icon>
+            <span class="name">play-backwards</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-button')" title="Click to copy">
+            <hd-icon icon="gg:play-button"></hd-icon>
+            <span class="name">play-button</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-button-o')" title="Click to copy">
+            <hd-icon icon="gg:play-button-o"></hd-icon>
+            <span class="name">play-button-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-button-r')" title="Click to copy">
+            <hd-icon icon="gg:play-button-r"></hd-icon>
+            <span class="name">play-button-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-forwards')" title="Click to copy">
+            <hd-icon icon="gg:play-forwards"></hd-icon>
+            <span class="name">play-forwards</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-list')" title="Click to copy">
+            <hd-icon icon="gg:play-list"></hd-icon>
+            <span class="name">play-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-list-add')" title="Click to copy">
+            <hd-icon icon="gg:play-list-add"></hd-icon>
+            <span class="name">play-list-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-list-check')" title="Click to copy">
+            <hd-icon icon="gg:play-list-check"></hd-icon>
+            <span class="name">play-list-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-list-remove')" title="Click to copy">
+            <hd-icon icon="gg:play-list-remove"></hd-icon>
+            <span class="name">play-list-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-list-search')" title="Click to copy">
+            <hd-icon icon="gg:play-list-search"></hd-icon>
+            <span class="name">play-list-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-pause')" title="Click to copy">
+            <hd-icon icon="gg:play-pause"></hd-icon>
+            <span class="name">play-pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-pause-o')" title="Click to copy">
+            <hd-icon icon="gg:play-pause-o"></hd-icon>
+            <span class="name">play-pause-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-pause-r')" title="Click to copy">
+            <hd-icon icon="gg:play-pause-r"></hd-icon>
+            <span class="name">play-pause-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-stop')" title="Click to copy">
+            <hd-icon icon="gg:play-stop"></hd-icon>
+            <span class="name">play-stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-stop-o')" title="Click to copy">
+            <hd-icon icon="gg:play-stop-o"></hd-icon>
+            <span class="name">play-stop-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-stop-r')" title="Click to copy">
+            <hd-icon icon="gg:play-stop-r"></hd-icon>
+            <span class="name">play-stop-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-track-next')" title="Click to copy">
+            <hd-icon icon="gg:play-track-next"></hd-icon>
+            <span class="name">play-track-next</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-track-next-o')" title="Click to copy">
+            <hd-icon icon="gg:play-track-next-o"></hd-icon>
+            <span class="name">play-track-next-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-track-next-r')" title="Click to copy">
+            <hd-icon icon="gg:play-track-next-r"></hd-icon>
+            <span class="name">play-track-next-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-track-prev')" title="Click to copy">
+            <hd-icon icon="gg:play-track-prev"></hd-icon>
+            <span class="name">play-track-prev</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-track-prev-o')" title="Click to copy">
+            <hd-icon icon="gg:play-track-prev-o"></hd-icon>
+            <span class="name">play-track-prev-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:play-track-prev-r')" title="Click to copy">
+            <hd-icon icon="gg:play-track-prev-r"></hd-icon>
+            <span class="name">play-track-prev-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:plug')" title="Click to copy">
+            <hd-icon icon="gg:plug"></hd-icon>
+            <span class="name">plug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pocket')" title="Click to copy">
+            <hd-icon icon="gg:pocket"></hd-icon>
+            <span class="name">pocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pokemon')" title="Click to copy">
+            <hd-icon icon="gg:pokemon"></hd-icon>
+            <span class="name">pokemon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:polaroid')" title="Click to copy">
+            <hd-icon icon="gg:polaroid"></hd-icon>
+            <span class="name">polaroid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:poll')" title="Click to copy">
+            <hd-icon icon="gg:poll"></hd-icon>
+            <span class="name">poll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:presentation')" title="Click to copy">
+            <hd-icon icon="gg:presentation"></hd-icon>
+            <span class="name">presentation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:printer')" title="Click to copy">
+            <hd-icon icon="gg:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:product-hunt')" title="Click to copy">
+            <hd-icon icon="gg:product-hunt"></hd-icon>
+            <span class="name">product-hunt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:profile')" title="Click to copy">
+            <hd-icon icon="gg:profile"></hd-icon>
+            <span class="name">profile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:pull-clear')" title="Click to copy">
+            <hd-icon icon="gg:pull-clear"></hd-icon>
+            <span class="name">pull-clear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-down')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-down"></hd-icon>
+            <span class="name">push-chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-down-o')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-down-o"></hd-icon>
+            <span class="name">push-chevron-down-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-down-r')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-down-r"></hd-icon>
+            <span class="name">push-chevron-down-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-left')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-left"></hd-icon>
+            <span class="name">push-chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-left-o')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-left-o"></hd-icon>
+            <span class="name">push-chevron-left-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-left-r')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-left-r"></hd-icon>
+            <span class="name">push-chevron-left-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-right')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-right"></hd-icon>
+            <span class="name">push-chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-right-o')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-right-o"></hd-icon>
+            <span class="name">push-chevron-right-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-right-r')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-right-r"></hd-icon>
+            <span class="name">push-chevron-right-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-up')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-up"></hd-icon>
+            <span class="name">push-chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-up-o')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-up-o"></hd-icon>
+            <span class="name">push-chevron-up-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-chevron-up-r')" title="Click to copy">
+            <hd-icon icon="gg:push-chevron-up-r"></hd-icon>
+            <span class="name">push-chevron-up-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-down')" title="Click to copy">
+            <hd-icon icon="gg:push-down"></hd-icon>
+            <span class="name">push-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-left')" title="Click to copy">
+            <hd-icon icon="gg:push-left"></hd-icon>
+            <span class="name">push-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-right')" title="Click to copy">
+            <hd-icon icon="gg:push-right"></hd-icon>
+            <span class="name">push-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:push-up')" title="Click to copy">
+            <hd-icon icon="gg:push-up"></hd-icon>
+            <span class="name">push-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:qr')" title="Click to copy">
+            <hd-icon icon="gg:qr"></hd-icon>
+            <span class="name">qr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:quote')" title="Click to copy">
+            <hd-icon icon="gg:quote"></hd-icon>
+            <span class="name">quote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:quote-o')" title="Click to copy">
+            <hd-icon icon="gg:quote-o"></hd-icon>
+            <span class="name">quote-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:radio-check')" title="Click to copy">
+            <hd-icon icon="gg:radio-check"></hd-icon>
+            <span class="name">radio-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:radio-checked')" title="Click to copy">
+            <hd-icon icon="gg:radio-checked"></hd-icon>
+            <span class="name">radio-checked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:ratio')" title="Click to copy">
+            <hd-icon icon="gg:ratio"></hd-icon>
+            <span class="name">ratio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:read')" title="Click to copy">
+            <hd-icon icon="gg:read"></hd-icon>
+            <span class="name">read</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:readme')" title="Click to copy">
+            <hd-icon icon="gg:readme"></hd-icon>
+            <span class="name">readme</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:record')" title="Click to copy">
+            <hd-icon icon="gg:record"></hd-icon>
+            <span class="name">record</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:redo')" title="Click to copy">
+            <hd-icon icon="gg:redo"></hd-icon>
+            <span class="name">redo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:remote')" title="Click to copy">
+            <hd-icon icon="gg:remote"></hd-icon>
+            <span class="name">remote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:remove')" title="Click to copy">
+            <hd-icon icon="gg:remove"></hd-icon>
+            <span class="name">remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:remove-r')" title="Click to copy">
+            <hd-icon icon="gg:remove-r"></hd-icon>
+            <span class="name">remove-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:rename')" title="Click to copy">
+            <hd-icon icon="gg:rename"></hd-icon>
+            <span class="name">rename</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:reorder')" title="Click to copy">
+            <hd-icon icon="gg:reorder"></hd-icon>
+            <span class="name">reorder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:repeat')" title="Click to copy">
+            <hd-icon icon="gg:repeat"></hd-icon>
+            <span class="name">repeat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:ring')" title="Click to copy">
+            <hd-icon icon="gg:ring"></hd-icon>
+            <span class="name">ring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:row-first')" title="Click to copy">
+            <hd-icon icon="gg:row-first"></hd-icon>
+            <span class="name">row-first</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:row-last')" title="Click to copy">
+            <hd-icon icon="gg:row-last"></hd-icon>
+            <span class="name">row-last</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:ruler')" title="Click to copy">
+            <hd-icon icon="gg:ruler"></hd-icon>
+            <span class="name">ruler</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sand-clock')" title="Click to copy">
+            <hd-icon icon="gg:sand-clock"></hd-icon>
+            <span class="name">sand-clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:scan')" title="Click to copy">
+            <hd-icon icon="gg:scan"></hd-icon>
+            <span class="name">scan</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:screen')" title="Click to copy">
+            <hd-icon icon="gg:screen"></hd-icon>
+            <span class="name">screen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:screen-mirror')" title="Click to copy">
+            <hd-icon icon="gg:screen-mirror"></hd-icon>
+            <span class="name">screen-mirror</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:screen-shot')" title="Click to copy">
+            <hd-icon icon="gg:screen-shot"></hd-icon>
+            <span class="name">screen-shot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:screen-wide')" title="Click to copy">
+            <hd-icon icon="gg:screen-wide"></hd-icon>
+            <span class="name">screen-wide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:scroll-h')" title="Click to copy">
+            <hd-icon icon="gg:scroll-h"></hd-icon>
+            <span class="name">scroll-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:scroll-v')" title="Click to copy">
+            <hd-icon icon="gg:scroll-v"></hd-icon>
+            <span class="name">scroll-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:search')" title="Click to copy">
+            <hd-icon icon="gg:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:search-found')" title="Click to copy">
+            <hd-icon icon="gg:search-found"></hd-icon>
+            <span class="name">search-found</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:search-loading')" title="Click to copy">
+            <hd-icon icon="gg:search-loading"></hd-icon>
+            <span class="name">search-loading</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:select')" title="Click to copy">
+            <hd-icon icon="gg:select"></hd-icon>
+            <span class="name">select</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:select-o')" title="Click to copy">
+            <hd-icon icon="gg:select-o"></hd-icon>
+            <span class="name">select-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:select-r')" title="Click to copy">
+            <hd-icon icon="gg:select-r"></hd-icon>
+            <span class="name">select-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:server')" title="Click to copy">
+            <hd-icon icon="gg:server"></hd-icon>
+            <span class="name">server</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:serverless')" title="Click to copy">
+            <hd-icon icon="gg:serverless"></hd-icon>
+            <span class="name">serverless</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shape-circle')" title="Click to copy">
+            <hd-icon icon="gg:shape-circle"></hd-icon>
+            <span class="name">shape-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shape-half-circle')" title="Click to copy">
+            <hd-icon icon="gg:shape-half-circle"></hd-icon>
+            <span class="name">shape-half-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shape-hexagon')" title="Click to copy">
+            <hd-icon icon="gg:shape-hexagon"></hd-icon>
+            <span class="name">shape-hexagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shape-rhombus')" title="Click to copy">
+            <hd-icon icon="gg:shape-rhombus"></hd-icon>
+            <span class="name">shape-rhombus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shape-square')" title="Click to copy">
+            <hd-icon icon="gg:shape-square"></hd-icon>
+            <span class="name">shape-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shape-triangle')" title="Click to copy">
+            <hd-icon icon="gg:shape-triangle"></hd-icon>
+            <span class="name">shape-triangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shape-zigzag')" title="Click to copy">
+            <hd-icon icon="gg:shape-zigzag"></hd-icon>
+            <span class="name">shape-zigzag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:share')" title="Click to copy">
+            <hd-icon icon="gg:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shield')" title="Click to copy">
+            <hd-icon icon="gg:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shopping-bag')" title="Click to copy">
+            <hd-icon icon="gg:shopping-bag"></hd-icon>
+            <span class="name">shopping-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shopping-cart')" title="Click to copy">
+            <hd-icon icon="gg:shopping-cart"></hd-icon>
+            <span class="name">shopping-cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shortcut')" title="Click to copy">
+            <hd-icon icon="gg:shortcut"></hd-icon>
+            <span class="name">shortcut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:shutterstock')" title="Click to copy">
+            <hd-icon icon="gg:shutterstock"></hd-icon>
+            <span class="name">shutterstock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sidebar')" title="Click to copy">
+            <hd-icon icon="gg:sidebar"></hd-icon>
+            <span class="name">sidebar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sidebar-open')" title="Click to copy">
+            <hd-icon icon="gg:sidebar-open"></hd-icon>
+            <span class="name">sidebar-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sidebar-right')" title="Click to copy">
+            <hd-icon icon="gg:sidebar-right"></hd-icon>
+            <span class="name">sidebar-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:signal')" title="Click to copy">
+            <hd-icon icon="gg:signal"></hd-icon>
+            <span class="name">signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:size')" title="Click to copy">
+            <hd-icon icon="gg:size"></hd-icon>
+            <span class="name">size</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sketch')" title="Click to copy">
+            <hd-icon icon="gg:sketch"></hd-icon>
+            <span class="name">sketch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:slack')" title="Click to copy">
+            <hd-icon icon="gg:slack"></hd-icon>
+            <span class="name">slack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sleep')" title="Click to copy">
+            <hd-icon icon="gg:sleep"></hd-icon>
+            <span class="name">sleep</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smart-home-boiler')" title="Click to copy">
+            <hd-icon icon="gg:smart-home-boiler"></hd-icon>
+            <span class="name">smart-home-boiler</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smart-home-cooker')" title="Click to copy">
+            <hd-icon icon="gg:smart-home-cooker"></hd-icon>
+            <span class="name">smart-home-cooker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smart-home-heat')" title="Click to copy">
+            <hd-icon icon="gg:smart-home-heat"></hd-icon>
+            <span class="name">smart-home-heat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smart-home-light')" title="Click to copy">
+            <hd-icon icon="gg:smart-home-light"></hd-icon>
+            <span class="name">smart-home-light</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smart-home-refrigerator')" title="Click to copy">
+            <hd-icon icon="gg:smart-home-refrigerator"></hd-icon>
+            <span class="name">smart-home-refrigerator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smart-home-wash-machine')" title="Click to copy">
+            <hd-icon icon="gg:smart-home-wash-machine"></hd-icon>
+            <span class="name">smart-home-wash-machine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smartphone')" title="Click to copy">
+            <hd-icon icon="gg:smartphone"></hd-icon>
+            <span class="name">smartphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smartphone-chip')" title="Click to copy">
+            <hd-icon icon="gg:smartphone-chip"></hd-icon>
+            <span class="name">smartphone-chip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smartphone-ram')" title="Click to copy">
+            <hd-icon icon="gg:smartphone-ram"></hd-icon>
+            <span class="name">smartphone-ram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smartphone-shake')" title="Click to copy">
+            <hd-icon icon="gg:smartphone-shake"></hd-icon>
+            <span class="name">smartphone-shake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smile')" title="Click to copy">
+            <hd-icon icon="gg:smile"></hd-icon>
+            <span class="name">smile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smile-mouth-open')" title="Click to copy">
+            <hd-icon icon="gg:smile-mouth-open"></hd-icon>
+            <span class="name">smile-mouth-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smile-neutral')" title="Click to copy">
+            <hd-icon icon="gg:smile-neutral"></hd-icon>
+            <span class="name">smile-neutral</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smile-no-mouth')" title="Click to copy">
+            <hd-icon icon="gg:smile-no-mouth"></hd-icon>
+            <span class="name">smile-no-mouth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smile-none')" title="Click to copy">
+            <hd-icon icon="gg:smile-none"></hd-icon>
+            <span class="name">smile-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smile-sad')" title="Click to copy">
+            <hd-icon icon="gg:smile-sad"></hd-icon>
+            <span class="name">smile-sad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:smile-upside')" title="Click to copy">
+            <hd-icon icon="gg:smile-upside"></hd-icon>
+            <span class="name">smile-upside</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:software-download')" title="Click to copy">
+            <hd-icon icon="gg:software-download"></hd-icon>
+            <span class="name">software-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:software-upload')" title="Click to copy">
+            <hd-icon icon="gg:software-upload"></hd-icon>
+            <span class="name">software-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sort-az')" title="Click to copy">
+            <hd-icon icon="gg:sort-az"></hd-icon>
+            <span class="name">sort-az</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sort-za')" title="Click to copy">
+            <hd-icon icon="gg:sort-za"></hd-icon>
+            <span class="name">sort-za</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:space-between')" title="Click to copy">
+            <hd-icon icon="gg:space-between"></hd-icon>
+            <span class="name">space-between</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:space-between-v')" title="Click to copy">
+            <hd-icon icon="gg:space-between-v"></hd-icon>
+            <span class="name">space-between-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:spectrum')" title="Click to copy">
+            <hd-icon icon="gg:spectrum"></hd-icon>
+            <span class="name">spectrum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:spinner')" title="Click to copy">
+            <hd-icon icon="gg:spinner"></hd-icon>
+            <span class="name">spinner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:spinner-alt')" title="Click to copy">
+            <hd-icon icon="gg:spinner-alt"></hd-icon>
+            <span class="name">spinner-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:spinner-two')" title="Click to copy">
+            <hd-icon icon="gg:spinner-two"></hd-icon>
+            <span class="name">spinner-two</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:spinner-two-alt')" title="Click to copy">
+            <hd-icon icon="gg:spinner-two-alt"></hd-icon>
+            <span class="name">spinner-two-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:square')" title="Click to copy">
+            <hd-icon icon="gg:square"></hd-icon>
+            <span class="name">square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:stack')" title="Click to copy">
+            <hd-icon icon="gg:stack"></hd-icon>
+            <span class="name">stack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:stark')" title="Click to copy">
+            <hd-icon icon="gg:stark"></hd-icon>
+            <span class="name">stark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:stopwatch')" title="Click to copy">
+            <hd-icon icon="gg:stopwatch"></hd-icon>
+            <span class="name">stopwatch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:stories')" title="Click to copy">
+            <hd-icon icon="gg:stories"></hd-icon>
+            <span class="name">stories</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:studio')" title="Click to copy">
+            <hd-icon icon="gg:studio"></hd-icon>
+            <span class="name">studio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:style')" title="Click to copy">
+            <hd-icon icon="gg:style"></hd-icon>
+            <span class="name">style</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sun')" title="Click to copy">
+            <hd-icon icon="gg:sun"></hd-icon>
+            <span class="name">sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:support')" title="Click to copy">
+            <hd-icon icon="gg:support"></hd-icon>
+            <span class="name">support</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:swap')" title="Click to copy">
+            <hd-icon icon="gg:swap"></hd-icon>
+            <span class="name">swap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:swap-vertical')" title="Click to copy">
+            <hd-icon icon="gg:swap-vertical"></hd-icon>
+            <span class="name">swap-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sweden')" title="Click to copy">
+            <hd-icon icon="gg:sweden"></hd-icon>
+            <span class="name">sweden</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:swiss')" title="Click to copy">
+            <hd-icon icon="gg:swiss"></hd-icon>
+            <span class="name">swiss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:sync')" title="Click to copy">
+            <hd-icon icon="gg:sync"></hd-icon>
+            <span class="name">sync</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:tab')" title="Click to copy">
+            <hd-icon icon="gg:tab"></hd-icon>
+            <span class="name">tab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:tag')" title="Click to copy">
+            <hd-icon icon="gg:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:tally')" title="Click to copy">
+            <hd-icon icon="gg:tally"></hd-icon>
+            <span class="name">tally</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:tap-double')" title="Click to copy">
+            <hd-icon icon="gg:tap-double"></hd-icon>
+            <span class="name">tap-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:tap-single')" title="Click to copy">
+            <hd-icon icon="gg:tap-single"></hd-icon>
+            <span class="name">tap-single</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:template')" title="Click to copy">
+            <hd-icon icon="gg:template"></hd-icon>
+            <span class="name">template</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:tennis')" title="Click to copy">
+            <hd-icon icon="gg:tennis"></hd-icon>
+            <span class="name">tennis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:terminal')" title="Click to copy">
+            <hd-icon icon="gg:terminal"></hd-icon>
+            <span class="name">terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:terrain')" title="Click to copy">
+            <hd-icon icon="gg:terrain"></hd-icon>
+            <span class="name">terrain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:thermometer')" title="Click to copy">
+            <hd-icon icon="gg:thermometer"></hd-icon>
+            <span class="name">thermometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:thermostat')" title="Click to copy">
+            <hd-icon icon="gg:thermostat"></hd-icon>
+            <span class="name">thermostat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:tikcode')" title="Click to copy">
+            <hd-icon icon="gg:tikcode"></hd-icon>
+            <span class="name">tikcode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:time')" title="Click to copy">
+            <hd-icon icon="gg:time"></hd-icon>
+            <span class="name">time</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:timelapse')" title="Click to copy">
+            <hd-icon icon="gg:timelapse"></hd-icon>
+            <span class="name">timelapse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:timer')" title="Click to copy">
+            <hd-icon icon="gg:timer"></hd-icon>
+            <span class="name">timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:today')" title="Click to copy">
+            <hd-icon icon="gg:today"></hd-icon>
+            <span class="name">today</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:toggle-off')" title="Click to copy">
+            <hd-icon icon="gg:toggle-off"></hd-icon>
+            <span class="name">toggle-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:toggle-on')" title="Click to copy">
+            <hd-icon icon="gg:toggle-on"></hd-icon>
+            <span class="name">toggle-on</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:toggle-square')" title="Click to copy">
+            <hd-icon icon="gg:toggle-square"></hd-icon>
+            <span class="name">toggle-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:toggle-square-off')" title="Click to copy">
+            <hd-icon icon="gg:toggle-square-off"></hd-icon>
+            <span class="name">toggle-square-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:toolbar-bottom')" title="Click to copy">
+            <hd-icon icon="gg:toolbar-bottom"></hd-icon>
+            <span class="name">toolbar-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:toolbar-left')" title="Click to copy">
+            <hd-icon icon="gg:toolbar-left"></hd-icon>
+            <span class="name">toolbar-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:toolbar-right')" title="Click to copy">
+            <hd-icon icon="gg:toolbar-right"></hd-icon>
+            <span class="name">toolbar-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:toolbar-top')" title="Click to copy">
+            <hd-icon icon="gg:toolbar-top"></hd-icon>
+            <span class="name">toolbar-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:toolbox')" title="Click to copy">
+            <hd-icon icon="gg:toolbox"></hd-icon>
+            <span class="name">toolbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:touchpad')" title="Click to copy">
+            <hd-icon icon="gg:touchpad"></hd-icon>
+            <span class="name">touchpad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:track')" title="Click to copy">
+            <hd-icon icon="gg:track"></hd-icon>
+            <span class="name">track</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:transcript')" title="Click to copy">
+            <hd-icon icon="gg:transcript"></hd-icon>
+            <span class="name">transcript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:trash')" title="Click to copy">
+            <hd-icon icon="gg:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:trash-empty')" title="Click to copy">
+            <hd-icon icon="gg:trash-empty"></hd-icon>
+            <span class="name">trash-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:tree')" title="Click to copy">
+            <hd-icon icon="gg:tree"></hd-icon>
+            <span class="name">tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:trees')" title="Click to copy">
+            <hd-icon icon="gg:trees"></hd-icon>
+            <span class="name">trees</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:trello')" title="Click to copy">
+            <hd-icon icon="gg:trello"></hd-icon>
+            <span class="name">trello</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:trending')" title="Click to copy">
+            <hd-icon icon="gg:trending"></hd-icon>
+            <span class="name">trending</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:trending-down')" title="Click to copy">
+            <hd-icon icon="gg:trending-down"></hd-icon>
+            <span class="name">trending-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:trophy')" title="Click to copy">
+            <hd-icon icon="gg:trophy"></hd-icon>
+            <span class="name">trophy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:tv')" title="Click to copy">
+            <hd-icon icon="gg:tv"></hd-icon>
+            <span class="name">tv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:twilio')" title="Click to copy">
+            <hd-icon icon="gg:twilio"></hd-icon>
+            <span class="name">twilio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:twitter')" title="Click to copy">
+            <hd-icon icon="gg:twitter"></hd-icon>
+            <span class="name">twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:ui-kit')" title="Click to copy">
+            <hd-icon icon="gg:ui-kit"></hd-icon>
+            <span class="name">ui-kit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:umbrella')" title="Click to copy">
+            <hd-icon icon="gg:umbrella"></hd-icon>
+            <span class="name">umbrella</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:unavailable')" title="Click to copy">
+            <hd-icon icon="gg:unavailable"></hd-icon>
+            <span class="name">unavailable</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:unblock')" title="Click to copy">
+            <hd-icon icon="gg:unblock"></hd-icon>
+            <span class="name">unblock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:undo')" title="Click to copy">
+            <hd-icon icon="gg:undo"></hd-icon>
+            <span class="name">undo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:unfold')" title="Click to copy">
+            <hd-icon icon="gg:unfold"></hd-icon>
+            <span class="name">unfold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:unsplash')" title="Click to copy">
+            <hd-icon icon="gg:unsplash"></hd-icon>
+            <span class="name">unsplash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:usb')" title="Click to copy">
+            <hd-icon icon="gg:usb"></hd-icon>
+            <span class="name">usb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:usb-c')" title="Click to copy">
+            <hd-icon icon="gg:usb-c"></hd-icon>
+            <span class="name">usb-c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:user')" title="Click to copy">
+            <hd-icon icon="gg:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:user-add')" title="Click to copy">
+            <hd-icon icon="gg:user-add"></hd-icon>
+            <span class="name">user-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:user-list')" title="Click to copy">
+            <hd-icon icon="gg:user-list"></hd-icon>
+            <span class="name">user-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:user-remove')" title="Click to copy">
+            <hd-icon icon="gg:user-remove"></hd-icon>
+            <span class="name">user-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:userlane')" title="Click to copy">
+            <hd-icon icon="gg:userlane"></hd-icon>
+            <span class="name">userlane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:vercel')" title="Click to copy">
+            <hd-icon icon="gg:vercel"></hd-icon>
+            <span class="name">vercel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:view-cols')" title="Click to copy">
+            <hd-icon icon="gg:view-cols"></hd-icon>
+            <span class="name">view-cols</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:view-comfortable')" title="Click to copy">
+            <hd-icon icon="gg:view-comfortable"></hd-icon>
+            <span class="name">view-comfortable</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:view-day')" title="Click to copy">
+            <hd-icon icon="gg:view-day"></hd-icon>
+            <span class="name">view-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:view-grid')" title="Click to copy">
+            <hd-icon icon="gg:view-grid"></hd-icon>
+            <span class="name">view-grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:view-list')" title="Click to copy">
+            <hd-icon icon="gg:view-list"></hd-icon>
+            <span class="name">view-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:view-month')" title="Click to copy">
+            <hd-icon icon="gg:view-month"></hd-icon>
+            <span class="name">view-month</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:view-split')" title="Click to copy">
+            <hd-icon icon="gg:view-split"></hd-icon>
+            <span class="name">view-split</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:vinyl')" title="Click to copy">
+            <hd-icon icon="gg:vinyl"></hd-icon>
+            <span class="name">vinyl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:voicemail')" title="Click to copy">
+            <hd-icon icon="gg:voicemail"></hd-icon>
+            <span class="name">voicemail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:voicemail-o')" title="Click to copy">
+            <hd-icon icon="gg:voicemail-o"></hd-icon>
+            <span class="name">voicemail-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:voicemail-r')" title="Click to copy">
+            <hd-icon icon="gg:voicemail-r"></hd-icon>
+            <span class="name">voicemail-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:volume')" title="Click to copy">
+            <hd-icon icon="gg:volume"></hd-icon>
+            <span class="name">volume</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:webcam')" title="Click to copy">
+            <hd-icon icon="gg:webcam"></hd-icon>
+            <span class="name">webcam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:website')" title="Click to copy">
+            <hd-icon icon="gg:website"></hd-icon>
+            <span class="name">website</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:windows')" title="Click to copy">
+            <hd-icon icon="gg:windows"></hd-icon>
+            <span class="name">windows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:work-alt')" title="Click to copy">
+            <hd-icon icon="gg:work-alt"></hd-icon>
+            <span class="name">work-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:yinyang')" title="Click to copy">
+            <hd-icon icon="gg:yinyang"></hd-icon>
+            <span class="name">yinyang</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:youtube')" title="Click to copy">
+            <hd-icon icon="gg:youtube"></hd-icon>
+            <span class="name">youtube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:zoom-in')" title="Click to copy">
+            <hd-icon icon="gg:zoom-in"></hd-icon>
+            <span class="name">zoom-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gg:zoom-out')" title="Click to copy">
+            <hd-icon icon="gg:zoom-out"></hd-icon>
+            <span class="name">zoom-out</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

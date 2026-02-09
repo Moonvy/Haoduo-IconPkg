@@ -1,0 +1,16 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAAClYkZAeMYYRrMNWzwWDFmYkSIRUSWWCZVdnU0N0ZEZ2V1gzZjRzFaQyZkRiQzY2ZaY3RFNkRGVEY1QSaVhIIGWF8SQR4aAz40BQIPBGL0FcQDAgETEjzkAQ4LCgTIAhkrEBkbASyCAU+KARQCQAgCiiADDYIBA1NVEwcCBxs8VsMXCQ0CyQEHBJsBCAoBLg0OCQEBCgUDDx2DDSeDBY4GcQJZAeOBzre6tg5E6MwsLZ9xn6tGbZ6GhP0GkMvm6+Y/wsEgR5X5I9E1hZ2pBdnxCx0PRrGifNoySsrTEAKTtuvhGWYHyQhHH0WFw7zplA7vlBsYifPyRGlyEQzFbTx03Y1Xvn0pmZyTFuHi7GSyaGdaHq49TRhtQQoYzdvFiAgh9oOn6S+wua3fMONarugtCz43FMIfKRngDQsPTcQzRwcx70NwEKf2JzHJV3XPoxN4EvddXzgD5E2rSRH8P7BXdpDpEuoXkyPwU4w0+sfv+KdFg/wbfeaFTpaF9AguKdKzDG2lI2SosjLsaYHhybufSBIHZ3JqtwfU4Vmheo8Uqj7Ob48kkTzYf/CNZ8zTyinG8AFZh8CTdJQqW0jC8677Lp2FMNv+S8qcRwUzl8w4AWjiq1iaIO4icY7G4hPdnYehCYGfYWy/S62W4WBdKPLVW6yhPIsyNg88NVgpEOTPEb6F7tZ0bGTYiDGrqW4q99+iqEyqWqx/kHv+13MVEbgkZJxjcRq56M9VCZHAUCIx6xk2Y8YvwfJ4/2mUOm1Eag2dWpVev7hh7O9emtdprw6BDDoWsI+/F1kGJTHskHIC3gvBevBCXU97qPuHVMnGy7yc6lV8bFEbMqQCiGNYrPdDyOB+NzQWvONNBAABiEDEImAQAEBCAAAAAAADAAAAG2NyeXB0b2N1cnJlbmN5LWNvbG9yLTAxLnN2ZwAAABtjcnlwdG9jdXJyZW5jeS1jb2xvci0wMi5zdmcAAAAbY3J5cHRvY3VycmVuY3ktY29sb3ItMDMuc3Zn/////wAAAAIAAAB5UlAiRCaGFBRkBKEAGRQSAWUmVVCIURERFZYJoRmUGkFFAURQBkVVUYRUQCBBARkkFEQFCEloUFVBCVgFqlWUREQVSkmFGGYoVUVICUIgRAQCFAABASBCEFVqRUGWBmBRpYVRJGUlBQEJEhoFVAWABCCAJYQVAFCYGQAAAAA=";
+
+const chunks = {
+  "cryptocurrency-color-01.svg": new URL("./cryptocurrency-color-01.svg", import.meta.url).href,
+  "cryptocurrency-color-02.svg": new URL("./cryptocurrency-color-02.svg", import.meta.url).href,
+  "cryptocurrency-color-03.svg": new URL("./cryptocurrency-color-03.svg", import.meta.url).href
+};
+
+register('cryptocurrency-color', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

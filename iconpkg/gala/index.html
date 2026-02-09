@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gala - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>gala <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(51)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('gala:add')" title="Click to copy">
+            <hd-icon icon="gala:add"></hd-icon>
+            <span class="name">add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:airplay')" title="Click to copy">
+            <hd-icon icon="gala:airplay"></hd-icon>
+            <span class="name">airplay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:apple')" title="Click to copy">
+            <hd-icon icon="gala:apple"></hd-icon>
+            <span class="name">apple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:bag')" title="Click to copy">
+            <hd-icon icon="gala:bag"></hd-icon>
+            <span class="name">bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:bell')" title="Click to copy">
+            <hd-icon icon="gala:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:book')" title="Click to copy">
+            <hd-icon icon="gala:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:brochure')" title="Click to copy">
+            <hd-icon icon="gala:brochure"></hd-icon>
+            <span class="name">brochure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:calendar')" title="Click to copy">
+            <hd-icon icon="gala:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:chart')" title="Click to copy">
+            <hd-icon icon="gala:chart"></hd-icon>
+            <span class="name">chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:chat')" title="Click to copy">
+            <hd-icon icon="gala:chat"></hd-icon>
+            <span class="name">chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:clock')" title="Click to copy">
+            <hd-icon icon="gala:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:copy')" title="Click to copy">
+            <hd-icon icon="gala:copy"></hd-icon>
+            <span class="name">copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:data')" title="Click to copy">
+            <hd-icon icon="gala:data"></hd-icon>
+            <span class="name">data</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:display')" title="Click to copy">
+            <hd-icon icon="gala:display"></hd-icon>
+            <span class="name">display</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:editor')" title="Click to copy">
+            <hd-icon icon="gala:editor"></hd-icon>
+            <span class="name">editor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:file')" title="Click to copy">
+            <hd-icon icon="gala:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:file-code1')" title="Click to copy">
+            <hd-icon icon="gala:file-code1"></hd-icon>
+            <span class="name">file-code1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:file-code2')" title="Click to copy">
+            <hd-icon icon="gala:file-code2"></hd-icon>
+            <span class="name">file-code2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:file-document')" title="Click to copy">
+            <hd-icon icon="gala:file-document"></hd-icon>
+            <span class="name">file-document</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:file-error')" title="Click to copy">
+            <hd-icon icon="gala:file-error"></hd-icon>
+            <span class="name">file-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:file-script')" title="Click to copy">
+            <hd-icon icon="gala:file-script"></hd-icon>
+            <span class="name">file-script</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:file-spreadsheet')" title="Click to copy">
+            <hd-icon icon="gala:file-spreadsheet"></hd-icon>
+            <span class="name">file-spreadsheet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:file-text')" title="Click to copy">
+            <hd-icon icon="gala:file-text"></hd-icon>
+            <span class="name">file-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:folder')" title="Click to copy">
+            <hd-icon icon="gala:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:globe')" title="Click to copy">
+            <hd-icon icon="gala:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:help')" title="Click to copy">
+            <hd-icon icon="gala:help"></hd-icon>
+            <span class="name">help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:image')" title="Click to copy">
+            <hd-icon icon="gala:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:issue')" title="Click to copy">
+            <hd-icon icon="gala:issue"></hd-icon>
+            <span class="name">issue</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:layer')" title="Click to copy">
+            <hd-icon icon="gala:layer"></hd-icon>
+            <span class="name">layer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:lock')" title="Click to copy">
+            <hd-icon icon="gala:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:mouse')" title="Click to copy">
+            <hd-icon icon="gala:mouse"></hd-icon>
+            <span class="name">mouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:multi')" title="Click to copy">
+            <hd-icon icon="gala:multi"></hd-icon>
+            <span class="name">multi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:orbit')" title="Click to copy">
+            <hd-icon icon="gala:orbit"></hd-icon>
+            <span class="name">orbit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:portrait1')" title="Click to copy">
+            <hd-icon icon="gala:portrait1"></hd-icon>
+            <span class="name">portrait1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:portrait2')" title="Click to copy">
+            <hd-icon icon="gala:portrait2"></hd-icon>
+            <span class="name">portrait2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:radar')" title="Click to copy">
+            <hd-icon icon="gala:radar"></hd-icon>
+            <span class="name">radar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:remove')" title="Click to copy">
+            <hd-icon icon="gala:remove"></hd-icon>
+            <span class="name">remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:search')" title="Click to copy">
+            <hd-icon icon="gala:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:secure')" title="Click to copy">
+            <hd-icon icon="gala:secure"></hd-icon>
+            <span class="name">secure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:select')" title="Click to copy">
+            <hd-icon icon="gala:select"></hd-icon>
+            <span class="name">select</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:settings')" title="Click to copy">
+            <hd-icon icon="gala:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:shield')" title="Click to copy">
+            <hd-icon icon="gala:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:sidebar-left')" title="Click to copy">
+            <hd-icon icon="gala:sidebar-left"></hd-icon>
+            <span class="name">sidebar-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:sidebar-right')" title="Click to copy">
+            <hd-icon icon="gala:sidebar-right"></hd-icon>
+            <span class="name">sidebar-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:store')" title="Click to copy">
+            <hd-icon icon="gala:store"></hd-icon>
+            <span class="name">store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:terminal')" title="Click to copy">
+            <hd-icon icon="gala:terminal"></hd-icon>
+            <span class="name">terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:tv')" title="Click to copy">
+            <hd-icon icon="gala:tv"></hd-icon>
+            <span class="name">tv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:unlock')" title="Click to copy">
+            <hd-icon icon="gala:unlock"></hd-icon>
+            <span class="name">unlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:usb')" title="Click to copy">
+            <hd-icon icon="gala:usb"></hd-icon>
+            <span class="name">usb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:video')" title="Click to copy">
+            <hd-icon icon="gala:video"></hd-icon>
+            <span class="name">video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gala:window')" title="Click to copy">
+            <hd-icon icon="gala:window"></hd-icon>
+            <span class="name">window</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

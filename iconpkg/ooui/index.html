@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ooui - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>ooui <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(370)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('ooui:add')" title="Click to copy">
+            <hd-icon icon="ooui:add"></hd-icon>
+            <span class="name">add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:alert')" title="Click to copy">
+            <hd-icon icon="ooui:alert"></hd-icon>
+            <span class="name">alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:align-center')" title="Click to copy">
+            <hd-icon icon="ooui:align-center"></hd-icon>
+            <span class="name">align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:align-left')" title="Click to copy">
+            <hd-icon icon="ooui:align-left"></hd-icon>
+            <span class="name">align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:align-right')" title="Click to copy">
+            <hd-icon icon="ooui:align-right"></hd-icon>
+            <span class="name">align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:appearance')" title="Click to copy">
+            <hd-icon icon="ooui:appearance"></hd-icon>
+            <span class="name">appearance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:arrow-down')" title="Click to copy">
+            <hd-icon icon="ooui:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:arrow-next-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:arrow-next-ltr"></hd-icon>
+            <span class="name">arrow-next-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:arrow-next-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:arrow-next-rtl"></hd-icon>
+            <span class="name">arrow-next-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:arrow-previous-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:arrow-previous-ltr"></hd-icon>
+            <span class="name">arrow-previous-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:arrow-previous-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:arrow-previous-rtl"></hd-icon>
+            <span class="name">arrow-previous-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:arrow-up')" title="Click to copy">
+            <hd-icon icon="ooui:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-add')" title="Click to copy">
+            <hd-icon icon="ooui:article-add"></hd-icon>
+            <span class="name">article-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-check')" title="Click to copy">
+            <hd-icon icon="ooui:article-check"></hd-icon>
+            <span class="name">article-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-disambiguation-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:article-disambiguation-ltr"></hd-icon>
+            <span class="name">article-disambiguation-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-disambiguation-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:article-disambiguation-rtl"></hd-icon>
+            <span class="name">article-disambiguation-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:article-ltr"></hd-icon>
+            <span class="name">article-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-not-found-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:article-not-found-ltr"></hd-icon>
+            <span class="name">article-not-found-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-not-found-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:article-not-found-rtl"></hd-icon>
+            <span class="name">article-not-found-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-redirect-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:article-redirect-ltr"></hd-icon>
+            <span class="name">article-redirect-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-redirect-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:article-redirect-rtl"></hd-icon>
+            <span class="name">article-redirect-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:article-rtl"></hd-icon>
+            <span class="name">article-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:article-search')" title="Click to copy">
+            <hd-icon icon="ooui:article-search"></hd-icon>
+            <span class="name">article-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:articles-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:articles-ltr"></hd-icon>
+            <span class="name">articles-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:articles-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:articles-rtl"></hd-icon>
+            <span class="name">articles-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:articles-search-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:articles-search-ltr"></hd-icon>
+            <span class="name">articles-search-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:articles-search-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:articles-search-rtl"></hd-icon>
+            <span class="name">articles-search-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:attachment')" title="Click to copy">
+            <hd-icon icon="ooui:attachment"></hd-icon>
+            <span class="name">attachment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bell')" title="Click to copy">
+            <hd-icon icon="ooui:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bell-outline')" title="Click to copy">
+            <hd-icon icon="ooui:bell-outline"></hd-icon>
+            <span class="name">bell-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bigger')" title="Click to copy">
+            <hd-icon icon="ooui:bigger"></hd-icon>
+            <span class="name">bigger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:block')" title="Click to copy">
+            <hd-icon icon="ooui:block"></hd-icon>
+            <span class="name">block</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-a')" title="Click to copy">
+            <hd-icon icon="ooui:bold-a"></hd-icon>
+            <span class="name">bold-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-arab-ain')" title="Click to copy">
+            <hd-icon icon="ooui:bold-arab-ain"></hd-icon>
+            <span class="name">bold-arab-ain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-arab-dad')" title="Click to copy">
+            <hd-icon icon="ooui:bold-arab-dad"></hd-icon>
+            <span class="name">bold-arab-dad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-arab-jeem')" title="Click to copy">
+            <hd-icon icon="ooui:bold-arab-jeem"></hd-icon>
+            <span class="name">bold-arab-jeem</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-armn-to')" title="Click to copy">
+            <hd-icon icon="ooui:bold-armn-to"></hd-icon>
+            <span class="name">bold-armn-to</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-b')" title="Click to copy">
+            <hd-icon icon="ooui:bold-b"></hd-icon>
+            <span class="name">bold-b</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-cyrl-be')" title="Click to copy">
+            <hd-icon icon="ooui:bold-cyrl-be"></hd-icon>
+            <span class="name">bold-cyrl-be</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-cyrl-palochka')" title="Click to copy">
+            <hd-icon icon="ooui:bold-cyrl-palochka"></hd-icon>
+            <span class="name">bold-cyrl-palochka</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-cyrl-te')" title="Click to copy">
+            <hd-icon icon="ooui:bold-cyrl-te"></hd-icon>
+            <span class="name">bold-cyrl-te</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-cyrl-zhe')" title="Click to copy">
+            <hd-icon icon="ooui:bold-cyrl-zhe"></hd-icon>
+            <span class="name">bold-cyrl-zhe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-f')" title="Click to copy">
+            <hd-icon icon="ooui:bold-f"></hd-icon>
+            <span class="name">bold-f</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-g')" title="Click to copy">
+            <hd-icon icon="ooui:bold-g"></hd-icon>
+            <span class="name">bold-g</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-geor-man')" title="Click to copy">
+            <hd-icon icon="ooui:bold-geor-man"></hd-icon>
+            <span class="name">bold-geor-man</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-l')" title="Click to copy">
+            <hd-icon icon="ooui:bold-l"></hd-icon>
+            <span class="name">bold-l</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-n')" title="Click to copy">
+            <hd-icon icon="ooui:bold-n"></hd-icon>
+            <span class="name">bold-n</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-q')" title="Click to copy">
+            <hd-icon icon="ooui:bold-q"></hd-icon>
+            <span class="name">bold-q</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bold-v')" title="Click to copy">
+            <hd-icon icon="ooui:bold-v"></hd-icon>
+            <span class="name">bold-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:book-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:book-ltr"></hd-icon>
+            <span class="name">book-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:book-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:book-rtl"></hd-icon>
+            <span class="name">book-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bookmark')" title="Click to copy">
+            <hd-icon icon="ooui:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bookmark-list-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:bookmark-list-ltr"></hd-icon>
+            <span class="name">bookmark-list-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bookmark-list-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:bookmark-list-rtl"></hd-icon>
+            <span class="name">bookmark-list-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bookmark-outline')" title="Click to copy">
+            <hd-icon icon="ooui:bookmark-outline"></hd-icon>
+            <span class="name">bookmark-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:bright')" title="Click to copy">
+            <hd-icon icon="ooui:bright"></hd-icon>
+            <span class="name">bright</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:browser-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:browser-ltr"></hd-icon>
+            <span class="name">browser-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:browser-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:browser-rtl"></hd-icon>
+            <span class="name">browser-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:calendar')" title="Click to copy">
+            <hd-icon icon="ooui:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:camera')" title="Click to copy">
+            <hd-icon icon="ooui:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:cancel')" title="Click to copy">
+            <hd-icon icon="ooui:cancel"></hd-icon>
+            <span class="name">cancel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:chart')" title="Click to copy">
+            <hd-icon icon="ooui:chart"></hd-icon>
+            <span class="name">chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:check')" title="Click to copy">
+            <hd-icon icon="ooui:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:check-all')" title="Click to copy">
+            <hd-icon icon="ooui:check-all"></hd-icon>
+            <span class="name">check-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:clear')" title="Click to copy">
+            <hd-icon icon="ooui:clear"></hd-icon>
+            <span class="name">clear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:clock')" title="Click to copy">
+            <hd-icon icon="ooui:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:close')" title="Click to copy">
+            <hd-icon icon="ooui:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:code')" title="Click to copy">
+            <hd-icon icon="ooui:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:collapse')" title="Click to copy">
+            <hd-icon icon="ooui:collapse"></hd-icon>
+            <span class="name">collapse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:copy-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:copy-ltr"></hd-icon>
+            <span class="name">copy-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:copy-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:copy-rtl"></hd-icon>
+            <span class="name">copy-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:cut-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:cut-ltr"></hd-icon>
+            <span class="name">cut-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:cut-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:cut-rtl"></hd-icon>
+            <span class="name">cut-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:database')" title="Click to copy">
+            <hd-icon icon="ooui:database"></hd-icon>
+            <span class="name">database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:die')" title="Click to copy">
+            <hd-icon icon="ooui:die"></hd-icon>
+            <span class="name">die</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:double-chevron-end-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:double-chevron-end-ltr"></hd-icon>
+            <span class="name">double-chevron-end-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:double-chevron-end-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:double-chevron-end-rtl"></hd-icon>
+            <span class="name">double-chevron-end-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:double-chevron-start-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:double-chevron-start-ltr"></hd-icon>
+            <span class="name">double-chevron-start-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:double-chevron-start-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:double-chevron-start-rtl"></hd-icon>
+            <span class="name">double-chevron-start-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:down-triangle')" title="Click to copy">
+            <hd-icon icon="ooui:down-triangle"></hd-icon>
+            <span class="name">down-triangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:download')" title="Click to copy">
+            <hd-icon icon="ooui:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:draggable')" title="Click to copy">
+            <hd-icon icon="ooui:draggable"></hd-icon>
+            <span class="name">draggable</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:edit')" title="Click to copy">
+            <hd-icon icon="ooui:edit"></hd-icon>
+            <span class="name">edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:edit-lock')" title="Click to copy">
+            <hd-icon icon="ooui:edit-lock"></hd-icon>
+            <span class="name">edit-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:edit-undo-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:edit-undo-ltr"></hd-icon>
+            <span class="name">edit-undo-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:edit-undo-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:edit-undo-rtl"></hd-icon>
+            <span class="name">edit-undo-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:ellipsis')" title="Click to copy">
+            <hd-icon icon="ooui:ellipsis"></hd-icon>
+            <span class="name">ellipsis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:error')" title="Click to copy">
+            <hd-icon icon="ooui:error"></hd-icon>
+            <span class="name">error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:exit-fullscreen')" title="Click to copy">
+            <hd-icon icon="ooui:exit-fullscreen"></hd-icon>
+            <span class="name">exit-fullscreen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:expand')" title="Click to copy">
+            <hd-icon icon="ooui:expand"></hd-icon>
+            <span class="name">expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:eye')" title="Click to copy">
+            <hd-icon icon="ooui:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:eye-closed')" title="Click to copy">
+            <hd-icon icon="ooui:eye-closed"></hd-icon>
+            <span class="name">eye-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:feedback-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:feedback-ltr"></hd-icon>
+            <span class="name">feedback-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:feedback-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:feedback-rtl"></hd-icon>
+            <span class="name">feedback-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:flag-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:flag-ltr"></hd-icon>
+            <span class="name">flag-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:flag-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:flag-rtl"></hd-icon>
+            <span class="name">flag-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:folder-placeholder-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:folder-placeholder-ltr"></hd-icon>
+            <span class="name">folder-placeholder-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:folder-placeholder-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:folder-placeholder-rtl"></hd-icon>
+            <span class="name">folder-placeholder-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:full-screen')" title="Click to copy">
+            <hd-icon icon="ooui:full-screen"></hd-icon>
+            <span class="name">full-screen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:function')" title="Click to copy">
+            <hd-icon icon="ooui:function"></hd-icon>
+            <span class="name">function</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:function-argument-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:function-argument-ltr"></hd-icon>
+            <span class="name">function-argument-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:function-argument-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:function-argument-rtl"></hd-icon>
+            <span class="name">function-argument-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:funnel-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:funnel-ltr"></hd-icon>
+            <span class="name">funnel-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:funnel-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:funnel-rtl"></hd-icon>
+            <span class="name">funnel-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:globe')" title="Click to copy">
+            <hd-icon icon="ooui:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:half-bright-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:half-bright-ltr"></hd-icon>
+            <span class="name">half-bright-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:half-bright-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:half-bright-rtl"></hd-icon>
+            <span class="name">half-bright-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:half-star-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:half-star-ltr"></hd-icon>
+            <span class="name">half-star-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:half-star-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:half-star-rtl"></hd-icon>
+            <span class="name">half-star-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:hand')" title="Click to copy">
+            <hd-icon icon="ooui:hand"></hd-icon>
+            <span class="name">hand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:heart')" title="Click to copy">
+            <hd-icon icon="ooui:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:help-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:help-ltr"></hd-icon>
+            <span class="name">help-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:help-notice-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:help-notice-ltr"></hd-icon>
+            <span class="name">help-notice-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:help-notice-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:help-notice-rtl"></hd-icon>
+            <span class="name">help-notice-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:help-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:help-rtl"></hd-icon>
+            <span class="name">help-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:hieroglyph')" title="Click to copy">
+            <hd-icon icon="ooui:hieroglyph"></hd-icon>
+            <span class="name">hieroglyph</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:highlight')" title="Click to copy">
+            <hd-icon icon="ooui:highlight"></hd-icon>
+            <span class="name">highlight</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:history')" title="Click to copy">
+            <hd-icon icon="ooui:history"></hd-icon>
+            <span class="name">history</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:home')" title="Click to copy">
+            <hd-icon icon="ooui:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image')" title="Click to copy">
+            <hd-icon icon="ooui:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image-add-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:image-add-ltr"></hd-icon>
+            <span class="name">image-add-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image-add-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:image-add-rtl"></hd-icon>
+            <span class="name">image-add-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image-broken')" title="Click to copy">
+            <hd-icon icon="ooui:image-broken"></hd-icon>
+            <span class="name">image-broken</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image-gallery')" title="Click to copy">
+            <hd-icon icon="ooui:image-gallery"></hd-icon>
+            <span class="name">image-gallery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image-layout-basic')" title="Click to copy">
+            <hd-icon icon="ooui:image-layout-basic"></hd-icon>
+            <span class="name">image-layout-basic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image-layout-frame')" title="Click to copy">
+            <hd-icon icon="ooui:image-layout-frame"></hd-icon>
+            <span class="name">image-layout-frame</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image-layout-frameless')" title="Click to copy">
+            <hd-icon icon="ooui:image-layout-frameless"></hd-icon>
+            <span class="name">image-layout-frameless</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image-layout-thumbnail')" title="Click to copy">
+            <hd-icon icon="ooui:image-layout-thumbnail"></hd-icon>
+            <span class="name">image-layout-thumbnail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image-lock-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:image-lock-ltr"></hd-icon>
+            <span class="name">image-lock-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:image-lock-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:image-lock-rtl"></hd-icon>
+            <span class="name">image-lock-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:indent-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:indent-ltr"></hd-icon>
+            <span class="name">indent-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:indent-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:indent-rtl"></hd-icon>
+            <span class="name">indent-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:info')" title="Click to copy">
+            <hd-icon icon="ooui:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:info-filled')" title="Click to copy">
+            <hd-icon icon="ooui:info-filled"></hd-icon>
+            <span class="name">info-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:instance-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:instance-ltr"></hd-icon>
+            <span class="name">instance-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:instance-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:instance-rtl"></hd-icon>
+            <span class="name">instance-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-a')" title="Click to copy">
+            <hd-icon icon="ooui:italic-a"></hd-icon>
+            <span class="name">italic-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-arab-keheh-jeem')" title="Click to copy">
+            <hd-icon icon="ooui:italic-arab-keheh-jeem"></hd-icon>
+            <span class="name">italic-arab-keheh-jeem</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-arab-meem')" title="Click to copy">
+            <hd-icon icon="ooui:italic-arab-meem"></hd-icon>
+            <span class="name">italic-arab-meem</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-arab-teh')" title="Click to copy">
+            <hd-icon icon="ooui:italic-arab-teh"></hd-icon>
+            <span class="name">italic-arab-teh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-armn-sha')" title="Click to copy">
+            <hd-icon icon="ooui:italic-armn-sha"></hd-icon>
+            <span class="name">italic-armn-sha</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-c')" title="Click to copy">
+            <hd-icon icon="ooui:italic-c"></hd-icon>
+            <span class="name">italic-c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-d')" title="Click to copy">
+            <hd-icon icon="ooui:italic-d"></hd-icon>
+            <span class="name">italic-d</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-e')" title="Click to copy">
+            <hd-icon icon="ooui:italic-e"></hd-icon>
+            <span class="name">italic-e</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-geor-kan')" title="Click to copy">
+            <hd-icon icon="ooui:italic-geor-kan"></hd-icon>
+            <span class="name">italic-geor-kan</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-i')" title="Click to copy">
+            <hd-icon icon="ooui:italic-i"></hd-icon>
+            <span class="name">italic-i</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-k')" title="Click to copy">
+            <hd-icon icon="ooui:italic-k"></hd-icon>
+            <span class="name">italic-k</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:italic-s')" title="Click to copy">
+            <hd-icon icon="ooui:italic-s"></hd-icon>
+            <span class="name">italic-s</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:journal-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:journal-ltr"></hd-icon>
+            <span class="name">journal-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:journal-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:journal-rtl"></hd-icon>
+            <span class="name">journal-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:key')" title="Click to copy">
+            <hd-icon icon="ooui:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:keyboard')" title="Click to copy">
+            <hd-icon icon="ooui:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:lab-flask')" title="Click to copy">
+            <hd-icon icon="ooui:lab-flask"></hd-icon>
+            <span class="name">lab-flask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:language')" title="Click to copy">
+            <hd-icon icon="ooui:language"></hd-icon>
+            <span class="name">language</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:larger-text')" title="Click to copy">
+            <hd-icon icon="ooui:larger-text"></hd-icon>
+            <span class="name">larger-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:layout-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:layout-ltr"></hd-icon>
+            <span class="name">layout-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:layout-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:layout-rtl"></hd-icon>
+            <span class="name">layout-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:lightbulb')" title="Click to copy">
+            <hd-icon icon="ooui:lightbulb"></hd-icon>
+            <span class="name">lightbulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:link')" title="Click to copy">
+            <hd-icon icon="ooui:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:link-external-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:link-external-ltr"></hd-icon>
+            <span class="name">link-external-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:link-external-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:link-external-rtl"></hd-icon>
+            <span class="name">link-external-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:link-secure')" title="Click to copy">
+            <hd-icon icon="ooui:link-secure"></hd-icon>
+            <span class="name">link-secure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:list-bullet-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:list-bullet-ltr"></hd-icon>
+            <span class="name">list-bullet-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:list-bullet-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:list-bullet-rtl"></hd-icon>
+            <span class="name">list-bullet-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:list-numbered-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:list-numbered-ltr"></hd-icon>
+            <span class="name">list-numbered-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:list-numbered-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:list-numbered-rtl"></hd-icon>
+            <span class="name">list-numbered-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:literal-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:literal-ltr"></hd-icon>
+            <span class="name">literal-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:literal-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:literal-rtl"></hd-icon>
+            <span class="name">literal-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:lock')" title="Click to copy">
+            <hd-icon icon="ooui:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:log-in-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:log-in-ltr"></hd-icon>
+            <span class="name">log-in-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:log-in-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:log-in-rtl"></hd-icon>
+            <span class="name">log-in-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:log-out-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:log-out-ltr"></hd-icon>
+            <span class="name">log-out-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:log-out-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:log-out-rtl"></hd-icon>
+            <span class="name">log-out-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-cc')" title="Click to copy">
+            <hd-icon icon="ooui:logo-cc"></hd-icon>
+            <span class="name">logo-cc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-codex')" title="Click to copy">
+            <hd-icon icon="ooui:logo-codex"></hd-icon>
+            <span class="name">logo-codex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-media-wiki')" title="Click to copy">
+            <hd-icon icon="ooui:logo-media-wiki"></hd-icon>
+            <span class="name">logo-media-wiki</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-meta-wiki')" title="Click to copy">
+            <hd-icon icon="ooui:logo-meta-wiki"></hd-icon>
+            <span class="name">logo-meta-wiki</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikibooks')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikibooks"></hd-icon>
+            <span class="name">logo-wikibooks</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikidata')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikidata"></hd-icon>
+            <span class="name">logo-wikidata</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikifunctions')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikifunctions"></hd-icon>
+            <span class="name">logo-wikifunctions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikimedia')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikimedia"></hd-icon>
+            <span class="name">logo-wikimedia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikimedia-commons')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikimedia-commons"></hd-icon>
+            <span class="name">logo-wikimedia-commons</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikimedia-discovery')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikimedia-discovery"></hd-icon>
+            <span class="name">logo-wikimedia-discovery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikinews')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikinews"></hd-icon>
+            <span class="name">logo-wikinews</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikipedia')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikipedia"></hd-icon>
+            <span class="name">logo-wikipedia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikiquote')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikiquote"></hd-icon>
+            <span class="name">logo-wikiquote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikisource')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikisource"></hd-icon>
+            <span class="name">logo-wikisource</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikispecies')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikispecies"></hd-icon>
+            <span class="name">logo-wikispecies</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikiversity')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikiversity"></hd-icon>
+            <span class="name">logo-wikiversity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wikivoyage')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wikivoyage"></hd-icon>
+            <span class="name">logo-wikivoyage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:logo-wiktionary')" title="Click to copy">
+            <hd-icon icon="ooui:logo-wiktionary"></hd-icon>
+            <span class="name">logo-wiktionary</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:map-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:map-ltr"></hd-icon>
+            <span class="name">map-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:map-pin')" title="Click to copy">
+            <hd-icon icon="ooui:map-pin"></hd-icon>
+            <span class="name">map-pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:map-pin-add')" title="Click to copy">
+            <hd-icon icon="ooui:map-pin-add"></hd-icon>
+            <span class="name">map-pin-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:map-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:map-rtl"></hd-icon>
+            <span class="name">map-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:map-trail')" title="Click to copy">
+            <hd-icon icon="ooui:map-trail"></hd-icon>
+            <span class="name">map-trail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:markup')" title="Click to copy">
+            <hd-icon icon="ooui:markup"></hd-icon>
+            <span class="name">markup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:mathematics')" title="Click to copy">
+            <hd-icon icon="ooui:mathematics"></hd-icon>
+            <span class="name">mathematics</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:mathematics-display-block')" title="Click to copy">
+            <hd-icon icon="ooui:mathematics-display-block"></hd-icon>
+            <span class="name">mathematics-display-block</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:mathematics-display-default')" title="Click to copy">
+            <hd-icon icon="ooui:mathematics-display-default"></hd-icon>
+            <span class="name">mathematics-display-default</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:mathematics-display-inline')" title="Click to copy">
+            <hd-icon icon="ooui:mathematics-display-inline"></hd-icon>
+            <span class="name">mathematics-display-inline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:menu')" title="Click to copy">
+            <hd-icon icon="ooui:menu"></hd-icon>
+            <span class="name">menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:merge-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:merge-ltr"></hd-icon>
+            <span class="name">merge-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:merge-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:merge-rtl"></hd-icon>
+            <span class="name">merge-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:message')" title="Click to copy">
+            <hd-icon icon="ooui:message"></hd-icon>
+            <span class="name">message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:moon')" title="Click to copy">
+            <hd-icon icon="ooui:moon"></hd-icon>
+            <span class="name">moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:move')" title="Click to copy">
+            <hd-icon icon="ooui:move"></hd-icon>
+            <span class="name">move</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:move-first-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:move-first-ltr"></hd-icon>
+            <span class="name">move-first-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:move-first-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:move-first-rtl"></hd-icon>
+            <span class="name">move-first-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:move-last-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:move-last-ltr"></hd-icon>
+            <span class="name">move-last-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:move-last-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:move-last-rtl"></hd-icon>
+            <span class="name">move-last-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:musical-score')" title="Click to copy">
+            <hd-icon icon="ooui:musical-score"></hd-icon>
+            <span class="name">musical-score</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:network')" title="Click to copy">
+            <hd-icon icon="ooui:network"></hd-icon>
+            <span class="name">network</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:network-off')" title="Click to copy">
+            <hd-icon icon="ooui:network-off"></hd-icon>
+            <span class="name">network-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:new-window-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:new-window-ltr"></hd-icon>
+            <span class="name">new-window-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:new-window-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:new-window-rtl"></hd-icon>
+            <span class="name">new-window-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:newline-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:newline-ltr"></hd-icon>
+            <span class="name">newline-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:newline-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:newline-rtl"></hd-icon>
+            <span class="name">newline-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:newspaper-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:newspaper-ltr"></hd-icon>
+            <span class="name">newspaper-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:newspaper-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:newspaper-rtl"></hd-icon>
+            <span class="name">newspaper-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:next-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:next-ltr"></hd-icon>
+            <span class="name">next-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:next-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:next-rtl"></hd-icon>
+            <span class="name">next-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:no-wiki-text')" title="Click to copy">
+            <hd-icon icon="ooui:no-wiki-text"></hd-icon>
+            <span class="name">no-wiki-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:not-bright')" title="Click to copy">
+            <hd-icon icon="ooui:not-bright"></hd-icon>
+            <span class="name">not-bright</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:notice')" title="Click to copy">
+            <hd-icon icon="ooui:notice"></hd-icon>
+            <span class="name">notice</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:ocr')" title="Click to copy">
+            <hd-icon icon="ooui:ocr"></hd-icon>
+            <span class="name">ocr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:ongoing-conversation-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:ongoing-conversation-ltr"></hd-icon>
+            <span class="name">ongoing-conversation-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:ongoing-conversation-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:ongoing-conversation-rtl"></hd-icon>
+            <span class="name">ongoing-conversation-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:outdent-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:outdent-ltr"></hd-icon>
+            <span class="name">outdent-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:outdent-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:outdent-rtl"></hd-icon>
+            <span class="name">outdent-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:outline-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:outline-ltr"></hd-icon>
+            <span class="name">outline-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:outline-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:outline-rtl"></hd-icon>
+            <span class="name">outline-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:page-settings')" title="Click to copy">
+            <hd-icon icon="ooui:page-settings"></hd-icon>
+            <span class="name">page-settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:palette-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:palette-ltr"></hd-icon>
+            <span class="name">palette-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:palette-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:palette-rtl"></hd-icon>
+            <span class="name">palette-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:paste-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:paste-ltr"></hd-icon>
+            <span class="name">paste-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:paste-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:paste-rtl"></hd-icon>
+            <span class="name">paste-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:pause')" title="Click to copy">
+            <hd-icon icon="ooui:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:play')" title="Click to copy">
+            <hd-icon icon="ooui:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:power')" title="Click to copy">
+            <hd-icon icon="ooui:power"></hd-icon>
+            <span class="name">power</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:previous-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:previous-ltr"></hd-icon>
+            <span class="name">previous-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:previous-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:previous-rtl"></hd-icon>
+            <span class="name">previous-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:printer')" title="Click to copy">
+            <hd-icon icon="ooui:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:push-pin')" title="Click to copy">
+            <hd-icon icon="ooui:push-pin"></hd-icon>
+            <span class="name">push-pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:puzzle-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:puzzle-ltr"></hd-icon>
+            <span class="name">puzzle-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:puzzle-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:puzzle-rtl"></hd-icon>
+            <span class="name">puzzle-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:qr-code')" title="Click to copy">
+            <hd-icon icon="ooui:qr-code"></hd-icon>
+            <span class="name">qr-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:quotes-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:quotes-ltr"></hd-icon>
+            <span class="name">quotes-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:quotes-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:quotes-rtl"></hd-icon>
+            <span class="name">quotes-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:recent-changes-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:recent-changes-ltr"></hd-icon>
+            <span class="name">recent-changes-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:recent-changes-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:recent-changes-rtl"></hd-icon>
+            <span class="name">recent-changes-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:redo-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:redo-ltr"></hd-icon>
+            <span class="name">redo-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:redo-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:redo-rtl"></hd-icon>
+            <span class="name">redo-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:reference')" title="Click to copy">
+            <hd-icon icon="ooui:reference"></hd-icon>
+            <span class="name">reference</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:reference-existing-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:reference-existing-ltr"></hd-icon>
+            <span class="name">reference-existing-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:reference-existing-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:reference-existing-rtl"></hd-icon>
+            <span class="name">reference-existing-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:references-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:references-ltr"></hd-icon>
+            <span class="name">references-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:references-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:references-rtl"></hd-icon>
+            <span class="name">references-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:reload')" title="Click to copy">
+            <hd-icon icon="ooui:reload"></hd-icon>
+            <span class="name">reload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:restore')" title="Click to copy">
+            <hd-icon icon="ooui:restore"></hd-icon>
+            <span class="name">restore</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:robot')" title="Click to copy">
+            <hd-icon icon="ooui:robot"></hd-icon>
+            <span class="name">robot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:sandbox')" title="Click to copy">
+            <hd-icon icon="ooui:sandbox"></hd-icon>
+            <span class="name">sandbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:search')" title="Click to copy">
+            <hd-icon icon="ooui:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:search-case-sensitive')" title="Click to copy">
+            <hd-icon icon="ooui:search-case-sensitive"></hd-icon>
+            <span class="name">search-case-sensitive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:search-diacritics')" title="Click to copy">
+            <hd-icon icon="ooui:search-diacritics"></hd-icon>
+            <span class="name">search-diacritics</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:search-regular-expression')" title="Click to copy">
+            <hd-icon icon="ooui:search-regular-expression"></hd-icon>
+            <span class="name">search-regular-expression</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:settings')" title="Click to copy">
+            <hd-icon icon="ooui:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:share')" title="Click to copy">
+            <hd-icon icon="ooui:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:signature-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:signature-ltr"></hd-icon>
+            <span class="name">signature-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:signature-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:signature-rtl"></hd-icon>
+            <span class="name">signature-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:smaller')" title="Click to copy">
+            <hd-icon icon="ooui:smaller"></hd-icon>
+            <span class="name">smaller</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:smaller-text')" title="Click to copy">
+            <hd-icon icon="ooui:smaller-text"></hd-icon>
+            <span class="name">smaller-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:sort-vertical')" title="Click to copy">
+            <hd-icon icon="ooui:sort-vertical"></hd-icon>
+            <span class="name">sort-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:special-character')" title="Click to copy">
+            <hd-icon icon="ooui:special-character"></hd-icon>
+            <span class="name">special-character</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:special-pages-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:special-pages-ltr"></hd-icon>
+            <span class="name">special-pages-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:special-pages-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:special-pages-rtl"></hd-icon>
+            <span class="name">special-pages-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:speech-bubble-add-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:speech-bubble-add-ltr"></hd-icon>
+            <span class="name">speech-bubble-add-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:speech-bubble-add-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:speech-bubble-add-rtl"></hd-icon>
+            <span class="name">speech-bubble-add-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:speech-bubble-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:speech-bubble-ltr"></hd-icon>
+            <span class="name">speech-bubble-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:speech-bubble-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:speech-bubble-rtl"></hd-icon>
+            <span class="name">speech-bubble-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:speech-bubbles-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:speech-bubbles-ltr"></hd-icon>
+            <span class="name">speech-bubbles-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:speech-bubbles-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:speech-bubbles-rtl"></hd-icon>
+            <span class="name">speech-bubbles-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:star')" title="Click to copy">
+            <hd-icon icon="ooui:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:stop')" title="Click to copy">
+            <hd-icon icon="ooui:stop"></hd-icon>
+            <span class="name">stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:strikethrough-a')" title="Click to copy">
+            <hd-icon icon="ooui:strikethrough-a"></hd-icon>
+            <span class="name">strikethrough-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:strikethrough-s')" title="Click to copy">
+            <hd-icon icon="ooui:strikethrough-s"></hd-icon>
+            <span class="name">strikethrough-s</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:strikethrough-y')" title="Click to copy">
+            <hd-icon icon="ooui:strikethrough-y"></hd-icon>
+            <span class="name">strikethrough-y</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:subscript-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:subscript-ltr"></hd-icon>
+            <span class="name">subscript-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:subscript-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:subscript-rtl"></hd-icon>
+            <span class="name">subscript-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:subtract')" title="Click to copy">
+            <hd-icon icon="ooui:subtract"></hd-icon>
+            <span class="name">subtract</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:success')" title="Click to copy">
+            <hd-icon icon="ooui:success"></hd-icon>
+            <span class="name">success</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:superscript-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:superscript-ltr"></hd-icon>
+            <span class="name">superscript-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:superscript-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:superscript-rtl"></hd-icon>
+            <span class="name">superscript-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table')" title="Click to copy">
+            <hd-icon icon="ooui:table"></hd-icon>
+            <span class="name">table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-add-column-after-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:table-add-column-after-ltr"></hd-icon>
+            <span class="name">table-add-column-after-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-add-column-after-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:table-add-column-after-rtl"></hd-icon>
+            <span class="name">table-add-column-after-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-add-column-before-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:table-add-column-before-ltr"></hd-icon>
+            <span class="name">table-add-column-before-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-add-column-before-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:table-add-column-before-rtl"></hd-icon>
+            <span class="name">table-add-column-before-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-add-row-after')" title="Click to copy">
+            <hd-icon icon="ooui:table-add-row-after"></hd-icon>
+            <span class="name">table-add-row-after</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-add-row-before')" title="Click to copy">
+            <hd-icon icon="ooui:table-add-row-before"></hd-icon>
+            <span class="name">table-add-row-before</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-caption')" title="Click to copy">
+            <hd-icon icon="ooui:table-caption"></hd-icon>
+            <span class="name">table-caption</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-merge-cells')" title="Click to copy">
+            <hd-icon icon="ooui:table-merge-cells"></hd-icon>
+            <span class="name">table-merge-cells</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-move-column-after-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:table-move-column-after-ltr"></hd-icon>
+            <span class="name">table-move-column-after-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-move-column-after-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:table-move-column-after-rtl"></hd-icon>
+            <span class="name">table-move-column-after-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-move-column-before-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:table-move-column-before-ltr"></hd-icon>
+            <span class="name">table-move-column-before-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-move-column-before-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:table-move-column-before-rtl"></hd-icon>
+            <span class="name">table-move-column-before-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-move-row-after')" title="Click to copy">
+            <hd-icon icon="ooui:table-move-row-after"></hd-icon>
+            <span class="name">table-move-row-after</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:table-move-row-before')" title="Click to copy">
+            <hd-icon icon="ooui:table-move-row-before"></hd-icon>
+            <span class="name">table-move-row-before</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:tag-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:tag-ltr"></hd-icon>
+            <span class="name">tag-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:tag-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:tag-rtl"></hd-icon>
+            <span class="name">tag-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:template-add-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:template-add-ltr"></hd-icon>
+            <span class="name">template-add-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:template-add-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:template-add-rtl"></hd-icon>
+            <span class="name">template-add-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:text-dir-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:text-dir-ltr"></hd-icon>
+            <span class="name">text-dir-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:text-dir-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:text-dir-rtl"></hd-icon>
+            <span class="name">text-dir-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:text-flow-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:text-flow-ltr"></hd-icon>
+            <span class="name">text-flow-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:text-flow-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:text-flow-rtl"></hd-icon>
+            <span class="name">text-flow-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:text-style')" title="Click to copy">
+            <hd-icon icon="ooui:text-style"></hd-icon>
+            <span class="name">text-style</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:text-summary-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:text-summary-ltr"></hd-icon>
+            <span class="name">text-summary-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:text-summary-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:text-summary-rtl"></hd-icon>
+            <span class="name">text-summary-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:trash')" title="Click to copy">
+            <hd-icon icon="ooui:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:tray')" title="Click to copy">
+            <hd-icon icon="ooui:tray"></hd-icon>
+            <span class="name">tray</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:un-block')" title="Click to copy">
+            <hd-icon icon="ooui:un-block"></hd-icon>
+            <span class="name">un-block</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:un-flag-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:un-flag-ltr"></hd-icon>
+            <span class="name">un-flag-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:un-flag-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:un-flag-rtl"></hd-icon>
+            <span class="name">un-flag-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:un-link')" title="Click to copy">
+            <hd-icon icon="ooui:un-link"></hd-icon>
+            <span class="name">un-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:un-lock')" title="Click to copy">
+            <hd-icon icon="ooui:un-lock"></hd-icon>
+            <span class="name">un-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:un-star')" title="Click to copy">
+            <hd-icon icon="ooui:un-star"></hd-icon>
+            <span class="name">un-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:underline-a')" title="Click to copy">
+            <hd-icon icon="ooui:underline-a"></hd-icon>
+            <span class="name">underline-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:underline-u')" title="Click to copy">
+            <hd-icon icon="ooui:underline-u"></hd-icon>
+            <span class="name">underline-u</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:undo-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:undo-ltr"></hd-icon>
+            <span class="name">undo-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:undo-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:undo-rtl"></hd-icon>
+            <span class="name">undo-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:up-triangle')" title="Click to copy">
+            <hd-icon icon="ooui:up-triangle"></hd-icon>
+            <span class="name">up-triangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:update-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:update-ltr"></hd-icon>
+            <span class="name">update-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:update-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:update-rtl"></hd-icon>
+            <span class="name">update-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:upload')" title="Click to copy">
+            <hd-icon icon="ooui:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-active')" title="Click to copy">
+            <hd-icon icon="ooui:user-active"></hd-icon>
+            <span class="name">user-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-add-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:user-add-ltr"></hd-icon>
+            <span class="name">user-add-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-add-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:user-add-rtl"></hd-icon>
+            <span class="name">user-add-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-anonymous')" title="Click to copy">
+            <hd-icon icon="ooui:user-anonymous"></hd-icon>
+            <span class="name">user-anonymous</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-avatar')" title="Click to copy">
+            <hd-icon icon="ooui:user-avatar"></hd-icon>
+            <span class="name">user-avatar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-avatar-outline')" title="Click to copy">
+            <hd-icon icon="ooui:user-avatar-outline"></hd-icon>
+            <span class="name">user-avatar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-contributions-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:user-contributions-ltr"></hd-icon>
+            <span class="name">user-contributions-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-contributions-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:user-contributions-rtl"></hd-icon>
+            <span class="name">user-contributions-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-group-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:user-group-ltr"></hd-icon>
+            <span class="name">user-group-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-group-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:user-group-rtl"></hd-icon>
+            <span class="name">user-group-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-rights-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:user-rights-ltr"></hd-icon>
+            <span class="name">user-rights-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-rights-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:user-rights-rtl"></hd-icon>
+            <span class="name">user-rights-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-talk-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:user-talk-ltr"></hd-icon>
+            <span class="name">user-talk-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-talk-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:user-talk-rtl"></hd-icon>
+            <span class="name">user-talk-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-temporary-location-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:user-temporary-location-ltr"></hd-icon>
+            <span class="name">user-temporary-location-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-temporary-location-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:user-temporary-location-rtl"></hd-icon>
+            <span class="name">user-temporary-location-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-temporary-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:user-temporary-ltr"></hd-icon>
+            <span class="name">user-temporary-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:user-temporary-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:user-temporary-rtl"></hd-icon>
+            <span class="name">user-temporary-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:vertical-ellipsis')" title="Click to copy">
+            <hd-icon icon="ooui:vertical-ellipsis"></hd-icon>
+            <span class="name">vertical-ellipsis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:view-compact')" title="Click to copy">
+            <hd-icon icon="ooui:view-compact"></hd-icon>
+            <span class="name">view-compact</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:view-details-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:view-details-ltr"></hd-icon>
+            <span class="name">view-details-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:view-details-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:view-details-rtl"></hd-icon>
+            <span class="name">view-details-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:vision-simulator')" title="Click to copy">
+            <hd-icon icon="ooui:vision-simulator"></hd-icon>
+            <span class="name">vision-simulator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:volume-down-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:volume-down-ltr"></hd-icon>
+            <span class="name">volume-down-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:volume-down-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:volume-down-rtl"></hd-icon>
+            <span class="name">volume-down-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:volume-off-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:volume-off-ltr"></hd-icon>
+            <span class="name">volume-off-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:volume-off-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:volume-off-rtl"></hd-icon>
+            <span class="name">volume-off-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:volume-up-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:volume-up-ltr"></hd-icon>
+            <span class="name">volume-up-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:volume-up-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:volume-up-rtl"></hd-icon>
+            <span class="name">volume-up-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:watchlist-ltr')" title="Click to copy">
+            <hd-icon icon="ooui:watchlist-ltr"></hd-icon>
+            <span class="name">watchlist-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:watchlist-rtl')" title="Click to copy">
+            <hd-icon icon="ooui:watchlist-rtl"></hd-icon>
+            <span class="name">watchlist-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:wiki-text')" title="Click to copy">
+            <hd-icon icon="ooui:wiki-text"></hd-icon>
+            <span class="name">wiki-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:window')" title="Click to copy">
+            <hd-icon icon="ooui:window"></hd-icon>
+            <span class="name">window</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:zoom-in')" title="Click to copy">
+            <hd-icon icon="ooui:zoom-in"></hd-icon>
+            <span class="name">zoom-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('ooui:zoom-out')" title="Click to copy">
+            <hd-icon icon="ooui:zoom-out"></hd-icon>
+            <span class="name">zoom-out</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

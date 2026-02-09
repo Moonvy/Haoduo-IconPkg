@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flat-ui - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>flat-ui <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(100)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:android')" title="Click to copy">
+            <hd-icon icon="flat-ui:android"></hd-icon>
+            <span class="name">android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:android1')" title="Click to copy">
+            <hd-icon icon="flat-ui:android1"></hd-icon>
+            <span class="name">android1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:app-store')" title="Click to copy">
+            <hd-icon icon="flat-ui:app-store"></hd-icon>
+            <span class="name">app-store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:arrow')" title="Click to copy">
+            <hd-icon icon="flat-ui:arrow"></hd-icon>
+            <span class="name">arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:art')" title="Click to copy">
+            <hd-icon icon="flat-ui:art"></hd-icon>
+            <span class="name">art</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:bag')" title="Click to copy">
+            <hd-icon icon="flat-ui:bag"></hd-icon>
+            <span class="name">bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:basket')" title="Click to copy">
+            <hd-icon icon="flat-ui:basket"></hd-icon>
+            <span class="name">basket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:book')" title="Click to copy">
+            <hd-icon icon="flat-ui:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:bowling')" title="Click to copy">
+            <hd-icon icon="flat-ui:bowling"></hd-icon>
+            <span class="name">bowling</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:box')" title="Click to copy">
+            <hd-icon icon="flat-ui:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:brush')" title="Click to copy">
+            <hd-icon icon="flat-ui:brush"></hd-icon>
+            <span class="name">brush</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:building')" title="Click to copy">
+            <hd-icon icon="flat-ui:building"></hd-icon>
+            <span class="name">building</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:bulb')" title="Click to copy">
+            <hd-icon icon="flat-ui:bulb"></hd-icon>
+            <span class="name">bulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:button')" title="Click to copy">
+            <hd-icon icon="flat-ui:button"></hd-icon>
+            <span class="name">button</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:calculator')" title="Click to copy">
+            <hd-icon icon="flat-ui:calculator"></hd-icon>
+            <span class="name">calculator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:calendar')" title="Click to copy">
+            <hd-icon icon="flat-ui:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:camera')" title="Click to copy">
+            <hd-icon icon="flat-ui:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:car')" title="Click to copy">
+            <hd-icon icon="flat-ui:car"></hd-icon>
+            <span class="name">car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:card')" title="Click to copy">
+            <hd-icon icon="flat-ui:card"></hd-icon>
+            <span class="name">card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:chair')" title="Click to copy">
+            <hd-icon icon="flat-ui:chair"></hd-icon>
+            <span class="name">chair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:chat')" title="Click to copy">
+            <hd-icon icon="flat-ui:chat"></hd-icon>
+            <span class="name">chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:clipboard')" title="Click to copy">
+            <hd-icon icon="flat-ui:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:clocks')" title="Click to copy">
+            <hd-icon icon="flat-ui:clocks"></hd-icon>
+            <span class="name">clocks</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:compas')" title="Click to copy">
+            <hd-icon icon="flat-ui:compas"></hd-icon>
+            <span class="name">compas</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:converse')" title="Click to copy">
+            <hd-icon icon="flat-ui:converse"></hd-icon>
+            <span class="name">converse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:cup')" title="Click to copy">
+            <hd-icon icon="flat-ui:cup"></hd-icon>
+            <span class="name">cup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:dj')" title="Click to copy">
+            <hd-icon icon="flat-ui:dj"></hd-icon>
+            <span class="name">dj</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:donut')" title="Click to copy">
+            <hd-icon icon="flat-ui:donut"></hd-icon>
+            <span class="name">donut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:dude')" title="Click to copy">
+            <hd-icon icon="flat-ui:dude"></hd-icon>
+            <span class="name">dude</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:dynamite')" title="Click to copy">
+            <hd-icon icon="flat-ui:dynamite"></hd-icon>
+            <span class="name">dynamite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:earth')" title="Click to copy">
+            <hd-icon icon="flat-ui:earth"></hd-icon>
+            <span class="name">earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:egg')" title="Click to copy">
+            <hd-icon icon="flat-ui:egg"></hd-icon>
+            <span class="name">egg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:eye')" title="Click to copy">
+            <hd-icon icon="flat-ui:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:file')" title="Click to copy">
+            <hd-icon icon="flat-ui:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:fit')" title="Click to copy">
+            <hd-icon icon="flat-ui:fit"></hd-icon>
+            <span class="name">fit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:flag')" title="Click to copy">
+            <hd-icon icon="flat-ui:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:flask')" title="Click to copy">
+            <hd-icon icon="flat-ui:flask"></hd-icon>
+            <span class="name">flask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:flower')" title="Click to copy">
+            <hd-icon icon="flat-ui:flower"></hd-icon>
+            <span class="name">flower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:games')" title="Click to copy">
+            <hd-icon icon="flat-ui:games"></hd-icon>
+            <span class="name">games</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:gift-box')" title="Click to copy">
+            <hd-icon icon="flat-ui:gift-box"></hd-icon>
+            <span class="name">gift-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:girl')" title="Click to copy">
+            <hd-icon icon="flat-ui:girl"></hd-icon>
+            <span class="name">girl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:goal')" title="Click to copy">
+            <hd-icon icon="flat-ui:goal"></hd-icon>
+            <span class="name">goal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:google')" title="Click to copy">
+            <hd-icon icon="flat-ui:google"></hd-icon>
+            <span class="name">google</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:graph')" title="Click to copy">
+            <hd-icon icon="flat-ui:graph"></hd-icon>
+            <span class="name">graph</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:icecream')" title="Click to copy">
+            <hd-icon icon="flat-ui:icecream"></hd-icon>
+            <span class="name">icecream</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:imac')" title="Click to copy">
+            <hd-icon icon="flat-ui:imac"></hd-icon>
+            <span class="name">imac</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:ipad')" title="Click to copy">
+            <hd-icon icon="flat-ui:ipad"></hd-icon>
+            <span class="name">ipad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:iphone')" title="Click to copy">
+            <hd-icon icon="flat-ui:iphone"></hd-icon>
+            <span class="name">iphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:key')" title="Click to copy">
+            <hd-icon icon="flat-ui:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:lettersymbol')" title="Click to copy">
+            <hd-icon icon="flat-ui:lettersymbol"></hd-icon>
+            <span class="name">lettersymbol</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:lock')" title="Click to copy">
+            <hd-icon icon="flat-ui:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:loop')" title="Click to copy">
+            <hd-icon icon="flat-ui:loop"></hd-icon>
+            <span class="name">loop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:macbook')" title="Click to copy">
+            <hd-icon icon="flat-ui:macbook"></hd-icon>
+            <span class="name">macbook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:magic')" title="Click to copy">
+            <hd-icon icon="flat-ui:magic"></hd-icon>
+            <span class="name">magic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:magicmouse')" title="Click to copy">
+            <hd-icon icon="flat-ui:magicmouse"></hd-icon>
+            <span class="name">magicmouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:mail')" title="Click to copy">
+            <hd-icon icon="flat-ui:mail"></hd-icon>
+            <span class="name">mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:map')" title="Click to copy">
+            <hd-icon icon="flat-ui:map"></hd-icon>
+            <span class="name">map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:medal')" title="Click to copy">
+            <hd-icon icon="flat-ui:medal"></hd-icon>
+            <span class="name">medal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:mic')" title="Click to copy">
+            <hd-icon icon="flat-ui:mic"></hd-icon>
+            <span class="name">mic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:money')" title="Click to copy">
+            <hd-icon icon="flat-ui:money"></hd-icon>
+            <span class="name">money</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:mortarboard')" title="Click to copy">
+            <hd-icon icon="flat-ui:mortarboard"></hd-icon>
+            <span class="name">mortarboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:mountain')" title="Click to copy">
+            <hd-icon icon="flat-ui:mountain"></hd-icon>
+            <span class="name">mountain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:news')" title="Click to copy">
+            <hd-icon icon="flat-ui:news"></hd-icon>
+            <span class="name">news</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:paper-bag')" title="Click to copy">
+            <hd-icon icon="flat-ui:paper-bag"></hd-icon>
+            <span class="name">paper-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:pc')" title="Click to copy">
+            <hd-icon icon="flat-ui:pc"></hd-icon>
+            <span class="name">pc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:pencil')" title="Click to copy">
+            <hd-icon icon="flat-ui:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:pencils')" title="Click to copy">
+            <hd-icon icon="flat-ui:pencils"></hd-icon>
+            <span class="name">pencils</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:picture')" title="Click to copy">
+            <hd-icon icon="flat-ui:picture"></hd-icon>
+            <span class="name">picture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:pig')" title="Click to copy">
+            <hd-icon icon="flat-ui:pig"></hd-icon>
+            <span class="name">pig</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:pills')" title="Click to copy">
+            <hd-icon icon="flat-ui:pills"></hd-icon>
+            <span class="name">pills</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:play')" title="Click to copy">
+            <hd-icon icon="flat-ui:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:printer')" title="Click to copy">
+            <hd-icon icon="flat-ui:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:responsive')" title="Click to copy">
+            <hd-icon icon="flat-ui:responsive"></hd-icon>
+            <span class="name">responsive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:retina')" title="Click to copy">
+            <hd-icon icon="flat-ui:retina"></hd-icon>
+            <span class="name">retina</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:ring')" title="Click to copy">
+            <hd-icon icon="flat-ui:ring"></hd-icon>
+            <span class="name">ring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:rocket')" title="Click to copy">
+            <hd-icon icon="flat-ui:rocket"></hd-icon>
+            <span class="name">rocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:rss')" title="Click to copy">
+            <hd-icon icon="flat-ui:rss"></hd-icon>
+            <span class="name">rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:safe')" title="Click to copy">
+            <hd-icon icon="flat-ui:safe"></hd-icon>
+            <span class="name">safe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:save')" title="Click to copy">
+            <hd-icon icon="flat-ui:save"></hd-icon>
+            <span class="name">save</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:search')" title="Click to copy">
+            <hd-icon icon="flat-ui:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:settings')" title="Click to copy">
+            <hd-icon icon="flat-ui:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:shield')" title="Click to copy">
+            <hd-icon icon="flat-ui:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:shirt')" title="Click to copy">
+            <hd-icon icon="flat-ui:shirt"></hd-icon>
+            <span class="name">shirt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:skateboard')" title="Click to copy">
+            <hd-icon icon="flat-ui:skateboard"></hd-icon>
+            <span class="name">skateboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:spray')" title="Click to copy">
+            <hd-icon icon="flat-ui:spray"></hd-icon>
+            <span class="name">spray</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:storage')" title="Click to copy">
+            <hd-icon icon="flat-ui:storage"></hd-icon>
+            <span class="name">storage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:support')" title="Click to copy">
+            <hd-icon icon="flat-ui:support"></hd-icon>
+            <span class="name">support</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:ticket')" title="Click to copy">
+            <hd-icon icon="flat-ui:ticket"></hd-icon>
+            <span class="name">ticket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:toilet-paper')" title="Click to copy">
+            <hd-icon icon="flat-ui:toilet-paper"></hd-icon>
+            <span class="name">toilet-paper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:touch')" title="Click to copy">
+            <hd-icon icon="flat-ui:touch"></hd-icon>
+            <span class="name">touch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:trash')" title="Click to copy">
+            <hd-icon icon="flat-ui:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:trip-bag')" title="Click to copy">
+            <hd-icon icon="flat-ui:trip-bag"></hd-icon>
+            <span class="name">trip-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:trunk')" title="Click to copy">
+            <hd-icon icon="flat-ui:trunk"></hd-icon>
+            <span class="name">trunk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:ubmrella')" title="Click to copy">
+            <hd-icon icon="flat-ui:ubmrella"></hd-icon>
+            <span class="name">ubmrella</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:user-interface')" title="Click to copy">
+            <hd-icon icon="flat-ui:user-interface"></hd-icon>
+            <span class="name">user-interface</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:video')" title="Click to copy">
+            <hd-icon icon="flat-ui:video"></hd-icon>
+            <span class="name">video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:weather')" title="Click to copy">
+            <hd-icon icon="flat-ui:weather"></hd-icon>
+            <span class="name">weather</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:wi-fi')" title="Click to copy">
+            <hd-icon icon="flat-ui:wi-fi"></hd-icon>
+            <span class="name">wi-fi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:wine')" title="Click to copy">
+            <hd-icon icon="flat-ui:wine"></hd-icon>
+            <span class="name">wine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('flat-ui:yinyang')" title="Click to copy">
+            <hd-icon icon="flat-ui:yinyang"></hd-icon>
+            <span class="name">yinyang</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

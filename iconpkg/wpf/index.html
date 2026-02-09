@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wpf - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>wpf <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(200)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('wpf:2f-swipe-down')" title="Click to copy">
+            <hd-icon icon="wpf:2f-swipe-down"></hd-icon>
+            <span class="name">2f-swipe-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:2f-swipe-right')" title="Click to copy">
+            <hd-icon icon="wpf:2f-swipe-right"></hd-icon>
+            <span class="name">2f-swipe-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:add-image')" title="Click to copy">
+            <hd-icon icon="wpf:add-image"></hd-icon>
+            <span class="name">add-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:add-user')" title="Click to copy">
+            <hd-icon icon="wpf:add-user"></hd-icon>
+            <span class="name">add-user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:administrator')" title="Click to copy">
+            <hd-icon icon="wpf:administrator"></hd-icon>
+            <span class="name">administrator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:airplane-takeoff')" title="Click to copy">
+            <hd-icon icon="wpf:airplane-takeoff"></hd-icon>
+            <span class="name">airplane-takeoff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:alarm-clock')" title="Click to copy">
+            <hd-icon icon="wpf:alarm-clock"></hd-icon>
+            <span class="name">alarm-clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:align-center')" title="Click to copy">
+            <hd-icon icon="wpf:align-center"></hd-icon>
+            <span class="name">align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:align-justify')" title="Click to copy">
+            <hd-icon icon="wpf:align-justify"></hd-icon>
+            <span class="name">align-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:align-left')" title="Click to copy">
+            <hd-icon icon="wpf:align-left"></hd-icon>
+            <span class="name">align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:align-right')" title="Click to copy">
+            <hd-icon icon="wpf:align-right"></hd-icon>
+            <span class="name">align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:android')" title="Click to copy">
+            <hd-icon icon="wpf:android"></hd-icon>
+            <span class="name">android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:android-os')" title="Click to copy">
+            <hd-icon icon="wpf:android-os"></hd-icon>
+            <span class="name">android-os</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:app-shield')" title="Click to copy">
+            <hd-icon icon="wpf:app-shield"></hd-icon>
+            <span class="name">app-shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:approval')" title="Click to copy">
+            <hd-icon icon="wpf:approval"></hd-icon>
+            <span class="name">approval</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:archive2')" title="Click to copy">
+            <hd-icon icon="wpf:archive2"></hd-icon>
+            <span class="name">archive2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:ask-question')" title="Click to copy">
+            <hd-icon icon="wpf:ask-question"></hd-icon>
+            <span class="name">ask-question</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:assistant')" title="Click to copy">
+            <hd-icon icon="wpf:assistant"></hd-icon>
+            <span class="name">assistant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:attach')" title="Click to copy">
+            <hd-icon icon="wpf:attach"></hd-icon>
+            <span class="name">attach</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:audio-wave')" title="Click to copy">
+            <hd-icon icon="wpf:audio-wave"></hd-icon>
+            <span class="name">audio-wave</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:autopilot')" title="Click to copy">
+            <hd-icon icon="wpf:autopilot"></hd-icon>
+            <span class="name">autopilot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:ball-point-pen')" title="Click to copy">
+            <hd-icon icon="wpf:ball-point-pen"></hd-icon>
+            <span class="name">ball-point-pen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:bank-cards')" title="Click to copy">
+            <hd-icon icon="wpf:bank-cards"></hd-icon>
+            <span class="name">bank-cards</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:banknotes')" title="Click to copy">
+            <hd-icon icon="wpf:banknotes"></hd-icon>
+            <span class="name">banknotes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:bed')" title="Click to copy">
+            <hd-icon icon="wpf:bed"></hd-icon>
+            <span class="name">bed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:behance')" title="Click to copy">
+            <hd-icon icon="wpf:behance"></hd-icon>
+            <span class="name">behance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:bicycle')" title="Click to copy">
+            <hd-icon icon="wpf:bicycle"></hd-icon>
+            <span class="name">bicycle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:birthday')" title="Click to copy">
+            <hd-icon icon="wpf:birthday"></hd-icon>
+            <span class="name">birthday</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:blackberry')" title="Click to copy">
+            <hd-icon icon="wpf:blackberry"></hd-icon>
+            <span class="name">blackberry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:bold')" title="Click to copy">
+            <hd-icon icon="wpf:bold"></hd-icon>
+            <span class="name">bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:books')" title="Click to copy">
+            <hd-icon icon="wpf:books"></hd-icon>
+            <span class="name">books</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:briefcase')" title="Click to copy">
+            <hd-icon icon="wpf:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:bright-moon')" title="Click to copy">
+            <hd-icon icon="wpf:bright-moon"></hd-icon>
+            <span class="name">bright-moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:bug')" title="Click to copy">
+            <hd-icon icon="wpf:bug"></hd-icon>
+            <span class="name">bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:building')" title="Click to copy">
+            <hd-icon icon="wpf:building"></hd-icon>
+            <span class="name">building</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:business-contact')" title="Click to copy">
+            <hd-icon icon="wpf:business-contact"></hd-icon>
+            <span class="name">business-contact</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:calendar')" title="Click to copy">
+            <hd-icon icon="wpf:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:call-transfer')" title="Click to copy">
+            <hd-icon icon="wpf:call-transfer"></hd-icon>
+            <span class="name">call-transfer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:camera')" title="Click to copy">
+            <hd-icon icon="wpf:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:car-rental')" title="Click to copy">
+            <hd-icon icon="wpf:car-rental"></hd-icon>
+            <span class="name">car-rental</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:charge-battery')" title="Click to copy">
+            <hd-icon icon="wpf:charge-battery"></hd-icon>
+            <span class="name">charge-battery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:chat')" title="Click to copy">
+            <hd-icon icon="wpf:chat"></hd-icon>
+            <span class="name">chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:check-book')" title="Click to copy">
+            <hd-icon icon="wpf:check-book"></hd-icon>
+            <span class="name">check-book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:check-file')" title="Click to copy">
+            <hd-icon icon="wpf:check-file"></hd-icon>
+            <span class="name">check-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:checkmark')" title="Click to copy">
+            <hd-icon icon="wpf:checkmark"></hd-icon>
+            <span class="name">checkmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:clapperboard')" title="Click to copy">
+            <hd-icon icon="wpf:clapperboard"></hd-icon>
+            <span class="name">clapperboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:clipboard')" title="Click to copy">
+            <hd-icon icon="wpf:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:cloakroom')" title="Click to copy">
+            <hd-icon icon="wpf:cloakroom"></hd-icon>
+            <span class="name">cloakroom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:close-up-mode')" title="Click to copy">
+            <hd-icon icon="wpf:close-up-mode"></hd-icon>
+            <span class="name">close-up-mode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:cloud')" title="Click to copy">
+            <hd-icon icon="wpf:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:coins')" title="Click to copy">
+            <hd-icon icon="wpf:coins"></hd-icon>
+            <span class="name">coins</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:collaborator')" title="Click to copy">
+            <hd-icon icon="wpf:collaborator"></hd-icon>
+            <span class="name">collaborator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:color-dropper')" title="Click to copy">
+            <hd-icon icon="wpf:color-dropper"></hd-icon>
+            <span class="name">color-dropper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:connected')" title="Click to copy">
+            <hd-icon icon="wpf:connected"></hd-icon>
+            <span class="name">connected</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:controller')" title="Click to copy">
+            <hd-icon icon="wpf:controller"></hd-icon>
+            <span class="name">controller</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:cornet')" title="Click to copy">
+            <hd-icon icon="wpf:cornet"></hd-icon>
+            <span class="name">cornet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:create-new')" title="Click to copy">
+            <hd-icon icon="wpf:create-new"></hd-icon>
+            <span class="name">create-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:cursor')" title="Click to copy">
+            <hd-icon icon="wpf:cursor"></hd-icon>
+            <span class="name">cursor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:cut')" title="Click to copy">
+            <hd-icon icon="wpf:cut"></hd-icon>
+            <span class="name">cut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:cut-paper')" title="Click to copy">
+            <hd-icon icon="wpf:cut-paper"></hd-icon>
+            <span class="name">cut-paper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:define-location')" title="Click to copy">
+            <hd-icon icon="wpf:define-location"></hd-icon>
+            <span class="name">define-location</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:delete')" title="Click to copy">
+            <hd-icon icon="wpf:delete"></hd-icon>
+            <span class="name">delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:delete-shield')" title="Click to copy">
+            <hd-icon icon="wpf:delete-shield"></hd-icon>
+            <span class="name">delete-shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:desk-lamp')" title="Click to copy">
+            <hd-icon icon="wpf:desk-lamp"></hd-icon>
+            <span class="name">desk-lamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:details')" title="Click to copy">
+            <hd-icon icon="wpf:details"></hd-icon>
+            <span class="name">details</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:dining-room')" title="Click to copy">
+            <hd-icon icon="wpf:dining-room"></hd-icon>
+            <span class="name">dining-room</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:diploma-1')" title="Click to copy">
+            <hd-icon icon="wpf:diploma-1"></hd-icon>
+            <span class="name">diploma-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:disconnected')" title="Click to copy">
+            <hd-icon icon="wpf:disconnected"></hd-icon>
+            <span class="name">disconnected</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:doctors-bag')" title="Click to copy">
+            <hd-icon icon="wpf:doctors-bag"></hd-icon>
+            <span class="name">doctors-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:edit')" title="Click to copy">
+            <hd-icon icon="wpf:edit"></hd-icon>
+            <span class="name">edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:edit-file')" title="Click to copy">
+            <hd-icon icon="wpf:edit-file"></hd-icon>
+            <span class="name">edit-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:edit-image')" title="Click to copy">
+            <hd-icon icon="wpf:edit-image"></hd-icon>
+            <span class="name">edit-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:eject')" title="Click to copy">
+            <hd-icon icon="wpf:eject"></hd-icon>
+            <span class="name">eject</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:empty-battery')" title="Click to copy">
+            <hd-icon icon="wpf:empty-battery"></hd-icon>
+            <span class="name">empty-battery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:empty-flag')" title="Click to copy">
+            <hd-icon icon="wpf:empty-flag"></hd-icon>
+            <span class="name">empty-flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:end')" title="Click to copy">
+            <hd-icon icon="wpf:end"></hd-icon>
+            <span class="name">end</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:facial-recognition-scan')" title="Click to copy">
+            <hd-icon icon="wpf:facial-recognition-scan"></hd-icon>
+            <span class="name">facial-recognition-scan</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:factory')" title="Click to copy">
+            <hd-icon icon="wpf:factory"></hd-icon>
+            <span class="name">factory</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:fan')" title="Click to copy">
+            <hd-icon icon="wpf:fan"></hd-icon>
+            <span class="name">fan</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:faq')" title="Click to copy">
+            <hd-icon icon="wpf:faq"></hd-icon>
+            <span class="name">faq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:fast-forward')" title="Click to copy">
+            <hd-icon icon="wpf:fast-forward"></hd-icon>
+            <span class="name">fast-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:filled-flag')" title="Click to copy">
+            <hd-icon icon="wpf:filled-flag"></hd-icon>
+            <span class="name">filled-flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:fingerprint-scan')" title="Click to copy">
+            <hd-icon icon="wpf:fingerprint-scan"></hd-icon>
+            <span class="name">fingerprint-scan</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:first')" title="Click to copy">
+            <hd-icon icon="wpf:first"></hd-icon>
+            <span class="name">first</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:full-battery')" title="Click to copy">
+            <hd-icon icon="wpf:full-battery"></hd-icon>
+            <span class="name">full-battery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:full-trash')" title="Click to copy">
+            <hd-icon icon="wpf:full-trash"></hd-icon>
+            <span class="name">full-trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:future')" title="Click to copy">
+            <hd-icon icon="wpf:future"></hd-icon>
+            <span class="name">future</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:geo-fence')" title="Click to copy">
+            <hd-icon icon="wpf:geo-fence"></hd-icon>
+            <span class="name">geo-fence</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:ghost')" title="Click to copy">
+            <hd-icon icon="wpf:ghost"></hd-icon>
+            <span class="name">ghost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:globe-earth')" title="Click to copy">
+            <hd-icon icon="wpf:globe-earth"></hd-icon>
+            <span class="name">globe-earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:gps-receiving')" title="Click to copy">
+            <hd-icon icon="wpf:gps-receiving"></hd-icon>
+            <span class="name">gps-receiving</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:group')" title="Click to copy">
+            <hd-icon icon="wpf:group"></hd-icon>
+            <span class="name">group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:guitar')" title="Click to copy">
+            <hd-icon icon="wpf:guitar"></hd-icon>
+            <span class="name">guitar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:happy')" title="Click to copy">
+            <hd-icon icon="wpf:happy"></hd-icon>
+            <span class="name">happy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:headset')" title="Click to copy">
+            <hd-icon icon="wpf:headset"></hd-icon>
+            <span class="name">headset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:helicopter')" title="Click to copy">
+            <hd-icon icon="wpf:helicopter"></hd-icon>
+            <span class="name">helicopter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:herald-trumpet')" title="Click to copy">
+            <hd-icon icon="wpf:herald-trumpet"></hd-icon>
+            <span class="name">herald-trumpet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:hexagon')" title="Click to copy">
+            <hd-icon icon="wpf:hexagon"></hd-icon>
+            <span class="name">hexagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:high-battery')" title="Click to copy">
+            <hd-icon icon="wpf:high-battery"></hd-icon>
+            <span class="name">high-battery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:image-file')" title="Click to copy">
+            <hd-icon icon="wpf:image-file"></hd-icon>
+            <span class="name">image-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:in-transit')" title="Click to copy">
+            <hd-icon icon="wpf:in-transit"></hd-icon>
+            <span class="name">in-transit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:inbox')" title="Click to copy">
+            <hd-icon icon="wpf:inbox"></hd-icon>
+            <span class="name">inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:inspection')" title="Click to copy">
+            <hd-icon icon="wpf:inspection"></hd-icon>
+            <span class="name">inspection</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:integrated-circuit')" title="Click to copy">
+            <hd-icon icon="wpf:integrated-circuit"></hd-icon>
+            <span class="name">integrated-circuit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:invisible')" title="Click to copy">
+            <hd-icon icon="wpf:invisible"></hd-icon>
+            <span class="name">invisible</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:iphone')" title="Click to copy">
+            <hd-icon icon="wpf:iphone"></hd-icon>
+            <span class="name">iphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:keep-dry')" title="Click to copy">
+            <hd-icon icon="wpf:keep-dry"></hd-icon>
+            <span class="name">keep-dry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:key-security')" title="Click to copy">
+            <hd-icon icon="wpf:key-security"></hd-icon>
+            <span class="name">key-security</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:keyboard')" title="Click to copy">
+            <hd-icon icon="wpf:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:last')" title="Click to copy">
+            <hd-icon icon="wpf:last"></hd-icon>
+            <span class="name">last</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:like')" title="Click to copy">
+            <hd-icon icon="wpf:like"></hd-icon>
+            <span class="name">like</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:lol')" title="Click to copy">
+            <hd-icon icon="wpf:lol"></hd-icon>
+            <span class="name">lol</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:luggage-trolley')" title="Click to copy">
+            <hd-icon icon="wpf:luggage-trolley"></hd-icon>
+            <span class="name">luggage-trolley</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:mac-os')" title="Click to copy">
+            <hd-icon icon="wpf:mac-os"></hd-icon>
+            <span class="name">mac-os</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:maestro')" title="Click to copy">
+            <hd-icon icon="wpf:maestro"></hd-icon>
+            <span class="name">maestro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:maintenance')" title="Click to copy">
+            <hd-icon icon="wpf:maintenance"></hd-icon>
+            <span class="name">maintenance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:medical-doctor')" title="Click to copy">
+            <hd-icon icon="wpf:medical-doctor"></hd-icon>
+            <span class="name">medical-doctor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:message')" title="Click to copy">
+            <hd-icon icon="wpf:message"></hd-icon>
+            <span class="name">message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:message-outline')" title="Click to copy">
+            <hd-icon icon="wpf:message-outline"></hd-icon>
+            <span class="name">message-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:microphone')" title="Click to copy">
+            <hd-icon icon="wpf:microphone"></hd-icon>
+            <span class="name">microphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:mouse')" title="Click to copy">
+            <hd-icon icon="wpf:mouse"></hd-icon>
+            <span class="name">mouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:musical-notes')" title="Click to copy">
+            <hd-icon icon="wpf:musical-notes"></hd-icon>
+            <span class="name">musical-notes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:mute')" title="Click to copy">
+            <hd-icon icon="wpf:mute"></hd-icon>
+            <span class="name">mute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:my-topic')" title="Click to copy">
+            <hd-icon icon="wpf:my-topic"></hd-icon>
+            <span class="name">my-topic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:name')" title="Click to copy">
+            <hd-icon icon="wpf:name"></hd-icon>
+            <span class="name">name</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:news')" title="Click to copy">
+            <hd-icon icon="wpf:news"></hd-icon>
+            <span class="name">news</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:next')" title="Click to copy">
+            <hd-icon icon="wpf:next"></hd-icon>
+            <span class="name">next</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:nfc-checkpoint')" title="Click to copy">
+            <hd-icon icon="wpf:nfc-checkpoint"></hd-icon>
+            <span class="name">nfc-checkpoint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:note')" title="Click to copy">
+            <hd-icon icon="wpf:note"></hd-icon>
+            <span class="name">note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:online')" title="Click to copy">
+            <hd-icon icon="wpf:online"></hd-icon>
+            <span class="name">online</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:packaging')" title="Click to copy">
+            <hd-icon icon="wpf:packaging"></hd-icon>
+            <span class="name">packaging</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:paid')" title="Click to copy">
+            <hd-icon icon="wpf:paid"></hd-icon>
+            <span class="name">paid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:panorama')" title="Click to copy">
+            <hd-icon icon="wpf:panorama"></hd-icon>
+            <span class="name">panorama</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:paper-clamp')" title="Click to copy">
+            <hd-icon icon="wpf:paper-clamp"></hd-icon>
+            <span class="name">paper-clamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:paper-plane')" title="Click to copy">
+            <hd-icon icon="wpf:paper-plane"></hd-icon>
+            <span class="name">paper-plane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:partly-cloudy-day')" title="Click to copy">
+            <hd-icon icon="wpf:partly-cloudy-day"></hd-icon>
+            <span class="name">partly-cloudy-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:partly-cloudy-night')" title="Click to copy">
+            <hd-icon icon="wpf:partly-cloudy-night"></hd-icon>
+            <span class="name">partly-cloudy-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:password1')" title="Click to copy">
+            <hd-icon icon="wpf:password1"></hd-icon>
+            <span class="name">password1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:past')" title="Click to copy">
+            <hd-icon icon="wpf:past"></hd-icon>
+            <span class="name">past</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:pause')" title="Click to copy">
+            <hd-icon icon="wpf:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:phone')" title="Click to copy">
+            <hd-icon icon="wpf:phone"></hd-icon>
+            <span class="name">phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:phone-office')" title="Click to copy">
+            <hd-icon icon="wpf:phone-office"></hd-icon>
+            <span class="name">phone-office</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:play')" title="Click to copy">
+            <hd-icon icon="wpf:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:polyline')" title="Click to copy">
+            <hd-icon icon="wpf:polyline"></hd-icon>
+            <span class="name">polyline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:previous')" title="Click to copy">
+            <hd-icon icon="wpf:previous"></hd-icon>
+            <span class="name">previous</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:privacy')" title="Click to copy">
+            <hd-icon icon="wpf:privacy"></hd-icon>
+            <span class="name">privacy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:qr-code')" title="Click to copy">
+            <hd-icon icon="wpf:qr-code"></hd-icon>
+            <span class="name">qr-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:radio')" title="Click to copy">
+            <hd-icon icon="wpf:radio"></hd-icon>
+            <span class="name">radio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:rain')" title="Click to copy">
+            <hd-icon icon="wpf:rain"></hd-icon>
+            <span class="name">rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:record')" title="Click to copy">
+            <hd-icon icon="wpf:record"></hd-icon>
+            <span class="name">record</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:recurring-appointment')" title="Click to copy">
+            <hd-icon icon="wpf:recurring-appointment"></hd-icon>
+            <span class="name">recurring-appointment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:refresh-shield')" title="Click to copy">
+            <hd-icon icon="wpf:refresh-shield"></hd-icon>
+            <span class="name">refresh-shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:remove-image')" title="Click to copy">
+            <hd-icon icon="wpf:remove-image"></hd-icon>
+            <span class="name">remove-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:rename')" title="Click to copy">
+            <hd-icon icon="wpf:rename"></hd-icon>
+            <span class="name">rename</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:renew-subscription')" title="Click to copy">
+            <hd-icon icon="wpf:renew-subscription"></hd-icon>
+            <span class="name">renew-subscription</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:repeat')" title="Click to copy">
+            <hd-icon icon="wpf:repeat"></hd-icon>
+            <span class="name">repeat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:restriction-shield')" title="Click to copy">
+            <hd-icon icon="wpf:restriction-shield"></hd-icon>
+            <span class="name">restriction-shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:retro-tv')" title="Click to copy">
+            <hd-icon icon="wpf:retro-tv"></hd-icon>
+            <span class="name">retro-tv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:rewind')" title="Click to copy">
+            <hd-icon icon="wpf:rewind"></hd-icon>
+            <span class="name">rewind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:rfid-tag')" title="Click to copy">
+            <hd-icon icon="wpf:rfid-tag"></hd-icon>
+            <span class="name">rfid-tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:ruler')" title="Click to copy">
+            <hd-icon icon="wpf:ruler"></hd-icon>
+            <span class="name">ruler</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:search')" title="Click to copy">
+            <hd-icon icon="wpf:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:security-checked')" title="Click to copy">
+            <hd-icon icon="wpf:security-checked"></hd-icon>
+            <span class="name">security-checked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:sent')" title="Click to copy">
+            <hd-icon icon="wpf:sent"></hd-icon>
+            <span class="name">sent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:settings')" title="Click to copy">
+            <hd-icon icon="wpf:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:shopping-bag')" title="Click to copy">
+            <hd-icon icon="wpf:shopping-bag"></hd-icon>
+            <span class="name">shopping-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:shopping-basket')" title="Click to copy">
+            <hd-icon icon="wpf:shopping-basket"></hd-icon>
+            <span class="name">shopping-basket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:shopping-cart')" title="Click to copy">
+            <hd-icon icon="wpf:shopping-cart"></hd-icon>
+            <span class="name">shopping-cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:shuffle')" title="Click to copy">
+            <hd-icon icon="wpf:shuffle"></hd-icon>
+            <span class="name">shuffle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:shutdown')" title="Click to copy">
+            <hd-icon icon="wpf:shutdown"></hd-icon>
+            <span class="name">shutdown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:signature')" title="Click to copy">
+            <hd-icon icon="wpf:signature"></hd-icon>
+            <span class="name">signature</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:sim-card-chip')" title="Click to copy">
+            <hd-icon icon="wpf:sim-card-chip"></hd-icon>
+            <span class="name">sim-card-chip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:skip-to-start')" title="Click to copy">
+            <hd-icon icon="wpf:skip-to-start"></hd-icon>
+            <span class="name">skip-to-start</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:snow')" title="Click to copy">
+            <hd-icon icon="wpf:snow"></hd-icon>
+            <span class="name">snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:speaker')" title="Click to copy">
+            <hd-icon icon="wpf:speaker"></hd-icon>
+            <span class="name">speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:speech-bubble')" title="Click to copy">
+            <hd-icon icon="wpf:speech-bubble"></hd-icon>
+            <span class="name">speech-bubble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:stack')" title="Click to copy">
+            <hd-icon icon="wpf:stack"></hd-icon>
+            <span class="name">stack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:stack-of-photos')" title="Click to copy">
+            <hd-icon icon="wpf:stack-of-photos"></hd-icon>
+            <span class="name">stack-of-photos</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:stanley-knife')" title="Click to copy">
+            <hd-icon icon="wpf:stanley-knife"></hd-icon>
+            <span class="name">stanley-knife</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:star')" title="Click to copy">
+            <hd-icon icon="wpf:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:statistics')" title="Click to copy">
+            <hd-icon icon="wpf:statistics"></hd-icon>
+            <span class="name">statistics</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:stop')" title="Click to copy">
+            <hd-icon icon="wpf:stop"></hd-icon>
+            <span class="name">stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:sun')" title="Click to copy">
+            <hd-icon icon="wpf:sun"></hd-icon>
+            <span class="name">sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:survey')" title="Click to copy">
+            <hd-icon icon="wpf:survey"></hd-icon>
+            <span class="name">survey</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:swiss-army-knife')" title="Click to copy">
+            <hd-icon icon="wpf:swiss-army-knife"></hd-icon>
+            <span class="name">swiss-army-knife</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:switch-camera')" title="Click to copy">
+            <hd-icon icon="wpf:switch-camera"></hd-icon>
+            <span class="name">switch-camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:timer')" title="Click to copy">
+            <hd-icon icon="wpf:timer"></hd-icon>
+            <span class="name">timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:today')" title="Click to copy">
+            <hd-icon icon="wpf:today"></hd-icon>
+            <span class="name">today</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:todo-list')" title="Click to copy">
+            <hd-icon icon="wpf:todo-list"></hd-icon>
+            <span class="name">todo-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:unlock')" title="Click to copy">
+            <hd-icon icon="wpf:unlock"></hd-icon>
+            <span class="name">unlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:unlock-2')" title="Click to copy">
+            <hd-icon icon="wpf:unlock-2"></hd-icon>
+            <span class="name">unlock-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:user-shield')" title="Click to copy">
+            <hd-icon icon="wpf:user-shield"></hd-icon>
+            <span class="name">user-shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:video-call')" title="Click to copy">
+            <hd-icon icon="wpf:video-call"></hd-icon>
+            <span class="name">video-call</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:view-file')" title="Click to copy">
+            <hd-icon icon="wpf:view-file"></hd-icon>
+            <span class="name">view-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:voicemail')" title="Click to copy">
+            <hd-icon icon="wpf:voicemail"></hd-icon>
+            <span class="name">voicemail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:volume-down')" title="Click to copy">
+            <hd-icon icon="wpf:volume-down"></hd-icon>
+            <span class="name">volume-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:volume-up')" title="Click to copy">
+            <hd-icon icon="wpf:volume-up"></hd-icon>
+            <span class="name">volume-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:wedding-cake')" title="Click to copy">
+            <hd-icon icon="wpf:wedding-cake"></hd-icon>
+            <span class="name">wedding-cake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:wind-rose')" title="Click to copy">
+            <hd-icon icon="wpf:wind-rose"></hd-icon>
+            <span class="name">wind-rose</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wpf:worldwide-location')" title="Click to copy">
+            <hd-icon icon="wpf:worldwide-location"></hd-icon>
+            <span class="name">worldwide-location</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

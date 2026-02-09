@@ -1,0 +1,17 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAADf4kZApMYhBofvXUTWEIyVHhHNbZWJIRsEmY0JHVVRKNoZxOUpGZZc0dIRmZjcmR1Q7ZGJTQjgVZlV5N1M2hFZ0RlVBVTZCNFYUY0RWNDU0hYhAgJB8sCSRYHGQIeuRIICwECf4g8EgJDOA0BCALHAQMPBQniB/0SQgVOAQyMDwXbAmQZhAaXAd8BFioQNARLFW3kAQdbAcEEDAiPHiYNJggOAtoCAhACMYEDDKUHBE8CA8sBTycBzwICFQUxAhwddAMnBDQDTA4y1gEFBhcBATcBGqAEEwJZApMVsmOPzinP3wOjtPCUG8UIz0wIYD2UPgCr2HodqA7AA+dG1rVAxTxiEnaoJu/WD3SFlgtBzK/cP7ou0OQQZaC8FkRzVcfIkxkQU43iBPbLWaffvHYrhAPfdzEo2Wpojhv3XiVCpjbHw9AHMC3QR8Mj9PwHAYuTGGSns1GHhXReGluWHEpsR/adgjrmWXCa1f3o8eCD8j+OMxYfxj0o2qm7igHlv/ZAmi9q82aQLNvB2nW5at8hbj7RWPiqVHnUHb4W591vMu3oKVK6BzTOTCEfY6Reqd+YNl++TFFdk8wvXtzZ/QB3bYalEOKKADFD9jK9qOTOVko2zQWwJRknWZGWIsy4GHHTSLEIeCVCKrmePFF6jCqzJAB/om2L4pl5AlP4YPnCdkEqEfXVNfqCxbp7/XikU/k4mHqFwzRCCniIYWrOPECCiJQzyDx7JQcjXN3idKHcqq48PND+h51pO4B3DrmV9mw48YKeaf2437yro7V6fP4tIw8XyXX3Rz3D8dzKAyana0GTPjoAI4yulWfAomtIBkaStnPcrmNhDr1PXI6GLNt+EswTzwJYHi/AxJs/4duiyyQnauDeqKvJZqNbpjYbyaAFt+Bzv9MXDQjNxZzqdmZCYE2d/2C/rZEniFhDa4AtoTBoDpn/gMfPsJSLEAeQBtFlcumz0c6ob5/s5AvoC9dgs4oerj1q8D9W7fg2UuzYWrUfXlatztYkqsvrF/6dRunfmTP+Q9wxdP0zu1yvMVkuQmk2Jyrd9SMAggKQ6wB9n5dHp8tqBOun0WGC129XVwa6GofRTLjord/wReHYywm5yEtmFCEscZPFlckT9/f/fQg0j0CbZ3x1jFVAFUqUVqq75HwsJvxw6+JqiskNt1EBQCBIAAIGUBDAAQEACBIBAwAAAAAEAAAAEWNhdHBwdWNjaW4tMDEuc3ZnAAAAEWNhdHBwdWNjaW4tMDIuc3ZnAAAAEWNhdHBwdWNjaW4tMDMuc3ZnAAAAEWNhdHBwdWNjaW4tMDQuc3Zn/////wAAAAMAAAD4QaQlijItGAAhSSYpyCYsSoRlSqREgBBMkqAkQAQg2CBJmzAI0SIkyjRJggABkRRFWiQIQRBEiKAggoAogiQBAgAJwARAgAIBSJJgQJAAAZQlQAIpkaAEmxIBCZIpggAEgZYIipIkAwBoUAIJkTBAiRRtACIEQJQpQJBISgIpQhJJWBQogwJJAJJFAoYIiKIhEqAACAQgEKBJUjJIGBBhUiQkEYBEUoAkARRhERJMUIABwIAEEpIASoJIkJRAgaBgCAAkQCQhSqAgCgAhEKIpmpBpCSAk0iJJiCRIijJoSRIByRJFiaQogQIokhBEUYQtUYBEkJJomQAAAAAA";
+
+const chunks = {
+  "catppuccin-01.svg": new URL("./catppuccin-01.svg", import.meta.url).href,
+  "catppuccin-02.svg": new URL("./catppuccin-02.svg", import.meta.url).href,
+  "catppuccin-03.svg": new URL("./catppuccin-03.svg", import.meta.url).href,
+  "catppuccin-04.svg": new URL("./catppuccin-04.svg", import.meta.url).href
+};
+
+register('catppuccin', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

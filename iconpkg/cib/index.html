@@ -1,0 +1,3492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cib - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>cib <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(830)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('cib:500px')" title="Click to copy">
+            <hd-icon icon="cib:500px"></hd-icon>
+            <span class="name">500px</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:500px-5')" title="Click to copy">
+            <hd-icon icon="cib:500px-5"></hd-icon>
+            <span class="name">500px-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:about-me')" title="Click to copy">
+            <hd-icon icon="cib:about-me"></hd-icon>
+            <span class="name">about-me</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:abstract')" title="Click to copy">
+            <hd-icon icon="cib:abstract"></hd-icon>
+            <span class="name">abstract</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:acm')" title="Click to copy">
+            <hd-icon icon="cib:acm"></hd-icon>
+            <span class="name">acm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:addthis')" title="Click to copy">
+            <hd-icon icon="cib:addthis"></hd-icon>
+            <span class="name">addthis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adguard')" title="Click to copy">
+            <hd-icon icon="cib:adguard"></hd-icon>
+            <span class="name">adguard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe')" title="Click to copy">
+            <hd-icon icon="cib:adobe"></hd-icon>
+            <span class="name">adobe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-acrobat-reader')" title="Click to copy">
+            <hd-icon icon="cib:adobe-acrobat-reader"></hd-icon>
+            <span class="name">adobe-acrobat-reader</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-after-effects')" title="Click to copy">
+            <hd-icon icon="cib:adobe-after-effects"></hd-icon>
+            <span class="name">adobe-after-effects</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-audition')" title="Click to copy">
+            <hd-icon icon="cib:adobe-audition"></hd-icon>
+            <span class="name">adobe-audition</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-creative-cloud')" title="Click to copy">
+            <hd-icon icon="cib:adobe-creative-cloud"></hd-icon>
+            <span class="name">adobe-creative-cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-dreamweaver')" title="Click to copy">
+            <hd-icon icon="cib:adobe-dreamweaver"></hd-icon>
+            <span class="name">adobe-dreamweaver</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-illustrator')" title="Click to copy">
+            <hd-icon icon="cib:adobe-illustrator"></hd-icon>
+            <span class="name">adobe-illustrator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-indesign')" title="Click to copy">
+            <hd-icon icon="cib:adobe-indesign"></hd-icon>
+            <span class="name">adobe-indesign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-lightroom')" title="Click to copy">
+            <hd-icon icon="cib:adobe-lightroom"></hd-icon>
+            <span class="name">adobe-lightroom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-lightroom-classic')" title="Click to copy">
+            <hd-icon icon="cib:adobe-lightroom-classic"></hd-icon>
+            <span class="name">adobe-lightroom-classic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-photoshop')" title="Click to copy">
+            <hd-icon icon="cib:adobe-photoshop"></hd-icon>
+            <span class="name">adobe-photoshop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-premiere')" title="Click to copy">
+            <hd-icon icon="cib:adobe-premiere"></hd-icon>
+            <span class="name">adobe-premiere</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-typekit')" title="Click to copy">
+            <hd-icon icon="cib:adobe-typekit"></hd-icon>
+            <span class="name">adobe-typekit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:adobe-xd')" title="Click to copy">
+            <hd-icon icon="cib:adobe-xd"></hd-icon>
+            <span class="name">adobe-xd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:airbnb')" title="Click to copy">
+            <hd-icon icon="cib:airbnb"></hd-icon>
+            <span class="name">airbnb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:algolia')" title="Click to copy">
+            <hd-icon icon="cib:algolia"></hd-icon>
+            <span class="name">algolia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:alipay')" title="Click to copy">
+            <hd-icon icon="cib:alipay"></hd-icon>
+            <span class="name">alipay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:allocine')" title="Click to copy">
+            <hd-icon icon="cib:allocine"></hd-icon>
+            <span class="name">allocine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:amazon')" title="Click to copy">
+            <hd-icon icon="cib:amazon"></hd-icon>
+            <span class="name">amazon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:amazon-aws')" title="Click to copy">
+            <hd-icon icon="cib:amazon-aws"></hd-icon>
+            <span class="name">amazon-aws</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:amazon-pay')" title="Click to copy">
+            <hd-icon icon="cib:amazon-pay"></hd-icon>
+            <span class="name">amazon-pay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:amd')" title="Click to copy">
+            <hd-icon icon="cib:amd"></hd-icon>
+            <span class="name">amd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:american-express')" title="Click to copy">
+            <hd-icon icon="cib:american-express"></hd-icon>
+            <span class="name">american-express</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:anaconda')" title="Click to copy">
+            <hd-icon icon="cib:anaconda"></hd-icon>
+            <span class="name">anaconda</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:analogue')" title="Click to copy">
+            <hd-icon icon="cib:analogue"></hd-icon>
+            <span class="name">analogue</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:android')" title="Click to copy">
+            <hd-icon icon="cib:android"></hd-icon>
+            <span class="name">android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:android-alt')" title="Click to copy">
+            <hd-icon icon="cib:android-alt"></hd-icon>
+            <span class="name">android-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:angellist')" title="Click to copy">
+            <hd-icon icon="cib:angellist"></hd-icon>
+            <span class="name">angellist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:angular')" title="Click to copy">
+            <hd-icon icon="cib:angular"></hd-icon>
+            <span class="name">angular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:angular-universal')" title="Click to copy">
+            <hd-icon icon="cib:angular-universal"></hd-icon>
+            <span class="name">angular-universal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ansible')" title="Click to copy">
+            <hd-icon icon="cib:ansible"></hd-icon>
+            <span class="name">ansible</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:apache')" title="Click to copy">
+            <hd-icon icon="cib:apache"></hd-icon>
+            <span class="name">apache</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:apache-airflow')" title="Click to copy">
+            <hd-icon icon="cib:apache-airflow"></hd-icon>
+            <span class="name">apache-airflow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:apache-flink')" title="Click to copy">
+            <hd-icon icon="cib:apache-flink"></hd-icon>
+            <span class="name">apache-flink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:apache-spark')" title="Click to copy">
+            <hd-icon icon="cib:apache-spark"></hd-icon>
+            <span class="name">apache-spark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:app-store')" title="Click to copy">
+            <hd-icon icon="cib:app-store"></hd-icon>
+            <span class="name">app-store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:app-store-ios')" title="Click to copy">
+            <hd-icon icon="cib:app-store-ios"></hd-icon>
+            <span class="name">app-store-ios</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:apple')" title="Click to copy">
+            <hd-icon icon="cib:apple"></hd-icon>
+            <span class="name">apple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:apple-music')" title="Click to copy">
+            <hd-icon icon="cib:apple-music"></hd-icon>
+            <span class="name">apple-music</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:apple-pay')" title="Click to copy">
+            <hd-icon icon="cib:apple-pay"></hd-icon>
+            <span class="name">apple-pay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:apple-podcasts')" title="Click to copy">
+            <hd-icon icon="cib:apple-podcasts"></hd-icon>
+            <span class="name">apple-podcasts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:appveyor')" title="Click to copy">
+            <hd-icon icon="cib:appveyor"></hd-icon>
+            <span class="name">appveyor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:aral')" title="Click to copy">
+            <hd-icon icon="cib:aral"></hd-icon>
+            <span class="name">aral</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:arch-linux')" title="Click to copy">
+            <hd-icon icon="cib:arch-linux"></hd-icon>
+            <span class="name">arch-linux</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:archive-of-our-own')" title="Click to copy">
+            <hd-icon icon="cib:archive-of-our-own"></hd-icon>
+            <span class="name">archive-of-our-own</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:arduino')" title="Click to copy">
+            <hd-icon icon="cib:arduino"></hd-icon>
+            <span class="name">arduino</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:artstation')" title="Click to copy">
+            <hd-icon icon="cib:artstation"></hd-icon>
+            <span class="name">artstation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:arxiv')" title="Click to copy">
+            <hd-icon icon="cib:arxiv"></hd-icon>
+            <span class="name">arxiv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:asana')" title="Click to copy">
+            <hd-icon icon="cib:asana"></hd-icon>
+            <span class="name">asana</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:at-and-t')" title="Click to copy">
+            <hd-icon icon="cib:at-and-t"></hd-icon>
+            <span class="name">at-and-t</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:atlassian')" title="Click to copy">
+            <hd-icon icon="cib:atlassian"></hd-icon>
+            <span class="name">atlassian</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:atom')" title="Click to copy">
+            <hd-icon icon="cib:atom"></hd-icon>
+            <span class="name">atom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:audible')" title="Click to copy">
+            <hd-icon icon="cib:audible"></hd-icon>
+            <span class="name">audible</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:aurelia')" title="Click to copy">
+            <hd-icon icon="cib:aurelia"></hd-icon>
+            <span class="name">aurelia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:auth0')" title="Click to copy">
+            <hd-icon icon="cib:auth0"></hd-icon>
+            <span class="name">auth0</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:automatic')" title="Click to copy">
+            <hd-icon icon="cib:automatic"></hd-icon>
+            <span class="name">automatic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:autotask')" title="Click to copy">
+            <hd-icon icon="cib:autotask"></hd-icon>
+            <span class="name">autotask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:aventrix')" title="Click to copy">
+            <hd-icon icon="cib:aventrix"></hd-icon>
+            <span class="name">aventrix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:azure-artifacts')" title="Click to copy">
+            <hd-icon icon="cib:azure-artifacts"></hd-icon>
+            <span class="name">azure-artifacts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:azure-devops')" title="Click to copy">
+            <hd-icon icon="cib:azure-devops"></hd-icon>
+            <span class="name">azure-devops</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:azure-pipelines')" title="Click to copy">
+            <hd-icon icon="cib:azure-pipelines"></hd-icon>
+            <span class="name">azure-pipelines</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:babel')" title="Click to copy">
+            <hd-icon icon="cib:babel"></hd-icon>
+            <span class="name">babel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:baidu')" title="Click to copy">
+            <hd-icon icon="cib:baidu"></hd-icon>
+            <span class="name">baidu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bamboo')" title="Click to copy">
+            <hd-icon icon="cib:bamboo"></hd-icon>
+            <span class="name">bamboo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bancontact')" title="Click to copy">
+            <hd-icon icon="cib:bancontact"></hd-icon>
+            <span class="name">bancontact</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bandcamp')" title="Click to copy">
+            <hd-icon icon="cib:bandcamp"></hd-icon>
+            <span class="name">bandcamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:basecamp')" title="Click to copy">
+            <hd-icon icon="cib:basecamp"></hd-icon>
+            <span class="name">basecamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bathasu')" title="Click to copy">
+            <hd-icon icon="cib:bathasu"></hd-icon>
+            <span class="name">bathasu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:behance')" title="Click to copy">
+            <hd-icon icon="cib:behance"></hd-icon>
+            <span class="name">behance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:big-cartel')" title="Click to copy">
+            <hd-icon icon="cib:big-cartel"></hd-icon>
+            <span class="name">big-cartel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bing')" title="Click to copy">
+            <hd-icon icon="cib:bing"></hd-icon>
+            <span class="name">bing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bit')" title="Click to copy">
+            <hd-icon icon="cib:bit"></hd-icon>
+            <span class="name">bit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bitbucket')" title="Click to copy">
+            <hd-icon icon="cib:bitbucket"></hd-icon>
+            <span class="name">bitbucket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bitcoin')" title="Click to copy">
+            <hd-icon icon="cib:bitcoin"></hd-icon>
+            <span class="name">bitcoin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bitdefender')" title="Click to copy">
+            <hd-icon icon="cib:bitdefender"></hd-icon>
+            <span class="name">bitdefender</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bitly')" title="Click to copy">
+            <hd-icon icon="cib:bitly"></hd-icon>
+            <span class="name">bitly</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:blackberry')" title="Click to copy">
+            <hd-icon icon="cib:blackberry"></hd-icon>
+            <span class="name">blackberry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:blender')" title="Click to copy">
+            <hd-icon icon="cib:blender"></hd-icon>
+            <span class="name">blender</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:blogger')" title="Click to copy">
+            <hd-icon icon="cib:blogger"></hd-icon>
+            <span class="name">blogger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:blogger-b')" title="Click to copy">
+            <hd-icon icon="cib:blogger-b"></hd-icon>
+            <span class="name">blogger-b</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bluetooth')" title="Click to copy">
+            <hd-icon icon="cib:bluetooth"></hd-icon>
+            <span class="name">bluetooth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bluetooth-b')" title="Click to copy">
+            <hd-icon icon="cib:bluetooth-b"></hd-icon>
+            <span class="name">bluetooth-b</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:boeing')" title="Click to copy">
+            <hd-icon icon="cib:boeing"></hd-icon>
+            <span class="name">boeing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:boost')" title="Click to copy">
+            <hd-icon icon="cib:boost"></hd-icon>
+            <span class="name">boost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bootstrap')" title="Click to copy">
+            <hd-icon icon="cib:bootstrap"></hd-icon>
+            <span class="name">bootstrap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:bower')" title="Click to copy">
+            <hd-icon icon="cib:bower"></hd-icon>
+            <span class="name">bower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:brand-ai')" title="Click to copy">
+            <hd-icon icon="cib:brand-ai"></hd-icon>
+            <span class="name">brand-ai</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:brave')" title="Click to copy">
+            <hd-icon icon="cib:brave"></hd-icon>
+            <span class="name">brave</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:btc')" title="Click to copy">
+            <hd-icon icon="cib:btc"></hd-icon>
+            <span class="name">btc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:buddy')" title="Click to copy">
+            <hd-icon icon="cib:buddy"></hd-icon>
+            <span class="name">buddy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:buffer')" title="Click to copy">
+            <hd-icon icon="cib:buffer"></hd-icon>
+            <span class="name">buffer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:buy-me-a-coffee')" title="Click to copy">
+            <hd-icon icon="cib:buy-me-a-coffee"></hd-icon>
+            <span class="name">buy-me-a-coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:buysellads')" title="Click to copy">
+            <hd-icon icon="cib:buysellads"></hd-icon>
+            <span class="name">buysellads</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:buzzfeed')" title="Click to copy">
+            <hd-icon icon="cib:buzzfeed"></hd-icon>
+            <span class="name">buzzfeed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:c')" title="Click to copy">
+            <hd-icon icon="cib:c"></hd-icon>
+            <span class="name">c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cakephp')" title="Click to copy">
+            <hd-icon icon="cib:cakephp"></hd-icon>
+            <span class="name">cakephp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:campaign-monitor')" title="Click to copy">
+            <hd-icon icon="cib:campaign-monitor"></hd-icon>
+            <span class="name">campaign-monitor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:canva')" title="Click to copy">
+            <hd-icon icon="cib:canva"></hd-icon>
+            <span class="name">canva</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cashapp')" title="Click to copy">
+            <hd-icon icon="cib:cashapp"></hd-icon>
+            <span class="name">cashapp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cassandra')" title="Click to copy">
+            <hd-icon icon="cib:cassandra"></hd-icon>
+            <span class="name">cassandra</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:castro')" title="Click to copy">
+            <hd-icon icon="cib:castro"></hd-icon>
+            <span class="name">castro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cc-amazon-pay')" title="Click to copy">
+            <hd-icon icon="cib:cc-amazon-pay"></hd-icon>
+            <span class="name">cc-amazon-pay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cc-amex')" title="Click to copy">
+            <hd-icon icon="cib:cc-amex"></hd-icon>
+            <span class="name">cc-amex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cc-apple-pay')" title="Click to copy">
+            <hd-icon icon="cib:cc-apple-pay"></hd-icon>
+            <span class="name">cc-apple-pay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cc-diners-club')" title="Click to copy">
+            <hd-icon icon="cib:cc-diners-club"></hd-icon>
+            <span class="name">cc-diners-club</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cc-discover')" title="Click to copy">
+            <hd-icon icon="cib:cc-discover"></hd-icon>
+            <span class="name">cc-discover</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cc-jcb')" title="Click to copy">
+            <hd-icon icon="cib:cc-jcb"></hd-icon>
+            <span class="name">cc-jcb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cc-mastercard')" title="Click to copy">
+            <hd-icon icon="cib:cc-mastercard"></hd-icon>
+            <span class="name">cc-mastercard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cc-paypal')" title="Click to copy">
+            <hd-icon icon="cib:cc-paypal"></hd-icon>
+            <span class="name">cc-paypal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cc-stripe')" title="Click to copy">
+            <hd-icon icon="cib:cc-stripe"></hd-icon>
+            <span class="name">cc-stripe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cc-visa')" title="Click to copy">
+            <hd-icon icon="cib:cc-visa"></hd-icon>
+            <span class="name">cc-visa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:centos')" title="Click to copy">
+            <hd-icon icon="cib:centos"></hd-icon>
+            <span class="name">centos</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cevo')" title="Click to copy">
+            <hd-icon icon="cib:cevo"></hd-icon>
+            <span class="name">cevo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:chase')" title="Click to copy">
+            <hd-icon icon="cib:chase"></hd-icon>
+            <span class="name">chase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:chef')" title="Click to copy">
+            <hd-icon icon="cib:chef"></hd-icon>
+            <span class="name">chef</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:chromecast')" title="Click to copy">
+            <hd-icon icon="cib:chromecast"></hd-icon>
+            <span class="name">chromecast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:circle')" title="Click to copy">
+            <hd-icon icon="cib:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:circleci')" title="Click to copy">
+            <hd-icon icon="cib:circleci"></hd-icon>
+            <span class="name">circleci</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cirrusci')" title="Click to copy">
+            <hd-icon icon="cib:cirrusci"></hd-icon>
+            <span class="name">cirrusci</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cisco')" title="Click to copy">
+            <hd-icon icon="cib:cisco"></hd-icon>
+            <span class="name">cisco</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:civicrm')" title="Click to copy">
+            <hd-icon icon="cib:civicrm"></hd-icon>
+            <span class="name">civicrm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:clockify')" title="Click to copy">
+            <hd-icon icon="cib:clockify"></hd-icon>
+            <span class="name">clockify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:clojure')" title="Click to copy">
+            <hd-icon icon="cib:clojure"></hd-icon>
+            <span class="name">clojure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cloudbees')" title="Click to copy">
+            <hd-icon icon="cib:cloudbees"></hd-icon>
+            <span class="name">cloudbees</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cloudflare')" title="Click to copy">
+            <hd-icon icon="cib:cloudflare"></hd-icon>
+            <span class="name">cloudflare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cmake')" title="Click to copy">
+            <hd-icon icon="cib:cmake"></hd-icon>
+            <span class="name">cmake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:co-op')" title="Click to copy">
+            <hd-icon icon="cib:co-op"></hd-icon>
+            <span class="name">co-op</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:codacy')" title="Click to copy">
+            <hd-icon icon="cib:codacy"></hd-icon>
+            <span class="name">codacy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:code-climate')" title="Click to copy">
+            <hd-icon icon="cib:code-climate"></hd-icon>
+            <span class="name">code-climate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:codecademy')" title="Click to copy">
+            <hd-icon icon="cib:codecademy"></hd-icon>
+            <span class="name">codecademy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:codecov')" title="Click to copy">
+            <hd-icon icon="cib:codecov"></hd-icon>
+            <span class="name">codecov</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:codeigniter')" title="Click to copy">
+            <hd-icon icon="cib:codeigniter"></hd-icon>
+            <span class="name">codeigniter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:codepen')" title="Click to copy">
+            <hd-icon icon="cib:codepen"></hd-icon>
+            <span class="name">codepen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:coderwall')" title="Click to copy">
+            <hd-icon icon="cib:coderwall"></hd-icon>
+            <span class="name">coderwall</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:codesandbox')" title="Click to copy">
+            <hd-icon icon="cib:codesandbox"></hd-icon>
+            <span class="name">codesandbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:codeship')" title="Click to copy">
+            <hd-icon icon="cib:codeship"></hd-icon>
+            <span class="name">codeship</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:codewars')" title="Click to copy">
+            <hd-icon icon="cib:codewars"></hd-icon>
+            <span class="name">codewars</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:codio')" title="Click to copy">
+            <hd-icon icon="cib:codio"></hd-icon>
+            <span class="name">codio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:coffeescript')" title="Click to copy">
+            <hd-icon icon="cib:coffeescript"></hd-icon>
+            <span class="name">coffeescript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:common-workflow-language')" title="Click to copy">
+            <hd-icon icon="cib:common-workflow-language"></hd-icon>
+            <span class="name">common-workflow-language</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:composer')" title="Click to copy">
+            <hd-icon icon="cib:composer"></hd-icon>
+            <span class="name">composer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:conda-forge')" title="Click to copy">
+            <hd-icon icon="cib:conda-forge"></hd-icon>
+            <span class="name">conda-forge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:conekta')" title="Click to copy">
+            <hd-icon icon="cib:conekta"></hd-icon>
+            <span class="name">conekta</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:confluence')" title="Click to copy">
+            <hd-icon icon="cib:confluence"></hd-icon>
+            <span class="name">confluence</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:coreui')" title="Click to copy">
+            <hd-icon icon="cib:coreui"></hd-icon>
+            <span class="name">coreui</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:coreui-c')" title="Click to copy">
+            <hd-icon icon="cib:coreui-c"></hd-icon>
+            <span class="name">coreui-c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:coursera')" title="Click to copy">
+            <hd-icon icon="cib:coursera"></hd-icon>
+            <span class="name">coursera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:coveralls')" title="Click to copy">
+            <hd-icon icon="cib:coveralls"></hd-icon>
+            <span class="name">coveralls</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cpanel')" title="Click to copy">
+            <hd-icon icon="cib:cpanel"></hd-icon>
+            <span class="name">cpanel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:cplusplus')" title="Click to copy">
+            <hd-icon icon="cib:cplusplus"></hd-icon>
+            <span class="name">cplusplus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons"></hd-icon>
+            <span class="name">creative-commons</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-by')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-by"></hd-icon>
+            <span class="name">creative-commons-by</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-nc')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-nc"></hd-icon>
+            <span class="name">creative-commons-nc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-nc-eu')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-nc-eu"></hd-icon>
+            <span class="name">creative-commons-nc-eu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-nc-jp')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-nc-jp"></hd-icon>
+            <span class="name">creative-commons-nc-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-nd')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-nd"></hd-icon>
+            <span class="name">creative-commons-nd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-pd')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-pd"></hd-icon>
+            <span class="name">creative-commons-pd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-pd-alt')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-pd-alt"></hd-icon>
+            <span class="name">creative-commons-pd-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-remix')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-remix"></hd-icon>
+            <span class="name">creative-commons-remix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-sa')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-sa"></hd-icon>
+            <span class="name">creative-commons-sa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-sampling')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-sampling"></hd-icon>
+            <span class="name">creative-commons-sampling</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-sampling-plus')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-sampling-plus"></hd-icon>
+            <span class="name">creative-commons-sampling-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-share')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-share"></hd-icon>
+            <span class="name">creative-commons-share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:creative-commons-zero')" title="Click to copy">
+            <hd-icon icon="cib:creative-commons-zero"></hd-icon>
+            <span class="name">creative-commons-zero</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:crunchbase')" title="Click to copy">
+            <hd-icon icon="cib:crunchbase"></hd-icon>
+            <span class="name">crunchbase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:crunchyroll')" title="Click to copy">
+            <hd-icon icon="cib:crunchyroll"></hd-icon>
+            <span class="name">crunchyroll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:css3')" title="Click to copy">
+            <hd-icon icon="cib:css3"></hd-icon>
+            <span class="name">css3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:css3-shiled')" title="Click to copy">
+            <hd-icon icon="cib:css3-shiled"></hd-icon>
+            <span class="name">css3-shiled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:csswizardry')" title="Click to copy">
+            <hd-icon icon="cib:csswizardry"></hd-icon>
+            <span class="name">csswizardry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:d3-js')" title="Click to copy">
+            <hd-icon icon="cib:d3-js"></hd-icon>
+            <span class="name">d3-js</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dailymotion')" title="Click to copy">
+            <hd-icon icon="cib:dailymotion"></hd-icon>
+            <span class="name">dailymotion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dashlane')" title="Click to copy">
+            <hd-icon icon="cib:dashlane"></hd-icon>
+            <span class="name">dashlane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dazn')" title="Click to copy">
+            <hd-icon icon="cib:dazn"></hd-icon>
+            <span class="name">dazn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dblp')" title="Click to copy">
+            <hd-icon icon="cib:dblp"></hd-icon>
+            <span class="name">dblp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:debian')" title="Click to copy">
+            <hd-icon icon="cib:debian"></hd-icon>
+            <span class="name">debian</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:deepin')" title="Click to copy">
+            <hd-icon icon="cib:deepin"></hd-icon>
+            <span class="name">deepin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:deezer')" title="Click to copy">
+            <hd-icon icon="cib:deezer"></hd-icon>
+            <span class="name">deezer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:delicious')" title="Click to copy">
+            <hd-icon icon="cib:delicious"></hd-icon>
+            <span class="name">delicious</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dell')" title="Click to copy">
+            <hd-icon icon="cib:dell"></hd-icon>
+            <span class="name">dell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:deno')" title="Click to copy">
+            <hd-icon icon="cib:deno"></hd-icon>
+            <span class="name">deno</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dependabot')" title="Click to copy">
+            <hd-icon icon="cib:dependabot"></hd-icon>
+            <span class="name">dependabot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:designer-news')" title="Click to copy">
+            <hd-icon icon="cib:designer-news"></hd-icon>
+            <span class="name">designer-news</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dev-to')" title="Click to copy">
+            <hd-icon icon="cib:dev-to"></hd-icon>
+            <span class="name">dev-to</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:deviantart')" title="Click to copy">
+            <hd-icon icon="cib:deviantart"></hd-icon>
+            <span class="name">deviantart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:devrant')" title="Click to copy">
+            <hd-icon icon="cib:devrant"></hd-icon>
+            <span class="name">devrant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:diaspora')" title="Click to copy">
+            <hd-icon icon="cib:diaspora"></hd-icon>
+            <span class="name">diaspora</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:digg')" title="Click to copy">
+            <hd-icon icon="cib:digg"></hd-icon>
+            <span class="name">digg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:digital-ocean')" title="Click to copy">
+            <hd-icon icon="cib:digital-ocean"></hd-icon>
+            <span class="name">digital-ocean</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:discord')" title="Click to copy">
+            <hd-icon icon="cib:discord"></hd-icon>
+            <span class="name">discord</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:discourse')" title="Click to copy">
+            <hd-icon icon="cib:discourse"></hd-icon>
+            <span class="name">discourse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:discover')" title="Click to copy">
+            <hd-icon icon="cib:discover"></hd-icon>
+            <span class="name">discover</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:disqus')" title="Click to copy">
+            <hd-icon icon="cib:disqus"></hd-icon>
+            <span class="name">disqus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:disroot')" title="Click to copy">
+            <hd-icon icon="cib:disroot"></hd-icon>
+            <span class="name">disroot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:django')" title="Click to copy">
+            <hd-icon icon="cib:django"></hd-icon>
+            <span class="name">django</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:docker')" title="Click to copy">
+            <hd-icon icon="cib:docker"></hd-icon>
+            <span class="name">docker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:docusign')" title="Click to copy">
+            <hd-icon icon="cib:docusign"></hd-icon>
+            <span class="name">docusign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dot-net')" title="Click to copy">
+            <hd-icon icon="cib:dot-net"></hd-icon>
+            <span class="name">dot-net</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:draugiem-lv')" title="Click to copy">
+            <hd-icon icon="cib:draugiem-lv"></hd-icon>
+            <span class="name">draugiem-lv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dribbble')" title="Click to copy">
+            <hd-icon icon="cib:dribbble"></hd-icon>
+            <span class="name">dribbble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:drone')" title="Click to copy">
+            <hd-icon icon="cib:drone"></hd-icon>
+            <span class="name">drone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dropbox')" title="Click to copy">
+            <hd-icon icon="cib:dropbox"></hd-icon>
+            <span class="name">dropbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:drupal')" title="Click to copy">
+            <hd-icon icon="cib:drupal"></hd-icon>
+            <span class="name">drupal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dtube')" title="Click to copy">
+            <hd-icon icon="cib:dtube"></hd-icon>
+            <span class="name">dtube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:duckduckgo')" title="Click to copy">
+            <hd-icon icon="cib:duckduckgo"></hd-icon>
+            <span class="name">duckduckgo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:dynatrace')" title="Click to copy">
+            <hd-icon icon="cib:dynatrace"></hd-icon>
+            <span class="name">dynatrace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ebay')" title="Click to copy">
+            <hd-icon icon="cib:ebay"></hd-icon>
+            <span class="name">ebay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:eclipseide')" title="Click to copy">
+            <hd-icon icon="cib:eclipseide"></hd-icon>
+            <span class="name">eclipseide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:elastic')" title="Click to copy">
+            <hd-icon icon="cib:elastic"></hd-icon>
+            <span class="name">elastic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:elastic-cloud')" title="Click to copy">
+            <hd-icon icon="cib:elastic-cloud"></hd-icon>
+            <span class="name">elastic-cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:elastic-search')" title="Click to copy">
+            <hd-icon icon="cib:elastic-search"></hd-icon>
+            <span class="name">elastic-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:elastic-stack')" title="Click to copy">
+            <hd-icon icon="cib:elastic-stack"></hd-icon>
+            <span class="name">elastic-stack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:electron')" title="Click to copy">
+            <hd-icon icon="cib:electron"></hd-icon>
+            <span class="name">electron</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:elementary')" title="Click to copy">
+            <hd-icon icon="cib:elementary"></hd-icon>
+            <span class="name">elementary</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:eleventy')" title="Click to copy">
+            <hd-icon icon="cib:eleventy"></hd-icon>
+            <span class="name">eleventy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ello')" title="Click to copy">
+            <hd-icon icon="cib:ello"></hd-icon>
+            <span class="name">ello</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:elsevier')" title="Click to copy">
+            <hd-icon icon="cib:elsevier"></hd-icon>
+            <span class="name">elsevier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:emlakjet')" title="Click to copy">
+            <hd-icon icon="cib:emlakjet"></hd-icon>
+            <span class="name">emlakjet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:empirekred')" title="Click to copy">
+            <hd-icon icon="cib:empirekred"></hd-icon>
+            <span class="name">empirekred</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:envato')" title="Click to copy">
+            <hd-icon icon="cib:envato"></hd-icon>
+            <span class="name">envato</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:epic-games')" title="Click to copy">
+            <hd-icon icon="cib:epic-games"></hd-icon>
+            <span class="name">epic-games</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:epson')" title="Click to copy">
+            <hd-icon icon="cib:epson"></hd-icon>
+            <span class="name">epson</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:esea')" title="Click to copy">
+            <hd-icon icon="cib:esea"></hd-icon>
+            <span class="name">esea</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:eslint')" title="Click to copy">
+            <hd-icon icon="cib:eslint"></hd-icon>
+            <span class="name">eslint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ethereum')" title="Click to copy">
+            <hd-icon icon="cib:ethereum"></hd-icon>
+            <span class="name">ethereum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:etsy')" title="Click to copy">
+            <hd-icon icon="cib:etsy"></hd-icon>
+            <span class="name">etsy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:event-store')" title="Click to copy">
+            <hd-icon icon="cib:event-store"></hd-icon>
+            <span class="name">event-store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:eventbrite')" title="Click to copy">
+            <hd-icon icon="cib:eventbrite"></hd-icon>
+            <span class="name">eventbrite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:evernote')" title="Click to copy">
+            <hd-icon icon="cib:evernote"></hd-icon>
+            <span class="name">evernote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:everplaces')" title="Click to copy">
+            <hd-icon icon="cib:everplaces"></hd-icon>
+            <span class="name">everplaces</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:evry')" title="Click to copy">
+            <hd-icon icon="cib:evry"></hd-icon>
+            <span class="name">evry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:exercism')" title="Click to copy">
+            <hd-icon icon="cib:exercism"></hd-icon>
+            <span class="name">exercism</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:experts-exchange')" title="Click to copy">
+            <hd-icon icon="cib:experts-exchange"></hd-icon>
+            <span class="name">experts-exchange</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:expo')" title="Click to copy">
+            <hd-icon icon="cib:expo"></hd-icon>
+            <span class="name">expo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:eyeem')" title="Click to copy">
+            <hd-icon icon="cib:eyeem"></hd-icon>
+            <span class="name">eyeem</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:f-secure')" title="Click to copy">
+            <hd-icon icon="cib:f-secure"></hd-icon>
+            <span class="name">f-secure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:facebook')" title="Click to copy">
+            <hd-icon icon="cib:facebook"></hd-icon>
+            <span class="name">facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:facebook-f')" title="Click to copy">
+            <hd-icon icon="cib:facebook-f"></hd-icon>
+            <span class="name">facebook-f</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:faceit')" title="Click to copy">
+            <hd-icon icon="cib:faceit"></hd-icon>
+            <span class="name">faceit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:fandango')" title="Click to copy">
+            <hd-icon icon="cib:fandango"></hd-icon>
+            <span class="name">fandango</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:favro')" title="Click to copy">
+            <hd-icon icon="cib:favro"></hd-icon>
+            <span class="name">favro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:feathub')" title="Click to copy">
+            <hd-icon icon="cib:feathub"></hd-icon>
+            <span class="name">feathub</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:fedex')" title="Click to copy">
+            <hd-icon icon="cib:fedex"></hd-icon>
+            <span class="name">fedex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:fedora')" title="Click to copy">
+            <hd-icon icon="cib:fedora"></hd-icon>
+            <span class="name">fedora</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:feedly')" title="Click to copy">
+            <hd-icon icon="cib:feedly"></hd-icon>
+            <span class="name">feedly</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:fido-alliance')" title="Click to copy">
+            <hd-icon icon="cib:fido-alliance"></hd-icon>
+            <span class="name">fido-alliance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:figma')" title="Click to copy">
+            <hd-icon icon="cib:figma"></hd-icon>
+            <span class="name">figma</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:filezilla')" title="Click to copy">
+            <hd-icon icon="cib:filezilla"></hd-icon>
+            <span class="name">filezilla</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:firebase')" title="Click to copy">
+            <hd-icon icon="cib:firebase"></hd-icon>
+            <span class="name">firebase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:fitbit')" title="Click to copy">
+            <hd-icon icon="cib:fitbit"></hd-icon>
+            <span class="name">fitbit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:flask')" title="Click to copy">
+            <hd-icon icon="cib:flask"></hd-icon>
+            <span class="name">flask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:flattr')" title="Click to copy">
+            <hd-icon icon="cib:flattr"></hd-icon>
+            <span class="name">flattr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:flickr')" title="Click to copy">
+            <hd-icon icon="cib:flickr"></hd-icon>
+            <span class="name">flickr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:flipboard')" title="Click to copy">
+            <hd-icon icon="cib:flipboard"></hd-icon>
+            <span class="name">flipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:flutter')" title="Click to copy">
+            <hd-icon icon="cib:flutter"></hd-icon>
+            <span class="name">flutter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:fnac')" title="Click to copy">
+            <hd-icon icon="cib:fnac"></hd-icon>
+            <span class="name">fnac</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:foursquare')" title="Click to copy">
+            <hd-icon icon="cib:foursquare"></hd-icon>
+            <span class="name">foursquare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:framer')" title="Click to copy">
+            <hd-icon icon="cib:framer"></hd-icon>
+            <span class="name">framer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:freebsd')" title="Click to copy">
+            <hd-icon icon="cib:freebsd"></hd-icon>
+            <span class="name">freebsd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:freecodecamp')" title="Click to copy">
+            <hd-icon icon="cib:freecodecamp"></hd-icon>
+            <span class="name">freecodecamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:fur-affinity')" title="Click to copy">
+            <hd-icon icon="cib:fur-affinity"></hd-icon>
+            <span class="name">fur-affinity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:furry-network')" title="Click to copy">
+            <hd-icon icon="cib:furry-network"></hd-icon>
+            <span class="name">furry-network</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:garmin')" title="Click to copy">
+            <hd-icon icon="cib:garmin"></hd-icon>
+            <span class="name">garmin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gatsby')" title="Click to copy">
+            <hd-icon icon="cib:gatsby"></hd-icon>
+            <span class="name">gatsby</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gauges')" title="Click to copy">
+            <hd-icon icon="cib:gauges"></hd-icon>
+            <span class="name">gauges</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:genius')" title="Click to copy">
+            <hd-icon icon="cib:genius"></hd-icon>
+            <span class="name">genius</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gentoo')" title="Click to copy">
+            <hd-icon icon="cib:gentoo"></hd-icon>
+            <span class="name">gentoo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:geocaching')" title="Click to copy">
+            <hd-icon icon="cib:geocaching"></hd-icon>
+            <span class="name">geocaching</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gerrit')" title="Click to copy">
+            <hd-icon icon="cib:gerrit"></hd-icon>
+            <span class="name">gerrit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gg')" title="Click to copy">
+            <hd-icon icon="cib:gg"></hd-icon>
+            <span class="name">gg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ghost')" title="Click to copy">
+            <hd-icon icon="cib:ghost"></hd-icon>
+            <span class="name">ghost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gimp')" title="Click to copy">
+            <hd-icon icon="cib:gimp"></hd-icon>
+            <span class="name">gimp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:git')" title="Click to copy">
+            <hd-icon icon="cib:git"></hd-icon>
+            <span class="name">git</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gitea')" title="Click to copy">
+            <hd-icon icon="cib:gitea"></hd-icon>
+            <span class="name">gitea</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:github')" title="Click to copy">
+            <hd-icon icon="cib:github"></hd-icon>
+            <span class="name">github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gitkraken')" title="Click to copy">
+            <hd-icon icon="cib:gitkraken"></hd-icon>
+            <span class="name">gitkraken</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gitlab')" title="Click to copy">
+            <hd-icon icon="cib:gitlab"></hd-icon>
+            <span class="name">gitlab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gitpod')" title="Click to copy">
+            <hd-icon icon="cib:gitpod"></hd-icon>
+            <span class="name">gitpod</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gitter')" title="Click to copy">
+            <hd-icon icon="cib:gitter"></hd-icon>
+            <span class="name">gitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:glassdoor')" title="Click to copy">
+            <hd-icon icon="cib:glassdoor"></hd-icon>
+            <span class="name">glassdoor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:glitch')" title="Click to copy">
+            <hd-icon icon="cib:glitch"></hd-icon>
+            <span class="name">glitch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gmail')" title="Click to copy">
+            <hd-icon icon="cib:gmail"></hd-icon>
+            <span class="name">gmail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gnu')" title="Click to copy">
+            <hd-icon icon="cib:gnu"></hd-icon>
+            <span class="name">gnu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gnu-privacy-guard')" title="Click to copy">
+            <hd-icon icon="cib:gnu-privacy-guard"></hd-icon>
+            <span class="name">gnu-privacy-guard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gnu-social')" title="Click to copy">
+            <hd-icon icon="cib:gnu-social"></hd-icon>
+            <span class="name">gnu-social</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:go')" title="Click to copy">
+            <hd-icon icon="cib:go"></hd-icon>
+            <span class="name">go</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:godot-engine')" title="Click to copy">
+            <hd-icon icon="cib:godot-engine"></hd-icon>
+            <span class="name">godot-engine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gog-com')" title="Click to copy">
+            <hd-icon icon="cib:gog-com"></hd-icon>
+            <span class="name">gog-com</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:goldenline')" title="Click to copy">
+            <hd-icon icon="cib:goldenline"></hd-icon>
+            <span class="name">goldenline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:goodreads')" title="Click to copy">
+            <hd-icon icon="cib:goodreads"></hd-icon>
+            <span class="name">goodreads</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:google')" title="Click to copy">
+            <hd-icon icon="cib:google"></hd-icon>
+            <span class="name">google</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:google-ads')" title="Click to copy">
+            <hd-icon icon="cib:google-ads"></hd-icon>
+            <span class="name">google-ads</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:google-allo')" title="Click to copy">
+            <hd-icon icon="cib:google-allo"></hd-icon>
+            <span class="name">google-allo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:google-analytics')" title="Click to copy">
+            <hd-icon icon="cib:google-analytics"></hd-icon>
+            <span class="name">google-analytics</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:google-chrome')" title="Click to copy">
+            <hd-icon icon="cib:google-chrome"></hd-icon>
+            <span class="name">google-chrome</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:google-cloud')" title="Click to copy">
+            <hd-icon icon="cib:google-cloud"></hd-icon>
+            <span class="name">google-cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:google-keep')" title="Click to copy">
+            <hd-icon icon="cib:google-keep"></hd-icon>
+            <span class="name">google-keep</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:google-pay')" title="Click to copy">
+            <hd-icon icon="cib:google-pay"></hd-icon>
+            <span class="name">google-pay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:google-play')" title="Click to copy">
+            <hd-icon icon="cib:google-play"></hd-icon>
+            <span class="name">google-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:google-podcasts')" title="Click to copy">
+            <hd-icon icon="cib:google-podcasts"></hd-icon>
+            <span class="name">google-podcasts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:googles-cholar')" title="Click to copy">
+            <hd-icon icon="cib:googles-cholar"></hd-icon>
+            <span class="name">googles-cholar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gov-uk')" title="Click to copy">
+            <hd-icon icon="cib:gov-uk"></hd-icon>
+            <span class="name">gov-uk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gradle')" title="Click to copy">
+            <hd-icon icon="cib:gradle"></hd-icon>
+            <span class="name">gradle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:grafana')" title="Click to copy">
+            <hd-icon icon="cib:grafana"></hd-icon>
+            <span class="name">grafana</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:graphcool')" title="Click to copy">
+            <hd-icon icon="cib:graphcool"></hd-icon>
+            <span class="name">graphcool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:graphql')" title="Click to copy">
+            <hd-icon icon="cib:graphql"></hd-icon>
+            <span class="name">graphql</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:grav')" title="Click to copy">
+            <hd-icon icon="cib:grav"></hd-icon>
+            <span class="name">grav</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gravatar')" title="Click to copy">
+            <hd-icon icon="cib:gravatar"></hd-icon>
+            <span class="name">gravatar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:greenkeeper')" title="Click to copy">
+            <hd-icon icon="cib:greenkeeper"></hd-icon>
+            <span class="name">greenkeeper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:greensock')" title="Click to copy">
+            <hd-icon icon="cib:greensock"></hd-icon>
+            <span class="name">greensock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:groovy')" title="Click to copy">
+            <hd-icon icon="cib:groovy"></hd-icon>
+            <span class="name">groovy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:groupon')" title="Click to copy">
+            <hd-icon icon="cib:groupon"></hd-icon>
+            <span class="name">groupon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:grunt')" title="Click to copy">
+            <hd-icon icon="cib:grunt"></hd-icon>
+            <span class="name">grunt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gulp')" title="Click to copy">
+            <hd-icon icon="cib:gulp"></hd-icon>
+            <span class="name">gulp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gumroad')" title="Click to copy">
+            <hd-icon icon="cib:gumroad"></hd-icon>
+            <span class="name">gumroad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:gumtree')" title="Click to copy">
+            <hd-icon icon="cib:gumtree"></hd-icon>
+            <span class="name">gumtree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:habr')" title="Click to copy">
+            <hd-icon icon="cib:habr"></hd-icon>
+            <span class="name">habr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hackaday')" title="Click to copy">
+            <hd-icon icon="cib:hackaday"></hd-icon>
+            <span class="name">hackaday</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hackerearth')" title="Click to copy">
+            <hd-icon icon="cib:hackerearth"></hd-icon>
+            <span class="name">hackerearth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hackerone')" title="Click to copy">
+            <hd-icon icon="cib:hackerone"></hd-icon>
+            <span class="name">hackerone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hackerrank')" title="Click to copy">
+            <hd-icon icon="cib:hackerrank"></hd-icon>
+            <span class="name">hackerrank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hackhands')" title="Click to copy">
+            <hd-icon icon="cib:hackhands"></hd-icon>
+            <span class="name">hackhands</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hackster')" title="Click to copy">
+            <hd-icon icon="cib:hackster"></hd-icon>
+            <span class="name">hackster</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:happycow')" title="Click to copy">
+            <hd-icon icon="cib:happycow"></hd-icon>
+            <span class="name">happycow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hashnode')" title="Click to copy">
+            <hd-icon icon="cib:hashnode"></hd-icon>
+            <span class="name">hashnode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:haskell')" title="Click to copy">
+            <hd-icon icon="cib:haskell"></hd-icon>
+            <span class="name">haskell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hatena-bookmark')" title="Click to copy">
+            <hd-icon icon="cib:hatena-bookmark"></hd-icon>
+            <span class="name">hatena-bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:haxe')" title="Click to copy">
+            <hd-icon icon="cib:haxe"></hd-icon>
+            <span class="name">haxe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:helm')" title="Click to copy">
+            <hd-icon icon="cib:helm"></hd-icon>
+            <span class="name">helm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:here')" title="Click to copy">
+            <hd-icon icon="cib:here"></hd-icon>
+            <span class="name">here</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:heroku')" title="Click to copy">
+            <hd-icon icon="cib:heroku"></hd-icon>
+            <span class="name">heroku</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hexo')" title="Click to copy">
+            <hd-icon icon="cib:hexo"></hd-icon>
+            <span class="name">hexo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:highly')" title="Click to copy">
+            <hd-icon icon="cib:highly"></hd-icon>
+            <span class="name">highly</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hipchat')" title="Click to copy">
+            <hd-icon icon="cib:hipchat"></hd-icon>
+            <span class="name">hipchat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hitachi')" title="Click to copy">
+            <hd-icon icon="cib:hitachi"></hd-icon>
+            <span class="name">hitachi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hockeyapp')" title="Click to copy">
+            <hd-icon icon="cib:hockeyapp"></hd-icon>
+            <span class="name">hockeyapp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:homify')" title="Click to copy">
+            <hd-icon icon="cib:homify"></hd-icon>
+            <span class="name">homify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hootsuite')" title="Click to copy">
+            <hd-icon icon="cib:hootsuite"></hd-icon>
+            <span class="name">hootsuite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hotjar')" title="Click to copy">
+            <hd-icon icon="cib:hotjar"></hd-icon>
+            <span class="name">hotjar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:houzz')" title="Click to copy">
+            <hd-icon icon="cib:houzz"></hd-icon>
+            <span class="name">houzz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hp')" title="Click to copy">
+            <hd-icon icon="cib:hp"></hd-icon>
+            <span class="name">hp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:html5')" title="Click to copy">
+            <hd-icon icon="cib:html5"></hd-icon>
+            <span class="name">html5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:html5-shield')" title="Click to copy">
+            <hd-icon icon="cib:html5-shield"></hd-icon>
+            <span class="name">html5-shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:htmlacademy')" title="Click to copy">
+            <hd-icon icon="cib:htmlacademy"></hd-icon>
+            <span class="name">htmlacademy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:huawei')" title="Click to copy">
+            <hd-icon icon="cib:huawei"></hd-icon>
+            <span class="name">huawei</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hubspot')" title="Click to copy">
+            <hd-icon icon="cib:hubspot"></hd-icon>
+            <span class="name">hubspot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:hulu')" title="Click to copy">
+            <hd-icon icon="cib:hulu"></hd-icon>
+            <span class="name">hulu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:humble-bundle')" title="Click to copy">
+            <hd-icon icon="cib:humble-bundle"></hd-icon>
+            <span class="name">humble-bundle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:iata')" title="Click to copy">
+            <hd-icon icon="cib:iata"></hd-icon>
+            <span class="name">iata</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ibm')" title="Click to copy">
+            <hd-icon icon="cib:ibm"></hd-icon>
+            <span class="name">ibm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:icloud')" title="Click to copy">
+            <hd-icon icon="cib:icloud"></hd-icon>
+            <span class="name">icloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:iconjar')" title="Click to copy">
+            <hd-icon icon="cib:iconjar"></hd-icon>
+            <span class="name">iconjar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:icq')" title="Click to copy">
+            <hd-icon icon="cib:icq"></hd-icon>
+            <span class="name">icq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ideal')" title="Click to copy">
+            <hd-icon icon="cib:ideal"></hd-icon>
+            <span class="name">ideal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ifixit')" title="Click to copy">
+            <hd-icon icon="cib:ifixit"></hd-icon>
+            <span class="name">ifixit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:imdb')" title="Click to copy">
+            <hd-icon icon="cib:imdb"></hd-icon>
+            <span class="name">imdb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:indeed')" title="Click to copy">
+            <hd-icon icon="cib:indeed"></hd-icon>
+            <span class="name">indeed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:inkscape')" title="Click to copy">
+            <hd-icon icon="cib:inkscape"></hd-icon>
+            <span class="name">inkscape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:instacart')" title="Click to copy">
+            <hd-icon icon="cib:instacart"></hd-icon>
+            <span class="name">instacart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:instagram')" title="Click to copy">
+            <hd-icon icon="cib:instagram"></hd-icon>
+            <span class="name">instagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:instapaper')" title="Click to copy">
+            <hd-icon icon="cib:instapaper"></hd-icon>
+            <span class="name">instapaper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:intel')" title="Click to copy">
+            <hd-icon icon="cib:intel"></hd-icon>
+            <span class="name">intel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:intellijidea')" title="Click to copy">
+            <hd-icon icon="cib:intellijidea"></hd-icon>
+            <span class="name">intellijidea</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:intercom')" title="Click to copy">
+            <hd-icon icon="cib:intercom"></hd-icon>
+            <span class="name">intercom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:internet-explorer')" title="Click to copy">
+            <hd-icon icon="cib:internet-explorer"></hd-icon>
+            <span class="name">internet-explorer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:invision')" title="Click to copy">
+            <hd-icon icon="cib:invision"></hd-icon>
+            <span class="name">invision</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ionic')" title="Click to copy">
+            <hd-icon icon="cib:ionic"></hd-icon>
+            <span class="name">ionic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:issuu')" title="Click to copy">
+            <hd-icon icon="cib:issuu"></hd-icon>
+            <span class="name">issuu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:itch-io')" title="Click to copy">
+            <hd-icon icon="cib:itch-io"></hd-icon>
+            <span class="name">itch-io</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jabber')" title="Click to copy">
+            <hd-icon icon="cib:jabber"></hd-icon>
+            <span class="name">jabber</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:java')" title="Click to copy">
+            <hd-icon icon="cib:java"></hd-icon>
+            <span class="name">java</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:javascript')" title="Click to copy">
+            <hd-icon icon="cib:javascript"></hd-icon>
+            <span class="name">javascript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jekyll')" title="Click to copy">
+            <hd-icon icon="cib:jekyll"></hd-icon>
+            <span class="name">jekyll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jenkins')" title="Click to copy">
+            <hd-icon icon="cib:jenkins"></hd-icon>
+            <span class="name">jenkins</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jest')" title="Click to copy">
+            <hd-icon icon="cib:jest"></hd-icon>
+            <span class="name">jest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jet')" title="Click to copy">
+            <hd-icon icon="cib:jet"></hd-icon>
+            <span class="name">jet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jetbrains')" title="Click to copy">
+            <hd-icon icon="cib:jetbrains"></hd-icon>
+            <span class="name">jetbrains</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jira')" title="Click to copy">
+            <hd-icon icon="cib:jira"></hd-icon>
+            <span class="name">jira</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:joomla')" title="Click to copy">
+            <hd-icon icon="cib:joomla"></hd-icon>
+            <span class="name">joomla</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jquery')" title="Click to copy">
+            <hd-icon icon="cib:jquery"></hd-icon>
+            <span class="name">jquery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:js')" title="Click to copy">
+            <hd-icon icon="cib:js"></hd-icon>
+            <span class="name">js</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jsdelivr')" title="Click to copy">
+            <hd-icon icon="cib:jsdelivr"></hd-icon>
+            <span class="name">jsdelivr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jsfiddle')" title="Click to copy">
+            <hd-icon icon="cib:jsfiddle"></hd-icon>
+            <span class="name">jsfiddle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:json')" title="Click to copy">
+            <hd-icon icon="cib:json"></hd-icon>
+            <span class="name">json</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:jupyter')" title="Click to copy">
+            <hd-icon icon="cib:jupyter"></hd-icon>
+            <span class="name">jupyter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:justgiving')" title="Click to copy">
+            <hd-icon icon="cib:justgiving"></hd-icon>
+            <span class="name">justgiving</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kaggle')" title="Click to copy">
+            <hd-icon icon="cib:kaggle"></hd-icon>
+            <span class="name">kaggle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kaios')" title="Click to copy">
+            <hd-icon icon="cib:kaios"></hd-icon>
+            <span class="name">kaios</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kaspersky')" title="Click to copy">
+            <hd-icon icon="cib:kaspersky"></hd-icon>
+            <span class="name">kaspersky</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kentico')" title="Click to copy">
+            <hd-icon icon="cib:kentico"></hd-icon>
+            <span class="name">kentico</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:keras')" title="Click to copy">
+            <hd-icon icon="cib:keras"></hd-icon>
+            <span class="name">keras</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:keybase')" title="Click to copy">
+            <hd-icon icon="cib:keybase"></hd-icon>
+            <span class="name">keybase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:keycdn')" title="Click to copy">
+            <hd-icon icon="cib:keycdn"></hd-icon>
+            <span class="name">keycdn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:khan-academy')" title="Click to copy">
+            <hd-icon icon="cib:khan-academy"></hd-icon>
+            <span class="name">khan-academy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kibana')" title="Click to copy">
+            <hd-icon icon="cib:kibana"></hd-icon>
+            <span class="name">kibana</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kickstarter')" title="Click to copy">
+            <hd-icon icon="cib:kickstarter"></hd-icon>
+            <span class="name">kickstarter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kik')" title="Click to copy">
+            <hd-icon icon="cib:kik"></hd-icon>
+            <span class="name">kik</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kirby')" title="Click to copy">
+            <hd-icon icon="cib:kirby"></hd-icon>
+            <span class="name">kirby</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:klout')" title="Click to copy">
+            <hd-icon icon="cib:klout"></hd-icon>
+            <span class="name">klout</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:known')" title="Click to copy">
+            <hd-icon icon="cib:known"></hd-icon>
+            <span class="name">known</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ko-fi')" title="Click to copy">
+            <hd-icon icon="cib:ko-fi"></hd-icon>
+            <span class="name">ko-fi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kodi')" title="Click to copy">
+            <hd-icon icon="cib:kodi"></hd-icon>
+            <span class="name">kodi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:koding')" title="Click to copy">
+            <hd-icon icon="cib:koding"></hd-icon>
+            <span class="name">koding</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kotlin')" title="Click to copy">
+            <hd-icon icon="cib:kotlin"></hd-icon>
+            <span class="name">kotlin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:krita')" title="Click to copy">
+            <hd-icon icon="cib:krita"></hd-icon>
+            <span class="name">krita</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:kubernetes')" title="Click to copy">
+            <hd-icon icon="cib:kubernetes"></hd-icon>
+            <span class="name">kubernetes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:lanyrd')" title="Click to copy">
+            <hd-icon icon="cib:lanyrd"></hd-icon>
+            <span class="name">lanyrd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:laravel')" title="Click to copy">
+            <hd-icon icon="cib:laravel"></hd-icon>
+            <span class="name">laravel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:laravel-horizon')" title="Click to copy">
+            <hd-icon icon="cib:laravel-horizon"></hd-icon>
+            <span class="name">laravel-horizon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:laravel-nova')" title="Click to copy">
+            <hd-icon icon="cib:laravel-nova"></hd-icon>
+            <span class="name">laravel-nova</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:last-fm')" title="Click to copy">
+            <hd-icon icon="cib:last-fm"></hd-icon>
+            <span class="name">last-fm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:latex')" title="Click to copy">
+            <hd-icon icon="cib:latex"></hd-icon>
+            <span class="name">latex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:launchpad')" title="Click to copy">
+            <hd-icon icon="cib:launchpad"></hd-icon>
+            <span class="name">launchpad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:leetcode')" title="Click to copy">
+            <hd-icon icon="cib:leetcode"></hd-icon>
+            <span class="name">leetcode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:lenovo')" title="Click to copy">
+            <hd-icon icon="cib:lenovo"></hd-icon>
+            <span class="name">lenovo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:less')" title="Click to copy">
+            <hd-icon icon="cib:less"></hd-icon>
+            <span class="name">less</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:lets-encrypt')" title="Click to copy">
+            <hd-icon icon="cib:lets-encrypt"></hd-icon>
+            <span class="name">lets-encrypt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:letterboxd')" title="Click to copy">
+            <hd-icon icon="cib:letterboxd"></hd-icon>
+            <span class="name">letterboxd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:lgtm')" title="Click to copy">
+            <hd-icon icon="cib:lgtm"></hd-icon>
+            <span class="name">lgtm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:liberapay')" title="Click to copy">
+            <hd-icon icon="cib:liberapay"></hd-icon>
+            <span class="name">liberapay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:librarything')" title="Click to copy">
+            <hd-icon icon="cib:librarything"></hd-icon>
+            <span class="name">librarything</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:libreoffice')" title="Click to copy">
+            <hd-icon icon="cib:libreoffice"></hd-icon>
+            <span class="name">libreoffice</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:line')" title="Click to copy">
+            <hd-icon icon="cib:line"></hd-icon>
+            <span class="name">line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:linkedin')" title="Click to copy">
+            <hd-icon icon="cib:linkedin"></hd-icon>
+            <span class="name">linkedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:linkedin-in')" title="Click to copy">
+            <hd-icon icon="cib:linkedin-in"></hd-icon>
+            <span class="name">linkedin-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:linux')" title="Click to copy">
+            <hd-icon icon="cib:linux"></hd-icon>
+            <span class="name">linux</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:linux-foundation')" title="Click to copy">
+            <hd-icon icon="cib:linux-foundation"></hd-icon>
+            <span class="name">linux-foundation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:linux-mint')" title="Click to copy">
+            <hd-icon icon="cib:linux-mint"></hd-icon>
+            <span class="name">linux-mint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:livejournal')" title="Click to copy">
+            <hd-icon icon="cib:livejournal"></hd-icon>
+            <span class="name">livejournal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:livestream')" title="Click to copy">
+            <hd-icon icon="cib:livestream"></hd-icon>
+            <span class="name">livestream</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:logstash')" title="Click to copy">
+            <hd-icon icon="cib:logstash"></hd-icon>
+            <span class="name">logstash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:lua')" title="Click to copy">
+            <hd-icon icon="cib:lua"></hd-icon>
+            <span class="name">lua</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:lumen')" title="Click to copy">
+            <hd-icon icon="cib:lumen"></hd-icon>
+            <span class="name">lumen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:lyft')" title="Click to copy">
+            <hd-icon icon="cib:lyft"></hd-icon>
+            <span class="name">lyft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:macys')" title="Click to copy">
+            <hd-icon icon="cib:macys"></hd-icon>
+            <span class="name">macys</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:magento')" title="Click to copy">
+            <hd-icon icon="cib:magento"></hd-icon>
+            <span class="name">magento</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:magisk')" title="Click to copy">
+            <hd-icon icon="cib:magisk"></hd-icon>
+            <span class="name">magisk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mail-ru')" title="Click to copy">
+            <hd-icon icon="cib:mail-ru"></hd-icon>
+            <span class="name">mail-ru</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mailchimp')" title="Click to copy">
+            <hd-icon icon="cib:mailchimp"></hd-icon>
+            <span class="name">mailchimp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:makerbot')" title="Click to copy">
+            <hd-icon icon="cib:makerbot"></hd-icon>
+            <span class="name">makerbot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:manjaro')" title="Click to copy">
+            <hd-icon icon="cib:manjaro"></hd-icon>
+            <span class="name">manjaro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:markdown')" title="Click to copy">
+            <hd-icon icon="cib:markdown"></hd-icon>
+            <span class="name">markdown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:marketo')" title="Click to copy">
+            <hd-icon icon="cib:marketo"></hd-icon>
+            <span class="name">marketo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mastercard')" title="Click to copy">
+            <hd-icon icon="cib:mastercard"></hd-icon>
+            <span class="name">mastercard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mastodon')" title="Click to copy">
+            <hd-icon icon="cib:mastodon"></hd-icon>
+            <span class="name">mastodon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:material-design')" title="Click to copy">
+            <hd-icon icon="cib:material-design"></hd-icon>
+            <span class="name">material-design</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mathworks')" title="Click to copy">
+            <hd-icon icon="cib:mathworks"></hd-icon>
+            <span class="name">mathworks</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:matrix')" title="Click to copy">
+            <hd-icon icon="cib:matrix"></hd-icon>
+            <span class="name">matrix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mattermost')" title="Click to copy">
+            <hd-icon icon="cib:mattermost"></hd-icon>
+            <span class="name">mattermost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:matternet')" title="Click to copy">
+            <hd-icon icon="cib:matternet"></hd-icon>
+            <span class="name">matternet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:maxcdn')" title="Click to copy">
+            <hd-icon icon="cib:maxcdn"></hd-icon>
+            <span class="name">maxcdn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mcafee')" title="Click to copy">
+            <hd-icon icon="cib:mcafee"></hd-icon>
+            <span class="name">mcafee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:media-temple')" title="Click to copy">
+            <hd-icon icon="cib:media-temple"></hd-icon>
+            <span class="name">media-temple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mediafire')" title="Click to copy">
+            <hd-icon icon="cib:mediafire"></hd-icon>
+            <span class="name">mediafire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:medium')" title="Click to copy">
+            <hd-icon icon="cib:medium"></hd-icon>
+            <span class="name">medium</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:medium-m')" title="Click to copy">
+            <hd-icon icon="cib:medium-m"></hd-icon>
+            <span class="name">medium-m</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:meetup')" title="Click to copy">
+            <hd-icon icon="cib:meetup"></hd-icon>
+            <span class="name">meetup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mega')" title="Click to copy">
+            <hd-icon icon="cib:mega"></hd-icon>
+            <span class="name">mega</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mendeley')" title="Click to copy">
+            <hd-icon icon="cib:mendeley"></hd-icon>
+            <span class="name">mendeley</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:messenger')" title="Click to copy">
+            <hd-icon icon="cib:messenger"></hd-icon>
+            <span class="name">messenger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:meteor')" title="Click to copy">
+            <hd-icon icon="cib:meteor"></hd-icon>
+            <span class="name">meteor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:micro-blog')" title="Click to copy">
+            <hd-icon icon="cib:micro-blog"></hd-icon>
+            <span class="name">micro-blog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:microgenetics')" title="Click to copy">
+            <hd-icon icon="cib:microgenetics"></hd-icon>
+            <span class="name">microgenetics</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:microsoft')" title="Click to copy">
+            <hd-icon icon="cib:microsoft"></hd-icon>
+            <span class="name">microsoft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:microsoft-edge')" title="Click to copy">
+            <hd-icon icon="cib:microsoft-edge"></hd-icon>
+            <span class="name">microsoft-edge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:minetest')" title="Click to copy">
+            <hd-icon icon="cib:minetest"></hd-icon>
+            <span class="name">minetest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:minutemailer')" title="Click to copy">
+            <hd-icon icon="cib:minutemailer"></hd-icon>
+            <span class="name">minutemailer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mix')" title="Click to copy">
+            <hd-icon icon="cib:mix"></hd-icon>
+            <span class="name">mix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mixcloud')" title="Click to copy">
+            <hd-icon icon="cib:mixcloud"></hd-icon>
+            <span class="name">mixcloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mixer')" title="Click to copy">
+            <hd-icon icon="cib:mixer"></hd-icon>
+            <span class="name">mixer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mojang')" title="Click to copy">
+            <hd-icon icon="cib:mojang"></hd-icon>
+            <span class="name">mojang</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:monero')" title="Click to copy">
+            <hd-icon icon="cib:monero"></hd-icon>
+            <span class="name">monero</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mongodb')" title="Click to copy">
+            <hd-icon icon="cib:mongodb"></hd-icon>
+            <span class="name">mongodb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:monkeytie')" title="Click to copy">
+            <hd-icon icon="cib:monkeytie"></hd-icon>
+            <span class="name">monkeytie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:monogram')" title="Click to copy">
+            <hd-icon icon="cib:monogram"></hd-icon>
+            <span class="name">monogram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:monzo')" title="Click to copy">
+            <hd-icon icon="cib:monzo"></hd-icon>
+            <span class="name">monzo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:moo')" title="Click to copy">
+            <hd-icon icon="cib:moo"></hd-icon>
+            <span class="name">moo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mozilla')" title="Click to copy">
+            <hd-icon icon="cib:mozilla"></hd-icon>
+            <span class="name">mozilla</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mozilla-firefox')" title="Click to copy">
+            <hd-icon icon="cib:mozilla-firefox"></hd-icon>
+            <span class="name">mozilla-firefox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:musescore')" title="Click to copy">
+            <hd-icon icon="cib:musescore"></hd-icon>
+            <span class="name">musescore</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mxlinux')" title="Click to copy">
+            <hd-icon icon="cib:mxlinux"></hd-icon>
+            <span class="name">mxlinux</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:myspace')" title="Click to copy">
+            <hd-icon icon="cib:myspace"></hd-icon>
+            <span class="name">myspace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:mysql')" title="Click to copy">
+            <hd-icon icon="cib:mysql"></hd-icon>
+            <span class="name">mysql</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nativescript')" title="Click to copy">
+            <hd-icon icon="cib:nativescript"></hd-icon>
+            <span class="name">nativescript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nec')" title="Click to copy">
+            <hd-icon icon="cib:nec"></hd-icon>
+            <span class="name">nec</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:neo4j')" title="Click to copy">
+            <hd-icon icon="cib:neo4j"></hd-icon>
+            <span class="name">neo4j</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:netflix')" title="Click to copy">
+            <hd-icon icon="cib:netflix"></hd-icon>
+            <span class="name">netflix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:netlify')" title="Click to copy">
+            <hd-icon icon="cib:netlify"></hd-icon>
+            <span class="name">netlify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:next-js')" title="Click to copy">
+            <hd-icon icon="cib:next-js"></hd-icon>
+            <span class="name">next-js</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nextcloud')" title="Click to copy">
+            <hd-icon icon="cib:nextcloud"></hd-icon>
+            <span class="name">nextcloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nextdoor')" title="Click to copy">
+            <hd-icon icon="cib:nextdoor"></hd-icon>
+            <span class="name">nextdoor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nginx')" title="Click to copy">
+            <hd-icon icon="cib:nginx"></hd-icon>
+            <span class="name">nginx</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nim')" title="Click to copy">
+            <hd-icon icon="cib:nim"></hd-icon>
+            <span class="name">nim</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nintendo')" title="Click to copy">
+            <hd-icon icon="cib:nintendo"></hd-icon>
+            <span class="name">nintendo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nintendo-3ds')" title="Click to copy">
+            <hd-icon icon="cib:nintendo-3ds"></hd-icon>
+            <span class="name">nintendo-3ds</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nintendo-gamecube')" title="Click to copy">
+            <hd-icon icon="cib:nintendo-gamecube"></hd-icon>
+            <span class="name">nintendo-gamecube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nintendo-switch')" title="Click to copy">
+            <hd-icon icon="cib:nintendo-switch"></hd-icon>
+            <span class="name">nintendo-switch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:node-js')" title="Click to copy">
+            <hd-icon icon="cib:node-js"></hd-icon>
+            <span class="name">node-js</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:node-red')" title="Click to copy">
+            <hd-icon icon="cib:node-red"></hd-icon>
+            <span class="name">node-red</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nodemon')" title="Click to copy">
+            <hd-icon icon="cib:nodemon"></hd-icon>
+            <span class="name">nodemon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nokia')" title="Click to copy">
+            <hd-icon icon="cib:nokia"></hd-icon>
+            <span class="name">nokia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:notion')" title="Click to copy">
+            <hd-icon icon="cib:notion"></hd-icon>
+            <span class="name">notion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:npm')" title="Click to copy">
+            <hd-icon icon="cib:npm"></hd-icon>
+            <span class="name">npm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nucleo')" title="Click to copy">
+            <hd-icon icon="cib:nucleo"></hd-icon>
+            <span class="name">nucleo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nuget')" title="Click to copy">
+            <hd-icon icon="cib:nuget"></hd-icon>
+            <span class="name">nuget</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nuxt-js')" title="Click to copy">
+            <hd-icon icon="cib:nuxt-js"></hd-icon>
+            <span class="name">nuxt-js</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:nvidia')" title="Click to copy">
+            <hd-icon icon="cib:nvidia"></hd-icon>
+            <span class="name">nvidia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ocaml')" title="Click to copy">
+            <hd-icon icon="cib:ocaml"></hd-icon>
+            <span class="name">ocaml</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:octave')" title="Click to copy">
+            <hd-icon icon="cib:octave"></hd-icon>
+            <span class="name">octave</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:octopus-deploy')" title="Click to copy">
+            <hd-icon icon="cib:octopus-deploy"></hd-icon>
+            <span class="name">octopus-deploy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:oculus')" title="Click to copy">
+            <hd-icon icon="cib:oculus"></hd-icon>
+            <span class="name">oculus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:odnoklassniki')" title="Click to copy">
+            <hd-icon icon="cib:odnoklassniki"></hd-icon>
+            <span class="name">odnoklassniki</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:open-access')" title="Click to copy">
+            <hd-icon icon="cib:open-access"></hd-icon>
+            <span class="name">open-access</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:open-collective')" title="Click to copy">
+            <hd-icon icon="cib:open-collective"></hd-icon>
+            <span class="name">open-collective</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:open-id')" title="Click to copy">
+            <hd-icon icon="cib:open-id"></hd-icon>
+            <span class="name">open-id</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:open-source-initiative')" title="Click to copy">
+            <hd-icon icon="cib:open-source-initiative"></hd-icon>
+            <span class="name">open-source-initiative</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:openstreetmap')" title="Click to copy">
+            <hd-icon icon="cib:openstreetmap"></hd-icon>
+            <span class="name">openstreetmap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:opensuse')" title="Click to copy">
+            <hd-icon icon="cib:opensuse"></hd-icon>
+            <span class="name">opensuse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:openvpn')" title="Click to copy">
+            <hd-icon icon="cib:openvpn"></hd-icon>
+            <span class="name">openvpn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:opera')" title="Click to copy">
+            <hd-icon icon="cib:opera"></hd-icon>
+            <span class="name">opera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:opsgenie')" title="Click to copy">
+            <hd-icon icon="cib:opsgenie"></hd-icon>
+            <span class="name">opsgenie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:oracle')" title="Click to copy">
+            <hd-icon icon="cib:oracle"></hd-icon>
+            <span class="name">oracle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:oracle-netsuite')" title="Click to copy">
+            <hd-icon icon="cib:oracle-netsuite"></hd-icon>
+            <span class="name">oracle-netsuite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:orcid')" title="Click to copy">
+            <hd-icon icon="cib:orcid"></hd-icon>
+            <span class="name">orcid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:origin')" title="Click to copy">
+            <hd-icon icon="cib:origin"></hd-icon>
+            <span class="name">origin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:osi')" title="Click to copy">
+            <hd-icon icon="cib:osi"></hd-icon>
+            <span class="name">osi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:osmc')" title="Click to copy">
+            <hd-icon icon="cib:osmc"></hd-icon>
+            <span class="name">osmc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:overcast')" title="Click to copy">
+            <hd-icon icon="cib:overcast"></hd-icon>
+            <span class="name">overcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:overleaf')" title="Click to copy">
+            <hd-icon icon="cib:overleaf"></hd-icon>
+            <span class="name">overleaf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ovh')" title="Click to copy">
+            <hd-icon icon="cib:ovh"></hd-icon>
+            <span class="name">ovh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pagekit')" title="Click to copy">
+            <hd-icon icon="cib:pagekit"></hd-icon>
+            <span class="name">pagekit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:palantir')" title="Click to copy">
+            <hd-icon icon="cib:palantir"></hd-icon>
+            <span class="name">palantir</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pandora')" title="Click to copy">
+            <hd-icon icon="cib:pandora"></hd-icon>
+            <span class="name">pandora</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pantheon')" title="Click to copy">
+            <hd-icon icon="cib:pantheon"></hd-icon>
+            <span class="name">pantheon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:patreon')" title="Click to copy">
+            <hd-icon icon="cib:patreon"></hd-icon>
+            <span class="name">patreon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:paypal')" title="Click to copy">
+            <hd-icon icon="cib:paypal"></hd-icon>
+            <span class="name">paypal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:periscope')" title="Click to copy">
+            <hd-icon icon="cib:periscope"></hd-icon>
+            <span class="name">periscope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:php')" title="Click to copy">
+            <hd-icon icon="cib:php"></hd-icon>
+            <span class="name">php</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:picarto-tv')" title="Click to copy">
+            <hd-icon icon="cib:picarto-tv"></hd-icon>
+            <span class="name">picarto-tv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pinboard')" title="Click to copy">
+            <hd-icon icon="cib:pinboard"></hd-icon>
+            <span class="name">pinboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pingdom')" title="Click to copy">
+            <hd-icon icon="cib:pingdom"></hd-icon>
+            <span class="name">pingdom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pingup')" title="Click to copy">
+            <hd-icon icon="cib:pingup"></hd-icon>
+            <span class="name">pingup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pinterest')" title="Click to copy">
+            <hd-icon icon="cib:pinterest"></hd-icon>
+            <span class="name">pinterest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pinterest-p')" title="Click to copy">
+            <hd-icon icon="cib:pinterest-p"></hd-icon>
+            <span class="name">pinterest-p</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pivotaltracker')" title="Click to copy">
+            <hd-icon icon="cib:pivotaltracker"></hd-icon>
+            <span class="name">pivotaltracker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:plangrid')" title="Click to copy">
+            <hd-icon icon="cib:plangrid"></hd-icon>
+            <span class="name">plangrid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:player-me')" title="Click to copy">
+            <hd-icon icon="cib:player-me"></hd-icon>
+            <span class="name">player-me</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:playerfm')" title="Click to copy">
+            <hd-icon icon="cib:playerfm"></hd-icon>
+            <span class="name">playerfm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:playstation')" title="Click to copy">
+            <hd-icon icon="cib:playstation"></hd-icon>
+            <span class="name">playstation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:playstation3')" title="Click to copy">
+            <hd-icon icon="cib:playstation3"></hd-icon>
+            <span class="name">playstation3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:playstation4')" title="Click to copy">
+            <hd-icon icon="cib:playstation4"></hd-icon>
+            <span class="name">playstation4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:plesk')" title="Click to copy">
+            <hd-icon icon="cib:plesk"></hd-icon>
+            <span class="name">plesk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:plex')" title="Click to copy">
+            <hd-icon icon="cib:plex"></hd-icon>
+            <span class="name">plex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pluralsight')" title="Click to copy">
+            <hd-icon icon="cib:pluralsight"></hd-icon>
+            <span class="name">pluralsight</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:plurk')" title="Click to copy">
+            <hd-icon icon="cib:plurk"></hd-icon>
+            <span class="name">plurk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pocket')" title="Click to copy">
+            <hd-icon icon="cib:pocket"></hd-icon>
+            <span class="name">pocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:postgresql')" title="Click to copy">
+            <hd-icon icon="cib:postgresql"></hd-icon>
+            <span class="name">postgresql</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:postman')" title="Click to copy">
+            <hd-icon icon="cib:postman"></hd-icon>
+            <span class="name">postman</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:postwoman')" title="Click to copy">
+            <hd-icon icon="cib:postwoman"></hd-icon>
+            <span class="name">postwoman</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:powershell')" title="Click to copy">
+            <hd-icon icon="cib:powershell"></hd-icon>
+            <span class="name">powershell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:prettier')" title="Click to copy">
+            <hd-icon icon="cib:prettier"></hd-icon>
+            <span class="name">prettier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:prismic')" title="Click to copy">
+            <hd-icon icon="cib:prismic"></hd-icon>
+            <span class="name">prismic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:probot')" title="Click to copy">
+            <hd-icon icon="cib:probot"></hd-icon>
+            <span class="name">probot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:processwire')" title="Click to copy">
+            <hd-icon icon="cib:processwire"></hd-icon>
+            <span class="name">processwire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:product-hunt')" title="Click to copy">
+            <hd-icon icon="cib:product-hunt"></hd-icon>
+            <span class="name">product-hunt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:proto-io')" title="Click to copy">
+            <hd-icon icon="cib:proto-io"></hd-icon>
+            <span class="name">proto-io</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:protonmail')" title="Click to copy">
+            <hd-icon icon="cib:protonmail"></hd-icon>
+            <span class="name">protonmail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:proxmox')" title="Click to copy">
+            <hd-icon icon="cib:proxmox"></hd-icon>
+            <span class="name">proxmox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pypi')" title="Click to copy">
+            <hd-icon icon="cib:pypi"></hd-icon>
+            <span class="name">pypi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:python')" title="Click to copy">
+            <hd-icon icon="cib:python"></hd-icon>
+            <span class="name">python</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:pytorch')" title="Click to copy">
+            <hd-icon icon="cib:pytorch"></hd-icon>
+            <span class="name">pytorch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:qgis')" title="Click to copy">
+            <hd-icon icon="cib:qgis"></hd-icon>
+            <span class="name">qgis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:qiita')" title="Click to copy">
+            <hd-icon icon="cib:qiita"></hd-icon>
+            <span class="name">qiita</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:qq')" title="Click to copy">
+            <hd-icon icon="cib:qq"></hd-icon>
+            <span class="name">qq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:qualcomm')" title="Click to copy">
+            <hd-icon icon="cib:qualcomm"></hd-icon>
+            <span class="name">qualcomm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:quantcast')" title="Click to copy">
+            <hd-icon icon="cib:quantcast"></hd-icon>
+            <span class="name">quantcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:quantopian')" title="Click to copy">
+            <hd-icon icon="cib:quantopian"></hd-icon>
+            <span class="name">quantopian</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:quarkus')" title="Click to copy">
+            <hd-icon icon="cib:quarkus"></hd-icon>
+            <span class="name">quarkus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:quora')" title="Click to copy">
+            <hd-icon icon="cib:quora"></hd-icon>
+            <span class="name">quora</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:qwiklabs')" title="Click to copy">
+            <hd-icon icon="cib:qwiklabs"></hd-icon>
+            <span class="name">qwiklabs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:qzone')" title="Click to copy">
+            <hd-icon icon="cib:qzone"></hd-icon>
+            <span class="name">qzone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:r')" title="Click to copy">
+            <hd-icon icon="cib:r"></hd-icon>
+            <span class="name">r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:radiopublic')" title="Click to copy">
+            <hd-icon icon="cib:radiopublic"></hd-icon>
+            <span class="name">radiopublic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:rails')" title="Click to copy">
+            <hd-icon icon="cib:rails"></hd-icon>
+            <span class="name">rails</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:raspberry-pi')" title="Click to copy">
+            <hd-icon icon="cib:raspberry-pi"></hd-icon>
+            <span class="name">raspberry-pi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:react')" title="Click to copy">
+            <hd-icon icon="cib:react"></hd-icon>
+            <span class="name">react</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:read-the-docs')" title="Click to copy">
+            <hd-icon icon="cib:read-the-docs"></hd-icon>
+            <span class="name">read-the-docs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:readme')" title="Click to copy">
+            <hd-icon icon="cib:readme"></hd-icon>
+            <span class="name">readme</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:realm')" title="Click to copy">
+            <hd-icon icon="cib:realm"></hd-icon>
+            <span class="name">realm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:reason')" title="Click to copy">
+            <hd-icon icon="cib:reason"></hd-icon>
+            <span class="name">reason</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:redbubble')" title="Click to copy">
+            <hd-icon icon="cib:redbubble"></hd-icon>
+            <span class="name">redbubble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:reddit')" title="Click to copy">
+            <hd-icon icon="cib:reddit"></hd-icon>
+            <span class="name">reddit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:reddit-alt')" title="Click to copy">
+            <hd-icon icon="cib:reddit-alt"></hd-icon>
+            <span class="name">reddit-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:redhat')" title="Click to copy">
+            <hd-icon icon="cib:redhat"></hd-icon>
+            <span class="name">redhat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:redis')" title="Click to copy">
+            <hd-icon icon="cib:redis"></hd-icon>
+            <span class="name">redis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:redux')" title="Click to copy">
+            <hd-icon icon="cib:redux"></hd-icon>
+            <span class="name">redux</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:renren')" title="Click to copy">
+            <hd-icon icon="cib:renren"></hd-icon>
+            <span class="name">renren</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:reverbnation')" title="Click to copy">
+            <hd-icon icon="cib:reverbnation"></hd-icon>
+            <span class="name">reverbnation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:riot')" title="Click to copy">
+            <hd-icon icon="cib:riot"></hd-icon>
+            <span class="name">riot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ripple')" title="Click to copy">
+            <hd-icon icon="cib:ripple"></hd-icon>
+            <span class="name">ripple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:riseup')" title="Click to copy">
+            <hd-icon icon="cib:riseup"></hd-icon>
+            <span class="name">riseup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:rollup-js')" title="Click to copy">
+            <hd-icon icon="cib:rollup-js"></hd-icon>
+            <span class="name">rollup-js</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:roots')" title="Click to copy">
+            <hd-icon icon="cib:roots"></hd-icon>
+            <span class="name">roots</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:roundcube')" title="Click to copy">
+            <hd-icon icon="cib:roundcube"></hd-icon>
+            <span class="name">roundcube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:rss')" title="Click to copy">
+            <hd-icon icon="cib:rss"></hd-icon>
+            <span class="name">rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:rstudio')" title="Click to copy">
+            <hd-icon icon="cib:rstudio"></hd-icon>
+            <span class="name">rstudio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ruby')" title="Click to copy">
+            <hd-icon icon="cib:ruby"></hd-icon>
+            <span class="name">ruby</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:rubygems')" title="Click to copy">
+            <hd-icon icon="cib:rubygems"></hd-icon>
+            <span class="name">rubygems</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:runkeeper')" title="Click to copy">
+            <hd-icon icon="cib:runkeeper"></hd-icon>
+            <span class="name">runkeeper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:rust')" title="Click to copy">
+            <hd-icon icon="cib:rust"></hd-icon>
+            <span class="name">rust</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:safari')" title="Click to copy">
+            <hd-icon icon="cib:safari"></hd-icon>
+            <span class="name">safari</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sahibinden')" title="Click to copy">
+            <hd-icon icon="cib:sahibinden"></hd-icon>
+            <span class="name">sahibinden</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:salesforce')" title="Click to copy">
+            <hd-icon icon="cib:salesforce"></hd-icon>
+            <span class="name">salesforce</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:saltstack')" title="Click to copy">
+            <hd-icon icon="cib:saltstack"></hd-icon>
+            <span class="name">saltstack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:samsung')" title="Click to copy">
+            <hd-icon icon="cib:samsung"></hd-icon>
+            <span class="name">samsung</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:samsung-pay')" title="Click to copy">
+            <hd-icon icon="cib:samsung-pay"></hd-icon>
+            <span class="name">samsung-pay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sap')" title="Click to copy">
+            <hd-icon icon="cib:sap"></hd-icon>
+            <span class="name">sap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sass')" title="Click to copy">
+            <hd-icon icon="cib:sass"></hd-icon>
+            <span class="name">sass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sass-alt')" title="Click to copy">
+            <hd-icon icon="cib:sass-alt"></hd-icon>
+            <span class="name">sass-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:saucelabs')" title="Click to copy">
+            <hd-icon icon="cib:saucelabs"></hd-icon>
+            <span class="name">saucelabs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:scala')" title="Click to copy">
+            <hd-icon icon="cib:scala"></hd-icon>
+            <span class="name">scala</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:scaleway')" title="Click to copy">
+            <hd-icon icon="cib:scaleway"></hd-icon>
+            <span class="name">scaleway</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:scribd')" title="Click to copy">
+            <hd-icon icon="cib:scribd"></hd-icon>
+            <span class="name">scribd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:scrutinizerci')" title="Click to copy">
+            <hd-icon icon="cib:scrutinizerci"></hd-icon>
+            <span class="name">scrutinizerci</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:seagate')" title="Click to copy">
+            <hd-icon icon="cib:seagate"></hd-icon>
+            <span class="name">seagate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sega')" title="Click to copy">
+            <hd-icon icon="cib:sega"></hd-icon>
+            <span class="name">sega</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sellfy')" title="Click to copy">
+            <hd-icon icon="cib:sellfy"></hd-icon>
+            <span class="name">sellfy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:semaphoreci')" title="Click to copy">
+            <hd-icon icon="cib:semaphoreci"></hd-icon>
+            <span class="name">semaphoreci</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sensu')" title="Click to copy">
+            <hd-icon icon="cib:sensu"></hd-icon>
+            <span class="name">sensu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sentry')" title="Click to copy">
+            <hd-icon icon="cib:sentry"></hd-icon>
+            <span class="name">sentry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:server-fault')" title="Click to copy">
+            <hd-icon icon="cib:server-fault"></hd-icon>
+            <span class="name">server-fault</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:shazam')" title="Click to copy">
+            <hd-icon icon="cib:shazam"></hd-icon>
+            <span class="name">shazam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:shell')" title="Click to copy">
+            <hd-icon icon="cib:shell"></hd-icon>
+            <span class="name">shell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:shopify')" title="Click to copy">
+            <hd-icon icon="cib:shopify"></hd-icon>
+            <span class="name">shopify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:showpad')" title="Click to copy">
+            <hd-icon icon="cib:showpad"></hd-icon>
+            <span class="name">showpad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:siemens')" title="Click to copy">
+            <hd-icon icon="cib:siemens"></hd-icon>
+            <span class="name">siemens</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:signal')" title="Click to copy">
+            <hd-icon icon="cib:signal"></hd-icon>
+            <span class="name">signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sina-weibo')" title="Click to copy">
+            <hd-icon icon="cib:sina-weibo"></hd-icon>
+            <span class="name">sina-weibo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sitepoint')" title="Click to copy">
+            <hd-icon icon="cib:sitepoint"></hd-icon>
+            <span class="name">sitepoint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sketch')" title="Click to copy">
+            <hd-icon icon="cib:sketch"></hd-icon>
+            <span class="name">sketch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:skillshare')" title="Click to copy">
+            <hd-icon icon="cib:skillshare"></hd-icon>
+            <span class="name">skillshare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:skyliner')" title="Click to copy">
+            <hd-icon icon="cib:skyliner"></hd-icon>
+            <span class="name">skyliner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:skype')" title="Click to copy">
+            <hd-icon icon="cib:skype"></hd-icon>
+            <span class="name">skype</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:slack')" title="Click to copy">
+            <hd-icon icon="cib:slack"></hd-icon>
+            <span class="name">slack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:slashdot')" title="Click to copy">
+            <hd-icon icon="cib:slashdot"></hd-icon>
+            <span class="name">slashdot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:slickpic')" title="Click to copy">
+            <hd-icon icon="cib:slickpic"></hd-icon>
+            <span class="name">slickpic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:slides')" title="Click to copy">
+            <hd-icon icon="cib:slides"></hd-icon>
+            <span class="name">slides</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:slideshare')" title="Click to copy">
+            <hd-icon icon="cib:slideshare"></hd-icon>
+            <span class="name">slideshare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:smashingmagazine')" title="Click to copy">
+            <hd-icon icon="cib:smashingmagazine"></hd-icon>
+            <span class="name">smashingmagazine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:snapchat')" title="Click to copy">
+            <hd-icon icon="cib:snapchat"></hd-icon>
+            <span class="name">snapchat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:snapcraft')" title="Click to copy">
+            <hd-icon icon="cib:snapcraft"></hd-icon>
+            <span class="name">snapcraft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:snyk')" title="Click to copy">
+            <hd-icon icon="cib:snyk"></hd-icon>
+            <span class="name">snyk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:society6')" title="Click to copy">
+            <hd-icon icon="cib:society6"></hd-icon>
+            <span class="name">society6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:socket-io')" title="Click to copy">
+            <hd-icon icon="cib:socket-io"></hd-icon>
+            <span class="name">socket-io</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sogou')" title="Click to copy">
+            <hd-icon icon="cib:sogou"></hd-icon>
+            <span class="name">sogou</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:solus')" title="Click to copy">
+            <hd-icon icon="cib:solus"></hd-icon>
+            <span class="name">solus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:songkick')" title="Click to copy">
+            <hd-icon icon="cib:songkick"></hd-icon>
+            <span class="name">songkick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sonos')" title="Click to copy">
+            <hd-icon icon="cib:sonos"></hd-icon>
+            <span class="name">sonos</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:soundcloud')" title="Click to copy">
+            <hd-icon icon="cib:soundcloud"></hd-icon>
+            <span class="name">soundcloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sourceforge')" title="Click to copy">
+            <hd-icon icon="cib:sourceforge"></hd-icon>
+            <span class="name">sourceforge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sourcegraph')" title="Click to copy">
+            <hd-icon icon="cib:sourcegraph"></hd-icon>
+            <span class="name">sourcegraph</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:spacemacs')" title="Click to copy">
+            <hd-icon icon="cib:spacemacs"></hd-icon>
+            <span class="name">spacemacs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:spacex')" title="Click to copy">
+            <hd-icon icon="cib:spacex"></hd-icon>
+            <span class="name">spacex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sparkfun')" title="Click to copy">
+            <hd-icon icon="cib:sparkfun"></hd-icon>
+            <span class="name">sparkfun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sparkpost')" title="Click to copy">
+            <hd-icon icon="cib:sparkpost"></hd-icon>
+            <span class="name">sparkpost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:spdx')" title="Click to copy">
+            <hd-icon icon="cib:spdx"></hd-icon>
+            <span class="name">spdx</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:speaker-deck')" title="Click to copy">
+            <hd-icon icon="cib:speaker-deck"></hd-icon>
+            <span class="name">speaker-deck</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:spectrum')" title="Click to copy">
+            <hd-icon icon="cib:spectrum"></hd-icon>
+            <span class="name">spectrum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:spotify')" title="Click to copy">
+            <hd-icon icon="cib:spotify"></hd-icon>
+            <span class="name">spotify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:spotlight')" title="Click to copy">
+            <hd-icon icon="cib:spotlight"></hd-icon>
+            <span class="name">spotlight</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:spreaker')" title="Click to copy">
+            <hd-icon icon="cib:spreaker"></hd-icon>
+            <span class="name">spreaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:spring')" title="Click to copy">
+            <hd-icon icon="cib:spring"></hd-icon>
+            <span class="name">spring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sprint')" title="Click to copy">
+            <hd-icon icon="cib:sprint"></hd-icon>
+            <span class="name">sprint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:squarespace')" title="Click to copy">
+            <hd-icon icon="cib:squarespace"></hd-icon>
+            <span class="name">squarespace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stackbit')" title="Click to copy">
+            <hd-icon icon="cib:stackbit"></hd-icon>
+            <span class="name">stackbit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stackexchange')" title="Click to copy">
+            <hd-icon icon="cib:stackexchange"></hd-icon>
+            <span class="name">stackexchange</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stackoverflow')" title="Click to copy">
+            <hd-icon icon="cib:stackoverflow"></hd-icon>
+            <span class="name">stackoverflow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stackpath')" title="Click to copy">
+            <hd-icon icon="cib:stackpath"></hd-icon>
+            <span class="name">stackpath</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stackshare')" title="Click to copy">
+            <hd-icon icon="cib:stackshare"></hd-icon>
+            <span class="name">stackshare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stadia')" title="Click to copy">
+            <hd-icon icon="cib:stadia"></hd-icon>
+            <span class="name">stadia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:statamic')" title="Click to copy">
+            <hd-icon icon="cib:statamic"></hd-icon>
+            <span class="name">statamic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:staticman')" title="Click to copy">
+            <hd-icon icon="cib:staticman"></hd-icon>
+            <span class="name">staticman</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:statuspage')" title="Click to copy">
+            <hd-icon icon="cib:statuspage"></hd-icon>
+            <span class="name">statuspage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:steam')" title="Click to copy">
+            <hd-icon icon="cib:steam"></hd-icon>
+            <span class="name">steam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:steem')" title="Click to copy">
+            <hd-icon icon="cib:steem"></hd-icon>
+            <span class="name">steem</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:steemit')" title="Click to copy">
+            <hd-icon icon="cib:steemit"></hd-icon>
+            <span class="name">steemit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stitcher')" title="Click to copy">
+            <hd-icon icon="cib:stitcher"></hd-icon>
+            <span class="name">stitcher</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:storify')" title="Click to copy">
+            <hd-icon icon="cib:storify"></hd-icon>
+            <span class="name">storify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:storybook')" title="Click to copy">
+            <hd-icon icon="cib:storybook"></hd-icon>
+            <span class="name">storybook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:strapi')" title="Click to copy">
+            <hd-icon icon="cib:strapi"></hd-icon>
+            <span class="name">strapi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:strava')" title="Click to copy">
+            <hd-icon icon="cib:strava"></hd-icon>
+            <span class="name">strava</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stripe')" title="Click to copy">
+            <hd-icon icon="cib:stripe"></hd-icon>
+            <span class="name">stripe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stripe-s')" title="Click to copy">
+            <hd-icon icon="cib:stripe-s"></hd-icon>
+            <span class="name">stripe-s</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stubhub')" title="Click to copy">
+            <hd-icon icon="cib:stubhub"></hd-icon>
+            <span class="name">stubhub</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stumbleupon')" title="Click to copy">
+            <hd-icon icon="cib:stumbleupon"></hd-icon>
+            <span class="name">stumbleupon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:styleshare')" title="Click to copy">
+            <hd-icon icon="cib:styleshare"></hd-icon>
+            <span class="name">styleshare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:stylus')" title="Click to copy">
+            <hd-icon icon="cib:stylus"></hd-icon>
+            <span class="name">stylus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:sublime-text')" title="Click to copy">
+            <hd-icon icon="cib:sublime-text"></hd-icon>
+            <span class="name">sublime-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:subversion')" title="Click to copy">
+            <hd-icon icon="cib:subversion"></hd-icon>
+            <span class="name">subversion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:superuser')" title="Click to copy">
+            <hd-icon icon="cib:superuser"></hd-icon>
+            <span class="name">superuser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:svelte')" title="Click to copy">
+            <hd-icon icon="cib:svelte"></hd-icon>
+            <span class="name">svelte</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:svg')" title="Click to copy">
+            <hd-icon icon="cib:svg"></hd-icon>
+            <span class="name">svg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:swagger')" title="Click to copy">
+            <hd-icon icon="cib:swagger"></hd-icon>
+            <span class="name">swagger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:swarm')" title="Click to copy">
+            <hd-icon icon="cib:swarm"></hd-icon>
+            <span class="name">swarm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:swift')" title="Click to copy">
+            <hd-icon icon="cib:swift"></hd-icon>
+            <span class="name">swift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:symantec')" title="Click to copy">
+            <hd-icon icon="cib:symantec"></hd-icon>
+            <span class="name">symantec</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:symfony')" title="Click to copy">
+            <hd-icon icon="cib:symfony"></hd-icon>
+            <span class="name">symfony</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:synology')" title="Click to copy">
+            <hd-icon icon="cib:synology"></hd-icon>
+            <span class="name">synology</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:t-mobile')" title="Click to copy">
+            <hd-icon icon="cib:t-mobile"></hd-icon>
+            <span class="name">t-mobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tableau')" title="Click to copy">
+            <hd-icon icon="cib:tableau"></hd-icon>
+            <span class="name">tableau</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tails')" title="Click to copy">
+            <hd-icon icon="cib:tails"></hd-icon>
+            <span class="name">tails</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tapas')" title="Click to copy">
+            <hd-icon icon="cib:tapas"></hd-icon>
+            <span class="name">tapas</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:teamviewer')" title="Click to copy">
+            <hd-icon icon="cib:teamviewer"></hd-icon>
+            <span class="name">teamviewer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ted')" title="Click to copy">
+            <hd-icon icon="cib:ted"></hd-icon>
+            <span class="name">ted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:teespring')" title="Click to copy">
+            <hd-icon icon="cib:teespring"></hd-icon>
+            <span class="name">teespring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:telegram')" title="Click to copy">
+            <hd-icon icon="cib:telegram"></hd-icon>
+            <span class="name">telegram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:telegram-plane')" title="Click to copy">
+            <hd-icon icon="cib:telegram-plane"></hd-icon>
+            <span class="name">telegram-plane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tencent-qq')" title="Click to copy">
+            <hd-icon icon="cib:tencent-qq"></hd-icon>
+            <span class="name">tencent-qq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tencent-weibo')" title="Click to copy">
+            <hd-icon icon="cib:tencent-weibo"></hd-icon>
+            <span class="name">tencent-weibo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tensorflow')" title="Click to copy">
+            <hd-icon icon="cib:tensorflow"></hd-icon>
+            <span class="name">tensorflow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:terraform')" title="Click to copy">
+            <hd-icon icon="cib:terraform"></hd-icon>
+            <span class="name">terraform</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tesla')" title="Click to copy">
+            <hd-icon icon="cib:tesla"></hd-icon>
+            <span class="name">tesla</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:the-mighty')" title="Click to copy">
+            <hd-icon icon="cib:the-mighty"></hd-icon>
+            <span class="name">the-mighty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:the-movie-database')" title="Click to copy">
+            <hd-icon icon="cib:the-movie-database"></hd-icon>
+            <span class="name">the-movie-database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tidal')" title="Click to copy">
+            <hd-icon icon="cib:tidal"></hd-icon>
+            <span class="name">tidal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tiktok')" title="Click to copy">
+            <hd-icon icon="cib:tiktok"></hd-icon>
+            <span class="name">tiktok</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tinder')" title="Click to copy">
+            <hd-icon icon="cib:tinder"></hd-icon>
+            <span class="name">tinder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:todoist')" title="Click to copy">
+            <hd-icon icon="cib:todoist"></hd-icon>
+            <span class="name">todoist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:toggl')" title="Click to copy">
+            <hd-icon icon="cib:toggl"></hd-icon>
+            <span class="name">toggl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:topcoder')" title="Click to copy">
+            <hd-icon icon="cib:topcoder"></hd-icon>
+            <span class="name">topcoder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:toptal')" title="Click to copy">
+            <hd-icon icon="cib:toptal"></hd-icon>
+            <span class="name">toptal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tor')" title="Click to copy">
+            <hd-icon icon="cib:tor"></hd-icon>
+            <span class="name">tor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:toshiba')" title="Click to copy">
+            <hd-icon icon="cib:toshiba"></hd-icon>
+            <span class="name">toshiba</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:trainerroad')" title="Click to copy">
+            <hd-icon icon="cib:trainerroad"></hd-icon>
+            <span class="name">trainerroad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:trakt')" title="Click to copy">
+            <hd-icon icon="cib:trakt"></hd-icon>
+            <span class="name">trakt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:travisci')" title="Click to copy">
+            <hd-icon icon="cib:travisci"></hd-icon>
+            <span class="name">travisci</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:treehouse')" title="Click to copy">
+            <hd-icon icon="cib:treehouse"></hd-icon>
+            <span class="name">treehouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:trello')" title="Click to copy">
+            <hd-icon icon="cib:trello"></hd-icon>
+            <span class="name">trello</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tripadvisor')" title="Click to copy">
+            <hd-icon icon="cib:tripadvisor"></hd-icon>
+            <span class="name">tripadvisor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:trulia')" title="Click to copy">
+            <hd-icon icon="cib:trulia"></hd-icon>
+            <span class="name">trulia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:tumblr')" title="Click to copy">
+            <hd-icon icon="cib:tumblr"></hd-icon>
+            <span class="name">tumblr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:twilio')" title="Click to copy">
+            <hd-icon icon="cib:twilio"></hd-icon>
+            <span class="name">twilio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:twitch')" title="Click to copy">
+            <hd-icon icon="cib:twitch"></hd-icon>
+            <span class="name">twitch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:twitter')" title="Click to copy">
+            <hd-icon icon="cib:twitter"></hd-icon>
+            <span class="name">twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:twoo')" title="Click to copy">
+            <hd-icon icon="cib:twoo"></hd-icon>
+            <span class="name">twoo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:typescript')" title="Click to copy">
+            <hd-icon icon="cib:typescript"></hd-icon>
+            <span class="name">typescript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:typo3')" title="Click to copy">
+            <hd-icon icon="cib:typo3"></hd-icon>
+            <span class="name">typo3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:uber')" title="Click to copy">
+            <hd-icon icon="cib:uber"></hd-icon>
+            <span class="name">uber</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ubisoft')" title="Click to copy">
+            <hd-icon icon="cib:ubisoft"></hd-icon>
+            <span class="name">ubisoft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ublock-origin')" title="Click to copy">
+            <hd-icon icon="cib:ublock-origin"></hd-icon>
+            <span class="name">ublock-origin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:ubuntu')" title="Click to copy">
+            <hd-icon icon="cib:ubuntu"></hd-icon>
+            <span class="name">ubuntu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:udacity')" title="Click to copy">
+            <hd-icon icon="cib:udacity"></hd-icon>
+            <span class="name">udacity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:udemy')" title="Click to copy">
+            <hd-icon icon="cib:udemy"></hd-icon>
+            <span class="name">udemy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:uikit')" title="Click to copy">
+            <hd-icon icon="cib:uikit"></hd-icon>
+            <span class="name">uikit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:umbraco')" title="Click to copy">
+            <hd-icon icon="cib:umbraco"></hd-icon>
+            <span class="name">umbraco</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:unity')" title="Click to copy">
+            <hd-icon icon="cib:unity"></hd-icon>
+            <span class="name">unity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:unreal-engine')" title="Click to copy">
+            <hd-icon icon="cib:unreal-engine"></hd-icon>
+            <span class="name">unreal-engine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:unsplash')" title="Click to copy">
+            <hd-icon icon="cib:unsplash"></hd-icon>
+            <span class="name">unsplash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:untappd')" title="Click to copy">
+            <hd-icon icon="cib:untappd"></hd-icon>
+            <span class="name">untappd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:upwork')" title="Click to copy">
+            <hd-icon icon="cib:upwork"></hd-icon>
+            <span class="name">upwork</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:usb')" title="Click to copy">
+            <hd-icon icon="cib:usb"></hd-icon>
+            <span class="name">usb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:v8')" title="Click to copy">
+            <hd-icon icon="cib:v8"></hd-icon>
+            <span class="name">v8</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:vagrant')" title="Click to copy">
+            <hd-icon icon="cib:vagrant"></hd-icon>
+            <span class="name">vagrant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:venmo')" title="Click to copy">
+            <hd-icon icon="cib:venmo"></hd-icon>
+            <span class="name">venmo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:verizon')" title="Click to copy">
+            <hd-icon icon="cib:verizon"></hd-icon>
+            <span class="name">verizon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:viadeo')" title="Click to copy">
+            <hd-icon icon="cib:viadeo"></hd-icon>
+            <span class="name">viadeo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:viber')" title="Click to copy">
+            <hd-icon icon="cib:viber"></hd-icon>
+            <span class="name">viber</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:vim')" title="Click to copy">
+            <hd-icon icon="cib:vim"></hd-icon>
+            <span class="name">vim</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:vimeo')" title="Click to copy">
+            <hd-icon icon="cib:vimeo"></hd-icon>
+            <span class="name">vimeo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:vimeo-v')" title="Click to copy">
+            <hd-icon icon="cib:vimeo-v"></hd-icon>
+            <span class="name">vimeo-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:vine')" title="Click to copy">
+            <hd-icon icon="cib:vine"></hd-icon>
+            <span class="name">vine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:virb')" title="Click to copy">
+            <hd-icon icon="cib:virb"></hd-icon>
+            <span class="name">virb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:visa')" title="Click to copy">
+            <hd-icon icon="cib:visa"></hd-icon>
+            <span class="name">visa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:visual-studio')" title="Click to copy">
+            <hd-icon icon="cib:visual-studio"></hd-icon>
+            <span class="name">visual-studio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:visual-studio-code')" title="Click to copy">
+            <hd-icon icon="cib:visual-studio-code"></hd-icon>
+            <span class="name">visual-studio-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:vk')" title="Click to copy">
+            <hd-icon icon="cib:vk"></hd-icon>
+            <span class="name">vk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:vlc')" title="Click to copy">
+            <hd-icon icon="cib:vlc"></hd-icon>
+            <span class="name">vlc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:vsco')" title="Click to copy">
+            <hd-icon icon="cib:vsco"></hd-icon>
+            <span class="name">vsco</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:vue-js')" title="Click to copy">
+            <hd-icon icon="cib:vue-js"></hd-icon>
+            <span class="name">vue-js</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wattpad')" title="Click to copy">
+            <hd-icon icon="cib:wattpad"></hd-icon>
+            <span class="name">wattpad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:weasyl')" title="Click to copy">
+            <hd-icon icon="cib:weasyl"></hd-icon>
+            <span class="name">weasyl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:webcomponents-org')" title="Click to copy">
+            <hd-icon icon="cib:webcomponents-org"></hd-icon>
+            <span class="name">webcomponents-org</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:webpack')" title="Click to copy">
+            <hd-icon icon="cib:webpack"></hd-icon>
+            <span class="name">webpack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:webstorm')" title="Click to copy">
+            <hd-icon icon="cib:webstorm"></hd-icon>
+            <span class="name">webstorm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wechat')" title="Click to copy">
+            <hd-icon icon="cib:wechat"></hd-icon>
+            <span class="name">wechat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:whatsapp')" title="Click to copy">
+            <hd-icon icon="cib:whatsapp"></hd-icon>
+            <span class="name">whatsapp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:when-i-work')" title="Click to copy">
+            <hd-icon icon="cib:when-i-work"></hd-icon>
+            <span class="name">when-i-work</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wii')" title="Click to copy">
+            <hd-icon icon="cib:wii"></hd-icon>
+            <span class="name">wii</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wiiu')" title="Click to copy">
+            <hd-icon icon="cib:wiiu"></hd-icon>
+            <span class="name">wiiu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wikipedia')" title="Click to copy">
+            <hd-icon icon="cib:wikipedia"></hd-icon>
+            <span class="name">wikipedia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:windows')" title="Click to copy">
+            <hd-icon icon="cib:windows"></hd-icon>
+            <span class="name">windows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wire')" title="Click to copy">
+            <hd-icon icon="cib:wire"></hd-icon>
+            <span class="name">wire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wireguard')" title="Click to copy">
+            <hd-icon icon="cib:wireguard"></hd-icon>
+            <span class="name">wireguard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wix')" title="Click to copy">
+            <hd-icon icon="cib:wix"></hd-icon>
+            <span class="name">wix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wolfram')" title="Click to copy">
+            <hd-icon icon="cib:wolfram"></hd-icon>
+            <span class="name">wolfram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wolfram-language')" title="Click to copy">
+            <hd-icon icon="cib:wolfram-language"></hd-icon>
+            <span class="name">wolfram-language</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wolfram-mathematica')" title="Click to copy">
+            <hd-icon icon="cib:wolfram-mathematica"></hd-icon>
+            <span class="name">wolfram-mathematica</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wordpress')" title="Click to copy">
+            <hd-icon icon="cib:wordpress"></hd-icon>
+            <span class="name">wordpress</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:wpengine')" title="Click to copy">
+            <hd-icon icon="cib:wpengine"></hd-icon>
+            <span class="name">wpengine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:x-pack')" title="Click to copy">
+            <hd-icon icon="cib:x-pack"></hd-icon>
+            <span class="name">x-pack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:xbox')" title="Click to copy">
+            <hd-icon icon="cib:xbox"></hd-icon>
+            <span class="name">xbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:xcode')" title="Click to copy">
+            <hd-icon icon="cib:xcode"></hd-icon>
+            <span class="name">xcode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:xero')" title="Click to copy">
+            <hd-icon icon="cib:xero"></hd-icon>
+            <span class="name">xero</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:xiaomi')" title="Click to copy">
+            <hd-icon icon="cib:xiaomi"></hd-icon>
+            <span class="name">xiaomi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:xing')" title="Click to copy">
+            <hd-icon icon="cib:xing"></hd-icon>
+            <span class="name">xing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:xrp')" title="Click to copy">
+            <hd-icon icon="cib:xrp"></hd-icon>
+            <span class="name">xrp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:xsplit')" title="Click to copy">
+            <hd-icon icon="cib:xsplit"></hd-icon>
+            <span class="name">xsplit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:y-combinator')" title="Click to copy">
+            <hd-icon icon="cib:y-combinator"></hd-icon>
+            <span class="name">y-combinator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:yahoo')" title="Click to copy">
+            <hd-icon icon="cib:yahoo"></hd-icon>
+            <span class="name">yahoo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:yammer')" title="Click to copy">
+            <hd-icon icon="cib:yammer"></hd-icon>
+            <span class="name">yammer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:yandex')" title="Click to copy">
+            <hd-icon icon="cib:yandex"></hd-icon>
+            <span class="name">yandex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:yarn')" title="Click to copy">
+            <hd-icon icon="cib:yarn"></hd-icon>
+            <span class="name">yarn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:yelp')" title="Click to copy">
+            <hd-icon icon="cib:yelp"></hd-icon>
+            <span class="name">yelp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:youtube')" title="Click to copy">
+            <hd-icon icon="cib:youtube"></hd-icon>
+            <span class="name">youtube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:zalando')" title="Click to copy">
+            <hd-icon icon="cib:zalando"></hd-icon>
+            <span class="name">zalando</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:zapier')" title="Click to copy">
+            <hd-icon icon="cib:zapier"></hd-icon>
+            <span class="name">zapier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:zeit')" title="Click to copy">
+            <hd-icon icon="cib:zeit"></hd-icon>
+            <span class="name">zeit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:zendesk')" title="Click to copy">
+            <hd-icon icon="cib:zendesk"></hd-icon>
+            <span class="name">zendesk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:zerply')" title="Click to copy">
+            <hd-icon icon="cib:zerply"></hd-icon>
+            <span class="name">zerply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:zillow')" title="Click to copy">
+            <hd-icon icon="cib:zillow"></hd-icon>
+            <span class="name">zillow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:zingat')" title="Click to copy">
+            <hd-icon icon="cib:zingat"></hd-icon>
+            <span class="name">zingat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:zoom')" title="Click to copy">
+            <hd-icon icon="cib:zoom"></hd-icon>
+            <span class="name">zoom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:zorin')" title="Click to copy">
+            <hd-icon icon="cib:zorin"></hd-icon>
+            <span class="name">zorin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cib:zulip')" title="Click to copy">
+            <hd-icon icon="cib:zulip"></hd-icon>
+            <span class="name">zulip</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

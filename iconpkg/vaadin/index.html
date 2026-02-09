@@ -1,0 +1,2716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vaadin - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>vaadin <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(636)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('vaadin:abacus')" title="Click to copy">
+            <hd-icon icon="vaadin:abacus"></hd-icon>
+            <span class="name">abacus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:absolute-position')" title="Click to copy">
+            <hd-icon icon="vaadin:absolute-position"></hd-icon>
+            <span class="name">absolute-position</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:academy-cap')" title="Click to copy">
+            <hd-icon icon="vaadin:academy-cap"></hd-icon>
+            <span class="name">academy-cap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:accessibility')" title="Click to copy">
+            <hd-icon icon="vaadin:accessibility"></hd-icon>
+            <span class="name">accessibility</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:accordion-menu')" title="Click to copy">
+            <hd-icon icon="vaadin:accordion-menu"></hd-icon>
+            <span class="name">accordion-menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:add-dock')" title="Click to copy">
+            <hd-icon icon="vaadin:add-dock"></hd-icon>
+            <span class="name">add-dock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:adjust')" title="Click to copy">
+            <hd-icon icon="vaadin:adjust"></hd-icon>
+            <span class="name">adjust</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:adobe-flash')" title="Click to copy">
+            <hd-icon icon="vaadin:adobe-flash"></hd-icon>
+            <span class="name">adobe-flash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:airplane')" title="Click to copy">
+            <hd-icon icon="vaadin:airplane"></hd-icon>
+            <span class="name">airplane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:alarm')" title="Click to copy">
+            <hd-icon icon="vaadin:alarm"></hd-icon>
+            <span class="name">alarm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:align-center')" title="Click to copy">
+            <hd-icon icon="vaadin:align-center"></hd-icon>
+            <span class="name">align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:align-justify')" title="Click to copy">
+            <hd-icon icon="vaadin:align-justify"></hd-icon>
+            <span class="name">align-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:align-left')" title="Click to copy">
+            <hd-icon icon="vaadin:align-left"></hd-icon>
+            <span class="name">align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:align-right')" title="Click to copy">
+            <hd-icon icon="vaadin:align-right"></hd-icon>
+            <span class="name">align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:alt')" title="Click to copy">
+            <hd-icon icon="vaadin:alt"></hd-icon>
+            <span class="name">alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:alt-a')" title="Click to copy">
+            <hd-icon icon="vaadin:alt-a"></hd-icon>
+            <span class="name">alt-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ambulance')" title="Click to copy">
+            <hd-icon icon="vaadin:ambulance"></hd-icon>
+            <span class="name">ambulance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:anchor')" title="Click to copy">
+            <hd-icon icon="vaadin:anchor"></hd-icon>
+            <span class="name">anchor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:angle-double-down')" title="Click to copy">
+            <hd-icon icon="vaadin:angle-double-down"></hd-icon>
+            <span class="name">angle-double-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:angle-double-left')" title="Click to copy">
+            <hd-icon icon="vaadin:angle-double-left"></hd-icon>
+            <span class="name">angle-double-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:angle-double-right')" title="Click to copy">
+            <hd-icon icon="vaadin:angle-double-right"></hd-icon>
+            <span class="name">angle-double-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:angle-double-up')" title="Click to copy">
+            <hd-icon icon="vaadin:angle-double-up"></hd-icon>
+            <span class="name">angle-double-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:angle-down')" title="Click to copy">
+            <hd-icon icon="vaadin:angle-down"></hd-icon>
+            <span class="name">angle-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:angle-left')" title="Click to copy">
+            <hd-icon icon="vaadin:angle-left"></hd-icon>
+            <span class="name">angle-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:angle-right')" title="Click to copy">
+            <hd-icon icon="vaadin:angle-right"></hd-icon>
+            <span class="name">angle-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:angle-up')" title="Click to copy">
+            <hd-icon icon="vaadin:angle-up"></hd-icon>
+            <span class="name">angle-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:archive')" title="Click to copy">
+            <hd-icon icon="vaadin:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:archives')" title="Click to copy">
+            <hd-icon icon="vaadin:archives"></hd-icon>
+            <span class="name">archives</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:area-select')" title="Click to copy">
+            <hd-icon icon="vaadin:area-select"></hd-icon>
+            <span class="name">area-select</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-backward')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-backward"></hd-icon>
+            <span class="name">arrow-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-circle-down')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-circle-down"></hd-icon>
+            <span class="name">arrow-circle-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-circle-down-o')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-circle-down-o"></hd-icon>
+            <span class="name">arrow-circle-down-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-circle-left')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-circle-left"></hd-icon>
+            <span class="name">arrow-circle-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-circle-left-o')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-circle-left-o"></hd-icon>
+            <span class="name">arrow-circle-left-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-circle-right')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-circle-right"></hd-icon>
+            <span class="name">arrow-circle-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-circle-right-o')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-circle-right-o"></hd-icon>
+            <span class="name">arrow-circle-right-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-circle-up')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-circle-up"></hd-icon>
+            <span class="name">arrow-circle-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-circle-up-o')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-circle-up-o"></hd-icon>
+            <span class="name">arrow-circle-up-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-down')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-forward')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-forward"></hd-icon>
+            <span class="name">arrow-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-left')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-long-down')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-long-down"></hd-icon>
+            <span class="name">arrow-long-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-long-left')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-long-left"></hd-icon>
+            <span class="name">arrow-long-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-right')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrow-up')" title="Click to copy">
+            <hd-icon icon="vaadin:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrows')" title="Click to copy">
+            <hd-icon icon="vaadin:arrows"></hd-icon>
+            <span class="name">arrows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrows-cross')" title="Click to copy">
+            <hd-icon icon="vaadin:arrows-cross"></hd-icon>
+            <span class="name">arrows-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrows-long-h')" title="Click to copy">
+            <hd-icon icon="vaadin:arrows-long-h"></hd-icon>
+            <span class="name">arrows-long-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrows-long-right')" title="Click to copy">
+            <hd-icon icon="vaadin:arrows-long-right"></hd-icon>
+            <span class="name">arrows-long-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrows-long-up')" title="Click to copy">
+            <hd-icon icon="vaadin:arrows-long-up"></hd-icon>
+            <span class="name">arrows-long-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:arrows-long-v')" title="Click to copy">
+            <hd-icon icon="vaadin:arrows-long-v"></hd-icon>
+            <span class="name">arrows-long-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:asterisk')" title="Click to copy">
+            <hd-icon icon="vaadin:asterisk"></hd-icon>
+            <span class="name">asterisk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:at')" title="Click to copy">
+            <hd-icon icon="vaadin:at"></hd-icon>
+            <span class="name">at</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:automation')" title="Click to copy">
+            <hd-icon icon="vaadin:automation"></hd-icon>
+            <span class="name">automation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:backspace')" title="Click to copy">
+            <hd-icon icon="vaadin:backspace"></hd-icon>
+            <span class="name">backspace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:backspace-a')" title="Click to copy">
+            <hd-icon icon="vaadin:backspace-a"></hd-icon>
+            <span class="name">backspace-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:backwards')" title="Click to copy">
+            <hd-icon icon="vaadin:backwards"></hd-icon>
+            <span class="name">backwards</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ban')" title="Click to copy">
+            <hd-icon icon="vaadin:ban"></hd-icon>
+            <span class="name">ban</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bar-chart')" title="Click to copy">
+            <hd-icon icon="vaadin:bar-chart"></hd-icon>
+            <span class="name">bar-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bar-chart-h')" title="Click to copy">
+            <hd-icon icon="vaadin:bar-chart-h"></hd-icon>
+            <span class="name">bar-chart-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bar-chart-v')" title="Click to copy">
+            <hd-icon icon="vaadin:bar-chart-v"></hd-icon>
+            <span class="name">bar-chart-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:barcode')" title="Click to copy">
+            <hd-icon icon="vaadin:barcode"></hd-icon>
+            <span class="name">barcode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bed')" title="Click to copy">
+            <hd-icon icon="vaadin:bed"></hd-icon>
+            <span class="name">bed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bell')" title="Click to copy">
+            <hd-icon icon="vaadin:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bell-o')" title="Click to copy">
+            <hd-icon icon="vaadin:bell-o"></hd-icon>
+            <span class="name">bell-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bell-slash')" title="Click to copy">
+            <hd-icon icon="vaadin:bell-slash"></hd-icon>
+            <span class="name">bell-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bell-slash-o')" title="Click to copy">
+            <hd-icon icon="vaadin:bell-slash-o"></hd-icon>
+            <span class="name">bell-slash-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:boat')" title="Click to copy">
+            <hd-icon icon="vaadin:boat"></hd-icon>
+            <span class="name">boat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bold')" title="Click to copy">
+            <hd-icon icon="vaadin:bold"></hd-icon>
+            <span class="name">bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bolt')" title="Click to copy">
+            <hd-icon icon="vaadin:bolt"></hd-icon>
+            <span class="name">bolt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bomb')" title="Click to copy">
+            <hd-icon icon="vaadin:bomb"></hd-icon>
+            <span class="name">bomb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:book')" title="Click to copy">
+            <hd-icon icon="vaadin:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:book-dollar')" title="Click to copy">
+            <hd-icon icon="vaadin:book-dollar"></hd-icon>
+            <span class="name">book-dollar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:book-percent')" title="Click to copy">
+            <hd-icon icon="vaadin:book-percent"></hd-icon>
+            <span class="name">book-percent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bookmark')" title="Click to copy">
+            <hd-icon icon="vaadin:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bookmark-o')" title="Click to copy">
+            <hd-icon icon="vaadin:bookmark-o"></hd-icon>
+            <span class="name">bookmark-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:briefcase')" title="Click to copy">
+            <hd-icon icon="vaadin:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:browser')" title="Click to copy">
+            <hd-icon icon="vaadin:browser"></hd-icon>
+            <span class="name">browser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bug')" title="Click to copy">
+            <hd-icon icon="vaadin:bug"></hd-icon>
+            <span class="name">bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bug-o')" title="Click to copy">
+            <hd-icon icon="vaadin:bug-o"></hd-icon>
+            <span class="name">bug-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:building')" title="Click to copy">
+            <hd-icon icon="vaadin:building"></hd-icon>
+            <span class="name">building</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:building-o')" title="Click to copy">
+            <hd-icon icon="vaadin:building-o"></hd-icon>
+            <span class="name">building-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bullets')" title="Click to copy">
+            <hd-icon icon="vaadin:bullets"></hd-icon>
+            <span class="name">bullets</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:bullseye')" title="Click to copy">
+            <hd-icon icon="vaadin:bullseye"></hd-icon>
+            <span class="name">bullseye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:buss')" title="Click to copy">
+            <hd-icon icon="vaadin:buss"></hd-icon>
+            <span class="name">buss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:button')" title="Click to copy">
+            <hd-icon icon="vaadin:button"></hd-icon>
+            <span class="name">button</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:calc')" title="Click to copy">
+            <hd-icon icon="vaadin:calc"></hd-icon>
+            <span class="name">calc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:calc-book')" title="Click to copy">
+            <hd-icon icon="vaadin:calc-book"></hd-icon>
+            <span class="name">calc-book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:calendar')" title="Click to copy">
+            <hd-icon icon="vaadin:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:calendar-briefcase')" title="Click to copy">
+            <hd-icon icon="vaadin:calendar-briefcase"></hd-icon>
+            <span class="name">calendar-briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:calendar-clock')" title="Click to copy">
+            <hd-icon icon="vaadin:calendar-clock"></hd-icon>
+            <span class="name">calendar-clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:calendar-envelope')" title="Click to copy">
+            <hd-icon icon="vaadin:calendar-envelope"></hd-icon>
+            <span class="name">calendar-envelope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:calendar-o')" title="Click to copy">
+            <hd-icon icon="vaadin:calendar-o"></hd-icon>
+            <span class="name">calendar-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:calendar-user')" title="Click to copy">
+            <hd-icon icon="vaadin:calendar-user"></hd-icon>
+            <span class="name">calendar-user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:camera')" title="Click to copy">
+            <hd-icon icon="vaadin:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:car')" title="Click to copy">
+            <hd-icon icon="vaadin:car"></hd-icon>
+            <span class="name">car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:caret-down')" title="Click to copy">
+            <hd-icon icon="vaadin:caret-down"></hd-icon>
+            <span class="name">caret-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:caret-left')" title="Click to copy">
+            <hd-icon icon="vaadin:caret-left"></hd-icon>
+            <span class="name">caret-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:caret-right')" title="Click to copy">
+            <hd-icon icon="vaadin:caret-right"></hd-icon>
+            <span class="name">caret-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:caret-square-down-o')" title="Click to copy">
+            <hd-icon icon="vaadin:caret-square-down-o"></hd-icon>
+            <span class="name">caret-square-down-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:caret-square-left-o')" title="Click to copy">
+            <hd-icon icon="vaadin:caret-square-left-o"></hd-icon>
+            <span class="name">caret-square-left-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:caret-square-right-o')" title="Click to copy">
+            <hd-icon icon="vaadin:caret-square-right-o"></hd-icon>
+            <span class="name">caret-square-right-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:caret-square-up-o')" title="Click to copy">
+            <hd-icon icon="vaadin:caret-square-up-o"></hd-icon>
+            <span class="name">caret-square-up-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:caret-up')" title="Click to copy">
+            <hd-icon icon="vaadin:caret-up"></hd-icon>
+            <span class="name">caret-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cart')" title="Click to copy">
+            <hd-icon icon="vaadin:cart"></hd-icon>
+            <span class="name">cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cart-o')" title="Click to copy">
+            <hd-icon icon="vaadin:cart-o"></hd-icon>
+            <span class="name">cart-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cash')" title="Click to copy">
+            <hd-icon icon="vaadin:cash"></hd-icon>
+            <span class="name">cash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chart')" title="Click to copy">
+            <hd-icon icon="vaadin:chart"></hd-icon>
+            <span class="name">chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chart-3d')" title="Click to copy">
+            <hd-icon icon="vaadin:chart-3d"></hd-icon>
+            <span class="name">chart-3d</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chart-grid')" title="Click to copy">
+            <hd-icon icon="vaadin:chart-grid"></hd-icon>
+            <span class="name">chart-grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chart-line')" title="Click to copy">
+            <hd-icon icon="vaadin:chart-line"></hd-icon>
+            <span class="name">chart-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chart-timeline')" title="Click to copy">
+            <hd-icon icon="vaadin:chart-timeline"></hd-icon>
+            <span class="name">chart-timeline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chat')" title="Click to copy">
+            <hd-icon icon="vaadin:chat"></hd-icon>
+            <span class="name">chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:check')" title="Click to copy">
+            <hd-icon icon="vaadin:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:check-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:check-circle"></hd-icon>
+            <span class="name">check-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:check-circle-o')" title="Click to copy">
+            <hd-icon icon="vaadin:check-circle-o"></hd-icon>
+            <span class="name">check-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:check-square')" title="Click to copy">
+            <hd-icon icon="vaadin:check-square"></hd-icon>
+            <span class="name">check-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:check-square-o')" title="Click to copy">
+            <hd-icon icon="vaadin:check-square-o"></hd-icon>
+            <span class="name">check-square-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-circle-down')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-circle-down"></hd-icon>
+            <span class="name">chevron-circle-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-circle-down-o')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-circle-down-o"></hd-icon>
+            <span class="name">chevron-circle-down-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-circle-left')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-circle-left"></hd-icon>
+            <span class="name">chevron-circle-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-circle-left-o')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-circle-left-o"></hd-icon>
+            <span class="name">chevron-circle-left-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-circle-right')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-circle-right"></hd-icon>
+            <span class="name">chevron-circle-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-circle-right-o')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-circle-right-o"></hd-icon>
+            <span class="name">chevron-circle-right-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-circle-up')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-circle-up"></hd-icon>
+            <span class="name">chevron-circle-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-circle-up-o')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-circle-up-o"></hd-icon>
+            <span class="name">chevron-circle-up-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-down')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-down-small')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-down-small"></hd-icon>
+            <span class="name">chevron-down-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-left')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-left-small')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-left-small"></hd-icon>
+            <span class="name">chevron-left-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-right')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-right-small')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-right-small"></hd-icon>
+            <span class="name">chevron-right-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-up')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:chevron-up-small')" title="Click to copy">
+            <hd-icon icon="vaadin:chevron-up-small"></hd-icon>
+            <span class="name">chevron-up-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:child')" title="Click to copy">
+            <hd-icon icon="vaadin:child"></hd-icon>
+            <span class="name">child</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:circle')" title="Click to copy">
+            <hd-icon icon="vaadin:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:circle-thin')" title="Click to copy">
+            <hd-icon icon="vaadin:circle-thin"></hd-icon>
+            <span class="name">circle-thin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:clipboard')" title="Click to copy">
+            <hd-icon icon="vaadin:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:clipboard-check')" title="Click to copy">
+            <hd-icon icon="vaadin:clipboard-check"></hd-icon>
+            <span class="name">clipboard-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:clipboard-cross')" title="Click to copy">
+            <hd-icon icon="vaadin:clipboard-cross"></hd-icon>
+            <span class="name">clipboard-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:clipboard-heart')" title="Click to copy">
+            <hd-icon icon="vaadin:clipboard-heart"></hd-icon>
+            <span class="name">clipboard-heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:clipboard-pulse')" title="Click to copy">
+            <hd-icon icon="vaadin:clipboard-pulse"></hd-icon>
+            <span class="name">clipboard-pulse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:clipboard-text')" title="Click to copy">
+            <hd-icon icon="vaadin:clipboard-text"></hd-icon>
+            <span class="name">clipboard-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:clipboard-user')" title="Click to copy">
+            <hd-icon icon="vaadin:clipboard-user"></hd-icon>
+            <span class="name">clipboard-user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:clock')" title="Click to copy">
+            <hd-icon icon="vaadin:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:close')" title="Click to copy">
+            <hd-icon icon="vaadin:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:close-big')" title="Click to copy">
+            <hd-icon icon="vaadin:close-big"></hd-icon>
+            <span class="name">close-big</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:close-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:close-circle"></hd-icon>
+            <span class="name">close-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:close-circle-o')" title="Click to copy">
+            <hd-icon icon="vaadin:close-circle-o"></hd-icon>
+            <span class="name">close-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:close-small')" title="Click to copy">
+            <hd-icon icon="vaadin:close-small"></hd-icon>
+            <span class="name">close-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cloud')" title="Click to copy">
+            <hd-icon icon="vaadin:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cloud-download')" title="Click to copy">
+            <hd-icon icon="vaadin:cloud-download"></hd-icon>
+            <span class="name">cloud-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cloud-download-o')" title="Click to copy">
+            <hd-icon icon="vaadin:cloud-download-o"></hd-icon>
+            <span class="name">cloud-download-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cloud-o')" title="Click to copy">
+            <hd-icon icon="vaadin:cloud-o"></hd-icon>
+            <span class="name">cloud-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cloud-upload')" title="Click to copy">
+            <hd-icon icon="vaadin:cloud-upload"></hd-icon>
+            <span class="name">cloud-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cloud-upload-o')" title="Click to copy">
+            <hd-icon icon="vaadin:cloud-upload-o"></hd-icon>
+            <span class="name">cloud-upload-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cluster')" title="Click to copy">
+            <hd-icon icon="vaadin:cluster"></hd-icon>
+            <span class="name">cluster</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:code')" title="Click to copy">
+            <hd-icon icon="vaadin:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:coffee')" title="Click to copy">
+            <hd-icon icon="vaadin:coffee"></hd-icon>
+            <span class="name">coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cog')" title="Click to copy">
+            <hd-icon icon="vaadin:cog"></hd-icon>
+            <span class="name">cog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cog-o')" title="Click to copy">
+            <hd-icon icon="vaadin:cog-o"></hd-icon>
+            <span class="name">cog-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cogs')" title="Click to copy">
+            <hd-icon icon="vaadin:cogs"></hd-icon>
+            <span class="name">cogs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:coin-piles')" title="Click to copy">
+            <hd-icon icon="vaadin:coin-piles"></hd-icon>
+            <span class="name">coin-piles</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:coins')" title="Click to copy">
+            <hd-icon icon="vaadin:coins"></hd-icon>
+            <span class="name">coins</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:combobox')" title="Click to copy">
+            <hd-icon icon="vaadin:combobox"></hd-icon>
+            <span class="name">combobox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:comment')" title="Click to copy">
+            <hd-icon icon="vaadin:comment"></hd-icon>
+            <span class="name">comment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:comment-ellipsis')" title="Click to copy">
+            <hd-icon icon="vaadin:comment-ellipsis"></hd-icon>
+            <span class="name">comment-ellipsis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:comment-ellipsis-o')" title="Click to copy">
+            <hd-icon icon="vaadin:comment-ellipsis-o"></hd-icon>
+            <span class="name">comment-ellipsis-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:comment-o')" title="Click to copy">
+            <hd-icon icon="vaadin:comment-o"></hd-icon>
+            <span class="name">comment-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:comments')" title="Click to copy">
+            <hd-icon icon="vaadin:comments"></hd-icon>
+            <span class="name">comments</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:comments-o')" title="Click to copy">
+            <hd-icon icon="vaadin:comments-o"></hd-icon>
+            <span class="name">comments-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:compile')" title="Click to copy">
+            <hd-icon icon="vaadin:compile"></hd-icon>
+            <span class="name">compile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:compress')" title="Click to copy">
+            <hd-icon icon="vaadin:compress"></hd-icon>
+            <span class="name">compress</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:compress-square')" title="Click to copy">
+            <hd-icon icon="vaadin:compress-square"></hd-icon>
+            <span class="name">compress-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:connect')" title="Click to copy">
+            <hd-icon icon="vaadin:connect"></hd-icon>
+            <span class="name">connect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:connect-o')" title="Click to copy">
+            <hd-icon icon="vaadin:connect-o"></hd-icon>
+            <span class="name">connect-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:controller')" title="Click to copy">
+            <hd-icon icon="vaadin:controller"></hd-icon>
+            <span class="name">controller</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:copy')" title="Click to copy">
+            <hd-icon icon="vaadin:copy"></hd-icon>
+            <span class="name">copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:copy-o')" title="Click to copy">
+            <hd-icon icon="vaadin:copy-o"></hd-icon>
+            <span class="name">copy-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:copyright')" title="Click to copy">
+            <hd-icon icon="vaadin:copyright"></hd-icon>
+            <span class="name">copyright</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:corner-lower-left')" title="Click to copy">
+            <hd-icon icon="vaadin:corner-lower-left"></hd-icon>
+            <span class="name">corner-lower-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:corner-lower-right')" title="Click to copy">
+            <hd-icon icon="vaadin:corner-lower-right"></hd-icon>
+            <span class="name">corner-lower-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:corner-upper-left')" title="Click to copy">
+            <hd-icon icon="vaadin:corner-upper-left"></hd-icon>
+            <span class="name">corner-upper-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:corner-upper-right')" title="Click to copy">
+            <hd-icon icon="vaadin:corner-upper-right"></hd-icon>
+            <span class="name">corner-upper-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:credit-card')" title="Click to copy">
+            <hd-icon icon="vaadin:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:crop')" title="Click to copy">
+            <hd-icon icon="vaadin:crop"></hd-icon>
+            <span class="name">crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cross-cutlery')" title="Click to copy">
+            <hd-icon icon="vaadin:cross-cutlery"></hd-icon>
+            <span class="name">cross-cutlery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:crosshairs')" title="Click to copy">
+            <hd-icon icon="vaadin:crosshairs"></hd-icon>
+            <span class="name">crosshairs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:css')" title="Click to copy">
+            <hd-icon icon="vaadin:css"></hd-icon>
+            <span class="name">css</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ctrl')" title="Click to copy">
+            <hd-icon icon="vaadin:ctrl"></hd-icon>
+            <span class="name">ctrl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ctrl-a')" title="Click to copy">
+            <hd-icon icon="vaadin:ctrl-a"></hd-icon>
+            <span class="name">ctrl-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cube')" title="Click to copy">
+            <hd-icon icon="vaadin:cube"></hd-icon>
+            <span class="name">cube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cubes')" title="Click to copy">
+            <hd-icon icon="vaadin:cubes"></hd-icon>
+            <span class="name">cubes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:curly-brackets')" title="Click to copy">
+            <hd-icon icon="vaadin:curly-brackets"></hd-icon>
+            <span class="name">curly-brackets</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cursor')" title="Click to copy">
+            <hd-icon icon="vaadin:cursor"></hd-icon>
+            <span class="name">cursor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cursor-o')" title="Click to copy">
+            <hd-icon icon="vaadin:cursor-o"></hd-icon>
+            <span class="name">cursor-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:cutlery')" title="Click to copy">
+            <hd-icon icon="vaadin:cutlery"></hd-icon>
+            <span class="name">cutlery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:dashboard')" title="Click to copy">
+            <hd-icon icon="vaadin:dashboard"></hd-icon>
+            <span class="name">dashboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:database')" title="Click to copy">
+            <hd-icon icon="vaadin:database"></hd-icon>
+            <span class="name">database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:date-input')" title="Click to copy">
+            <hd-icon icon="vaadin:date-input"></hd-icon>
+            <span class="name">date-input</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:deindent')" title="Click to copy">
+            <hd-icon icon="vaadin:deindent"></hd-icon>
+            <span class="name">deindent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:del')" title="Click to copy">
+            <hd-icon icon="vaadin:del"></hd-icon>
+            <span class="name">del</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:del-a')" title="Click to copy">
+            <hd-icon icon="vaadin:del-a"></hd-icon>
+            <span class="name">del-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:dental-chair')" title="Click to copy">
+            <hd-icon icon="vaadin:dental-chair"></hd-icon>
+            <span class="name">dental-chair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:desktop')" title="Click to copy">
+            <hd-icon icon="vaadin:desktop"></hd-icon>
+            <span class="name">desktop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:diamond')" title="Click to copy">
+            <hd-icon icon="vaadin:diamond"></hd-icon>
+            <span class="name">diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:diamond-o')" title="Click to copy">
+            <hd-icon icon="vaadin:diamond-o"></hd-icon>
+            <span class="name">diamond-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:diploma')" title="Click to copy">
+            <hd-icon icon="vaadin:diploma"></hd-icon>
+            <span class="name">diploma</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:diploma-scroll')" title="Click to copy">
+            <hd-icon icon="vaadin:diploma-scroll"></hd-icon>
+            <span class="name">diploma-scroll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:disc')" title="Click to copy">
+            <hd-icon icon="vaadin:disc"></hd-icon>
+            <span class="name">disc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:doctor')" title="Click to copy">
+            <hd-icon icon="vaadin:doctor"></hd-icon>
+            <span class="name">doctor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:doctor-briefcase')" title="Click to copy">
+            <hd-icon icon="vaadin:doctor-briefcase"></hd-icon>
+            <span class="name">doctor-briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:dollar')" title="Click to copy">
+            <hd-icon icon="vaadin:dollar"></hd-icon>
+            <span class="name">dollar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:dot-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:dot-circle"></hd-icon>
+            <span class="name">dot-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:download')" title="Click to copy">
+            <hd-icon icon="vaadin:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:download-alt')" title="Click to copy">
+            <hd-icon icon="vaadin:download-alt"></hd-icon>
+            <span class="name">download-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:drop')" title="Click to copy">
+            <hd-icon icon="vaadin:drop"></hd-icon>
+            <span class="name">drop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:edit')" title="Click to copy">
+            <hd-icon icon="vaadin:edit"></hd-icon>
+            <span class="name">edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:eject')" title="Click to copy">
+            <hd-icon icon="vaadin:eject"></hd-icon>
+            <span class="name">eject</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:elastic')" title="Click to copy">
+            <hd-icon icon="vaadin:elastic"></hd-icon>
+            <span class="name">elastic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ellipsis-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:ellipsis-circle"></hd-icon>
+            <span class="name">ellipsis-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ellipsis-circle-o')" title="Click to copy">
+            <hd-icon icon="vaadin:ellipsis-circle-o"></hd-icon>
+            <span class="name">ellipsis-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ellipsis-dots-h')" title="Click to copy">
+            <hd-icon icon="vaadin:ellipsis-dots-h"></hd-icon>
+            <span class="name">ellipsis-dots-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ellipsis-dots-v')" title="Click to copy">
+            <hd-icon icon="vaadin:ellipsis-dots-v"></hd-icon>
+            <span class="name">ellipsis-dots-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ellipsis-h')" title="Click to copy">
+            <hd-icon icon="vaadin:ellipsis-h"></hd-icon>
+            <span class="name">ellipsis-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ellipsis-v')" title="Click to copy">
+            <hd-icon icon="vaadin:ellipsis-v"></hd-icon>
+            <span class="name">ellipsis-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:enter')" title="Click to copy">
+            <hd-icon icon="vaadin:enter"></hd-icon>
+            <span class="name">enter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:enter-arrow')" title="Click to copy">
+            <hd-icon icon="vaadin:enter-arrow"></hd-icon>
+            <span class="name">enter-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:envelope')" title="Click to copy">
+            <hd-icon icon="vaadin:envelope"></hd-icon>
+            <span class="name">envelope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:envelope-o')" title="Click to copy">
+            <hd-icon icon="vaadin:envelope-o"></hd-icon>
+            <span class="name">envelope-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:envelope-open')" title="Click to copy">
+            <hd-icon icon="vaadin:envelope-open"></hd-icon>
+            <span class="name">envelope-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:envelope-open-o')" title="Click to copy">
+            <hd-icon icon="vaadin:envelope-open-o"></hd-icon>
+            <span class="name">envelope-open-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:envelopes')" title="Click to copy">
+            <hd-icon icon="vaadin:envelopes"></hd-icon>
+            <span class="name">envelopes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:envelopes-o')" title="Click to copy">
+            <hd-icon icon="vaadin:envelopes-o"></hd-icon>
+            <span class="name">envelopes-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:eraser')" title="Click to copy">
+            <hd-icon icon="vaadin:eraser"></hd-icon>
+            <span class="name">eraser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:esc')" title="Click to copy">
+            <hd-icon icon="vaadin:esc"></hd-icon>
+            <span class="name">esc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:esc-a')" title="Click to copy">
+            <hd-icon icon="vaadin:esc-a"></hd-icon>
+            <span class="name">esc-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:euro')" title="Click to copy">
+            <hd-icon icon="vaadin:euro"></hd-icon>
+            <span class="name">euro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:exchange')" title="Click to copy">
+            <hd-icon icon="vaadin:exchange"></hd-icon>
+            <span class="name">exchange</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:exclamation')" title="Click to copy">
+            <hd-icon icon="vaadin:exclamation"></hd-icon>
+            <span class="name">exclamation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:exclamation-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:exclamation-circle"></hd-icon>
+            <span class="name">exclamation-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:exclamation-circle-o')" title="Click to copy">
+            <hd-icon icon="vaadin:exclamation-circle-o"></hd-icon>
+            <span class="name">exclamation-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:exit')" title="Click to copy">
+            <hd-icon icon="vaadin:exit"></hd-icon>
+            <span class="name">exit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:exit-o')" title="Click to copy">
+            <hd-icon icon="vaadin:exit-o"></hd-icon>
+            <span class="name">exit-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:expand')" title="Click to copy">
+            <hd-icon icon="vaadin:expand"></hd-icon>
+            <span class="name">expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:expand-full')" title="Click to copy">
+            <hd-icon icon="vaadin:expand-full"></hd-icon>
+            <span class="name">expand-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:expand-square')" title="Click to copy">
+            <hd-icon icon="vaadin:expand-square"></hd-icon>
+            <span class="name">expand-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:external-browser')" title="Click to copy">
+            <hd-icon icon="vaadin:external-browser"></hd-icon>
+            <span class="name">external-browser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:external-link')" title="Click to copy">
+            <hd-icon icon="vaadin:external-link"></hd-icon>
+            <span class="name">external-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:eye')" title="Click to copy">
+            <hd-icon icon="vaadin:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:eye-slash')" title="Click to copy">
+            <hd-icon icon="vaadin:eye-slash"></hd-icon>
+            <span class="name">eye-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:eyedropper')" title="Click to copy">
+            <hd-icon icon="vaadin:eyedropper"></hd-icon>
+            <span class="name">eyedropper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:facebook')" title="Click to copy">
+            <hd-icon icon="vaadin:facebook"></hd-icon>
+            <span class="name">facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:facebook-square')" title="Click to copy">
+            <hd-icon icon="vaadin:facebook-square"></hd-icon>
+            <span class="name">facebook-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:factory')" title="Click to copy">
+            <hd-icon icon="vaadin:factory"></hd-icon>
+            <span class="name">factory</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:family')" title="Click to copy">
+            <hd-icon icon="vaadin:family"></hd-icon>
+            <span class="name">family</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:fast-backward')" title="Click to copy">
+            <hd-icon icon="vaadin:fast-backward"></hd-icon>
+            <span class="name">fast-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:fast-forward')" title="Click to copy">
+            <hd-icon icon="vaadin:fast-forward"></hd-icon>
+            <span class="name">fast-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:female')" title="Click to copy">
+            <hd-icon icon="vaadin:female"></hd-icon>
+            <span class="name">female</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file')" title="Click to copy">
+            <hd-icon icon="vaadin:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-add')" title="Click to copy">
+            <hd-icon icon="vaadin:file-add"></hd-icon>
+            <span class="name">file-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-code')" title="Click to copy">
+            <hd-icon icon="vaadin:file-code"></hd-icon>
+            <span class="name">file-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-font')" title="Click to copy">
+            <hd-icon icon="vaadin:file-font"></hd-icon>
+            <span class="name">file-font</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-movie')" title="Click to copy">
+            <hd-icon icon="vaadin:file-movie"></hd-icon>
+            <span class="name">file-movie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-o')" title="Click to copy">
+            <hd-icon icon="vaadin:file-o"></hd-icon>
+            <span class="name">file-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-picture')" title="Click to copy">
+            <hd-icon icon="vaadin:file-picture"></hd-icon>
+            <span class="name">file-picture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-presentation')" title="Click to copy">
+            <hd-icon icon="vaadin:file-presentation"></hd-icon>
+            <span class="name">file-presentation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-process')" title="Click to copy">
+            <hd-icon icon="vaadin:file-process"></hd-icon>
+            <span class="name">file-process</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-refresh')" title="Click to copy">
+            <hd-icon icon="vaadin:file-refresh"></hd-icon>
+            <span class="name">file-refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-remove')" title="Click to copy">
+            <hd-icon icon="vaadin:file-remove"></hd-icon>
+            <span class="name">file-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-search')" title="Click to copy">
+            <hd-icon icon="vaadin:file-search"></hd-icon>
+            <span class="name">file-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-sound')" title="Click to copy">
+            <hd-icon icon="vaadin:file-sound"></hd-icon>
+            <span class="name">file-sound</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-start')" title="Click to copy">
+            <hd-icon icon="vaadin:file-start"></hd-icon>
+            <span class="name">file-start</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-table')" title="Click to copy">
+            <hd-icon icon="vaadin:file-table"></hd-icon>
+            <span class="name">file-table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-text')" title="Click to copy">
+            <hd-icon icon="vaadin:file-text"></hd-icon>
+            <span class="name">file-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-text-o')" title="Click to copy">
+            <hd-icon icon="vaadin:file-text-o"></hd-icon>
+            <span class="name">file-text-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-tree')" title="Click to copy">
+            <hd-icon icon="vaadin:file-tree"></hd-icon>
+            <span class="name">file-tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-tree-small')" title="Click to copy">
+            <hd-icon icon="vaadin:file-tree-small"></hd-icon>
+            <span class="name">file-tree-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-tree-sub')" title="Click to copy">
+            <hd-icon icon="vaadin:file-tree-sub"></hd-icon>
+            <span class="name">file-tree-sub</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:file-zip')" title="Click to copy">
+            <hd-icon icon="vaadin:file-zip"></hd-icon>
+            <span class="name">file-zip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:fill')" title="Click to copy">
+            <hd-icon icon="vaadin:fill"></hd-icon>
+            <span class="name">fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:film')" title="Click to copy">
+            <hd-icon icon="vaadin:film"></hd-icon>
+            <span class="name">film</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:filter')" title="Click to copy">
+            <hd-icon icon="vaadin:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:fire')" title="Click to copy">
+            <hd-icon icon="vaadin:fire"></hd-icon>
+            <span class="name">fire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:flag')" title="Click to copy">
+            <hd-icon icon="vaadin:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:flag-checkered')" title="Click to copy">
+            <hd-icon icon="vaadin:flag-checkered"></hd-icon>
+            <span class="name">flag-checkered</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:flag-o')" title="Click to copy">
+            <hd-icon icon="vaadin:flag-o"></hd-icon>
+            <span class="name">flag-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:flash')" title="Click to copy">
+            <hd-icon icon="vaadin:flash"></hd-icon>
+            <span class="name">flash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:flask')" title="Click to copy">
+            <hd-icon icon="vaadin:flask"></hd-icon>
+            <span class="name">flask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:flight-landing')" title="Click to copy">
+            <hd-icon icon="vaadin:flight-landing"></hd-icon>
+            <span class="name">flight-landing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:flight-takeoff')" title="Click to copy">
+            <hd-icon icon="vaadin:flight-takeoff"></hd-icon>
+            <span class="name">flight-takeoff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:flip-h')" title="Click to copy">
+            <hd-icon icon="vaadin:flip-h"></hd-icon>
+            <span class="name">flip-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:flip-v')" title="Click to copy">
+            <hd-icon icon="vaadin:flip-v"></hd-icon>
+            <span class="name">flip-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:folder')" title="Click to copy">
+            <hd-icon icon="vaadin:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:folder-add')" title="Click to copy">
+            <hd-icon icon="vaadin:folder-add"></hd-icon>
+            <span class="name">folder-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:folder-o')" title="Click to copy">
+            <hd-icon icon="vaadin:folder-o"></hd-icon>
+            <span class="name">folder-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:folder-open')" title="Click to copy">
+            <hd-icon icon="vaadin:folder-open"></hd-icon>
+            <span class="name">folder-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:folder-open-o')" title="Click to copy">
+            <hd-icon icon="vaadin:folder-open-o"></hd-icon>
+            <span class="name">folder-open-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:folder-remove')" title="Click to copy">
+            <hd-icon icon="vaadin:folder-remove"></hd-icon>
+            <span class="name">folder-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:folder-search')" title="Click to copy">
+            <hd-icon icon="vaadin:folder-search"></hd-icon>
+            <span class="name">folder-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:font')" title="Click to copy">
+            <hd-icon icon="vaadin:font"></hd-icon>
+            <span class="name">font</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:form')" title="Click to copy">
+            <hd-icon icon="vaadin:form"></hd-icon>
+            <span class="name">form</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:forward')" title="Click to copy">
+            <hd-icon icon="vaadin:forward"></hd-icon>
+            <span class="name">forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:frown-o')" title="Click to copy">
+            <hd-icon icon="vaadin:frown-o"></hd-icon>
+            <span class="name">frown-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:funcion')" title="Click to copy">
+            <hd-icon icon="vaadin:funcion"></hd-icon>
+            <span class="name">funcion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:funnel')" title="Click to copy">
+            <hd-icon icon="vaadin:funnel"></hd-icon>
+            <span class="name">funnel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:gamepad')" title="Click to copy">
+            <hd-icon icon="vaadin:gamepad"></hd-icon>
+            <span class="name">gamepad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:gavel')" title="Click to copy">
+            <hd-icon icon="vaadin:gavel"></hd-icon>
+            <span class="name">gavel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:gift')" title="Click to copy">
+            <hd-icon icon="vaadin:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:glass')" title="Click to copy">
+            <hd-icon icon="vaadin:glass"></hd-icon>
+            <span class="name">glass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:glasses')" title="Click to copy">
+            <hd-icon icon="vaadin:glasses"></hd-icon>
+            <span class="name">glasses</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:globe')" title="Click to copy">
+            <hd-icon icon="vaadin:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:globe-wire')" title="Click to copy">
+            <hd-icon icon="vaadin:globe-wire"></hd-icon>
+            <span class="name">globe-wire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:golf')" title="Click to copy">
+            <hd-icon icon="vaadin:golf"></hd-icon>
+            <span class="name">golf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:google-plus')" title="Click to copy">
+            <hd-icon icon="vaadin:google-plus"></hd-icon>
+            <span class="name">google-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:google-plus-square')" title="Click to copy">
+            <hd-icon icon="vaadin:google-plus-square"></hd-icon>
+            <span class="name">google-plus-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:grab')" title="Click to copy">
+            <hd-icon icon="vaadin:grab"></hd-icon>
+            <span class="name">grab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:grid')" title="Click to copy">
+            <hd-icon icon="vaadin:grid"></hd-icon>
+            <span class="name">grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:grid-bevel')" title="Click to copy">
+            <hd-icon icon="vaadin:grid-bevel"></hd-icon>
+            <span class="name">grid-bevel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:grid-big')" title="Click to copy">
+            <hd-icon icon="vaadin:grid-big"></hd-icon>
+            <span class="name">grid-big</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:grid-big-o')" title="Click to copy">
+            <hd-icon icon="vaadin:grid-big-o"></hd-icon>
+            <span class="name">grid-big-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:grid-h')" title="Click to copy">
+            <hd-icon icon="vaadin:grid-h"></hd-icon>
+            <span class="name">grid-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:grid-small')" title="Click to copy">
+            <hd-icon icon="vaadin:grid-small"></hd-icon>
+            <span class="name">grid-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:grid-small-o')" title="Click to copy">
+            <hd-icon icon="vaadin:grid-small-o"></hd-icon>
+            <span class="name">grid-small-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:grid-v')" title="Click to copy">
+            <hd-icon icon="vaadin:grid-v"></hd-icon>
+            <span class="name">grid-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:group')" title="Click to copy">
+            <hd-icon icon="vaadin:group"></hd-icon>
+            <span class="name">group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:hammer')" title="Click to copy">
+            <hd-icon icon="vaadin:hammer"></hd-icon>
+            <span class="name">hammer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:hand')" title="Click to copy">
+            <hd-icon icon="vaadin:hand"></hd-icon>
+            <span class="name">hand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:handle-corner')" title="Click to copy">
+            <hd-icon icon="vaadin:handle-corner"></hd-icon>
+            <span class="name">handle-corner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:hands-up')" title="Click to copy">
+            <hd-icon icon="vaadin:hands-up"></hd-icon>
+            <span class="name">hands-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:handshake')" title="Click to copy">
+            <hd-icon icon="vaadin:handshake"></hd-icon>
+            <span class="name">handshake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:harddrive')" title="Click to copy">
+            <hd-icon icon="vaadin:harddrive"></hd-icon>
+            <span class="name">harddrive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:harddrive-o')" title="Click to copy">
+            <hd-icon icon="vaadin:harddrive-o"></hd-icon>
+            <span class="name">harddrive-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:hash')" title="Click to copy">
+            <hd-icon icon="vaadin:hash"></hd-icon>
+            <span class="name">hash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:header')" title="Click to copy">
+            <hd-icon icon="vaadin:header"></hd-icon>
+            <span class="name">header</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:headphones')" title="Click to copy">
+            <hd-icon icon="vaadin:headphones"></hd-icon>
+            <span class="name">headphones</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:headset')" title="Click to copy">
+            <hd-icon icon="vaadin:headset"></hd-icon>
+            <span class="name">headset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:health-card')" title="Click to copy">
+            <hd-icon icon="vaadin:health-card"></hd-icon>
+            <span class="name">health-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:heart')" title="Click to copy">
+            <hd-icon icon="vaadin:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:heart-o')" title="Click to copy">
+            <hd-icon icon="vaadin:heart-o"></hd-icon>
+            <span class="name">heart-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:home')" title="Click to copy">
+            <hd-icon icon="vaadin:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:home-o')" title="Click to copy">
+            <hd-icon icon="vaadin:home-o"></hd-icon>
+            <span class="name">home-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:hospital')" title="Click to copy">
+            <hd-icon icon="vaadin:hospital"></hd-icon>
+            <span class="name">hospital</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:hourglass')" title="Click to copy">
+            <hd-icon icon="vaadin:hourglass"></hd-icon>
+            <span class="name">hourglass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:hourglass-empty')" title="Click to copy">
+            <hd-icon icon="vaadin:hourglass-empty"></hd-icon>
+            <span class="name">hourglass-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:hourglass-end')" title="Click to copy">
+            <hd-icon icon="vaadin:hourglass-end"></hd-icon>
+            <span class="name">hourglass-end</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:hourglass-start')" title="Click to copy">
+            <hd-icon icon="vaadin:hourglass-start"></hd-icon>
+            <span class="name">hourglass-start</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:inbox')" title="Click to copy">
+            <hd-icon icon="vaadin:inbox"></hd-icon>
+            <span class="name">inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:indent')" title="Click to copy">
+            <hd-icon icon="vaadin:indent"></hd-icon>
+            <span class="name">indent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:info')" title="Click to copy">
+            <hd-icon icon="vaadin:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:info-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:info-circle"></hd-icon>
+            <span class="name">info-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:info-circle-o')" title="Click to copy">
+            <hd-icon icon="vaadin:info-circle-o"></hd-icon>
+            <span class="name">info-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:input')" title="Click to copy">
+            <hd-icon icon="vaadin:input"></hd-icon>
+            <span class="name">input</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:insert')" title="Click to copy">
+            <hd-icon icon="vaadin:insert"></hd-icon>
+            <span class="name">insert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:institution')" title="Click to copy">
+            <hd-icon icon="vaadin:institution"></hd-icon>
+            <span class="name">institution</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:invoice')" title="Click to copy">
+            <hd-icon icon="vaadin:invoice"></hd-icon>
+            <span class="name">invoice</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:italic')" title="Click to copy">
+            <hd-icon icon="vaadin:italic"></hd-icon>
+            <span class="name">italic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:key')" title="Click to copy">
+            <hd-icon icon="vaadin:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:key-o')" title="Click to copy">
+            <hd-icon icon="vaadin:key-o"></hd-icon>
+            <span class="name">key-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:keyboard')" title="Click to copy">
+            <hd-icon icon="vaadin:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:keyboard-o')" title="Click to copy">
+            <hd-icon icon="vaadin:keyboard-o"></hd-icon>
+            <span class="name">keyboard-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:laptop')" title="Click to copy">
+            <hd-icon icon="vaadin:laptop"></hd-icon>
+            <span class="name">laptop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:layout')" title="Click to copy">
+            <hd-icon icon="vaadin:layout"></hd-icon>
+            <span class="name">layout</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:level-down')" title="Click to copy">
+            <hd-icon icon="vaadin:level-down"></hd-icon>
+            <span class="name">level-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:level-down-bold')" title="Click to copy">
+            <hd-icon icon="vaadin:level-down-bold"></hd-icon>
+            <span class="name">level-down-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:level-left')" title="Click to copy">
+            <hd-icon icon="vaadin:level-left"></hd-icon>
+            <span class="name">level-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:level-left-bold')" title="Click to copy">
+            <hd-icon icon="vaadin:level-left-bold"></hd-icon>
+            <span class="name">level-left-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:level-right')" title="Click to copy">
+            <hd-icon icon="vaadin:level-right"></hd-icon>
+            <span class="name">level-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:level-right-bold')" title="Click to copy">
+            <hd-icon icon="vaadin:level-right-bold"></hd-icon>
+            <span class="name">level-right-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:level-up')" title="Click to copy">
+            <hd-icon icon="vaadin:level-up"></hd-icon>
+            <span class="name">level-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:level-up-bold')" title="Click to copy">
+            <hd-icon icon="vaadin:level-up-bold"></hd-icon>
+            <span class="name">level-up-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:lifebuoy')" title="Click to copy">
+            <hd-icon icon="vaadin:lifebuoy"></hd-icon>
+            <span class="name">lifebuoy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:lightbulb')" title="Click to copy">
+            <hd-icon icon="vaadin:lightbulb"></hd-icon>
+            <span class="name">lightbulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:line-bar-chart')" title="Click to copy">
+            <hd-icon icon="vaadin:line-bar-chart"></hd-icon>
+            <span class="name">line-bar-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:line-chart')" title="Click to copy">
+            <hd-icon icon="vaadin:line-chart"></hd-icon>
+            <span class="name">line-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:line-h')" title="Click to copy">
+            <hd-icon icon="vaadin:line-h"></hd-icon>
+            <span class="name">line-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:line-v')" title="Click to copy">
+            <hd-icon icon="vaadin:line-v"></hd-icon>
+            <span class="name">line-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:lines')" title="Click to copy">
+            <hd-icon icon="vaadin:lines"></hd-icon>
+            <span class="name">lines</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:lines-list')" title="Click to copy">
+            <hd-icon icon="vaadin:lines-list"></hd-icon>
+            <span class="name">lines-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:link')" title="Click to copy">
+            <hd-icon icon="vaadin:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:list')" title="Click to copy">
+            <hd-icon icon="vaadin:list"></hd-icon>
+            <span class="name">list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:list-ol')" title="Click to copy">
+            <hd-icon icon="vaadin:list-ol"></hd-icon>
+            <span class="name">list-ol</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:list-select')" title="Click to copy">
+            <hd-icon icon="vaadin:list-select"></hd-icon>
+            <span class="name">list-select</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:list-ul')" title="Click to copy">
+            <hd-icon icon="vaadin:list-ul"></hd-icon>
+            <span class="name">list-ul</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:location-arrow')" title="Click to copy">
+            <hd-icon icon="vaadin:location-arrow"></hd-icon>
+            <span class="name">location-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:location-arrow-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:location-arrow-circle"></hd-icon>
+            <span class="name">location-arrow-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:location-arrow-circle-o')" title="Click to copy">
+            <hd-icon icon="vaadin:location-arrow-circle-o"></hd-icon>
+            <span class="name">location-arrow-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:lock')" title="Click to copy">
+            <hd-icon icon="vaadin:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:magic')" title="Click to copy">
+            <hd-icon icon="vaadin:magic"></hd-icon>
+            <span class="name">magic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:magnet')" title="Click to copy">
+            <hd-icon icon="vaadin:magnet"></hd-icon>
+            <span class="name">magnet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:mailbox')" title="Click to copy">
+            <hd-icon icon="vaadin:mailbox"></hd-icon>
+            <span class="name">mailbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:male')" title="Click to copy">
+            <hd-icon icon="vaadin:male"></hd-icon>
+            <span class="name">male</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:map-marker')" title="Click to copy">
+            <hd-icon icon="vaadin:map-marker"></hd-icon>
+            <span class="name">map-marker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:margin')" title="Click to copy">
+            <hd-icon icon="vaadin:margin"></hd-icon>
+            <span class="name">margin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:margin-bottom')" title="Click to copy">
+            <hd-icon icon="vaadin:margin-bottom"></hd-icon>
+            <span class="name">margin-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:margin-left')" title="Click to copy">
+            <hd-icon icon="vaadin:margin-left"></hd-icon>
+            <span class="name">margin-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:margin-right')" title="Click to copy">
+            <hd-icon icon="vaadin:margin-right"></hd-icon>
+            <span class="name">margin-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:margin-top')" title="Click to copy">
+            <hd-icon icon="vaadin:margin-top"></hd-icon>
+            <span class="name">margin-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:medal')" title="Click to copy">
+            <hd-icon icon="vaadin:medal"></hd-icon>
+            <span class="name">medal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:megafone')" title="Click to copy">
+            <hd-icon icon="vaadin:megafone"></hd-icon>
+            <span class="name">megafone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:meh-o')" title="Click to copy">
+            <hd-icon icon="vaadin:meh-o"></hd-icon>
+            <span class="name">meh-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:menu')" title="Click to copy">
+            <hd-icon icon="vaadin:menu"></hd-icon>
+            <span class="name">menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:microphone')" title="Click to copy">
+            <hd-icon icon="vaadin:microphone"></hd-icon>
+            <span class="name">microphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:minus')" title="Click to copy">
+            <hd-icon icon="vaadin:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:minus-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:minus-circle"></hd-icon>
+            <span class="name">minus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:minus-circle-o')" title="Click to copy">
+            <hd-icon icon="vaadin:minus-circle-o"></hd-icon>
+            <span class="name">minus-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:minus-square-o')" title="Click to copy">
+            <hd-icon icon="vaadin:minus-square-o"></hd-icon>
+            <span class="name">minus-square-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:mobile')" title="Click to copy">
+            <hd-icon icon="vaadin:mobile"></hd-icon>
+            <span class="name">mobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:mobile-browser')" title="Click to copy">
+            <hd-icon icon="vaadin:mobile-browser"></hd-icon>
+            <span class="name">mobile-browser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:mobile-retro')" title="Click to copy">
+            <hd-icon icon="vaadin:mobile-retro"></hd-icon>
+            <span class="name">mobile-retro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:modal')" title="Click to copy">
+            <hd-icon icon="vaadin:modal"></hd-icon>
+            <span class="name">modal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:modal-list')" title="Click to copy">
+            <hd-icon icon="vaadin:modal-list"></hd-icon>
+            <span class="name">modal-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:money')" title="Click to copy">
+            <hd-icon icon="vaadin:money"></hd-icon>
+            <span class="name">money</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:money-deposit')" title="Click to copy">
+            <hd-icon icon="vaadin:money-deposit"></hd-icon>
+            <span class="name">money-deposit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:money-exchange')" title="Click to copy">
+            <hd-icon icon="vaadin:money-exchange"></hd-icon>
+            <span class="name">money-exchange</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:money-withdraw')" title="Click to copy">
+            <hd-icon icon="vaadin:money-withdraw"></hd-icon>
+            <span class="name">money-withdraw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:moon')" title="Click to copy">
+            <hd-icon icon="vaadin:moon"></hd-icon>
+            <span class="name">moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:moon-o')" title="Click to copy">
+            <hd-icon icon="vaadin:moon-o"></hd-icon>
+            <span class="name">moon-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:morning')" title="Click to copy">
+            <hd-icon icon="vaadin:morning"></hd-icon>
+            <span class="name">morning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:movie')" title="Click to copy">
+            <hd-icon icon="vaadin:movie"></hd-icon>
+            <span class="name">movie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:music')" title="Click to copy">
+            <hd-icon icon="vaadin:music"></hd-icon>
+            <span class="name">music</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:mute')" title="Click to copy">
+            <hd-icon icon="vaadin:mute"></hd-icon>
+            <span class="name">mute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:native-button')" title="Click to copy">
+            <hd-icon icon="vaadin:native-button"></hd-icon>
+            <span class="name">native-button</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:newspaper')" title="Click to copy">
+            <hd-icon icon="vaadin:newspaper"></hd-icon>
+            <span class="name">newspaper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:notebook')" title="Click to copy">
+            <hd-icon icon="vaadin:notebook"></hd-icon>
+            <span class="name">notebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:nurse')" title="Click to copy">
+            <hd-icon icon="vaadin:nurse"></hd-icon>
+            <span class="name">nurse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:office')" title="Click to copy">
+            <hd-icon icon="vaadin:office"></hd-icon>
+            <span class="name">office</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:open-book')" title="Click to copy">
+            <hd-icon icon="vaadin:open-book"></hd-icon>
+            <span class="name">open-book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:option')" title="Click to copy">
+            <hd-icon icon="vaadin:option"></hd-icon>
+            <span class="name">option</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:option-a')" title="Click to copy">
+            <hd-icon icon="vaadin:option-a"></hd-icon>
+            <span class="name">option-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:options')" title="Click to copy">
+            <hd-icon icon="vaadin:options"></hd-icon>
+            <span class="name">options</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:orientation')" title="Click to copy">
+            <hd-icon icon="vaadin:orientation"></hd-icon>
+            <span class="name">orientation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:out')" title="Click to copy">
+            <hd-icon icon="vaadin:out"></hd-icon>
+            <span class="name">out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:outbox')" title="Click to copy">
+            <hd-icon icon="vaadin:outbox"></hd-icon>
+            <span class="name">outbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:package')" title="Click to copy">
+            <hd-icon icon="vaadin:package"></hd-icon>
+            <span class="name">package</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:padding')" title="Click to copy">
+            <hd-icon icon="vaadin:padding"></hd-icon>
+            <span class="name">padding</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:padding-bottom')" title="Click to copy">
+            <hd-icon icon="vaadin:padding-bottom"></hd-icon>
+            <span class="name">padding-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:padding-left')" title="Click to copy">
+            <hd-icon icon="vaadin:padding-left"></hd-icon>
+            <span class="name">padding-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:padding-right')" title="Click to copy">
+            <hd-icon icon="vaadin:padding-right"></hd-icon>
+            <span class="name">padding-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:padding-top')" title="Click to copy">
+            <hd-icon icon="vaadin:padding-top"></hd-icon>
+            <span class="name">padding-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:paint-roll')" title="Click to copy">
+            <hd-icon icon="vaadin:paint-roll"></hd-icon>
+            <span class="name">paint-roll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:paintbrush')" title="Click to copy">
+            <hd-icon icon="vaadin:paintbrush"></hd-icon>
+            <span class="name">paintbrush</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:palete')" title="Click to copy">
+            <hd-icon icon="vaadin:palete"></hd-icon>
+            <span class="name">palete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:panel')" title="Click to copy">
+            <hd-icon icon="vaadin:panel"></hd-icon>
+            <span class="name">panel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:paperclip')" title="Click to copy">
+            <hd-icon icon="vaadin:paperclip"></hd-icon>
+            <span class="name">paperclip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:paperplane')" title="Click to copy">
+            <hd-icon icon="vaadin:paperplane"></hd-icon>
+            <span class="name">paperplane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:paperplane-o')" title="Click to copy">
+            <hd-icon icon="vaadin:paperplane-o"></hd-icon>
+            <span class="name">paperplane-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:paragraph')" title="Click to copy">
+            <hd-icon icon="vaadin:paragraph"></hd-icon>
+            <span class="name">paragraph</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:password')" title="Click to copy">
+            <hd-icon icon="vaadin:password"></hd-icon>
+            <span class="name">password</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:paste')" title="Click to copy">
+            <hd-icon icon="vaadin:paste"></hd-icon>
+            <span class="name">paste</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:pause')" title="Click to copy">
+            <hd-icon icon="vaadin:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:pencil')" title="Click to copy">
+            <hd-icon icon="vaadin:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:phone')" title="Click to copy">
+            <hd-icon icon="vaadin:phone"></hd-icon>
+            <span class="name">phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:phone-landline')" title="Click to copy">
+            <hd-icon icon="vaadin:phone-landline"></hd-icon>
+            <span class="name">phone-landline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:picture')" title="Click to copy">
+            <hd-icon icon="vaadin:picture"></hd-icon>
+            <span class="name">picture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:pie-bar-chart')" title="Click to copy">
+            <hd-icon icon="vaadin:pie-bar-chart"></hd-icon>
+            <span class="name">pie-bar-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:pie-chart')" title="Click to copy">
+            <hd-icon icon="vaadin:pie-chart"></hd-icon>
+            <span class="name">pie-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:piggy-bank')" title="Click to copy">
+            <hd-icon icon="vaadin:piggy-bank"></hd-icon>
+            <span class="name">piggy-bank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:piggy-bank-coin')" title="Click to copy">
+            <hd-icon icon="vaadin:piggy-bank-coin"></hd-icon>
+            <span class="name">piggy-bank-coin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:pill')" title="Click to copy">
+            <hd-icon icon="vaadin:pill"></hd-icon>
+            <span class="name">pill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:pills')" title="Click to copy">
+            <hd-icon icon="vaadin:pills"></hd-icon>
+            <span class="name">pills</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:pin')" title="Click to copy">
+            <hd-icon icon="vaadin:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:pin-post')" title="Click to copy">
+            <hd-icon icon="vaadin:pin-post"></hd-icon>
+            <span class="name">pin-post</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:play')" title="Click to copy">
+            <hd-icon icon="vaadin:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:play-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:play-circle"></hd-icon>
+            <span class="name">play-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:play-circle-o')" title="Click to copy">
+            <hd-icon icon="vaadin:play-circle-o"></hd-icon>
+            <span class="name">play-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:plug')" title="Click to copy">
+            <hd-icon icon="vaadin:plug"></hd-icon>
+            <span class="name">plug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:plus')" title="Click to copy">
+            <hd-icon icon="vaadin:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:plus-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:plus-circle"></hd-icon>
+            <span class="name">plus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:plus-circle-o')" title="Click to copy">
+            <hd-icon icon="vaadin:plus-circle-o"></hd-icon>
+            <span class="name">plus-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:plus-minus')" title="Click to copy">
+            <hd-icon icon="vaadin:plus-minus"></hd-icon>
+            <span class="name">plus-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:plus-square-o')" title="Click to copy">
+            <hd-icon icon="vaadin:plus-square-o"></hd-icon>
+            <span class="name">plus-square-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:pointer')" title="Click to copy">
+            <hd-icon icon="vaadin:pointer"></hd-icon>
+            <span class="name">pointer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:power-off')" title="Click to copy">
+            <hd-icon icon="vaadin:power-off"></hd-icon>
+            <span class="name">power-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:presentation')" title="Click to copy">
+            <hd-icon icon="vaadin:presentation"></hd-icon>
+            <span class="name">presentation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:print')" title="Click to copy">
+            <hd-icon icon="vaadin:print"></hd-icon>
+            <span class="name">print</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:progressbar')" title="Click to copy">
+            <hd-icon icon="vaadin:progressbar"></hd-icon>
+            <span class="name">progressbar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:puzzle-piece')" title="Click to copy">
+            <hd-icon icon="vaadin:puzzle-piece"></hd-icon>
+            <span class="name">puzzle-piece</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:pyramid-chart')" title="Click to copy">
+            <hd-icon icon="vaadin:pyramid-chart"></hd-icon>
+            <span class="name">pyramid-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:qrcode')" title="Click to copy">
+            <hd-icon icon="vaadin:qrcode"></hd-icon>
+            <span class="name">qrcode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:question')" title="Click to copy">
+            <hd-icon icon="vaadin:question"></hd-icon>
+            <span class="name">question</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:question-circle')" title="Click to copy">
+            <hd-icon icon="vaadin:question-circle"></hd-icon>
+            <span class="name">question-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:question-circle-o')" title="Click to copy">
+            <hd-icon icon="vaadin:question-circle-o"></hd-icon>
+            <span class="name">question-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:quote-left')" title="Click to copy">
+            <hd-icon icon="vaadin:quote-left"></hd-icon>
+            <span class="name">quote-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:quote-right')" title="Click to copy">
+            <hd-icon icon="vaadin:quote-right"></hd-icon>
+            <span class="name">quote-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:random')" title="Click to copy">
+            <hd-icon icon="vaadin:random"></hd-icon>
+            <span class="name">random</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:raster')" title="Click to copy">
+            <hd-icon icon="vaadin:raster"></hd-icon>
+            <span class="name">raster</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:raster-lower-left')" title="Click to copy">
+            <hd-icon icon="vaadin:raster-lower-left"></hd-icon>
+            <span class="name">raster-lower-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:records')" title="Click to copy">
+            <hd-icon icon="vaadin:records"></hd-icon>
+            <span class="name">records</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:recycle')" title="Click to copy">
+            <hd-icon icon="vaadin:recycle"></hd-icon>
+            <span class="name">recycle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:refresh')" title="Click to copy">
+            <hd-icon icon="vaadin:refresh"></hd-icon>
+            <span class="name">refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:reply')" title="Click to copy">
+            <hd-icon icon="vaadin:reply"></hd-icon>
+            <span class="name">reply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:reply-all')" title="Click to copy">
+            <hd-icon icon="vaadin:reply-all"></hd-icon>
+            <span class="name">reply-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:resize-h')" title="Click to copy">
+            <hd-icon icon="vaadin:resize-h"></hd-icon>
+            <span class="name">resize-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:resize-v')" title="Click to copy">
+            <hd-icon icon="vaadin:resize-v"></hd-icon>
+            <span class="name">resize-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:retweet')" title="Click to copy">
+            <hd-icon icon="vaadin:retweet"></hd-icon>
+            <span class="name">retweet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:rhombus')" title="Click to copy">
+            <hd-icon icon="vaadin:rhombus"></hd-icon>
+            <span class="name">rhombus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:road')" title="Click to copy">
+            <hd-icon icon="vaadin:road"></hd-icon>
+            <span class="name">road</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:road-branch')" title="Click to copy">
+            <hd-icon icon="vaadin:road-branch"></hd-icon>
+            <span class="name">road-branch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:road-branches')" title="Click to copy">
+            <hd-icon icon="vaadin:road-branches"></hd-icon>
+            <span class="name">road-branches</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:road-split')" title="Click to copy">
+            <hd-icon icon="vaadin:road-split"></hd-icon>
+            <span class="name">road-split</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:rocket')" title="Click to copy">
+            <hd-icon icon="vaadin:rocket"></hd-icon>
+            <span class="name">rocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:rotate-left')" title="Click to copy">
+            <hd-icon icon="vaadin:rotate-left"></hd-icon>
+            <span class="name">rotate-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:rotate-right')" title="Click to copy">
+            <hd-icon icon="vaadin:rotate-right"></hd-icon>
+            <span class="name">rotate-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:rss')" title="Click to copy">
+            <hd-icon icon="vaadin:rss"></hd-icon>
+            <span class="name">rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:rss-square')" title="Click to copy">
+            <hd-icon icon="vaadin:rss-square"></hd-icon>
+            <span class="name">rss-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:safe')" title="Click to copy">
+            <hd-icon icon="vaadin:safe"></hd-icon>
+            <span class="name">safe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:safe-lock')" title="Click to copy">
+            <hd-icon icon="vaadin:safe-lock"></hd-icon>
+            <span class="name">safe-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:scale')" title="Click to copy">
+            <hd-icon icon="vaadin:scale"></hd-icon>
+            <span class="name">scale</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:scale-unbalance')" title="Click to copy">
+            <hd-icon icon="vaadin:scale-unbalance"></hd-icon>
+            <span class="name">scale-unbalance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:scatter-chart')" title="Click to copy">
+            <hd-icon icon="vaadin:scatter-chart"></hd-icon>
+            <span class="name">scatter-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:scissors')" title="Click to copy">
+            <hd-icon icon="vaadin:scissors"></hd-icon>
+            <span class="name">scissors</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:screwdriver')" title="Click to copy">
+            <hd-icon icon="vaadin:screwdriver"></hd-icon>
+            <span class="name">screwdriver</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:search')" title="Click to copy">
+            <hd-icon icon="vaadin:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:search-minus')" title="Click to copy">
+            <hd-icon icon="vaadin:search-minus"></hd-icon>
+            <span class="name">search-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:search-plus')" title="Click to copy">
+            <hd-icon icon="vaadin:search-plus"></hd-icon>
+            <span class="name">search-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:select')" title="Click to copy">
+            <hd-icon icon="vaadin:select"></hd-icon>
+            <span class="name">select</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:server')" title="Click to copy">
+            <hd-icon icon="vaadin:server"></hd-icon>
+            <span class="name">server</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:share')" title="Click to copy">
+            <hd-icon icon="vaadin:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:share-square')" title="Click to copy">
+            <hd-icon icon="vaadin:share-square"></hd-icon>
+            <span class="name">share-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:shield')" title="Click to copy">
+            <hd-icon icon="vaadin:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:shift')" title="Click to copy">
+            <hd-icon icon="vaadin:shift"></hd-icon>
+            <span class="name">shift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:shift-arrow')" title="Click to copy">
+            <hd-icon icon="vaadin:shift-arrow"></hd-icon>
+            <span class="name">shift-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:shop')" title="Click to copy">
+            <hd-icon icon="vaadin:shop"></hd-icon>
+            <span class="name">shop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sign-in')" title="Click to copy">
+            <hd-icon icon="vaadin:sign-in"></hd-icon>
+            <span class="name">sign-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sign-in-alt')" title="Click to copy">
+            <hd-icon icon="vaadin:sign-in-alt"></hd-icon>
+            <span class="name">sign-in-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sign-out')" title="Click to copy">
+            <hd-icon icon="vaadin:sign-out"></hd-icon>
+            <span class="name">sign-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sign-out-alt')" title="Click to copy">
+            <hd-icon icon="vaadin:sign-out-alt"></hd-icon>
+            <span class="name">sign-out-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:signal')" title="Click to copy">
+            <hd-icon icon="vaadin:signal"></hd-icon>
+            <span class="name">signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sitemap')" title="Click to copy">
+            <hd-icon icon="vaadin:sitemap"></hd-icon>
+            <span class="name">sitemap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:slider')" title="Click to copy">
+            <hd-icon icon="vaadin:slider"></hd-icon>
+            <span class="name">slider</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sliders')" title="Click to copy">
+            <hd-icon icon="vaadin:sliders"></hd-icon>
+            <span class="name">sliders</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:smiley-o')" title="Click to copy">
+            <hd-icon icon="vaadin:smiley-o"></hd-icon>
+            <span class="name">smiley-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sort')" title="Click to copy">
+            <hd-icon icon="vaadin:sort"></hd-icon>
+            <span class="name">sort</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sound-disable')" title="Click to copy">
+            <hd-icon icon="vaadin:sound-disable"></hd-icon>
+            <span class="name">sound-disable</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:spark-line')" title="Click to copy">
+            <hd-icon icon="vaadin:spark-line"></hd-icon>
+            <span class="name">spark-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:specialist')" title="Click to copy">
+            <hd-icon icon="vaadin:specialist"></hd-icon>
+            <span class="name">specialist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:spinner')" title="Click to copy">
+            <hd-icon icon="vaadin:spinner"></hd-icon>
+            <span class="name">spinner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:spinner-arc')" title="Click to copy">
+            <hd-icon icon="vaadin:spinner-arc"></hd-icon>
+            <span class="name">spinner-arc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:spinner-third')" title="Click to copy">
+            <hd-icon icon="vaadin:spinner-third"></hd-icon>
+            <span class="name">spinner-third</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:spline-area-chart')" title="Click to copy">
+            <hd-icon icon="vaadin:spline-area-chart"></hd-icon>
+            <span class="name">spline-area-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:spline-chart')" title="Click to copy">
+            <hd-icon icon="vaadin:spline-chart"></hd-icon>
+            <span class="name">spline-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:split')" title="Click to copy">
+            <hd-icon icon="vaadin:split"></hd-icon>
+            <span class="name">split</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:split-h')" title="Click to copy">
+            <hd-icon icon="vaadin:split-h"></hd-icon>
+            <span class="name">split-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:split-v')" title="Click to copy">
+            <hd-icon icon="vaadin:split-v"></hd-icon>
+            <span class="name">split-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:spoon')" title="Click to copy">
+            <hd-icon icon="vaadin:spoon"></hd-icon>
+            <span class="name">spoon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:square-shadow')" title="Click to copy">
+            <hd-icon icon="vaadin:square-shadow"></hd-icon>
+            <span class="name">square-shadow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:star')" title="Click to copy">
+            <hd-icon icon="vaadin:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:star-half-left')" title="Click to copy">
+            <hd-icon icon="vaadin:star-half-left"></hd-icon>
+            <span class="name">star-half-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:star-half-left-o')" title="Click to copy">
+            <hd-icon icon="vaadin:star-half-left-o"></hd-icon>
+            <span class="name">star-half-left-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:star-half-right')" title="Click to copy">
+            <hd-icon icon="vaadin:star-half-right"></hd-icon>
+            <span class="name">star-half-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:star-half-right-o')" title="Click to copy">
+            <hd-icon icon="vaadin:star-half-right-o"></hd-icon>
+            <span class="name">star-half-right-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:star-o')" title="Click to copy">
+            <hd-icon icon="vaadin:star-o"></hd-icon>
+            <span class="name">star-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:start-cog')" title="Click to copy">
+            <hd-icon icon="vaadin:start-cog"></hd-icon>
+            <span class="name">start-cog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:step-backward')" title="Click to copy">
+            <hd-icon icon="vaadin:step-backward"></hd-icon>
+            <span class="name">step-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:step-forward')" title="Click to copy">
+            <hd-icon icon="vaadin:step-forward"></hd-icon>
+            <span class="name">step-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:stethoscope')" title="Click to copy">
+            <hd-icon icon="vaadin:stethoscope"></hd-icon>
+            <span class="name">stethoscope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:stock')" title="Click to copy">
+            <hd-icon icon="vaadin:stock"></hd-icon>
+            <span class="name">stock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:stop')" title="Click to copy">
+            <hd-icon icon="vaadin:stop"></hd-icon>
+            <span class="name">stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:stop-cog')" title="Click to copy">
+            <hd-icon icon="vaadin:stop-cog"></hd-icon>
+            <span class="name">stop-cog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:stopwatch')" title="Click to copy">
+            <hd-icon icon="vaadin:stopwatch"></hd-icon>
+            <span class="name">stopwatch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:storage')" title="Click to copy">
+            <hd-icon icon="vaadin:storage"></hd-icon>
+            <span class="name">storage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:strikethrough')" title="Click to copy">
+            <hd-icon icon="vaadin:strikethrough"></hd-icon>
+            <span class="name">strikethrough</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:subscript')" title="Click to copy">
+            <hd-icon icon="vaadin:subscript"></hd-icon>
+            <span class="name">subscript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:suitcase')" title="Click to copy">
+            <hd-icon icon="vaadin:suitcase"></hd-icon>
+            <span class="name">suitcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sun-down')" title="Click to copy">
+            <hd-icon icon="vaadin:sun-down"></hd-icon>
+            <span class="name">sun-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sun-o')" title="Click to copy">
+            <hd-icon icon="vaadin:sun-o"></hd-icon>
+            <span class="name">sun-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sun-rise')" title="Click to copy">
+            <hd-icon icon="vaadin:sun-rise"></hd-icon>
+            <span class="name">sun-rise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:superscript')" title="Click to copy">
+            <hd-icon icon="vaadin:superscript"></hd-icon>
+            <span class="name">superscript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:sword')" title="Click to copy">
+            <hd-icon icon="vaadin:sword"></hd-icon>
+            <span class="name">sword</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:tab')" title="Click to copy">
+            <hd-icon icon="vaadin:tab"></hd-icon>
+            <span class="name">tab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:tab-a')" title="Click to copy">
+            <hd-icon icon="vaadin:tab-a"></hd-icon>
+            <span class="name">tab-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:table')" title="Click to copy">
+            <hd-icon icon="vaadin:table"></hd-icon>
+            <span class="name">table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:tablet')" title="Click to copy">
+            <hd-icon icon="vaadin:tablet"></hd-icon>
+            <span class="name">tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:tabs')" title="Click to copy">
+            <hd-icon icon="vaadin:tabs"></hd-icon>
+            <span class="name">tabs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:tag')" title="Click to copy">
+            <hd-icon icon="vaadin:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:tags')" title="Click to copy">
+            <hd-icon icon="vaadin:tags"></hd-icon>
+            <span class="name">tags</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:tasks')" title="Click to copy">
+            <hd-icon icon="vaadin:tasks"></hd-icon>
+            <span class="name">tasks</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:taxi')" title="Click to copy">
+            <hd-icon icon="vaadin:taxi"></hd-icon>
+            <span class="name">taxi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:teeth')" title="Click to copy">
+            <hd-icon icon="vaadin:teeth"></hd-icon>
+            <span class="name">teeth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:terminal')" title="Click to copy">
+            <hd-icon icon="vaadin:terminal"></hd-icon>
+            <span class="name">terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:text-height')" title="Click to copy">
+            <hd-icon icon="vaadin:text-height"></hd-icon>
+            <span class="name">text-height</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:text-input')" title="Click to copy">
+            <hd-icon icon="vaadin:text-input"></hd-icon>
+            <span class="name">text-input</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:text-label')" title="Click to copy">
+            <hd-icon icon="vaadin:text-label"></hd-icon>
+            <span class="name">text-label</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:text-width')" title="Click to copy">
+            <hd-icon icon="vaadin:text-width"></hd-icon>
+            <span class="name">text-width</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:thin-square')" title="Click to copy">
+            <hd-icon icon="vaadin:thin-square"></hd-icon>
+            <span class="name">thin-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:thumbs-down')" title="Click to copy">
+            <hd-icon icon="vaadin:thumbs-down"></hd-icon>
+            <span class="name">thumbs-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:thumbs-down-o')" title="Click to copy">
+            <hd-icon icon="vaadin:thumbs-down-o"></hd-icon>
+            <span class="name">thumbs-down-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:thumbs-up')" title="Click to copy">
+            <hd-icon icon="vaadin:thumbs-up"></hd-icon>
+            <span class="name">thumbs-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:thumbs-up-o')" title="Click to copy">
+            <hd-icon icon="vaadin:thumbs-up-o"></hd-icon>
+            <span class="name">thumbs-up-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:ticket')" title="Click to copy">
+            <hd-icon icon="vaadin:ticket"></hd-icon>
+            <span class="name">ticket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:time-backward')" title="Click to copy">
+            <hd-icon icon="vaadin:time-backward"></hd-icon>
+            <span class="name">time-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:time-forward')" title="Click to copy">
+            <hd-icon icon="vaadin:time-forward"></hd-icon>
+            <span class="name">time-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:timer')" title="Click to copy">
+            <hd-icon icon="vaadin:timer"></hd-icon>
+            <span class="name">timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:toolbox')" title="Click to copy">
+            <hd-icon icon="vaadin:toolbox"></hd-icon>
+            <span class="name">toolbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:tools')" title="Click to copy">
+            <hd-icon icon="vaadin:tools"></hd-icon>
+            <span class="name">tools</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:tooth')" title="Click to copy">
+            <hd-icon icon="vaadin:tooth"></hd-icon>
+            <span class="name">tooth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:touch')" title="Click to copy">
+            <hd-icon icon="vaadin:touch"></hd-icon>
+            <span class="name">touch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:train')" title="Click to copy">
+            <hd-icon icon="vaadin:train"></hd-icon>
+            <span class="name">train</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:trash')" title="Click to copy">
+            <hd-icon icon="vaadin:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:tree-table')" title="Click to copy">
+            <hd-icon icon="vaadin:tree-table"></hd-icon>
+            <span class="name">tree-table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:trendind-down')" title="Click to copy">
+            <hd-icon icon="vaadin:trendind-down"></hd-icon>
+            <span class="name">trendind-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:trending-up')" title="Click to copy">
+            <hd-icon icon="vaadin:trending-up"></hd-icon>
+            <span class="name">trending-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:trophy')" title="Click to copy">
+            <hd-icon icon="vaadin:trophy"></hd-icon>
+            <span class="name">trophy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:truck')" title="Click to copy">
+            <hd-icon icon="vaadin:truck"></hd-icon>
+            <span class="name">truck</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:twin-col-select')" title="Click to copy">
+            <hd-icon icon="vaadin:twin-col-select"></hd-icon>
+            <span class="name">twin-col-select</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:twitter')" title="Click to copy">
+            <hd-icon icon="vaadin:twitter"></hd-icon>
+            <span class="name">twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:twitter-square')" title="Click to copy">
+            <hd-icon icon="vaadin:twitter-square"></hd-icon>
+            <span class="name">twitter-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:umbrella')" title="Click to copy">
+            <hd-icon icon="vaadin:umbrella"></hd-icon>
+            <span class="name">umbrella</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:underline')" title="Click to copy">
+            <hd-icon icon="vaadin:underline"></hd-icon>
+            <span class="name">underline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:unlink')" title="Click to copy">
+            <hd-icon icon="vaadin:unlink"></hd-icon>
+            <span class="name">unlink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:unlock')" title="Click to copy">
+            <hd-icon icon="vaadin:unlock"></hd-icon>
+            <span class="name">unlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:upload')" title="Click to copy">
+            <hd-icon icon="vaadin:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:upload-alt')" title="Click to copy">
+            <hd-icon icon="vaadin:upload-alt"></hd-icon>
+            <span class="name">upload-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:user')" title="Click to copy">
+            <hd-icon icon="vaadin:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:user-card')" title="Click to copy">
+            <hd-icon icon="vaadin:user-card"></hd-icon>
+            <span class="name">user-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:user-check')" title="Click to copy">
+            <hd-icon icon="vaadin:user-check"></hd-icon>
+            <span class="name">user-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:user-clock')" title="Click to copy">
+            <hd-icon icon="vaadin:user-clock"></hd-icon>
+            <span class="name">user-clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:user-heart')" title="Click to copy">
+            <hd-icon icon="vaadin:user-heart"></hd-icon>
+            <span class="name">user-heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:user-star')" title="Click to copy">
+            <hd-icon icon="vaadin:user-star"></hd-icon>
+            <span class="name">user-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:users')" title="Click to copy">
+            <hd-icon icon="vaadin:users"></hd-icon>
+            <span class="name">users</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:vaadin-h')" title="Click to copy">
+            <hd-icon icon="vaadin:vaadin-h"></hd-icon>
+            <span class="name">vaadin-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:vaadin-v')" title="Click to copy">
+            <hd-icon icon="vaadin:vaadin-v"></hd-icon>
+            <span class="name">vaadin-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:viewport')" title="Click to copy">
+            <hd-icon icon="vaadin:viewport"></hd-icon>
+            <span class="name">viewport</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:vimeo')" title="Click to copy">
+            <hd-icon icon="vaadin:vimeo"></hd-icon>
+            <span class="name">vimeo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:vimeo-square')" title="Click to copy">
+            <hd-icon icon="vaadin:vimeo-square"></hd-icon>
+            <span class="name">vimeo-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:volume')" title="Click to copy">
+            <hd-icon icon="vaadin:volume"></hd-icon>
+            <span class="name">volume</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:volume-down')" title="Click to copy">
+            <hd-icon icon="vaadin:volume-down"></hd-icon>
+            <span class="name">volume-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:volume-off')" title="Click to copy">
+            <hd-icon icon="vaadin:volume-off"></hd-icon>
+            <span class="name">volume-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:volume-up')" title="Click to copy">
+            <hd-icon icon="vaadin:volume-up"></hd-icon>
+            <span class="name">volume-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:wallet')" title="Click to copy">
+            <hd-icon icon="vaadin:wallet"></hd-icon>
+            <span class="name">wallet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:warning')" title="Click to copy">
+            <hd-icon icon="vaadin:warning"></hd-icon>
+            <span class="name">warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:workplace')" title="Click to copy">
+            <hd-icon icon="vaadin:workplace"></hd-icon>
+            <span class="name">workplace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:wrench')" title="Click to copy">
+            <hd-icon icon="vaadin:wrench"></hd-icon>
+            <span class="name">wrench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:youtube')" title="Click to copy">
+            <hd-icon icon="vaadin:youtube"></hd-icon>
+            <span class="name">youtube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vaadin:youtube-square')" title="Click to copy">
+            <hd-icon icon="vaadin:youtube-square"></hd-icon>
+            <span class="name">youtube-square</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

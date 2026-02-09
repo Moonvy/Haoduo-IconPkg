@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>meteocons - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>meteocons <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(447)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('meteocons:barometer')" title="Click to copy">
+            <hd-icon icon="meteocons:barometer"></hd-icon>
+            <span class="name">barometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:barometer-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:barometer-fill"></hd-icon>
+            <span class="name">barometer-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:beanie')" title="Click to copy">
+            <hd-icon icon="meteocons:beanie"></hd-icon>
+            <span class="name">beanie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:beanie-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:beanie-fill"></hd-icon>
+            <span class="name">beanie-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:celsius')" title="Click to copy">
+            <hd-icon icon="meteocons:celsius"></hd-icon>
+            <span class="name">celsius</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:celsius-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:celsius-fill"></hd-icon>
+            <span class="name">celsius-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:clear-day')" title="Click to copy">
+            <hd-icon icon="meteocons:clear-day"></hd-icon>
+            <span class="name">clear-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:clear-day-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:clear-day-fill"></hd-icon>
+            <span class="name">clear-day-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:clear-night')" title="Click to copy">
+            <hd-icon icon="meteocons:clear-night"></hd-icon>
+            <span class="name">clear-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:clear-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:clear-night-fill"></hd-icon>
+            <span class="name">clear-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:cloud-down')" title="Click to copy">
+            <hd-icon icon="meteocons:cloud-down"></hd-icon>
+            <span class="name">cloud-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:cloud-down-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:cloud-down-fill"></hd-icon>
+            <span class="name">cloud-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:cloud-up')" title="Click to copy">
+            <hd-icon icon="meteocons:cloud-up"></hd-icon>
+            <span class="name">cloud-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:cloud-up-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:cloud-up-fill"></hd-icon>
+            <span class="name">cloud-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:cloudy')" title="Click to copy">
+            <hd-icon icon="meteocons:cloudy"></hd-icon>
+            <span class="name">cloudy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:cloudy-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:cloudy-fill"></hd-icon>
+            <span class="name">cloudy-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:code-green')" title="Click to copy">
+            <hd-icon icon="meteocons:code-green"></hd-icon>
+            <span class="name">code-green</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:code-green-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:code-green-fill"></hd-icon>
+            <span class="name">code-green-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:code-orange')" title="Click to copy">
+            <hd-icon icon="meteocons:code-orange"></hd-icon>
+            <span class="name">code-orange</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:code-orange-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:code-orange-fill"></hd-icon>
+            <span class="name">code-orange-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:code-red')" title="Click to copy">
+            <hd-icon icon="meteocons:code-red"></hd-icon>
+            <span class="name">code-red</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:code-red-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:code-red-fill"></hd-icon>
+            <span class="name">code-red-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:code-yellow')" title="Click to copy">
+            <hd-icon icon="meteocons:code-yellow"></hd-icon>
+            <span class="name">code-yellow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:code-yellow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:code-yellow-fill"></hd-icon>
+            <span class="name">code-yellow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:compass')" title="Click to copy">
+            <hd-icon icon="meteocons:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:compass-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:compass-fill"></hd-icon>
+            <span class="name">compass-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:drizzle')" title="Click to copy">
+            <hd-icon icon="meteocons:drizzle"></hd-icon>
+            <span class="name">drizzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:drizzle-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:drizzle-fill"></hd-icon>
+            <span class="name">drizzle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:dust')" title="Click to copy">
+            <hd-icon icon="meteocons:dust"></hd-icon>
+            <span class="name">dust</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:dust-day')" title="Click to copy">
+            <hd-icon icon="meteocons:dust-day"></hd-icon>
+            <span class="name">dust-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:dust-day-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:dust-day-fill"></hd-icon>
+            <span class="name">dust-day-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:dust-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:dust-fill"></hd-icon>
+            <span class="name">dust-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:dust-night')" title="Click to copy">
+            <hd-icon icon="meteocons:dust-night"></hd-icon>
+            <span class="name">dust-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:dust-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:dust-night-fill"></hd-icon>
+            <span class="name">dust-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:dust-wind')" title="Click to copy">
+            <hd-icon icon="meteocons:dust-wind"></hd-icon>
+            <span class="name">dust-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:dust-wind-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:dust-wind-fill"></hd-icon>
+            <span class="name">dust-wind-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme"></hd-icon>
+            <span class="name">extreme</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day"></hd-icon>
+            <span class="name">extreme-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-drizzle')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-drizzle"></hd-icon>
+            <span class="name">extreme-day-drizzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-drizzle-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-drizzle-fill"></hd-icon>
+            <span class="name">extreme-day-drizzle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-fill"></hd-icon>
+            <span class="name">extreme-day-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-fog')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-fog"></hd-icon>
+            <span class="name">extreme-day-fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-fog-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-fog-fill"></hd-icon>
+            <span class="name">extreme-day-fog-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-hail')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-hail"></hd-icon>
+            <span class="name">extreme-day-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-hail-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-hail-fill"></hd-icon>
+            <span class="name">extreme-day-hail-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-haze')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-haze"></hd-icon>
+            <span class="name">extreme-day-haze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-haze-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-haze-fill"></hd-icon>
+            <span class="name">extreme-day-haze-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-rain')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-rain"></hd-icon>
+            <span class="name">extreme-day-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-rain-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-rain-fill"></hd-icon>
+            <span class="name">extreme-day-rain-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-sleet')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-sleet"></hd-icon>
+            <span class="name">extreme-day-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-sleet-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-sleet-fill"></hd-icon>
+            <span class="name">extreme-day-sleet-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-smoke')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-smoke"></hd-icon>
+            <span class="name">extreme-day-smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-smoke-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-smoke-fill"></hd-icon>
+            <span class="name">extreme-day-smoke-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-snow"></hd-icon>
+            <span class="name">extreme-day-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-day-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-day-snow-fill"></hd-icon>
+            <span class="name">extreme-day-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-drizzle')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-drizzle"></hd-icon>
+            <span class="name">extreme-drizzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-drizzle-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-drizzle-fill"></hd-icon>
+            <span class="name">extreme-drizzle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-fill"></hd-icon>
+            <span class="name">extreme-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-fog')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-fog"></hd-icon>
+            <span class="name">extreme-fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-fog-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-fog-fill"></hd-icon>
+            <span class="name">extreme-fog-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-hail')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-hail"></hd-icon>
+            <span class="name">extreme-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-hail-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-hail-fill"></hd-icon>
+            <span class="name">extreme-hail-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-haze')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-haze"></hd-icon>
+            <span class="name">extreme-haze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-haze-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-haze-fill"></hd-icon>
+            <span class="name">extreme-haze-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night"></hd-icon>
+            <span class="name">extreme-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-drizzle')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-drizzle"></hd-icon>
+            <span class="name">extreme-night-drizzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-drizzle-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-drizzle-fill"></hd-icon>
+            <span class="name">extreme-night-drizzle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-fill"></hd-icon>
+            <span class="name">extreme-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-fog')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-fog"></hd-icon>
+            <span class="name">extreme-night-fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-fog-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-fog-fill"></hd-icon>
+            <span class="name">extreme-night-fog-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-hail')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-hail"></hd-icon>
+            <span class="name">extreme-night-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-hail-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-hail-fill"></hd-icon>
+            <span class="name">extreme-night-hail-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-haze')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-haze"></hd-icon>
+            <span class="name">extreme-night-haze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-haze-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-haze-fill"></hd-icon>
+            <span class="name">extreme-night-haze-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-rain')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-rain"></hd-icon>
+            <span class="name">extreme-night-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-rain-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-rain-fill"></hd-icon>
+            <span class="name">extreme-night-rain-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-sleet')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-sleet"></hd-icon>
+            <span class="name">extreme-night-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-sleet-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-sleet-fill"></hd-icon>
+            <span class="name">extreme-night-sleet-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-smoke')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-smoke"></hd-icon>
+            <span class="name">extreme-night-smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-smoke-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-smoke-fill"></hd-icon>
+            <span class="name">extreme-night-smoke-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-snow"></hd-icon>
+            <span class="name">extreme-night-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-night-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-night-snow-fill"></hd-icon>
+            <span class="name">extreme-night-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-rain')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-rain"></hd-icon>
+            <span class="name">extreme-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-rain-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-rain-fill"></hd-icon>
+            <span class="name">extreme-rain-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-sleet')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-sleet"></hd-icon>
+            <span class="name">extreme-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-sleet-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-sleet-fill"></hd-icon>
+            <span class="name">extreme-sleet-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-smoke')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-smoke"></hd-icon>
+            <span class="name">extreme-smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-smoke-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-smoke-fill"></hd-icon>
+            <span class="name">extreme-smoke-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-snow"></hd-icon>
+            <span class="name">extreme-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:extreme-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:extreme-snow-fill"></hd-icon>
+            <span class="name">extreme-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:fahrenheit')" title="Click to copy">
+            <hd-icon icon="meteocons:fahrenheit"></hd-icon>
+            <span class="name">fahrenheit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:fahrenheit-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:fahrenheit-fill"></hd-icon>
+            <span class="name">fahrenheit-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:falling-stars')" title="Click to copy">
+            <hd-icon icon="meteocons:falling-stars"></hd-icon>
+            <span class="name">falling-stars</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:falling-stars-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:falling-stars-fill"></hd-icon>
+            <span class="name">falling-stars-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:flag-gale-warning')" title="Click to copy">
+            <hd-icon icon="meteocons:flag-gale-warning"></hd-icon>
+            <span class="name">flag-gale-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:flag-gale-warning-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:flag-gale-warning-fill"></hd-icon>
+            <span class="name">flag-gale-warning-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:flag-hurricane-warning')" title="Click to copy">
+            <hd-icon icon="meteocons:flag-hurricane-warning"></hd-icon>
+            <span class="name">flag-hurricane-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:flag-hurricane-warning-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:flag-hurricane-warning-fill"></hd-icon>
+            <span class="name">flag-hurricane-warning-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:flag-small-craft-advisory')" title="Click to copy">
+            <hd-icon icon="meteocons:flag-small-craft-advisory"></hd-icon>
+            <span class="name">flag-small-craft-advisory</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:flag-small-craft-advisory-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:flag-small-craft-advisory-fill"></hd-icon>
+            <span class="name">flag-small-craft-advisory-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:flag-storm-warning')" title="Click to copy">
+            <hd-icon icon="meteocons:flag-storm-warning"></hd-icon>
+            <span class="name">flag-storm-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:flag-storm-warning-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:flag-storm-warning-fill"></hd-icon>
+            <span class="name">flag-storm-warning-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:fog')" title="Click to copy">
+            <hd-icon icon="meteocons:fog"></hd-icon>
+            <span class="name">fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:fog-day')" title="Click to copy">
+            <hd-icon icon="meteocons:fog-day"></hd-icon>
+            <span class="name">fog-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:fog-day-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:fog-day-fill"></hd-icon>
+            <span class="name">fog-day-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:fog-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:fog-fill"></hd-icon>
+            <span class="name">fog-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:fog-night')" title="Click to copy">
+            <hd-icon icon="meteocons:fog-night"></hd-icon>
+            <span class="name">fog-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:fog-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:fog-night-fill"></hd-icon>
+            <span class="name">fog-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:glove')" title="Click to copy">
+            <hd-icon icon="meteocons:glove"></hd-icon>
+            <span class="name">glove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:glove-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:glove-fill"></hd-icon>
+            <span class="name">glove-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:hail')" title="Click to copy">
+            <hd-icon icon="meteocons:hail"></hd-icon>
+            <span class="name">hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:hail-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:hail-fill"></hd-icon>
+            <span class="name">hail-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:haze')" title="Click to copy">
+            <hd-icon icon="meteocons:haze"></hd-icon>
+            <span class="name">haze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:haze-day')" title="Click to copy">
+            <hd-icon icon="meteocons:haze-day"></hd-icon>
+            <span class="name">haze-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:haze-day-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:haze-day-fill"></hd-icon>
+            <span class="name">haze-day-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:haze-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:haze-fill"></hd-icon>
+            <span class="name">haze-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:haze-night')" title="Click to copy">
+            <hd-icon icon="meteocons:haze-night"></hd-icon>
+            <span class="name">haze-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:haze-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:haze-night-fill"></hd-icon>
+            <span class="name">haze-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:horizon')" title="Click to copy">
+            <hd-icon icon="meteocons:horizon"></hd-icon>
+            <span class="name">horizon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:horizon-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:horizon-fill"></hd-icon>
+            <span class="name">horizon-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:humidity')" title="Click to copy">
+            <hd-icon icon="meteocons:humidity"></hd-icon>
+            <span class="name">humidity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:humidity-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:humidity-fill"></hd-icon>
+            <span class="name">humidity-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:hurricane')" title="Click to copy">
+            <hd-icon icon="meteocons:hurricane"></hd-icon>
+            <span class="name">hurricane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:hurricane-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:hurricane-fill"></hd-icon>
+            <span class="name">hurricane-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:lightning-bolt')" title="Click to copy">
+            <hd-icon icon="meteocons:lightning-bolt"></hd-icon>
+            <span class="name">lightning-bolt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:lightning-bolt-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:lightning-bolt-fill"></hd-icon>
+            <span class="name">lightning-bolt-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:mist')" title="Click to copy">
+            <hd-icon icon="meteocons:mist"></hd-icon>
+            <span class="name">mist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:mist-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:mist-fill"></hd-icon>
+            <span class="name">mist-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-first-quarter')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-first-quarter"></hd-icon>
+            <span class="name">moon-first-quarter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-first-quarter-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-first-quarter-fill"></hd-icon>
+            <span class="name">moon-first-quarter-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-full')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-full"></hd-icon>
+            <span class="name">moon-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-full-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-full-fill"></hd-icon>
+            <span class="name">moon-full-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-last-quarter')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-last-quarter"></hd-icon>
+            <span class="name">moon-last-quarter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-last-quarter-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-last-quarter-fill"></hd-icon>
+            <span class="name">moon-last-quarter-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-new')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-new"></hd-icon>
+            <span class="name">moon-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-new-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-new-fill"></hd-icon>
+            <span class="name">moon-new-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-waning-crescent')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-waning-crescent"></hd-icon>
+            <span class="name">moon-waning-crescent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-waning-crescent-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-waning-crescent-fill"></hd-icon>
+            <span class="name">moon-waning-crescent-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-waning-gibbous')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-waning-gibbous"></hd-icon>
+            <span class="name">moon-waning-gibbous</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-waning-gibbous-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-waning-gibbous-fill"></hd-icon>
+            <span class="name">moon-waning-gibbous-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-waxing-crescent')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-waxing-crescent"></hd-icon>
+            <span class="name">moon-waxing-crescent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-waxing-crescent-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-waxing-crescent-fill"></hd-icon>
+            <span class="name">moon-waxing-crescent-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-waxing-gibbous')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-waxing-gibbous"></hd-icon>
+            <span class="name">moon-waxing-gibbous</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moon-waxing-gibbous-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:moon-waxing-gibbous-fill"></hd-icon>
+            <span class="name">moon-waxing-gibbous-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moonrise')" title="Click to copy">
+            <hd-icon icon="meteocons:moonrise"></hd-icon>
+            <span class="name">moonrise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moonrise-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:moonrise-fill"></hd-icon>
+            <span class="name">moonrise-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moonset')" title="Click to copy">
+            <hd-icon icon="meteocons:moonset"></hd-icon>
+            <span class="name">moonset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:moonset-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:moonset-fill"></hd-icon>
+            <span class="name">moonset-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:not-available')" title="Click to copy">
+            <hd-icon icon="meteocons:not-available"></hd-icon>
+            <span class="name">not-available</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:not-available-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:not-available-fill"></hd-icon>
+            <span class="name">not-available-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast"></hd-icon>
+            <span class="name">overcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day"></hd-icon>
+            <span class="name">overcast-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-drizzle')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-drizzle"></hd-icon>
+            <span class="name">overcast-day-drizzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-drizzle-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-drizzle-fill"></hd-icon>
+            <span class="name">overcast-day-drizzle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-fill"></hd-icon>
+            <span class="name">overcast-day-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-fog')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-fog"></hd-icon>
+            <span class="name">overcast-day-fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-fog-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-fog-fill"></hd-icon>
+            <span class="name">overcast-day-fog-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-hail')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-hail"></hd-icon>
+            <span class="name">overcast-day-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-hail-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-hail-fill"></hd-icon>
+            <span class="name">overcast-day-hail-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-haze')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-haze"></hd-icon>
+            <span class="name">overcast-day-haze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-haze-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-haze-fill"></hd-icon>
+            <span class="name">overcast-day-haze-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-rain')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-rain"></hd-icon>
+            <span class="name">overcast-day-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-rain-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-rain-fill"></hd-icon>
+            <span class="name">overcast-day-rain-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-sleet')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-sleet"></hd-icon>
+            <span class="name">overcast-day-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-sleet-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-sleet-fill"></hd-icon>
+            <span class="name">overcast-day-sleet-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-smoke')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-smoke"></hd-icon>
+            <span class="name">overcast-day-smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-smoke-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-smoke-fill"></hd-icon>
+            <span class="name">overcast-day-smoke-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-snow"></hd-icon>
+            <span class="name">overcast-day-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-day-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-day-snow-fill"></hd-icon>
+            <span class="name">overcast-day-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-drizzle')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-drizzle"></hd-icon>
+            <span class="name">overcast-drizzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-drizzle-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-drizzle-fill"></hd-icon>
+            <span class="name">overcast-drizzle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-fill"></hd-icon>
+            <span class="name">overcast-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-fog')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-fog"></hd-icon>
+            <span class="name">overcast-fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-fog-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-fog-fill"></hd-icon>
+            <span class="name">overcast-fog-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-hail')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-hail"></hd-icon>
+            <span class="name">overcast-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-hail-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-hail-fill"></hd-icon>
+            <span class="name">overcast-hail-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-haze')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-haze"></hd-icon>
+            <span class="name">overcast-haze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-haze-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-haze-fill"></hd-icon>
+            <span class="name">overcast-haze-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night"></hd-icon>
+            <span class="name">overcast-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-drizzle')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-drizzle"></hd-icon>
+            <span class="name">overcast-night-drizzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-drizzle-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-drizzle-fill"></hd-icon>
+            <span class="name">overcast-night-drizzle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-fill"></hd-icon>
+            <span class="name">overcast-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-fog')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-fog"></hd-icon>
+            <span class="name">overcast-night-fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-fog-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-fog-fill"></hd-icon>
+            <span class="name">overcast-night-fog-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-hail')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-hail"></hd-icon>
+            <span class="name">overcast-night-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-hail-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-hail-fill"></hd-icon>
+            <span class="name">overcast-night-hail-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-haze')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-haze"></hd-icon>
+            <span class="name">overcast-night-haze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-haze-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-haze-fill"></hd-icon>
+            <span class="name">overcast-night-haze-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-rain')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-rain"></hd-icon>
+            <span class="name">overcast-night-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-rain-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-rain-fill"></hd-icon>
+            <span class="name">overcast-night-rain-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-sleet')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-sleet"></hd-icon>
+            <span class="name">overcast-night-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-sleet-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-sleet-fill"></hd-icon>
+            <span class="name">overcast-night-sleet-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-smoke')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-smoke"></hd-icon>
+            <span class="name">overcast-night-smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-smoke-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-smoke-fill"></hd-icon>
+            <span class="name">overcast-night-smoke-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-snow"></hd-icon>
+            <span class="name">overcast-night-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-night-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-night-snow-fill"></hd-icon>
+            <span class="name">overcast-night-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-rain')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-rain"></hd-icon>
+            <span class="name">overcast-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-rain-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-rain-fill"></hd-icon>
+            <span class="name">overcast-rain-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-sleet')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-sleet"></hd-icon>
+            <span class="name">overcast-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-sleet-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-sleet-fill"></hd-icon>
+            <span class="name">overcast-sleet-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-smoke')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-smoke"></hd-icon>
+            <span class="name">overcast-smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-smoke-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-smoke-fill"></hd-icon>
+            <span class="name">overcast-smoke-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-snow"></hd-icon>
+            <span class="name">overcast-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:overcast-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:overcast-snow-fill"></hd-icon>
+            <span class="name">overcast-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day"></hd-icon>
+            <span class="name">partly-cloudy-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-drizzle')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-drizzle"></hd-icon>
+            <span class="name">partly-cloudy-day-drizzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-drizzle-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-drizzle-fill"></hd-icon>
+            <span class="name">partly-cloudy-day-drizzle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-fill"></hd-icon>
+            <span class="name">partly-cloudy-day-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-fog')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-fog"></hd-icon>
+            <span class="name">partly-cloudy-day-fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-fog-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-fog-fill"></hd-icon>
+            <span class="name">partly-cloudy-day-fog-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-hail')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-hail"></hd-icon>
+            <span class="name">partly-cloudy-day-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-hail-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-hail-fill"></hd-icon>
+            <span class="name">partly-cloudy-day-hail-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-haze')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-haze"></hd-icon>
+            <span class="name">partly-cloudy-day-haze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-haze-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-haze-fill"></hd-icon>
+            <span class="name">partly-cloudy-day-haze-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-rain')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-rain"></hd-icon>
+            <span class="name">partly-cloudy-day-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-rain-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-rain-fill"></hd-icon>
+            <span class="name">partly-cloudy-day-rain-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-sleet')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-sleet"></hd-icon>
+            <span class="name">partly-cloudy-day-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-sleet-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-sleet-fill"></hd-icon>
+            <span class="name">partly-cloudy-day-sleet-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-smoke')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-smoke"></hd-icon>
+            <span class="name">partly-cloudy-day-smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-smoke-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-smoke-fill"></hd-icon>
+            <span class="name">partly-cloudy-day-smoke-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-snow"></hd-icon>
+            <span class="name">partly-cloudy-day-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-day-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-day-snow-fill"></hd-icon>
+            <span class="name">partly-cloudy-day-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night"></hd-icon>
+            <span class="name">partly-cloudy-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-drizzle')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-drizzle"></hd-icon>
+            <span class="name">partly-cloudy-night-drizzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-drizzle-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-drizzle-fill"></hd-icon>
+            <span class="name">partly-cloudy-night-drizzle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-fill"></hd-icon>
+            <span class="name">partly-cloudy-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-fog')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-fog"></hd-icon>
+            <span class="name">partly-cloudy-night-fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-fog-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-fog-fill"></hd-icon>
+            <span class="name">partly-cloudy-night-fog-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-hail')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-hail"></hd-icon>
+            <span class="name">partly-cloudy-night-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-haze')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-haze"></hd-icon>
+            <span class="name">partly-cloudy-night-haze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-haze-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-haze-fill"></hd-icon>
+            <span class="name">partly-cloudy-night-haze-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-rain')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-rain"></hd-icon>
+            <span class="name">partly-cloudy-night-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-rain-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-rain-fill"></hd-icon>
+            <span class="name">partly-cloudy-night-rain-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-sleet')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-sleet"></hd-icon>
+            <span class="name">partly-cloudy-night-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-sleet-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-sleet-fill"></hd-icon>
+            <span class="name">partly-cloudy-night-sleet-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-smoke')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-smoke"></hd-icon>
+            <span class="name">partly-cloudy-night-smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-smoke-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-smoke-fill"></hd-icon>
+            <span class="name">partly-cloudy-night-smoke-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-snow"></hd-icon>
+            <span class="name">partly-cloudy-night-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:partly-cloudy-night-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:partly-cloudy-night-snow-fill"></hd-icon>
+            <span class="name">partly-cloudy-night-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pollen')" title="Click to copy">
+            <hd-icon icon="meteocons:pollen"></hd-icon>
+            <span class="name">pollen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pollen-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:pollen-fill"></hd-icon>
+            <span class="name">pollen-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pollen-flower')" title="Click to copy">
+            <hd-icon icon="meteocons:pollen-flower"></hd-icon>
+            <span class="name">pollen-flower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pollen-flower-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:pollen-flower-fill"></hd-icon>
+            <span class="name">pollen-flower-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pollen-grass')" title="Click to copy">
+            <hd-icon icon="meteocons:pollen-grass"></hd-icon>
+            <span class="name">pollen-grass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pollen-grass-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:pollen-grass-fill"></hd-icon>
+            <span class="name">pollen-grass-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pollen-tree')" title="Click to copy">
+            <hd-icon icon="meteocons:pollen-tree"></hd-icon>
+            <span class="name">pollen-tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pollen-tree-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:pollen-tree-fill"></hd-icon>
+            <span class="name">pollen-tree-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pressure-high')" title="Click to copy">
+            <hd-icon icon="meteocons:pressure-high"></hd-icon>
+            <span class="name">pressure-high</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pressure-high-alt')" title="Click to copy">
+            <hd-icon icon="meteocons:pressure-high-alt"></hd-icon>
+            <span class="name">pressure-high-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pressure-high-alt-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:pressure-high-alt-fill"></hd-icon>
+            <span class="name">pressure-high-alt-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pressure-high-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:pressure-high-fill"></hd-icon>
+            <span class="name">pressure-high-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pressure-low')" title="Click to copy">
+            <hd-icon icon="meteocons:pressure-low"></hd-icon>
+            <span class="name">pressure-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pressure-low-alt')" title="Click to copy">
+            <hd-icon icon="meteocons:pressure-low-alt"></hd-icon>
+            <span class="name">pressure-low-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pressure-low-alt-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:pressure-low-alt-fill"></hd-icon>
+            <span class="name">pressure-low-alt-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:pressure-low-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:pressure-low-fill"></hd-icon>
+            <span class="name">pressure-low-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:rain')" title="Click to copy">
+            <hd-icon icon="meteocons:rain"></hd-icon>
+            <span class="name">rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:rain-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:rain-fill"></hd-icon>
+            <span class="name">rain-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:rainbow')" title="Click to copy">
+            <hd-icon icon="meteocons:rainbow"></hd-icon>
+            <span class="name">rainbow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:rainbow-clear')" title="Click to copy">
+            <hd-icon icon="meteocons:rainbow-clear"></hd-icon>
+            <span class="name">rainbow-clear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:rainbow-clear-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:rainbow-clear-fill"></hd-icon>
+            <span class="name">rainbow-clear-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:rainbow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:rainbow-fill"></hd-icon>
+            <span class="name">rainbow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:raindrop')" title="Click to copy">
+            <hd-icon icon="meteocons:raindrop"></hd-icon>
+            <span class="name">raindrop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:raindrop-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:raindrop-fill"></hd-icon>
+            <span class="name">raindrop-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:raindrop-measure')" title="Click to copy">
+            <hd-icon icon="meteocons:raindrop-measure"></hd-icon>
+            <span class="name">raindrop-measure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:raindrop-measure-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:raindrop-measure-fill"></hd-icon>
+            <span class="name">raindrop-measure-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:raindrops')" title="Click to copy">
+            <hd-icon icon="meteocons:raindrops"></hd-icon>
+            <span class="name">raindrops</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:raindrops-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:raindrops-fill"></hd-icon>
+            <span class="name">raindrops-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:sleet')" title="Click to copy">
+            <hd-icon icon="meteocons:sleet"></hd-icon>
+            <span class="name">sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:sleet-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:sleet-fill"></hd-icon>
+            <span class="name">sleet-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:smoke')" title="Click to copy">
+            <hd-icon icon="meteocons:smoke"></hd-icon>
+            <span class="name">smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:smoke-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:smoke-fill"></hd-icon>
+            <span class="name">smoke-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:smoke-particles')" title="Click to copy">
+            <hd-icon icon="meteocons:smoke-particles"></hd-icon>
+            <span class="name">smoke-particles</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:smoke-particles-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:smoke-particles-fill"></hd-icon>
+            <span class="name">smoke-particles-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:snow')" title="Click to copy">
+            <hd-icon icon="meteocons:snow"></hd-icon>
+            <span class="name">snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:snow-fill"></hd-icon>
+            <span class="name">snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:snowflake')" title="Click to copy">
+            <hd-icon icon="meteocons:snowflake"></hd-icon>
+            <span class="name">snowflake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:snowflake-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:snowflake-fill"></hd-icon>
+            <span class="name">snowflake-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:snowman')" title="Click to copy">
+            <hd-icon icon="meteocons:snowman"></hd-icon>
+            <span class="name">snowman</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:snowman-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:snowman-fill"></hd-icon>
+            <span class="name">snowman-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:solar-eclipse')" title="Click to copy">
+            <hd-icon icon="meteocons:solar-eclipse"></hd-icon>
+            <span class="name">solar-eclipse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:solar-eclipse-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:solar-eclipse-fill"></hd-icon>
+            <span class="name">solar-eclipse-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:star')" title="Click to copy">
+            <hd-icon icon="meteocons:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:star-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:star-fill"></hd-icon>
+            <span class="name">star-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:starry-night')" title="Click to copy">
+            <hd-icon icon="meteocons:starry-night"></hd-icon>
+            <span class="name">starry-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:starry-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:starry-night-fill"></hd-icon>
+            <span class="name">starry-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:sun-hot')" title="Click to copy">
+            <hd-icon icon="meteocons:sun-hot"></hd-icon>
+            <span class="name">sun-hot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:sun-hot-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:sun-hot-fill"></hd-icon>
+            <span class="name">sun-hot-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:sunrise')" title="Click to copy">
+            <hd-icon icon="meteocons:sunrise"></hd-icon>
+            <span class="name">sunrise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:sunrise-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:sunrise-fill"></hd-icon>
+            <span class="name">sunrise-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:sunset')" title="Click to copy">
+            <hd-icon icon="meteocons:sunset"></hd-icon>
+            <span class="name">sunset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:sunset-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:sunset-fill"></hd-icon>
+            <span class="name">sunset-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer"></hd-icon>
+            <span class="name">thermometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-celsius')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-celsius"></hd-icon>
+            <span class="name">thermometer-celsius</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-celsius-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-celsius-fill"></hd-icon>
+            <span class="name">thermometer-celsius-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-colder')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-colder"></hd-icon>
+            <span class="name">thermometer-colder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-colder-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-colder-fill"></hd-icon>
+            <span class="name">thermometer-colder-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-fahrenheit')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-fahrenheit"></hd-icon>
+            <span class="name">thermometer-fahrenheit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-fahrenheit-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-fahrenheit-fill"></hd-icon>
+            <span class="name">thermometer-fahrenheit-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-fill"></hd-icon>
+            <span class="name">thermometer-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-glass')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-glass"></hd-icon>
+            <span class="name">thermometer-glass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-glass-celsius')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-glass-celsius"></hd-icon>
+            <span class="name">thermometer-glass-celsius</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-glass-celsius-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-glass-celsius-fill"></hd-icon>
+            <span class="name">thermometer-glass-celsius-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-glass-fahrenheit')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-glass-fahrenheit"></hd-icon>
+            <span class="name">thermometer-glass-fahrenheit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-glass-fahrenheit-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-glass-fahrenheit-fill"></hd-icon>
+            <span class="name">thermometer-glass-fahrenheit-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-glass-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-glass-fill"></hd-icon>
+            <span class="name">thermometer-glass-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-mercury')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-mercury"></hd-icon>
+            <span class="name">thermometer-mercury</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-mercury-cold')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-mercury-cold"></hd-icon>
+            <span class="name">thermometer-mercury-cold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-mercury-cold-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-mercury-cold-fill"></hd-icon>
+            <span class="name">thermometer-mercury-cold-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-mercury-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-mercury-fill"></hd-icon>
+            <span class="name">thermometer-mercury-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-moon')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-moon"></hd-icon>
+            <span class="name">thermometer-moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-moon-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-moon-fill"></hd-icon>
+            <span class="name">thermometer-moon-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-raindrop')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-raindrop"></hd-icon>
+            <span class="name">thermometer-raindrop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-raindrop-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-raindrop-fill"></hd-icon>
+            <span class="name">thermometer-raindrop-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-snow"></hd-icon>
+            <span class="name">thermometer-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-snow-fill"></hd-icon>
+            <span class="name">thermometer-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-sun')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-sun"></hd-icon>
+            <span class="name">thermometer-sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-sun-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-sun-fill"></hd-icon>
+            <span class="name">thermometer-sun-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-warmer')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-warmer"></hd-icon>
+            <span class="name">thermometer-warmer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-warmer-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-warmer-fill"></hd-icon>
+            <span class="name">thermometer-warmer-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-water')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-water"></hd-icon>
+            <span class="name">thermometer-water</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thermometer-water-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thermometer-water-fill"></hd-icon>
+            <span class="name">thermometer-water-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms"></hd-icon>
+            <span class="name">thunderstorms</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day"></hd-icon>
+            <span class="name">thunderstorms-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-extreme')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-extreme"></hd-icon>
+            <span class="name">thunderstorms-day-extreme</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-extreme-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-extreme-fill"></hd-icon>
+            <span class="name">thunderstorms-day-extreme-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-extreme-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-extreme-snow"></hd-icon>
+            <span class="name">thunderstorms-day-extreme-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-extreme-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-extreme-snow-fill"></hd-icon>
+            <span class="name">thunderstorms-day-extreme-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-fill"></hd-icon>
+            <span class="name">thunderstorms-day-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-overcast')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-overcast"></hd-icon>
+            <span class="name">thunderstorms-day-overcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-overcast-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-overcast-fill"></hd-icon>
+            <span class="name">thunderstorms-day-overcast-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-overcast-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-overcast-snow"></hd-icon>
+            <span class="name">thunderstorms-day-overcast-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-overcast-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-overcast-snow-fill"></hd-icon>
+            <span class="name">thunderstorms-day-overcast-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-snow"></hd-icon>
+            <span class="name">thunderstorms-day-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-day-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-day-snow-fill"></hd-icon>
+            <span class="name">thunderstorms-day-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-extreme')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-extreme"></hd-icon>
+            <span class="name">thunderstorms-extreme</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-extreme-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-extreme-fill"></hd-icon>
+            <span class="name">thunderstorms-extreme-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-extreme-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-extreme-snow"></hd-icon>
+            <span class="name">thunderstorms-extreme-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-extreme-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-extreme-snow-fill"></hd-icon>
+            <span class="name">thunderstorms-extreme-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-fill"></hd-icon>
+            <span class="name">thunderstorms-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night"></hd-icon>
+            <span class="name">thunderstorms-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-extreme')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-extreme"></hd-icon>
+            <span class="name">thunderstorms-night-extreme</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-extreme-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-extreme-fill"></hd-icon>
+            <span class="name">thunderstorms-night-extreme-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-extreme-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-extreme-snow"></hd-icon>
+            <span class="name">thunderstorms-night-extreme-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-extreme-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-extreme-snow-fill"></hd-icon>
+            <span class="name">thunderstorms-night-extreme-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-fill"></hd-icon>
+            <span class="name">thunderstorms-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-overcast')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-overcast"></hd-icon>
+            <span class="name">thunderstorms-night-overcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-overcast-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-overcast-fill"></hd-icon>
+            <span class="name">thunderstorms-night-overcast-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-overcast-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-overcast-snow"></hd-icon>
+            <span class="name">thunderstorms-night-overcast-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-overcast-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-overcast-snow-fill"></hd-icon>
+            <span class="name">thunderstorms-night-overcast-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-snow"></hd-icon>
+            <span class="name">thunderstorms-night-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-night-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-night-snow-fill"></hd-icon>
+            <span class="name">thunderstorms-night-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-overcast')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-overcast"></hd-icon>
+            <span class="name">thunderstorms-overcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-overcast-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-overcast-fill"></hd-icon>
+            <span class="name">thunderstorms-overcast-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-overcast-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-overcast-snow"></hd-icon>
+            <span class="name">thunderstorms-overcast-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-overcast-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-overcast-snow-fill"></hd-icon>
+            <span class="name">thunderstorms-overcast-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-snow"></hd-icon>
+            <span class="name">thunderstorms-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:thunderstorms-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:thunderstorms-snow-fill"></hd-icon>
+            <span class="name">thunderstorms-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:tide-high')" title="Click to copy">
+            <hd-icon icon="meteocons:tide-high"></hd-icon>
+            <span class="name">tide-high</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:tide-high-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:tide-high-fill"></hd-icon>
+            <span class="name">tide-high-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:tide-low')" title="Click to copy">
+            <hd-icon icon="meteocons:tide-low"></hd-icon>
+            <span class="name">tide-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:tide-low-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:tide-low-fill"></hd-icon>
+            <span class="name">tide-low-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-afternoon')" title="Click to copy">
+            <hd-icon icon="meteocons:time-afternoon"></hd-icon>
+            <span class="name">time-afternoon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-afternoon-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:time-afternoon-fill"></hd-icon>
+            <span class="name">time-afternoon-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-evening')" title="Click to copy">
+            <hd-icon icon="meteocons:time-evening"></hd-icon>
+            <span class="name">time-evening</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-evening-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:time-evening-fill"></hd-icon>
+            <span class="name">time-evening-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-late-afternoon')" title="Click to copy">
+            <hd-icon icon="meteocons:time-late-afternoon"></hd-icon>
+            <span class="name">time-late-afternoon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-late-afternoon-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:time-late-afternoon-fill"></hd-icon>
+            <span class="name">time-late-afternoon-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-late-evening')" title="Click to copy">
+            <hd-icon icon="meteocons:time-late-evening"></hd-icon>
+            <span class="name">time-late-evening</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-late-evening-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:time-late-evening-fill"></hd-icon>
+            <span class="name">time-late-evening-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-late-morning')" title="Click to copy">
+            <hd-icon icon="meteocons:time-late-morning"></hd-icon>
+            <span class="name">time-late-morning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-late-morning-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:time-late-morning-fill"></hd-icon>
+            <span class="name">time-late-morning-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-late-night')" title="Click to copy">
+            <hd-icon icon="meteocons:time-late-night"></hd-icon>
+            <span class="name">time-late-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-late-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:time-late-night-fill"></hd-icon>
+            <span class="name">time-late-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-morning')" title="Click to copy">
+            <hd-icon icon="meteocons:time-morning"></hd-icon>
+            <span class="name">time-morning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-morning-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:time-morning-fill"></hd-icon>
+            <span class="name">time-morning-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-night')" title="Click to copy">
+            <hd-icon icon="meteocons:time-night"></hd-icon>
+            <span class="name">time-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:time-night-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:time-night-fill"></hd-icon>
+            <span class="name">time-night-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:umbrella')" title="Click to copy">
+            <hd-icon icon="meteocons:umbrella"></hd-icon>
+            <span class="name">umbrella</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:umbrella-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:umbrella-fill"></hd-icon>
+            <span class="name">umbrella-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:umbrella-wind')" title="Click to copy">
+            <hd-icon icon="meteocons:umbrella-wind"></hd-icon>
+            <span class="name">umbrella-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:umbrella-wind-alt')" title="Click to copy">
+            <hd-icon icon="meteocons:umbrella-wind-alt"></hd-icon>
+            <span class="name">umbrella-wind-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:umbrella-wind-alt-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:umbrella-wind-alt-fill"></hd-icon>
+            <span class="name">umbrella-wind-alt-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:umbrella-wind-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:umbrella-wind-fill"></hd-icon>
+            <span class="name">umbrella-wind-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index"></hd-icon>
+            <span class="name">uv-index</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-1')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-1"></hd-icon>
+            <span class="name">uv-index-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-1-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-1-fill"></hd-icon>
+            <span class="name">uv-index-1-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-10')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-10"></hd-icon>
+            <span class="name">uv-index-10</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-10-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-10-fill"></hd-icon>
+            <span class="name">uv-index-10-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-11')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-11"></hd-icon>
+            <span class="name">uv-index-11</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-11-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-11-fill"></hd-icon>
+            <span class="name">uv-index-11-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-2')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-2"></hd-icon>
+            <span class="name">uv-index-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-2-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-2-fill"></hd-icon>
+            <span class="name">uv-index-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-3')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-3"></hd-icon>
+            <span class="name">uv-index-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-3-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-3-fill"></hd-icon>
+            <span class="name">uv-index-3-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-4')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-4"></hd-icon>
+            <span class="name">uv-index-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-4-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-4-fill"></hd-icon>
+            <span class="name">uv-index-4-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-5')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-5"></hd-icon>
+            <span class="name">uv-index-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-5-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-5-fill"></hd-icon>
+            <span class="name">uv-index-5-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-6')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-6"></hd-icon>
+            <span class="name">uv-index-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-6-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-6-fill"></hd-icon>
+            <span class="name">uv-index-6-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-7')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-7"></hd-icon>
+            <span class="name">uv-index-7</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-7-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-7-fill"></hd-icon>
+            <span class="name">uv-index-7-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-8')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-8"></hd-icon>
+            <span class="name">uv-index-8</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-8-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-8-fill"></hd-icon>
+            <span class="name">uv-index-8-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-9')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-9"></hd-icon>
+            <span class="name">uv-index-9</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-9-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-9-fill"></hd-icon>
+            <span class="name">uv-index-9-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:uv-index-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:uv-index-fill"></hd-icon>
+            <span class="name">uv-index-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind')" title="Click to copy">
+            <hd-icon icon="meteocons:wind"></hd-icon>
+            <span class="name">wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-alert')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-alert"></hd-icon>
+            <span class="name">wind-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-alert-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-alert-fill"></hd-icon>
+            <span class="name">wind-alert-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-0')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-0"></hd-icon>
+            <span class="name">wind-beaufort-0</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-0-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-0-fill"></hd-icon>
+            <span class="name">wind-beaufort-0-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-1')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-1"></hd-icon>
+            <span class="name">wind-beaufort-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-1-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-1-fill"></hd-icon>
+            <span class="name">wind-beaufort-1-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-10')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-10"></hd-icon>
+            <span class="name">wind-beaufort-10</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-10-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-10-fill"></hd-icon>
+            <span class="name">wind-beaufort-10-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-11')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-11"></hd-icon>
+            <span class="name">wind-beaufort-11</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-11-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-11-fill"></hd-icon>
+            <span class="name">wind-beaufort-11-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-12')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-12"></hd-icon>
+            <span class="name">wind-beaufort-12</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-12-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-12-fill"></hd-icon>
+            <span class="name">wind-beaufort-12-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-2')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-2"></hd-icon>
+            <span class="name">wind-beaufort-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-2-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-2-fill"></hd-icon>
+            <span class="name">wind-beaufort-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-3')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-3"></hd-icon>
+            <span class="name">wind-beaufort-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-3-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-3-fill"></hd-icon>
+            <span class="name">wind-beaufort-3-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-4')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-4"></hd-icon>
+            <span class="name">wind-beaufort-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-4-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-4-fill"></hd-icon>
+            <span class="name">wind-beaufort-4-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-5')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-5"></hd-icon>
+            <span class="name">wind-beaufort-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-5-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-5-fill"></hd-icon>
+            <span class="name">wind-beaufort-5-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-6')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-6"></hd-icon>
+            <span class="name">wind-beaufort-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-6-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-6-fill"></hd-icon>
+            <span class="name">wind-beaufort-6-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-7')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-7"></hd-icon>
+            <span class="name">wind-beaufort-7</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-7-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-7-fill"></hd-icon>
+            <span class="name">wind-beaufort-7-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-8')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-8"></hd-icon>
+            <span class="name">wind-beaufort-8</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-8-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-8-fill"></hd-icon>
+            <span class="name">wind-beaufort-8-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-9')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-9"></hd-icon>
+            <span class="name">wind-beaufort-9</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-beaufort-9-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-beaufort-9-fill"></hd-icon>
+            <span class="name">wind-beaufort-9-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-fill"></hd-icon>
+            <span class="name">wind-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-offshore')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-offshore"></hd-icon>
+            <span class="name">wind-offshore</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-offshore-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-offshore-fill"></hd-icon>
+            <span class="name">wind-offshore-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-onshore')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-onshore"></hd-icon>
+            <span class="name">wind-onshore</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-onshore-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-onshore-fill"></hd-icon>
+            <span class="name">wind-onshore-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-snow')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-snow"></hd-icon>
+            <span class="name">wind-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:wind-snow-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:wind-snow-fill"></hd-icon>
+            <span class="name">wind-snow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:windsock')" title="Click to copy">
+            <hd-icon icon="meteocons:windsock"></hd-icon>
+            <span class="name">windsock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:windsock-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:windsock-fill"></hd-icon>
+            <span class="name">windsock-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:windsock-weak')" title="Click to copy">
+            <hd-icon icon="meteocons:windsock-weak"></hd-icon>
+            <span class="name">windsock-weak</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('meteocons:windsock-weak-fill')" title="Click to copy">
+            <hd-icon icon="meteocons:windsock-weak-fill"></hd-icon>
+            <span class="name">windsock-weak-fill</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

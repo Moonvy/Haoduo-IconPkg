@@ -1,0 +1,16 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAAC6IkZAiMYbhqSAXSSWDciNCVERjN2ZCRWNYRSVmmFMgR4YlNXhSeDRUQ2s1UkhBo0N3YlglaDuFG1YWQ4ZEl0cUVmdjlFWGsEBDMGWwQEBIYBKA2aAQQwASMECJwECAgZwAYOC/kBtgaOAQsCDQYLD/YCHwShBQUpAogBAdYKCQIHqwa7AgcDIQEBdy0C1gUGAQbIA1X7AwESjR9IrwIjggEBAYAB/QFOnwESfnLZBwoGAQJZAiMqcx1abh+8vSZAlgTEhsywnLrPQ7A2JMUz5Mv/9K5ASE5XryscE/Jh1x4YD80bAkyQkFUFEW5jcH8qrv8XtuasA0VTfYqXQbg+SWFT0O2PGKkBjDTOpuzRh183DtryyzlJqZ5cEFy5BhNxyTZXXYmcERcPmy40XQI7R/ACy82/Wf3n0a3hTVvLnLDCif/CupudkNb2dRs1uyEfiGyHm9OyFIqMbYNCfpR4i55GrenpyJBjEQtAdkeV1mK88XK5oPAUMhcUreEPNnKDfla5Q1XpYsyNIjIqGmu75uZbGb8g1jHkL6uc7+mO5dDuNDNvO72+x5DSHjQKMImJORhNJx0tcReoLcpzU8vVTmAmLoZGWPPmegw0sfn+gTKBV9Fl8hGsBeIkgN6xjNW9hMdgzIkiowM7PLrqP+POgWlVUS2+z7APrdc4YPOUQsCH7DJC7C4FNVuft07SIu5Vb704LV5LrM/lDPDWHc/i3x3SbMoBdRqj17kyavxAq4BxnTDb0o0Q8IEvv6t8OvZhXPPv9Gl7Q2BMWx3FnX6v6VXXmT3QVEjdX26rU6yuH23vkzX6FC1mbWow4gIviqSiv/cRPdhUG3GWjbidlQUqVznmhBucAr432Ad7mIq2h1XTYbmxsQwyp4Kx97lgKCSwzrz0XZRWcwcdpwklfDwiqWlXuw9z/fwDvtZ0pSDJBZgYMWwd6JdhOJO5ud21mbYSc0W/O9Hr65sOTqMAAgFPAIUkAgJEGyQAAAAAAAMAAAAPcHJvaWNvbnMtMDEuc3ZnAAAAD3Byb2ljb25zLTAyLnN2ZwAAAA9wcm9pY29ucy0wMy5zdmf/////AAAAAgAAAIlRaYpAKBFpUUFIiFRFUKGUWCIBhWoYURlIBkWQSEGFGCEKkalEWilFkCWikAISEIYRRhBSSUAGFAUFklpJEAFUQEYFVVVhFaIEaCVaESVKAoBAaRpBlAKFRAEAYGloBBQFGUCVYqFlFEJgAlpoKpIYZUCCaoUKGoJlKFmpaoUIVUppAlkoIqSRJgAAAAA=";
+
+const chunks = {
+  "proicons-01.svg": new URL("./proicons-01.svg", import.meta.url).href,
+  "proicons-02.svg": new URL("./proicons-02.svg", import.meta.url).href,
+  "proicons-03.svg": new URL("./proicons-03.svg", import.meta.url).href
+};
+
+register('proicons', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

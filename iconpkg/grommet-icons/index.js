@@ -1,0 +1,17 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAADYYkZAn0YgBrULX4DWEBTNUlTdLVkNWRoiIdhVnVoRVlCJTdGKGKEc3RVNkY6V3MScnVCckdFI2hTREhTUkQ0RzQVFIZVhVRkR1RVNaSEWH8IEQOzDhABFAtCIqhMCEQEAQFYDSuyB9UDrwHwAjABEQx7EA4BD5MECAUCAT95ogECCAafBQEyEpgBIAwOARMG2ShdBgcILyMNAwQJHSslBAG6BIEBARwEBKgCBSYKARIFASACBQITAnfzAhMBHXYLKwhgLwYiATEFHNYUDbUCAlkCfUUA1KtT3SZHlb2HUJ02b10hP+fIku2UCcIPpUFdkr+CqwWbegnsl/faKDVryqqB8gyqZuYvhKgQvihu+Ii8NbsprAGae4blsj/M+ffrIFv4lWbMNBjTvtYTFrCDulefM0IwtJR/ZxrlR+/5596YhmlWgOuqpBT5ykR6SE2dIelxBz5NbRGOil/2Bp8wnv+V0i7OgVPOg8nzaNqmlUNA5S52tct9gPx+ryIZMGi+toyH/yU+bJwsQjjmhe1Hz67ypnjOSK0Y71lEyYIa8212rSyf5NIScS9na/sKYRWTgKtJeB7MYpb5xT7ZydyVverEti1wh1c2Rb3o/BzM1RGtn3ZyM8cc4QK5bkU3IFGSYM8aUzEqCJGQkkTRPlmIhv8wnJw74QBKeXCqz1K4ZJPdzAyBn85vLNEYjlBfXjkr3wFIGlL3g0fkhSg7FC8Rd6Ogz4mtM2r01RUSCuu0BBTLyiayh58NrhHVz92PlhFlpnWaOFebzGH9Fx4ChCqknRYSRJW7zl8j0acY7gYnUxG61stnGN6MAm8OR8xtsx2hC9lRAOFpMbKtAGuQP4Cl9OaPLk8jLdoJt4cUBHfbu2H4igcymeKWyxLRXc/8sSs0lvLzlon/+A42z3Hbr7jFDNLXcQfjaQNzxfsUk6l/nNCTXKy2thvRx4ysqdsXbF8e7gPV10b2dOTSHcb30Fqd+aRReQS3xrWyfNa49FaivluW7eD6SaJsD1BBhNi3rFr+0WZJuKf5+XM0lhkmJXWs2xbGrMJU5Ln57etYeBmmcE7ZnHwbSSYA7TIhb3PmnQVj3WC5YB2bHbEVpq7rF20gv/qnOy1Sr9keq7WfQPDQA6JQCAAAARBKACAcIQAUgAJACAAAAAAEAAAAFGdyb21tZXQtaWNvbnMtMDEuc3ZnAAAAFGdyb21tZXQtaWNvbnMtMDIuc3ZnAAAAFGdyb21tZXQtaWNvbnMtMDMuc3ZnAAAAFGdyb21tZXQtaWNvbnMtMDQuc3Zn/////wAAAAMAAADvUgRIURAFmpJAWoIAihIBkARlQRQIEJQkEJAkEAQJCwYlShIhgRIBgQAkCKBkiCBIiyRAipAoChBFWCAhCAApSJRMEaAlCiAEiKBACqApAJQFihQIEAJhURJJAgRBizAhAQZBgCQlQgBIQhBFEiJBkKIASiIBEJIskZYsCDRFASJJgZBAigIkQqRMCaIIirAIUIJMCiAIEyQtgiQIQZBFCqQkipIFAgBAUhBlwJIIUAQgWJQkCAQoUwRkARJAgCJtiSREkpAIUQAgQZABEoAogpQICLRAECJACRIkABAhQYBISoAEUpBIARJFAiAIySQAAAAA";
+
+const chunks = {
+  "grommet-icons-01.svg": new URL("./grommet-icons-01.svg", import.meta.url).href,
+  "grommet-icons-02.svg": new URL("./grommet-icons-02.svg", import.meta.url).href,
+  "grommet-icons-03.svg": new URL("./grommet-icons-03.svg", import.meta.url).href,
+  "grommet-icons-04.svg": new URL("./grommet-icons-04.svg", import.meta.url).href
+};
+
+register('grommet-icons', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>charm - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>charm <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(261)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('charm:anchor')" title="Click to copy">
+            <hd-icon icon="charm:anchor"></hd-icon>
+            <span class="name">anchor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:apps')" title="Click to copy">
+            <hd-icon icon="charm:apps"></hd-icon>
+            <span class="name">apps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:apps-minus')" title="Click to copy">
+            <hd-icon icon="charm:apps-minus"></hd-icon>
+            <span class="name">apps-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:apps-plus')" title="Click to copy">
+            <hd-icon icon="charm:apps-plus"></hd-icon>
+            <span class="name">apps-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:archive')" title="Click to copy">
+            <hd-icon icon="charm:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:arrow-down')" title="Click to copy">
+            <hd-icon icon="charm:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:arrow-down-left')" title="Click to copy">
+            <hd-icon icon="charm:arrow-down-left"></hd-icon>
+            <span class="name">arrow-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:arrow-down-right')" title="Click to copy">
+            <hd-icon icon="charm:arrow-down-right"></hd-icon>
+            <span class="name">arrow-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:arrow-left')" title="Click to copy">
+            <hd-icon icon="charm:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:arrow-right')" title="Click to copy">
+            <hd-icon icon="charm:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:arrow-up')" title="Click to copy">
+            <hd-icon icon="charm:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:arrow-up-left')" title="Click to copy">
+            <hd-icon icon="charm:arrow-up-left"></hd-icon>
+            <span class="name">arrow-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:arrow-up-right')" title="Click to copy">
+            <hd-icon icon="charm:arrow-up-right"></hd-icon>
+            <span class="name">arrow-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:at-sign')" title="Click to copy">
+            <hd-icon icon="charm:at-sign"></hd-icon>
+            <span class="name">at-sign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:atom')" title="Click to copy">
+            <hd-icon icon="charm:atom"></hd-icon>
+            <span class="name">atom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:bell')" title="Click to copy">
+            <hd-icon icon="charm:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:bell-slash')" title="Click to copy">
+            <hd-icon icon="charm:bell-slash"></hd-icon>
+            <span class="name">bell-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:bin')" title="Click to copy">
+            <hd-icon icon="charm:bin"></hd-icon>
+            <span class="name">bin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:binary')" title="Click to copy">
+            <hd-icon icon="charm:binary"></hd-icon>
+            <span class="name">binary</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:block')" title="Click to copy">
+            <hd-icon icon="charm:block"></hd-icon>
+            <span class="name">block</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:bluetooth')" title="Click to copy">
+            <hd-icon icon="charm:bluetooth"></hd-icon>
+            <span class="name">bluetooth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:bluetooth-connected')" title="Click to copy">
+            <hd-icon icon="charm:bluetooth-connected"></hd-icon>
+            <span class="name">bluetooth-connected</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:bluetooth-searching')" title="Click to copy">
+            <hd-icon icon="charm:bluetooth-searching"></hd-icon>
+            <span class="name">bluetooth-searching</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:bluetooth-slash')" title="Click to copy">
+            <hd-icon icon="charm:bluetooth-slash"></hd-icon>
+            <span class="name">bluetooth-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:book')" title="Click to copy">
+            <hd-icon icon="charm:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:book-open')" title="Click to copy">
+            <hd-icon icon="charm:book-open"></hd-icon>
+            <span class="name">book-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:bookmark')" title="Click to copy">
+            <hd-icon icon="charm:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:briefcase')" title="Click to copy">
+            <hd-icon icon="charm:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:bug')" title="Click to copy">
+            <hd-icon icon="charm:bug"></hd-icon>
+            <span class="name">bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:calendar')" title="Click to copy">
+            <hd-icon icon="charm:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:camera')" title="Click to copy">
+            <hd-icon icon="charm:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:camera-video')" title="Click to copy">
+            <hd-icon icon="charm:camera-video"></hd-icon>
+            <span class="name">camera-video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:camera-video-slash')" title="Click to copy">
+            <hd-icon icon="charm:camera-video-slash"></hd-icon>
+            <span class="name">camera-video-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:candy')" title="Click to copy">
+            <hd-icon icon="charm:candy"></hd-icon>
+            <span class="name">candy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:cards')" title="Click to copy">
+            <hd-icon icon="charm:cards"></hd-icon>
+            <span class="name">cards</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:cast')" title="Click to copy">
+            <hd-icon icon="charm:cast"></hd-icon>
+            <span class="name">cast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:certificate')" title="Click to copy">
+            <hd-icon icon="charm:certificate"></hd-icon>
+            <span class="name">certificate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chart-bar')" title="Click to copy">
+            <hd-icon icon="charm:chart-bar"></hd-icon>
+            <span class="name">chart-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chart-line')" title="Click to copy">
+            <hd-icon icon="charm:chart-line"></hd-icon>
+            <span class="name">chart-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chevron-down')" title="Click to copy">
+            <hd-icon icon="charm:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chevron-left')" title="Click to copy">
+            <hd-icon icon="charm:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chevron-right')" title="Click to copy">
+            <hd-icon icon="charm:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chevron-up')" title="Click to copy">
+            <hd-icon icon="charm:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chevrons-down')" title="Click to copy">
+            <hd-icon icon="charm:chevrons-down"></hd-icon>
+            <span class="name">chevrons-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chevrons-left')" title="Click to copy">
+            <hd-icon icon="charm:chevrons-left"></hd-icon>
+            <span class="name">chevrons-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chevrons-right')" title="Click to copy">
+            <hd-icon icon="charm:chevrons-right"></hd-icon>
+            <span class="name">chevrons-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chevrons-up')" title="Click to copy">
+            <hd-icon icon="charm:chevrons-up"></hd-icon>
+            <span class="name">chevrons-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chevrons-up-down')" title="Click to copy">
+            <hd-icon icon="charm:chevrons-up-down"></hd-icon>
+            <span class="name">chevrons-up-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:chip')" title="Click to copy">
+            <hd-icon icon="charm:chip"></hd-icon>
+            <span class="name">chip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:circle')" title="Click to copy">
+            <hd-icon icon="charm:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:circle-cross')" title="Click to copy">
+            <hd-icon icon="charm:circle-cross"></hd-icon>
+            <span class="name">circle-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:circle-minus')" title="Click to copy">
+            <hd-icon icon="charm:circle-minus"></hd-icon>
+            <span class="name">circle-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:circle-tick')" title="Click to copy">
+            <hd-icon icon="charm:circle-tick"></hd-icon>
+            <span class="name">circle-tick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:circle-warning')" title="Click to copy">
+            <hd-icon icon="charm:circle-warning"></hd-icon>
+            <span class="name">circle-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:clipboard')" title="Click to copy">
+            <hd-icon icon="charm:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:clipboard-tick')" title="Click to copy">
+            <hd-icon icon="charm:clipboard-tick"></hd-icon>
+            <span class="name">clipboard-tick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:clock')" title="Click to copy">
+            <hd-icon icon="charm:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:clock-alarm')" title="Click to copy">
+            <hd-icon icon="charm:clock-alarm"></hd-icon>
+            <span class="name">clock-alarm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:cloud')" title="Click to copy">
+            <hd-icon icon="charm:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:clover')" title="Click to copy">
+            <hd-icon icon="charm:clover"></hd-icon>
+            <span class="name">clover</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:code')" title="Click to copy">
+            <hd-icon icon="charm:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:coffee')" title="Click to copy">
+            <hd-icon icon="charm:coffee"></hd-icon>
+            <span class="name">coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:cog')" title="Click to copy">
+            <hd-icon icon="charm:cog"></hd-icon>
+            <span class="name">cog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:compass')" title="Click to copy">
+            <hd-icon icon="charm:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:conical-flask')" title="Click to copy">
+            <hd-icon icon="charm:conical-flask"></hd-icon>
+            <span class="name">conical-flask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:container')" title="Click to copy">
+            <hd-icon icon="charm:container"></hd-icon>
+            <span class="name">container</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:copy')" title="Click to copy">
+            <hd-icon icon="charm:copy"></hd-icon>
+            <span class="name">copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:copyleft')" title="Click to copy">
+            <hd-icon icon="charm:copyleft"></hd-icon>
+            <span class="name">copyleft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:copyright')" title="Click to copy">
+            <hd-icon icon="charm:copyright"></hd-icon>
+            <span class="name">copyright</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:credit-card')" title="Click to copy">
+            <hd-icon icon="charm:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:crop')" title="Click to copy">
+            <hd-icon icon="charm:crop"></hd-icon>
+            <span class="name">crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:cross')" title="Click to copy">
+            <hd-icon icon="charm:cross"></hd-icon>
+            <span class="name">cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:crosshair')" title="Click to copy">
+            <hd-icon icon="charm:crosshair"></hd-icon>
+            <span class="name">crosshair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:cube')" title="Click to copy">
+            <hd-icon icon="charm:cube"></hd-icon>
+            <span class="name">cube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:cursor')" title="Click to copy">
+            <hd-icon icon="charm:cursor"></hd-icon>
+            <span class="name">cursor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:database')" title="Click to copy">
+            <hd-icon icon="charm:database"></hd-icon>
+            <span class="name">database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:diamond')" title="Click to copy">
+            <hd-icon icon="charm:diamond"></hd-icon>
+            <span class="name">diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:diff')" title="Click to copy">
+            <hd-icon icon="charm:diff"></hd-icon>
+            <span class="name">diff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:disc')" title="Click to copy">
+            <hd-icon icon="charm:disc"></hd-icon>
+            <span class="name">disc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:download')" title="Click to copy">
+            <hd-icon icon="charm:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:droplet')" title="Click to copy">
+            <hd-icon icon="charm:droplet"></hd-icon>
+            <span class="name">droplet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:eraser')" title="Click to copy">
+            <hd-icon icon="charm:eraser"></hd-icon>
+            <span class="name">eraser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:eye')" title="Click to copy">
+            <hd-icon icon="charm:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:eye-slash')" title="Click to copy">
+            <hd-icon icon="charm:eye-slash"></hd-icon>
+            <span class="name">eye-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:face-frown')" title="Click to copy">
+            <hd-icon icon="charm:face-frown"></hd-icon>
+            <span class="name">face-frown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:face-neutral')" title="Click to copy">
+            <hd-icon icon="charm:face-neutral"></hd-icon>
+            <span class="name">face-neutral</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:face-smile')" title="Click to copy">
+            <hd-icon icon="charm:face-smile"></hd-icon>
+            <span class="name">face-smile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:file')" title="Click to copy">
+            <hd-icon icon="charm:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:file-binary')" title="Click to copy">
+            <hd-icon icon="charm:file-binary"></hd-icon>
+            <span class="name">file-binary</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:file-code')" title="Click to copy">
+            <hd-icon icon="charm:file-code"></hd-icon>
+            <span class="name">file-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:file-symlink')" title="Click to copy">
+            <hd-icon icon="charm:file-symlink"></hd-icon>
+            <span class="name">file-symlink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:files')" title="Click to copy">
+            <hd-icon icon="charm:files"></hd-icon>
+            <span class="name">files</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:filter')" title="Click to copy">
+            <hd-icon icon="charm:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:flag')" title="Click to copy">
+            <hd-icon icon="charm:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:flame')" title="Click to copy">
+            <hd-icon icon="charm:flame"></hd-icon>
+            <span class="name">flame</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:floppy-disk')" title="Click to copy">
+            <hd-icon icon="charm:floppy-disk"></hd-icon>
+            <span class="name">floppy-disk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:folder')" title="Click to copy">
+            <hd-icon icon="charm:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:folder-symlink')" title="Click to copy">
+            <hd-icon icon="charm:folder-symlink"></hd-icon>
+            <span class="name">folder-symlink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:folders')" title="Click to copy">
+            <hd-icon icon="charm:folders"></hd-icon>
+            <span class="name">folders</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:forward')" title="Click to copy">
+            <hd-icon icon="charm:forward"></hd-icon>
+            <span class="name">forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:gamepad')" title="Click to copy">
+            <hd-icon icon="charm:gamepad"></hd-icon>
+            <span class="name">gamepad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:gem')" title="Click to copy">
+            <hd-icon icon="charm:gem"></hd-icon>
+            <span class="name">gem</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:gift')" title="Click to copy">
+            <hd-icon icon="charm:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:git-branch')" title="Click to copy">
+            <hd-icon icon="charm:git-branch"></hd-icon>
+            <span class="name">git-branch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:git-cherry-pick')" title="Click to copy">
+            <hd-icon icon="charm:git-cherry-pick"></hd-icon>
+            <span class="name">git-cherry-pick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:git-commit')" title="Click to copy">
+            <hd-icon icon="charm:git-commit"></hd-icon>
+            <span class="name">git-commit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:git-compare')" title="Click to copy">
+            <hd-icon icon="charm:git-compare"></hd-icon>
+            <span class="name">git-compare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:git-fork')" title="Click to copy">
+            <hd-icon icon="charm:git-fork"></hd-icon>
+            <span class="name">git-fork</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:git-merge')" title="Click to copy">
+            <hd-icon icon="charm:git-merge"></hd-icon>
+            <span class="name">git-merge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:git-request')" title="Click to copy">
+            <hd-icon icon="charm:git-request"></hd-icon>
+            <span class="name">git-request</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:git-request-cross')" title="Click to copy">
+            <hd-icon icon="charm:git-request-cross"></hd-icon>
+            <span class="name">git-request-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:git-request-draft')" title="Click to copy">
+            <hd-icon icon="charm:git-request-draft"></hd-icon>
+            <span class="name">git-request-draft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:github')" title="Click to copy">
+            <hd-icon icon="charm:github"></hd-icon>
+            <span class="name">github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:gitlab')" title="Click to copy">
+            <hd-icon icon="charm:gitlab"></hd-icon>
+            <span class="name">gitlab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:glasses')" title="Click to copy">
+            <hd-icon icon="charm:glasses"></hd-icon>
+            <span class="name">glasses</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:globe')" title="Click to copy">
+            <hd-icon icon="charm:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:grab-horizontal')" title="Click to copy">
+            <hd-icon icon="charm:grab-horizontal"></hd-icon>
+            <span class="name">grab-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:grab-vertical')" title="Click to copy">
+            <hd-icon icon="charm:grab-vertical"></hd-icon>
+            <span class="name">grab-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:graduate-cap')" title="Click to copy">
+            <hd-icon icon="charm:graduate-cap"></hd-icon>
+            <span class="name">graduate-cap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:hash')" title="Click to copy">
+            <hd-icon icon="charm:hash"></hd-icon>
+            <span class="name">hash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:headphones')" title="Click to copy">
+            <hd-icon icon="charm:headphones"></hd-icon>
+            <span class="name">headphones</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:heart')" title="Click to copy">
+            <hd-icon icon="charm:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:help')" title="Click to copy">
+            <hd-icon icon="charm:help"></hd-icon>
+            <span class="name">help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:hexagon')" title="Click to copy">
+            <hd-icon icon="charm:hexagon"></hd-icon>
+            <span class="name">hexagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:home')" title="Click to copy">
+            <hd-icon icon="charm:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:hourglass')" title="Click to copy">
+            <hd-icon icon="charm:hourglass"></hd-icon>
+            <span class="name">hourglass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:id')" title="Click to copy">
+            <hd-icon icon="charm:id"></hd-icon>
+            <span class="name">id</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:image')" title="Click to copy">
+            <hd-icon icon="charm:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:inbox')" title="Click to copy">
+            <hd-icon icon="charm:inbox"></hd-icon>
+            <span class="name">inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:infinity')" title="Click to copy">
+            <hd-icon icon="charm:infinity"></hd-icon>
+            <span class="name">infinity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:info')" title="Click to copy">
+            <hd-icon icon="charm:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:key')" title="Click to copy">
+            <hd-icon icon="charm:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:laptop')" title="Click to copy">
+            <hd-icon icon="charm:laptop"></hd-icon>
+            <span class="name">laptop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:layout-columns')" title="Click to copy">
+            <hd-icon icon="charm:layout-columns"></hd-icon>
+            <span class="name">layout-columns</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:layout-dashboard')" title="Click to copy">
+            <hd-icon icon="charm:layout-dashboard"></hd-icon>
+            <span class="name">layout-dashboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:layout-grid')" title="Click to copy">
+            <hd-icon icon="charm:layout-grid"></hd-icon>
+            <span class="name">layout-grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:layout-list')" title="Click to copy">
+            <hd-icon icon="charm:layout-list"></hd-icon>
+            <span class="name">layout-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:layout-rows')" title="Click to copy">
+            <hd-icon icon="charm:layout-rows"></hd-icon>
+            <span class="name">layout-rows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:layout-sidebar')" title="Click to copy">
+            <hd-icon icon="charm:layout-sidebar"></hd-icon>
+            <span class="name">layout-sidebar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:layout-stack-h')" title="Click to copy">
+            <hd-icon icon="charm:layout-stack-h"></hd-icon>
+            <span class="name">layout-stack-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:layout-stack-v')" title="Click to copy">
+            <hd-icon icon="charm:layout-stack-v"></hd-icon>
+            <span class="name">layout-stack-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:lightbulb')" title="Click to copy">
+            <hd-icon icon="charm:lightbulb"></hd-icon>
+            <span class="name">lightbulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:lightning-bolt')" title="Click to copy">
+            <hd-icon icon="charm:lightning-bolt"></hd-icon>
+            <span class="name">lightning-bolt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:link')" title="Click to copy">
+            <hd-icon icon="charm:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:link-external')" title="Click to copy">
+            <hd-icon icon="charm:link-external"></hd-icon>
+            <span class="name">link-external</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:link-slash')" title="Click to copy">
+            <hd-icon icon="charm:link-slash"></hd-icon>
+            <span class="name">link-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:mail')" title="Click to copy">
+            <hd-icon icon="charm:mail"></hd-icon>
+            <span class="name">mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:map')" title="Click to copy">
+            <hd-icon icon="charm:map"></hd-icon>
+            <span class="name">map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:map-pin')" title="Click to copy">
+            <hd-icon icon="charm:map-pin"></hd-icon>
+            <span class="name">map-pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:media-back')" title="Click to copy">
+            <hd-icon icon="charm:media-back"></hd-icon>
+            <span class="name">media-back</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:media-eject')" title="Click to copy">
+            <hd-icon icon="charm:media-eject"></hd-icon>
+            <span class="name">media-eject</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:media-fast-forward')" title="Click to copy">
+            <hd-icon icon="charm:media-fast-forward"></hd-icon>
+            <span class="name">media-fast-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:media-pause')" title="Click to copy">
+            <hd-icon icon="charm:media-pause"></hd-icon>
+            <span class="name">media-pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:media-play')" title="Click to copy">
+            <hd-icon icon="charm:media-play"></hd-icon>
+            <span class="name">media-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:media-rewind')" title="Click to copy">
+            <hd-icon icon="charm:media-rewind"></hd-icon>
+            <span class="name">media-rewind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:media-skip')" title="Click to copy">
+            <hd-icon icon="charm:media-skip"></hd-icon>
+            <span class="name">media-skip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:menu-hamburger')" title="Click to copy">
+            <hd-icon icon="charm:menu-hamburger"></hd-icon>
+            <span class="name">menu-hamburger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:menu-kebab')" title="Click to copy">
+            <hd-icon icon="charm:menu-kebab"></hd-icon>
+            <span class="name">menu-kebab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:menu-meatball')" title="Click to copy">
+            <hd-icon icon="charm:menu-meatball"></hd-icon>
+            <span class="name">menu-meatball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:message')" title="Click to copy">
+            <hd-icon icon="charm:message"></hd-icon>
+            <span class="name">message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:messages')" title="Click to copy">
+            <hd-icon icon="charm:messages"></hd-icon>
+            <span class="name">messages</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:microphone')" title="Click to copy">
+            <hd-icon icon="charm:microphone"></hd-icon>
+            <span class="name">microphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:minus')" title="Click to copy">
+            <hd-icon icon="charm:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:mobile')" title="Click to copy">
+            <hd-icon icon="charm:mobile"></hd-icon>
+            <span class="name">mobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:monitor')" title="Click to copy">
+            <hd-icon icon="charm:monitor"></hd-icon>
+            <span class="name">monitor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:monitor-arrow')" title="Click to copy">
+            <hd-icon icon="charm:monitor-arrow"></hd-icon>
+            <span class="name">monitor-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:monitor-cross')" title="Click to copy">
+            <hd-icon icon="charm:monitor-cross"></hd-icon>
+            <span class="name">monitor-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:moon')" title="Click to copy">
+            <hd-icon icon="charm:moon"></hd-icon>
+            <span class="name">moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:move')" title="Click to copy">
+            <hd-icon icon="charm:move"></hd-icon>
+            <span class="name">move</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:music')" title="Click to copy">
+            <hd-icon icon="charm:music"></hd-icon>
+            <span class="name">music</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:newspaper')" title="Click to copy">
+            <hd-icon icon="charm:newspaper"></hd-icon>
+            <span class="name">newspaper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:north-star')" title="Click to copy">
+            <hd-icon icon="charm:north-star"></hd-icon>
+            <span class="name">north-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:notes')" title="Click to copy">
+            <hd-icon icon="charm:notes"></hd-icon>
+            <span class="name">notes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:notes-cross')" title="Click to copy">
+            <hd-icon icon="charm:notes-cross"></hd-icon>
+            <span class="name">notes-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:notes-tick')" title="Click to copy">
+            <hd-icon icon="charm:notes-tick"></hd-icon>
+            <span class="name">notes-tick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:nut')" title="Click to copy">
+            <hd-icon icon="charm:nut"></hd-icon>
+            <span class="name">nut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:octagon')" title="Click to copy">
+            <hd-icon icon="charm:octagon"></hd-icon>
+            <span class="name">octagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:octagon-warning')" title="Click to copy">
+            <hd-icon icon="charm:octagon-warning"></hd-icon>
+            <span class="name">octagon-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:organisation')" title="Click to copy">
+            <hd-icon icon="charm:organisation"></hd-icon>
+            <span class="name">organisation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:package')" title="Click to copy">
+            <hd-icon icon="charm:package"></hd-icon>
+            <span class="name">package</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:padlock')" title="Click to copy">
+            <hd-icon icon="charm:padlock"></hd-icon>
+            <span class="name">padlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:paper-plane')" title="Click to copy">
+            <hd-icon icon="charm:paper-plane"></hd-icon>
+            <span class="name">paper-plane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:paperclip')" title="Click to copy">
+            <hd-icon icon="charm:paperclip"></hd-icon>
+            <span class="name">paperclip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:pencil')" title="Click to copy">
+            <hd-icon icon="charm:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:people')" title="Click to copy">
+            <hd-icon icon="charm:people"></hd-icon>
+            <span class="name">people</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:person')" title="Click to copy">
+            <hd-icon icon="charm:person"></hd-icon>
+            <span class="name">person</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:phone')" title="Click to copy">
+            <hd-icon icon="charm:phone"></hd-icon>
+            <span class="name">phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:phone-call')" title="Click to copy">
+            <hd-icon icon="charm:phone-call"></hd-icon>
+            <span class="name">phone-call</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:phone-cross')" title="Click to copy">
+            <hd-icon icon="charm:phone-cross"></hd-icon>
+            <span class="name">phone-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:phone-forward')" title="Click to copy">
+            <hd-icon icon="charm:phone-forward"></hd-icon>
+            <span class="name">phone-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:phone-incoming')" title="Click to copy">
+            <hd-icon icon="charm:phone-incoming"></hd-icon>
+            <span class="name">phone-incoming</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:phone-outgoing')" title="Click to copy">
+            <hd-icon icon="charm:phone-outgoing"></hd-icon>
+            <span class="name">phone-outgoing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:pin')" title="Click to copy">
+            <hd-icon icon="charm:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:plant-pot')" title="Click to copy">
+            <hd-icon icon="charm:plant-pot"></hd-icon>
+            <span class="name">plant-pot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:plus')" title="Click to copy">
+            <hd-icon icon="charm:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:power')" title="Click to copy">
+            <hd-icon icon="charm:power"></hd-icon>
+            <span class="name">power</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:printer')" title="Click to copy">
+            <hd-icon icon="charm:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:pulse')" title="Click to copy">
+            <hd-icon icon="charm:pulse"></hd-icon>
+            <span class="name">pulse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:quote')" title="Click to copy">
+            <hd-icon icon="charm:quote"></hd-icon>
+            <span class="name">quote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:refresh')" title="Click to copy">
+            <hd-icon icon="charm:refresh"></hd-icon>
+            <span class="name">refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:reply')" title="Click to copy">
+            <hd-icon icon="charm:reply"></hd-icon>
+            <span class="name">reply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:robot')" title="Click to copy">
+            <hd-icon icon="charm:robot"></hd-icon>
+            <span class="name">robot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:rocket')" title="Click to copy">
+            <hd-icon icon="charm:rocket"></hd-icon>
+            <span class="name">rocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:rotate-anti-clockwise')" title="Click to copy">
+            <hd-icon icon="charm:rotate-anti-clockwise"></hd-icon>
+            <span class="name">rotate-anti-clockwise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:rotate-clockwise')" title="Click to copy">
+            <hd-icon icon="charm:rotate-clockwise"></hd-icon>
+            <span class="name">rotate-clockwise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:scales')" title="Click to copy">
+            <hd-icon icon="charm:scales"></hd-icon>
+            <span class="name">scales</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:screen-maximise')" title="Click to copy">
+            <hd-icon icon="charm:screen-maximise"></hd-icon>
+            <span class="name">screen-maximise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:screen-minimise')" title="Click to copy">
+            <hd-icon icon="charm:screen-minimise"></hd-icon>
+            <span class="name">screen-minimise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:search')" title="Click to copy">
+            <hd-icon icon="charm:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:server')" title="Click to copy">
+            <hd-icon icon="charm:server"></hd-icon>
+            <span class="name">server</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:share')" title="Click to copy">
+            <hd-icon icon="charm:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:shield')" title="Click to copy">
+            <hd-icon icon="charm:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:shield-cross')" title="Click to copy">
+            <hd-icon icon="charm:shield-cross"></hd-icon>
+            <span class="name">shield-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:shield-keyhole')" title="Click to copy">
+            <hd-icon icon="charm:shield-keyhole"></hd-icon>
+            <span class="name">shield-keyhole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:shield-tick')" title="Click to copy">
+            <hd-icon icon="charm:shield-tick"></hd-icon>
+            <span class="name">shield-tick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:shield-warning')" title="Click to copy">
+            <hd-icon icon="charm:shield-warning"></hd-icon>
+            <span class="name">shield-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:shopping-bag')" title="Click to copy">
+            <hd-icon icon="charm:shopping-bag"></hd-icon>
+            <span class="name">shopping-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:sign-in')" title="Click to copy">
+            <hd-icon icon="charm:sign-in"></hd-icon>
+            <span class="name">sign-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:sign-out')" title="Click to copy">
+            <hd-icon icon="charm:sign-out"></hd-icon>
+            <span class="name">sign-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:signpost')" title="Click to copy">
+            <hd-icon icon="charm:signpost"></hd-icon>
+            <span class="name">signpost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:skull')" title="Click to copy">
+            <hd-icon icon="charm:skull"></hd-icon>
+            <span class="name">skull</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:snowflake')" title="Click to copy">
+            <hd-icon icon="charm:snowflake"></hd-icon>
+            <span class="name">snowflake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:sound-down')" title="Click to copy">
+            <hd-icon icon="charm:sound-down"></hd-icon>
+            <span class="name">sound-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:sound-mute')" title="Click to copy">
+            <hd-icon icon="charm:sound-mute"></hd-icon>
+            <span class="name">sound-mute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:sound-up')" title="Click to copy">
+            <hd-icon icon="charm:sound-up"></hd-icon>
+            <span class="name">sound-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:speaker')" title="Click to copy">
+            <hd-icon icon="charm:speaker"></hd-icon>
+            <span class="name">speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:square')" title="Click to copy">
+            <hd-icon icon="charm:square"></hd-icon>
+            <span class="name">square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:square-cross')" title="Click to copy">
+            <hd-icon icon="charm:square-cross"></hd-icon>
+            <span class="name">square-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:square-tick')" title="Click to copy">
+            <hd-icon icon="charm:square-tick"></hd-icon>
+            <span class="name">square-tick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:stack')" title="Click to copy">
+            <hd-icon icon="charm:stack"></hd-icon>
+            <span class="name">stack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:stack-pop')" title="Click to copy">
+            <hd-icon icon="charm:stack-pop"></hd-icon>
+            <span class="name">stack-pop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:stack-push')" title="Click to copy">
+            <hd-icon icon="charm:stack-push"></hd-icon>
+            <span class="name">stack-push</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:star')" title="Click to copy">
+            <hd-icon icon="charm:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:sticky-note')" title="Click to copy">
+            <hd-icon icon="charm:sticky-note"></hd-icon>
+            <span class="name">sticky-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:sun')" title="Click to copy">
+            <hd-icon icon="charm:sun"></hd-icon>
+            <span class="name">sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:swap-horizontal')" title="Click to copy">
+            <hd-icon icon="charm:swap-horizontal"></hd-icon>
+            <span class="name">swap-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:swap-vertical')" title="Click to copy">
+            <hd-icon icon="charm:swap-vertical"></hd-icon>
+            <span class="name">swap-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:sword')" title="Click to copy">
+            <hd-icon icon="charm:sword"></hd-icon>
+            <span class="name">sword</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:swords')" title="Click to copy">
+            <hd-icon icon="charm:swords"></hd-icon>
+            <span class="name">swords</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:tablet')" title="Click to copy">
+            <hd-icon icon="charm:tablet"></hd-icon>
+            <span class="name">tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:tag')" title="Click to copy">
+            <hd-icon icon="charm:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:telescope')" title="Click to copy">
+            <hd-icon icon="charm:telescope"></hd-icon>
+            <span class="name">telescope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:tent')" title="Click to copy">
+            <hd-icon icon="charm:tent"></hd-icon>
+            <span class="name">tent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:terminal')" title="Click to copy">
+            <hd-icon icon="charm:terminal"></hd-icon>
+            <span class="name">terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:thumb-down')" title="Click to copy">
+            <hd-icon icon="charm:thumb-down"></hd-icon>
+            <span class="name">thumb-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:thumb-up')" title="Click to copy">
+            <hd-icon icon="charm:thumb-up"></hd-icon>
+            <span class="name">thumb-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:tick')" title="Click to copy">
+            <hd-icon icon="charm:tick"></hd-icon>
+            <span class="name">tick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:tick-double')" title="Click to copy">
+            <hd-icon icon="charm:tick-double"></hd-icon>
+            <span class="name">tick-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:ticket')" title="Click to copy">
+            <hd-icon icon="charm:ticket"></hd-icon>
+            <span class="name">ticket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:tree-fir')" title="Click to copy">
+            <hd-icon icon="charm:tree-fir"></hd-icon>
+            <span class="name">tree-fir</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:triangle')" title="Click to copy">
+            <hd-icon icon="charm:triangle"></hd-icon>
+            <span class="name">triangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:trophy')" title="Click to copy">
+            <hd-icon icon="charm:trophy"></hd-icon>
+            <span class="name">trophy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:umbrella')" title="Click to copy">
+            <hd-icon icon="charm:umbrella"></hd-icon>
+            <span class="name">umbrella</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:upload')" title="Click to copy">
+            <hd-icon icon="charm:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:wifi')" title="Click to copy">
+            <hd-icon icon="charm:wifi"></hd-icon>
+            <span class="name">wifi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:wifi-fair')" title="Click to copy">
+            <hd-icon icon="charm:wifi-fair"></hd-icon>
+            <span class="name">wifi-fair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:wifi-poor')" title="Click to copy">
+            <hd-icon icon="charm:wifi-poor"></hd-icon>
+            <span class="name">wifi-poor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:wifi-slash')" title="Click to copy">
+            <hd-icon icon="charm:wifi-slash"></hd-icon>
+            <span class="name">wifi-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:wifi-warning')" title="Click to copy">
+            <hd-icon icon="charm:wifi-warning"></hd-icon>
+            <span class="name">wifi-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:zoom-in')" title="Click to copy">
+            <hd-icon icon="charm:zoom-in"></hd-icon>
+            <span class="name">zoom-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('charm:zoom-out')" title="Click to copy">
+            <hd-icon icon="charm:zoom-out"></hd-icon>
+            <span class="name">zoom-out</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAACZIkZAbwYWRo4++K5WC2WQmA8NVdFfGQ1cndGYzV0dFUzQlR2hmZFY6hDNnNxYWNVZlYzMlVjpTUzRwVYWh/RBAUEug0IPisjEcZ52wQHCAsOBJ8G8QHOAXcFBUMUhgEH3gIIKQEGAhgJCgydAhEEEp0BXwdV1wnsNgENEmBpAosBHAYqAVIYAggEMQEEwAEgzDoCBwKhAQJZAbw77ZtsUnxm/mzaPaPBbsQGP6HK6xfSzzp1HvHmUrqpPrzdcKUBPs8XZ69AAMcdPCPok99tDWaGlDbPWhZjc0rm1pssc5drd1J4uKwvSeUKbVPlGhaIoNYwYTgznCm2b3qe+tFgFg4zt53texRja1020BC1OaBbM1REDrEuLEnhjtS8rNOVs6xyIBylFSU7lhtX8OH6Xf8OfGQyffSSWaD+8rZcBLJQOfwowjRw9FtTgTaTyYBnUFigKxBZOkkfkBl7Xxvx7CxKX8ich2Dg5jdFpKMFilFTQZxEFGzF0c1x1yWpgfR0uL9JOgQMonynIYQCSY1y921builCtUjyA1Ntd/olQ0ifAwG245W+ElooBxRwoSxZgXjmJqWcf8hzAjTDDrUVlh41/TQQfkSfz+7p5llLNca7a6atiJBNwYV4LsDBTvVhyQv9eowLVQifVilQyeF331NWMv2kjWkUGLkZMnO8Y7/K/JBMwKv7U5UzUxV1NCTr7V+GWm0spvO9HUjOBiD2B+5K660ZWWu4pC+J6lUx3LJaqrsjS+Rh0M/aX0PuZ6tfQd7G/BAph3reuFFM8lDKO7aQcG0YtYJMlAIAYAAABNYABIQBAAAAAAMAAAAKb3VpLTAxLnN2ZwAAAApvdWktMDIuc3ZnAAAACm91aS0wMy5zdmf/////AAAAAgAAAG8ARkFEJAQFQFASWCBEUEkUEEQUBBQVFBQWAERVJBhFkVRgQFVJWFUFAWERAQUVUkJYlQUIESEJAVQBAUAVFVkkERUFGIQFIESYUJUJooABUoIBQWFASVRRFVFUABERQVSgUAVRUEQUBVBURFZBFSgAAAAA";
+
+const chunks = {
+  "oui-01.svg": new URL("./oui-01.svg", import.meta.url).href,
+  "oui-02.svg": new URL("./oui-02.svg", import.meta.url).href,
+  "oui-03.svg": new URL("./oui-03.svg", import.meta.url).href
+};
+
+register('oui', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

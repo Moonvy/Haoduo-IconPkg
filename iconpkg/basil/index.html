@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>basil - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>basil <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(493)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('basil:add-outline')" title="Click to copy">
+            <hd-icon icon="basil:add-outline"></hd-icon>
+            <span class="name">add-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:add-solid')" title="Click to copy">
+            <hd-icon icon="basil:add-solid"></hd-icon>
+            <span class="name">add-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-after-effects-outline')" title="Click to copy">
+            <hd-icon icon="basil:adobe-after-effects-outline"></hd-icon>
+            <span class="name">adobe-after-effects-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-after-effects-solid')" title="Click to copy">
+            <hd-icon icon="basil:adobe-after-effects-solid"></hd-icon>
+            <span class="name">adobe-after-effects-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-experince-design-outline')" title="Click to copy">
+            <hd-icon icon="basil:adobe-experince-design-outline"></hd-icon>
+            <span class="name">adobe-experince-design-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-experince-design-solid')" title="Click to copy">
+            <hd-icon icon="basil:adobe-experince-design-solid"></hd-icon>
+            <span class="name">adobe-experince-design-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-illustrator-outline')" title="Click to copy">
+            <hd-icon icon="basil:adobe-illustrator-outline"></hd-icon>
+            <span class="name">adobe-illustrator-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-illustrator-solid')" title="Click to copy">
+            <hd-icon icon="basil:adobe-illustrator-solid"></hd-icon>
+            <span class="name">adobe-illustrator-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-indesign-outline')" title="Click to copy">
+            <hd-icon icon="basil:adobe-indesign-outline"></hd-icon>
+            <span class="name">adobe-indesign-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-indesign-solid')" title="Click to copy">
+            <hd-icon icon="basil:adobe-indesign-solid"></hd-icon>
+            <span class="name">adobe-indesign-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-lightroom-outline')" title="Click to copy">
+            <hd-icon icon="basil:adobe-lightroom-outline"></hd-icon>
+            <span class="name">adobe-lightroom-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-lightroom-solid')" title="Click to copy">
+            <hd-icon icon="basil:adobe-lightroom-solid"></hd-icon>
+            <span class="name">adobe-lightroom-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-photoshop-outline')" title="Click to copy">
+            <hd-icon icon="basil:adobe-photoshop-outline"></hd-icon>
+            <span class="name">adobe-photoshop-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-photoshop-solid')" title="Click to copy">
+            <hd-icon icon="basil:adobe-photoshop-solid"></hd-icon>
+            <span class="name">adobe-photoshop-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-premiere-outline')" title="Click to copy">
+            <hd-icon icon="basil:adobe-premiere-outline"></hd-icon>
+            <span class="name">adobe-premiere-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:adobe-premiere-solid')" title="Click to copy">
+            <hd-icon icon="basil:adobe-premiere-solid"></hd-icon>
+            <span class="name">adobe-premiere-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:alarm-outline')" title="Click to copy">
+            <hd-icon icon="basil:alarm-outline"></hd-icon>
+            <span class="name">alarm-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:alarm-solid')" title="Click to copy">
+            <hd-icon icon="basil:alarm-solid"></hd-icon>
+            <span class="name">alarm-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:android-outline')" title="Click to copy">
+            <hd-icon icon="basil:android-outline"></hd-icon>
+            <span class="name">android-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:android-solid')" title="Click to copy">
+            <hd-icon icon="basil:android-solid"></hd-icon>
+            <span class="name">android-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:app-store-outline')" title="Click to copy">
+            <hd-icon icon="basil:app-store-outline"></hd-icon>
+            <span class="name">app-store-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:app-store-solid')" title="Click to copy">
+            <hd-icon icon="basil:app-store-solid"></hd-icon>
+            <span class="name">app-store-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:apple-outline')" title="Click to copy">
+            <hd-icon icon="basil:apple-outline"></hd-icon>
+            <span class="name">apple-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:apple-solid')" title="Click to copy">
+            <hd-icon icon="basil:apple-solid"></hd-icon>
+            <span class="name">apple-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:apps-outline')" title="Click to copy">
+            <hd-icon icon="basil:apps-outline"></hd-icon>
+            <span class="name">apps-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:apps-solid')" title="Click to copy">
+            <hd-icon icon="basil:apps-solid"></hd-icon>
+            <span class="name">apps-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:arrow-down-outline')" title="Click to copy">
+            <hd-icon icon="basil:arrow-down-outline"></hd-icon>
+            <span class="name">arrow-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:arrow-down-solid')" title="Click to copy">
+            <hd-icon icon="basil:arrow-down-solid"></hd-icon>
+            <span class="name">arrow-down-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:arrow-left-outline')" title="Click to copy">
+            <hd-icon icon="basil:arrow-left-outline"></hd-icon>
+            <span class="name">arrow-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:arrow-left-solid')" title="Click to copy">
+            <hd-icon icon="basil:arrow-left-solid"></hd-icon>
+            <span class="name">arrow-left-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:arrow-right-outline')" title="Click to copy">
+            <hd-icon icon="basil:arrow-right-outline"></hd-icon>
+            <span class="name">arrow-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:arrow-right-solid')" title="Click to copy">
+            <hd-icon icon="basil:arrow-right-solid"></hd-icon>
+            <span class="name">arrow-right-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:arrow-up-outline')" title="Click to copy">
+            <hd-icon icon="basil:arrow-up-outline"></hd-icon>
+            <span class="name">arrow-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:arrow-up-solid')" title="Click to copy">
+            <hd-icon icon="basil:arrow-up-solid"></hd-icon>
+            <span class="name">arrow-up-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:asana-outline')" title="Click to copy">
+            <hd-icon icon="basil:asana-outline"></hd-icon>
+            <span class="name">asana-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:asana-solid')" title="Click to copy">
+            <hd-icon icon="basil:asana-solid"></hd-icon>
+            <span class="name">asana-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:at-sign-outline')" title="Click to copy">
+            <hd-icon icon="basil:at-sign-outline"></hd-icon>
+            <span class="name">at-sign-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:at-sign-solid')" title="Click to copy">
+            <hd-icon icon="basil:at-sign-solid"></hd-icon>
+            <span class="name">at-sign-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:attach-outline')" title="Click to copy">
+            <hd-icon icon="basil:attach-outline"></hd-icon>
+            <span class="name">attach-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:attach-solid')" title="Click to copy">
+            <hd-icon icon="basil:attach-solid"></hd-icon>
+            <span class="name">attach-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:award-outline')" title="Click to copy">
+            <hd-icon icon="basil:award-outline"></hd-icon>
+            <span class="name">award-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:award-solid')" title="Click to copy">
+            <hd-icon icon="basil:award-solid"></hd-icon>
+            <span class="name">award-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:backspace-outline')" title="Click to copy">
+            <hd-icon icon="basil:backspace-outline"></hd-icon>
+            <span class="name">backspace-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:backspace-solid')" title="Click to copy">
+            <hd-icon icon="basil:backspace-solid"></hd-icon>
+            <span class="name">backspace-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:bag-outline')" title="Click to copy">
+            <hd-icon icon="basil:bag-outline"></hd-icon>
+            <span class="name">bag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:bag-solid')" title="Click to copy">
+            <hd-icon icon="basil:bag-solid"></hd-icon>
+            <span class="name">bag-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:bank-outline')" title="Click to copy">
+            <hd-icon icon="basil:bank-outline"></hd-icon>
+            <span class="name">bank-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:bank-solid')" title="Click to copy">
+            <hd-icon icon="basil:bank-solid"></hd-icon>
+            <span class="name">bank-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battery-empty-outline')" title="Click to copy">
+            <hd-icon icon="basil:battery-empty-outline"></hd-icon>
+            <span class="name">battery-empty-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battery-full-outline')" title="Click to copy">
+            <hd-icon icon="basil:battery-full-outline"></hd-icon>
+            <span class="name">battery-full-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battery-full-solid')" title="Click to copy">
+            <hd-icon icon="basil:battery-full-solid"></hd-icon>
+            <span class="name">battery-full-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battery-low-outline')" title="Click to copy">
+            <hd-icon icon="basil:battery-low-outline"></hd-icon>
+            <span class="name">battery-low-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battery-low-solid')" title="Click to copy">
+            <hd-icon icon="basil:battery-low-solid"></hd-icon>
+            <span class="name">battery-low-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battery-most-outline')" title="Click to copy">
+            <hd-icon icon="basil:battery-most-outline"></hd-icon>
+            <span class="name">battery-most-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battery-most-solid')" title="Click to copy">
+            <hd-icon icon="basil:battery-most-solid"></hd-icon>
+            <span class="name">battery-most-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battery-quarter-outline')" title="Click to copy">
+            <hd-icon icon="basil:battery-quarter-outline"></hd-icon>
+            <span class="name">battery-quarter-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battery-quarter-solid')" title="Click to copy">
+            <hd-icon icon="basil:battery-quarter-solid"></hd-icon>
+            <span class="name">battery-quarter-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battry-half-outline')" title="Click to copy">
+            <hd-icon icon="basil:battry-half-outline"></hd-icon>
+            <span class="name">battry-half-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:battry-half-solid')" title="Click to copy">
+            <hd-icon icon="basil:battry-half-solid"></hd-icon>
+            <span class="name">battry-half-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:behance-outline')" title="Click to copy">
+            <hd-icon icon="basil:behance-outline"></hd-icon>
+            <span class="name">behance-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:behance-solid')" title="Click to copy">
+            <hd-icon icon="basil:behance-solid"></hd-icon>
+            <span class="name">behance-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:binocular-outline')" title="Click to copy">
+            <hd-icon icon="basil:binocular-outline"></hd-icon>
+            <span class="name">binocular-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:binocular-solid')" title="Click to copy">
+            <hd-icon icon="basil:binocular-solid"></hd-icon>
+            <span class="name">binocular-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:bluetooth-outline')" title="Click to copy">
+            <hd-icon icon="basil:bluetooth-outline"></hd-icon>
+            <span class="name">bluetooth-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:bluetooth-solid')" title="Click to copy">
+            <hd-icon icon="basil:bluetooth-solid"></hd-icon>
+            <span class="name">bluetooth-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:book-check-outline')" title="Click to copy">
+            <hd-icon icon="basil:book-check-outline"></hd-icon>
+            <span class="name">book-check-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:book-check-solid')" title="Click to copy">
+            <hd-icon icon="basil:book-check-solid"></hd-icon>
+            <span class="name">book-check-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:book-mark-outline')" title="Click to copy">
+            <hd-icon icon="basil:book-mark-outline"></hd-icon>
+            <span class="name">book-mark-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:book-mark-solid')" title="Click to copy">
+            <hd-icon icon="basil:book-mark-solid"></hd-icon>
+            <span class="name">book-mark-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:book-open-outline')" title="Click to copy">
+            <hd-icon icon="basil:book-open-outline"></hd-icon>
+            <span class="name">book-open-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:book-open-solid')" title="Click to copy">
+            <hd-icon icon="basil:book-open-solid"></hd-icon>
+            <span class="name">book-open-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:book-outline')" title="Click to copy">
+            <hd-icon icon="basil:book-outline"></hd-icon>
+            <span class="name">book-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:book-solid')" title="Click to copy">
+            <hd-icon icon="basil:book-solid"></hd-icon>
+            <span class="name">book-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:bookmark-outline')" title="Click to copy">
+            <hd-icon icon="basil:bookmark-outline"></hd-icon>
+            <span class="name">bookmark-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:bookmark-solid')" title="Click to copy">
+            <hd-icon icon="basil:bookmark-solid"></hd-icon>
+            <span class="name">bookmark-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:box-outline')" title="Click to copy">
+            <hd-icon icon="basil:box-outline"></hd-icon>
+            <span class="name">box-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:box-solid')" title="Click to copy">
+            <hd-icon icon="basil:box-solid"></hd-icon>
+            <span class="name">box-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:bullhorn-outline')" title="Click to copy">
+            <hd-icon icon="basil:bullhorn-outline"></hd-icon>
+            <span class="name">bullhorn-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:bullhorn-solid')" title="Click to copy">
+            <hd-icon icon="basil:bullhorn-solid"></hd-icon>
+            <span class="name">bullhorn-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:calendar-outline')" title="Click to copy">
+            <hd-icon icon="basil:calendar-outline"></hd-icon>
+            <span class="name">calendar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:calendar-solid')" title="Click to copy">
+            <hd-icon icon="basil:calendar-solid"></hd-icon>
+            <span class="name">calendar-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:camera-outline')" title="Click to copy">
+            <hd-icon icon="basil:camera-outline"></hd-icon>
+            <span class="name">camera-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:camera-solid')" title="Click to copy">
+            <hd-icon icon="basil:camera-solid"></hd-icon>
+            <span class="name">camera-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cancel-outline')" title="Click to copy">
+            <hd-icon icon="basil:cancel-outline"></hd-icon>
+            <span class="name">cancel-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cancel-solid')" title="Click to copy">
+            <hd-icon icon="basil:cancel-solid"></hd-icon>
+            <span class="name">cancel-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:card-outline')" title="Click to copy">
+            <hd-icon icon="basil:card-outline"></hd-icon>
+            <span class="name">card-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:card-solid')" title="Click to copy">
+            <hd-icon icon="basil:card-solid"></hd-icon>
+            <span class="name">card-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:caret-down-outline')" title="Click to copy">
+            <hd-icon icon="basil:caret-down-outline"></hd-icon>
+            <span class="name">caret-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:caret-down-solid')" title="Click to copy">
+            <hd-icon icon="basil:caret-down-solid"></hd-icon>
+            <span class="name">caret-down-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:caret-left-outline')" title="Click to copy">
+            <hd-icon icon="basil:caret-left-outline"></hd-icon>
+            <span class="name">caret-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:caret-left-solid')" title="Click to copy">
+            <hd-icon icon="basil:caret-left-solid"></hd-icon>
+            <span class="name">caret-left-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:caret-right-outline')" title="Click to copy">
+            <hd-icon icon="basil:caret-right-outline"></hd-icon>
+            <span class="name">caret-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:caret-right-solid')" title="Click to copy">
+            <hd-icon icon="basil:caret-right-solid"></hd-icon>
+            <span class="name">caret-right-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:caret-up-outline')" title="Click to copy">
+            <hd-icon icon="basil:caret-up-outline"></hd-icon>
+            <span class="name">caret-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:caret-up-solid')" title="Click to copy">
+            <hd-icon icon="basil:caret-up-solid"></hd-icon>
+            <span class="name">caret-up-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:chart-pie-alt-outline')" title="Click to copy">
+            <hd-icon icon="basil:chart-pie-alt-outline"></hd-icon>
+            <span class="name">chart-pie-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:chart-pie-alt-solid')" title="Click to copy">
+            <hd-icon icon="basil:chart-pie-alt-solid"></hd-icon>
+            <span class="name">chart-pie-alt-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:chart-pie-outline')" title="Click to copy">
+            <hd-icon icon="basil:chart-pie-outline"></hd-icon>
+            <span class="name">chart-pie-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:chart-pie-solid')" title="Click to copy">
+            <hd-icon icon="basil:chart-pie-solid"></hd-icon>
+            <span class="name">chart-pie-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:chat-outline')" title="Click to copy">
+            <hd-icon icon="basil:chat-outline"></hd-icon>
+            <span class="name">chat-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:chat-solid')" title="Click to copy">
+            <hd-icon icon="basil:chat-solid"></hd-icon>
+            <span class="name">chat-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:check-outline')" title="Click to copy">
+            <hd-icon icon="basil:check-outline"></hd-icon>
+            <span class="name">check-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:check-solid')" title="Click to copy">
+            <hd-icon icon="basil:check-solid"></hd-icon>
+            <span class="name">check-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:checked-box-outline')" title="Click to copy">
+            <hd-icon icon="basil:checked-box-outline"></hd-icon>
+            <span class="name">checked-box-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:checked-box-solid')" title="Click to copy">
+            <hd-icon icon="basil:checked-box-solid"></hd-icon>
+            <span class="name">checked-box-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:chrome-outline')" title="Click to copy">
+            <hd-icon icon="basil:chrome-outline"></hd-icon>
+            <span class="name">chrome-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:chrome-solid')" title="Click to copy">
+            <hd-icon icon="basil:chrome-solid"></hd-icon>
+            <span class="name">chrome-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:clipboard-alt-outline')" title="Click to copy">
+            <hd-icon icon="basil:clipboard-alt-outline"></hd-icon>
+            <span class="name">clipboard-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:clipboard-alt-solid')" title="Click to copy">
+            <hd-icon icon="basil:clipboard-alt-solid"></hd-icon>
+            <span class="name">clipboard-alt-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:clipboard-outline')" title="Click to copy">
+            <hd-icon icon="basil:clipboard-outline"></hd-icon>
+            <span class="name">clipboard-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:clipboard-solid')" title="Click to copy">
+            <hd-icon icon="basil:clipboard-solid"></hd-icon>
+            <span class="name">clipboard-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:clock-outline')" title="Click to copy">
+            <hd-icon icon="basil:clock-outline"></hd-icon>
+            <span class="name">clock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:clock-solid')" title="Click to copy">
+            <hd-icon icon="basil:clock-solid"></hd-icon>
+            <span class="name">clock-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cloud-check-outline')" title="Click to copy">
+            <hd-icon icon="basil:cloud-check-outline"></hd-icon>
+            <span class="name">cloud-check-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cloud-check-solid')" title="Click to copy">
+            <hd-icon icon="basil:cloud-check-solid"></hd-icon>
+            <span class="name">cloud-check-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cloud-download-outline')" title="Click to copy">
+            <hd-icon icon="basil:cloud-download-outline"></hd-icon>
+            <span class="name">cloud-download-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cloud-download-solid')" title="Click to copy">
+            <hd-icon icon="basil:cloud-download-solid"></hd-icon>
+            <span class="name">cloud-download-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cloud-off-outline')" title="Click to copy">
+            <hd-icon icon="basil:cloud-off-outline"></hd-icon>
+            <span class="name">cloud-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cloud-off-solid')" title="Click to copy">
+            <hd-icon icon="basil:cloud-off-solid"></hd-icon>
+            <span class="name">cloud-off-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cloud-outline')" title="Click to copy">
+            <hd-icon icon="basil:cloud-outline"></hd-icon>
+            <span class="name">cloud-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cloud-solid')" title="Click to copy">
+            <hd-icon icon="basil:cloud-solid"></hd-icon>
+            <span class="name">cloud-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cloud-upload-outline')" title="Click to copy">
+            <hd-icon icon="basil:cloud-upload-outline"></hd-icon>
+            <span class="name">cloud-upload-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cloud-upload-solid')" title="Click to copy">
+            <hd-icon icon="basil:cloud-upload-solid"></hd-icon>
+            <span class="name">cloud-upload-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:collapse-outline')" title="Click to copy">
+            <hd-icon icon="basil:collapse-outline"></hd-icon>
+            <span class="name">collapse-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:collapse-solid')" title="Click to copy">
+            <hd-icon icon="basil:collapse-solid"></hd-icon>
+            <span class="name">collapse-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:comment-block-outline')" title="Click to copy">
+            <hd-icon icon="basil:comment-block-outline"></hd-icon>
+            <span class="name">comment-block-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:comment-block-solid')" title="Click to copy">
+            <hd-icon icon="basil:comment-block-solid"></hd-icon>
+            <span class="name">comment-block-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:comment-minus-outline')" title="Click to copy">
+            <hd-icon icon="basil:comment-minus-outline"></hd-icon>
+            <span class="name">comment-minus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:comment-minus-solid')" title="Click to copy">
+            <hd-icon icon="basil:comment-minus-solid"></hd-icon>
+            <span class="name">comment-minus-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:comment-outline')" title="Click to copy">
+            <hd-icon icon="basil:comment-outline"></hd-icon>
+            <span class="name">comment-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:comment-plus-outline')" title="Click to copy">
+            <hd-icon icon="basil:comment-plus-outline"></hd-icon>
+            <span class="name">comment-plus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:comment-plus-solid')" title="Click to copy">
+            <hd-icon icon="basil:comment-plus-solid"></hd-icon>
+            <span class="name">comment-plus-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:comment-solid')" title="Click to copy">
+            <hd-icon icon="basil:comment-solid"></hd-icon>
+            <span class="name">comment-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:contacts-outline')" title="Click to copy">
+            <hd-icon icon="basil:contacts-outline"></hd-icon>
+            <span class="name">contacts-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:contacts-solid')" title="Click to copy">
+            <hd-icon icon="basil:contacts-solid"></hd-icon>
+            <span class="name">contacts-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:copy-outline')" title="Click to copy">
+            <hd-icon icon="basil:copy-outline"></hd-icon>
+            <span class="name">copy-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:copy-solid')" title="Click to copy">
+            <hd-icon icon="basil:copy-solid"></hd-icon>
+            <span class="name">copy-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cross-outline')" title="Click to copy">
+            <hd-icon icon="basil:cross-outline"></hd-icon>
+            <span class="name">cross-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cross-solid')" title="Click to copy">
+            <hd-icon icon="basil:cross-solid"></hd-icon>
+            <span class="name">cross-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:current-location-outline')" title="Click to copy">
+            <hd-icon icon="basil:current-location-outline"></hd-icon>
+            <span class="name">current-location-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:current-location-solid')" title="Click to copy">
+            <hd-icon icon="basil:current-location-solid"></hd-icon>
+            <span class="name">current-location-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cursor-outline')" title="Click to copy">
+            <hd-icon icon="basil:cursor-outline"></hd-icon>
+            <span class="name">cursor-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:cursor-solid')" title="Click to copy">
+            <hd-icon icon="basil:cursor-solid"></hd-icon>
+            <span class="name">cursor-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:desktop-outline')" title="Click to copy">
+            <hd-icon icon="basil:desktop-outline"></hd-icon>
+            <span class="name">desktop-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:desktop-solid')" title="Click to copy">
+            <hd-icon icon="basil:desktop-solid"></hd-icon>
+            <span class="name">desktop-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:dialpad-outline')" title="Click to copy">
+            <hd-icon icon="basil:dialpad-outline"></hd-icon>
+            <span class="name">dialpad-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:dialpad-solid')" title="Click to copy">
+            <hd-icon icon="basil:dialpad-solid"></hd-icon>
+            <span class="name">dialpad-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:diamond-outline')" title="Click to copy">
+            <hd-icon icon="basil:diamond-outline"></hd-icon>
+            <span class="name">diamond-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:diamond-solid')" title="Click to copy">
+            <hd-icon icon="basil:diamond-solid"></hd-icon>
+            <span class="name">diamond-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:dislike-outline')" title="Click to copy">
+            <hd-icon icon="basil:dislike-outline"></hd-icon>
+            <span class="name">dislike-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:dislike-solid')" title="Click to copy">
+            <hd-icon icon="basil:dislike-solid"></hd-icon>
+            <span class="name">dislike-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:document-outline')" title="Click to copy">
+            <hd-icon icon="basil:document-outline"></hd-icon>
+            <span class="name">document-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:document-solid')" title="Click to copy">
+            <hd-icon icon="basil:document-solid"></hd-icon>
+            <span class="name">document-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:download-outline')" title="Click to copy">
+            <hd-icon icon="basil:download-outline"></hd-icon>
+            <span class="name">download-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:download-solid')" title="Click to copy">
+            <hd-icon icon="basil:download-solid"></hd-icon>
+            <span class="name">download-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:dribbble-outline')" title="Click to copy">
+            <hd-icon icon="basil:dribbble-outline"></hd-icon>
+            <span class="name">dribbble-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:dribbble-solid')" title="Click to copy">
+            <hd-icon icon="basil:dribbble-solid"></hd-icon>
+            <span class="name">dribbble-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:dropbox-outline')" title="Click to copy">
+            <hd-icon icon="basil:dropbox-outline"></hd-icon>
+            <span class="name">dropbox-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:dropbox-solid')" title="Click to copy">
+            <hd-icon icon="basil:dropbox-solid"></hd-icon>
+            <span class="name">dropbox-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:edit-alt-outline')" title="Click to copy">
+            <hd-icon icon="basil:edit-alt-outline"></hd-icon>
+            <span class="name">edit-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:edit-alt-solid')" title="Click to copy">
+            <hd-icon icon="basil:edit-alt-solid"></hd-icon>
+            <span class="name">edit-alt-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:edit-outline')" title="Click to copy">
+            <hd-icon icon="basil:edit-outline"></hd-icon>
+            <span class="name">edit-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:edit-solid')" title="Click to copy">
+            <hd-icon icon="basil:edit-solid"></hd-icon>
+            <span class="name">edit-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:envelope-open-outline')" title="Click to copy">
+            <hd-icon icon="basil:envelope-open-outline"></hd-icon>
+            <span class="name">envelope-open-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:envelope-open-solid')" title="Click to copy">
+            <hd-icon icon="basil:envelope-open-solid"></hd-icon>
+            <span class="name">envelope-open-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:envelope-outline')" title="Click to copy">
+            <hd-icon icon="basil:envelope-outline"></hd-icon>
+            <span class="name">envelope-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:envelope-solid')" title="Click to copy">
+            <hd-icon icon="basil:envelope-solid"></hd-icon>
+            <span class="name">envelope-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:exchange-outline')" title="Click to copy">
+            <hd-icon icon="basil:exchange-outline"></hd-icon>
+            <span class="name">exchange-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:exchange-solid')" title="Click to copy">
+            <hd-icon icon="basil:exchange-solid"></hd-icon>
+            <span class="name">exchange-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:expand-outline')" title="Click to copy">
+            <hd-icon icon="basil:expand-outline"></hd-icon>
+            <span class="name">expand-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:expand-solid')" title="Click to copy">
+            <hd-icon icon="basil:expand-solid"></hd-icon>
+            <span class="name">expand-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:explore-outline')" title="Click to copy">
+            <hd-icon icon="basil:explore-outline"></hd-icon>
+            <span class="name">explore-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:explore-solid')" title="Click to copy">
+            <hd-icon icon="basil:explore-solid"></hd-icon>
+            <span class="name">explore-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:eye-closed-outline')" title="Click to copy">
+            <hd-icon icon="basil:eye-closed-outline"></hd-icon>
+            <span class="name">eye-closed-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:eye-closed-solid')" title="Click to copy">
+            <hd-icon icon="basil:eye-closed-solid"></hd-icon>
+            <span class="name">eye-closed-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:eye-outline')" title="Click to copy">
+            <hd-icon icon="basil:eye-outline"></hd-icon>
+            <span class="name">eye-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:eye-solid')" title="Click to copy">
+            <hd-icon icon="basil:eye-solid"></hd-icon>
+            <span class="name">eye-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:facebook-messenger-outline')" title="Click to copy">
+            <hd-icon icon="basil:facebook-messenger-outline"></hd-icon>
+            <span class="name">facebook-messenger-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:facebook-messenger-solid')" title="Click to copy">
+            <hd-icon icon="basil:facebook-messenger-solid"></hd-icon>
+            <span class="name">facebook-messenger-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:facebook-outline')" title="Click to copy">
+            <hd-icon icon="basil:facebook-outline"></hd-icon>
+            <span class="name">facebook-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:facebook-solid')" title="Click to copy">
+            <hd-icon icon="basil:facebook-solid"></hd-icon>
+            <span class="name">facebook-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:fast-forward-outline')" title="Click to copy">
+            <hd-icon icon="basil:fast-forward-outline"></hd-icon>
+            <span class="name">fast-forward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:fast-forward-solid')" title="Click to copy">
+            <hd-icon icon="basil:fast-forward-solid"></hd-icon>
+            <span class="name">fast-forward-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:fast-rewind-outline')" title="Click to copy">
+            <hd-icon icon="basil:fast-rewind-outline"></hd-icon>
+            <span class="name">fast-rewind-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:fast-rewind-solid')" title="Click to copy">
+            <hd-icon icon="basil:fast-rewind-solid"></hd-icon>
+            <span class="name">fast-rewind-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:figma-outline')" title="Click to copy">
+            <hd-icon icon="basil:figma-outline"></hd-icon>
+            <span class="name">figma-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:figma-solid')" title="Click to copy">
+            <hd-icon icon="basil:figma-solid"></hd-icon>
+            <span class="name">figma-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:file-download-outline')" title="Click to copy">
+            <hd-icon icon="basil:file-download-outline"></hd-icon>
+            <span class="name">file-download-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:file-download-solid')" title="Click to copy">
+            <hd-icon icon="basil:file-download-solid"></hd-icon>
+            <span class="name">file-download-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:file-outline')" title="Click to copy">
+            <hd-icon icon="basil:file-outline"></hd-icon>
+            <span class="name">file-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:file-solid')" title="Click to copy">
+            <hd-icon icon="basil:file-solid"></hd-icon>
+            <span class="name">file-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:file-upload-outline')" title="Click to copy">
+            <hd-icon icon="basil:file-upload-outline"></hd-icon>
+            <span class="name">file-upload-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:file-upload-solid')" title="Click to copy">
+            <hd-icon icon="basil:file-upload-solid"></hd-icon>
+            <span class="name">file-upload-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:file-user-outline')" title="Click to copy">
+            <hd-icon icon="basil:file-user-outline"></hd-icon>
+            <span class="name">file-user-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:file-user-solid')" title="Click to copy">
+            <hd-icon icon="basil:file-user-solid"></hd-icon>
+            <span class="name">file-user-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:filter-outline')" title="Click to copy">
+            <hd-icon icon="basil:filter-outline"></hd-icon>
+            <span class="name">filter-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:filter-solid')" title="Click to copy">
+            <hd-icon icon="basil:filter-solid"></hd-icon>
+            <span class="name">filter-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:fire-outline')" title="Click to copy">
+            <hd-icon icon="basil:fire-outline"></hd-icon>
+            <span class="name">fire-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:fire-solid')" title="Click to copy">
+            <hd-icon icon="basil:fire-solid"></hd-icon>
+            <span class="name">fire-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:flask-alt-outline')" title="Click to copy">
+            <hd-icon icon="basil:flask-alt-outline"></hd-icon>
+            <span class="name">flask-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:flask-alt-solid')" title="Click to copy">
+            <hd-icon icon="basil:flask-alt-solid"></hd-icon>
+            <span class="name">flask-alt-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:flask-outline')" title="Click to copy">
+            <hd-icon icon="basil:flask-outline"></hd-icon>
+            <span class="name">flask-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:flask-solid')" title="Click to copy">
+            <hd-icon icon="basil:flask-solid"></hd-icon>
+            <span class="name">flask-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-block-outline')" title="Click to copy">
+            <hd-icon icon="basil:folder-block-outline"></hd-icon>
+            <span class="name">folder-block-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-block-solid')" title="Click to copy">
+            <hd-icon icon="basil:folder-block-solid"></hd-icon>
+            <span class="name">folder-block-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-delete-outline')" title="Click to copy">
+            <hd-icon icon="basil:folder-delete-outline"></hd-icon>
+            <span class="name">folder-delete-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-delete-solid')" title="Click to copy">
+            <hd-icon icon="basil:folder-delete-solid"></hd-icon>
+            <span class="name">folder-delete-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-lock-outline')" title="Click to copy">
+            <hd-icon icon="basil:folder-lock-outline"></hd-icon>
+            <span class="name">folder-lock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-lock-solid')" title="Click to copy">
+            <hd-icon icon="basil:folder-lock-solid"></hd-icon>
+            <span class="name">folder-lock-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-open-outline')" title="Click to copy">
+            <hd-icon icon="basil:folder-open-outline"></hd-icon>
+            <span class="name">folder-open-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-open-solid')" title="Click to copy">
+            <hd-icon icon="basil:folder-open-solid"></hd-icon>
+            <span class="name">folder-open-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-outline')" title="Click to copy">
+            <hd-icon icon="basil:folder-outline"></hd-icon>
+            <span class="name">folder-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-plus-outline')" title="Click to copy">
+            <hd-icon icon="basil:folder-plus-outline"></hd-icon>
+            <span class="name">folder-plus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-plus-solid')" title="Click to copy">
+            <hd-icon icon="basil:folder-plus-solid"></hd-icon>
+            <span class="name">folder-plus-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-solid')" title="Click to copy">
+            <hd-icon icon="basil:folder-solid"></hd-icon>
+            <span class="name">folder-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-user-outline')" title="Click to copy">
+            <hd-icon icon="basil:folder-user-outline"></hd-icon>
+            <span class="name">folder-user-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:folder-user-solid')" title="Click to copy">
+            <hd-icon icon="basil:folder-user-solid"></hd-icon>
+            <span class="name">folder-user-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:forward-outline')" title="Click to copy">
+            <hd-icon icon="basil:forward-outline"></hd-icon>
+            <span class="name">forward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:forward-solid')" title="Click to copy">
+            <hd-icon icon="basil:forward-solid"></hd-icon>
+            <span class="name">forward-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:gamepad-outline')" title="Click to copy">
+            <hd-icon icon="basil:gamepad-outline"></hd-icon>
+            <span class="name">gamepad-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:gamepad-solid')" title="Click to copy">
+            <hd-icon icon="basil:gamepad-solid"></hd-icon>
+            <span class="name">gamepad-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:globe-outline')" title="Click to copy">
+            <hd-icon icon="basil:globe-outline"></hd-icon>
+            <span class="name">globe-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:globe-solid')" title="Click to copy">
+            <hd-icon icon="basil:globe-solid"></hd-icon>
+            <span class="name">globe-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:gmail-outline')" title="Click to copy">
+            <hd-icon icon="basil:gmail-outline"></hd-icon>
+            <span class="name">gmail-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:gmail-solid')" title="Click to copy">
+            <hd-icon icon="basil:gmail-solid"></hd-icon>
+            <span class="name">gmail-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:google-alt-outline')" title="Click to copy">
+            <hd-icon icon="basil:google-alt-outline"></hd-icon>
+            <span class="name">google-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:google-alt-solid')" title="Click to copy">
+            <hd-icon icon="basil:google-alt-solid"></hd-icon>
+            <span class="name">google-alt-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:google-drive-outline')" title="Click to copy">
+            <hd-icon icon="basil:google-drive-outline"></hd-icon>
+            <span class="name">google-drive-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:google-drive-solid')" title="Click to copy">
+            <hd-icon icon="basil:google-drive-solid"></hd-icon>
+            <span class="name">google-drive-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:google-outline')" title="Click to copy">
+            <hd-icon icon="basil:google-outline"></hd-icon>
+            <span class="name">google-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:google-play-outline')" title="Click to copy">
+            <hd-icon icon="basil:google-play-outline"></hd-icon>
+            <span class="name">google-play-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:google-play-solid')" title="Click to copy">
+            <hd-icon icon="basil:google-play-solid"></hd-icon>
+            <span class="name">google-play-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:google-solid')" title="Click to copy">
+            <hd-icon icon="basil:google-solid"></hd-icon>
+            <span class="name">google-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:group-151-outline')" title="Click to copy">
+            <hd-icon icon="basil:group-151-outline"></hd-icon>
+            <span class="name">group-151-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:group-23-solid')" title="Click to copy">
+            <hd-icon icon="basil:group-23-solid"></hd-icon>
+            <span class="name">group-23-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:headphone-outline')" title="Click to copy">
+            <hd-icon icon="basil:headphone-outline"></hd-icon>
+            <span class="name">headphone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:headphone-solid')" title="Click to copy">
+            <hd-icon icon="basil:headphone-solid"></hd-icon>
+            <span class="name">headphone-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:headset-outline')" title="Click to copy">
+            <hd-icon icon="basil:headset-outline"></hd-icon>
+            <span class="name">headset-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:headset-solid')" title="Click to copy">
+            <hd-icon icon="basil:headset-solid"></hd-icon>
+            <span class="name">headset-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:heart-off-outline')" title="Click to copy">
+            <hd-icon icon="basil:heart-off-outline"></hd-icon>
+            <span class="name">heart-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:heart-off-solid')" title="Click to copy">
+            <hd-icon icon="basil:heart-off-solid"></hd-icon>
+            <span class="name">heart-off-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:heart-outline')" title="Click to copy">
+            <hd-icon icon="basil:heart-outline"></hd-icon>
+            <span class="name">heart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:heart-plus-outline')" title="Click to copy">
+            <hd-icon icon="basil:heart-plus-outline"></hd-icon>
+            <span class="name">heart-plus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:heart-solid')" title="Click to copy">
+            <hd-icon icon="basil:heart-solid"></hd-icon>
+            <span class="name">heart-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:heartbeat-outline')" title="Click to copy">
+            <hd-icon icon="basil:heartbeat-outline"></hd-icon>
+            <span class="name">heartbeat-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:heartbeat-solid')" title="Click to copy">
+            <hd-icon icon="basil:heartbeat-solid"></hd-icon>
+            <span class="name">heartbeat-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:history-outline')" title="Click to copy">
+            <hd-icon icon="basil:history-outline"></hd-icon>
+            <span class="name">history-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:history-solid')" title="Click to copy">
+            <hd-icon icon="basil:history-solid"></hd-icon>
+            <span class="name">history-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:home-outline')" title="Click to copy">
+            <hd-icon icon="basil:home-outline"></hd-icon>
+            <span class="name">home-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:home-solid')" title="Click to copy">
+            <hd-icon icon="basil:home-solid"></hd-icon>
+            <span class="name">home-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:hotspot-outline')" title="Click to copy">
+            <hd-icon icon="basil:hotspot-outline"></hd-icon>
+            <span class="name">hotspot-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:hotspot-solid')" title="Click to copy">
+            <hd-icon icon="basil:hotspot-solid"></hd-icon>
+            <span class="name">hotspot-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:image-outline')" title="Click to copy">
+            <hd-icon icon="basil:image-outline"></hd-icon>
+            <span class="name">image-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:image-solid')" title="Click to copy">
+            <hd-icon icon="basil:image-solid"></hd-icon>
+            <span class="name">image-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:info-circle-outline')" title="Click to copy">
+            <hd-icon icon="basil:info-circle-outline"></hd-icon>
+            <span class="name">info-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:info-circle-solid')" title="Click to copy">
+            <hd-icon icon="basil:info-circle-solid"></hd-icon>
+            <span class="name">info-circle-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:info-rect-outline')" title="Click to copy">
+            <hd-icon icon="basil:info-rect-outline"></hd-icon>
+            <span class="name">info-rect-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:info-rect-solid')" title="Click to copy">
+            <hd-icon icon="basil:info-rect-solid"></hd-icon>
+            <span class="name">info-rect-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:info-triangle-outline')" title="Click to copy">
+            <hd-icon icon="basil:info-triangle-outline"></hd-icon>
+            <span class="name">info-triangle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:info-triangle-solid')" title="Click to copy">
+            <hd-icon icon="basil:info-triangle-solid"></hd-icon>
+            <span class="name">info-triangle-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:instagram-outline')" title="Click to copy">
+            <hd-icon icon="basil:instagram-outline"></hd-icon>
+            <span class="name">instagram-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:instagram-solid')" title="Click to copy">
+            <hd-icon icon="basil:instagram-solid"></hd-icon>
+            <span class="name">instagram-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:invoice-outline')" title="Click to copy">
+            <hd-icon icon="basil:invoice-outline"></hd-icon>
+            <span class="name">invoice-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:invoice-solid')" title="Click to copy">
+            <hd-icon icon="basil:invoice-solid"></hd-icon>
+            <span class="name">invoice-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:key-outline')" title="Click to copy">
+            <hd-icon icon="basil:key-outline"></hd-icon>
+            <span class="name">key-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:key-solid')" title="Click to copy">
+            <hd-icon icon="basil:key-solid"></hd-icon>
+            <span class="name">key-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:layout-outline')" title="Click to copy">
+            <hd-icon icon="basil:layout-outline"></hd-icon>
+            <span class="name">layout-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:layout-solid')" title="Click to copy">
+            <hd-icon icon="basil:layout-solid"></hd-icon>
+            <span class="name">layout-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lightbulb-alt-outline')" title="Click to copy">
+            <hd-icon icon="basil:lightbulb-alt-outline"></hd-icon>
+            <span class="name">lightbulb-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lightbulb-alt-solid')" title="Click to copy">
+            <hd-icon icon="basil:lightbulb-alt-solid"></hd-icon>
+            <span class="name">lightbulb-alt-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lightbulb-off-outline')" title="Click to copy">
+            <hd-icon icon="basil:lightbulb-off-outline"></hd-icon>
+            <span class="name">lightbulb-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lightbulb-off-solid')" title="Click to copy">
+            <hd-icon icon="basil:lightbulb-off-solid"></hd-icon>
+            <span class="name">lightbulb-off-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lightbulb-outline')" title="Click to copy">
+            <hd-icon icon="basil:lightbulb-outline"></hd-icon>
+            <span class="name">lightbulb-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lightbulb-solid')" title="Click to copy">
+            <hd-icon icon="basil:lightbulb-solid"></hd-icon>
+            <span class="name">lightbulb-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lightning-alt-outline')" title="Click to copy">
+            <hd-icon icon="basil:lightning-alt-outline"></hd-icon>
+            <span class="name">lightning-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lightning-alt-solid')" title="Click to copy">
+            <hd-icon icon="basil:lightning-alt-solid"></hd-icon>
+            <span class="name">lightning-alt-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lightning-outline')" title="Click to copy">
+            <hd-icon icon="basil:lightning-outline"></hd-icon>
+            <span class="name">lightning-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lightning-solid')" title="Click to copy">
+            <hd-icon icon="basil:lightning-solid"></hd-icon>
+            <span class="name">lightning-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:like-outline')" title="Click to copy">
+            <hd-icon icon="basil:like-outline"></hd-icon>
+            <span class="name">like-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:like-solid')" title="Click to copy">
+            <hd-icon icon="basil:like-solid"></hd-icon>
+            <span class="name">like-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:linkedin-outline')" title="Click to copy">
+            <hd-icon icon="basil:linkedin-outline"></hd-icon>
+            <span class="name">linkedin-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:linkedin-solid')" title="Click to copy">
+            <hd-icon icon="basil:linkedin-solid"></hd-icon>
+            <span class="name">linkedin-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:location-check-outline')" title="Click to copy">
+            <hd-icon icon="basil:location-check-outline"></hd-icon>
+            <span class="name">location-check-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:location-check-solid')" title="Click to copy">
+            <hd-icon icon="basil:location-check-solid"></hd-icon>
+            <span class="name">location-check-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:location-outline')" title="Click to copy">
+            <hd-icon icon="basil:location-outline"></hd-icon>
+            <span class="name">location-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:location-plus-outline')" title="Click to copy">
+            <hd-icon icon="basil:location-plus-outline"></hd-icon>
+            <span class="name">location-plus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:location-plus-solid')" title="Click to copy">
+            <hd-icon icon="basil:location-plus-solid"></hd-icon>
+            <span class="name">location-plus-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:location-question-outline')" title="Click to copy">
+            <hd-icon icon="basil:location-question-outline"></hd-icon>
+            <span class="name">location-question-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:location-question-solid')" title="Click to copy">
+            <hd-icon icon="basil:location-question-solid"></hd-icon>
+            <span class="name">location-question-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:location-solid')" title="Click to copy">
+            <hd-icon icon="basil:location-solid"></hd-icon>
+            <span class="name">location-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lock-outline')" title="Click to copy">
+            <hd-icon icon="basil:lock-outline"></hd-icon>
+            <span class="name">lock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lock-solid')" title="Click to copy">
+            <hd-icon icon="basil:lock-solid"></hd-icon>
+            <span class="name">lock-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lock-time-outline')" title="Click to copy">
+            <hd-icon icon="basil:lock-time-outline"></hd-icon>
+            <span class="name">lock-time-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:lock-time-solid')" title="Click to copy">
+            <hd-icon icon="basil:lock-time-solid"></hd-icon>
+            <span class="name">lock-time-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:login-outline')" title="Click to copy">
+            <hd-icon icon="basil:login-outline"></hd-icon>
+            <span class="name">login-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:login-solid')" title="Click to copy">
+            <hd-icon icon="basil:login-solid"></hd-icon>
+            <span class="name">login-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:logout-outline')" title="Click to copy">
+            <hd-icon icon="basil:logout-outline"></hd-icon>
+            <span class="name">logout-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:logout-solid')" title="Click to copy">
+            <hd-icon icon="basil:logout-solid"></hd-icon>
+            <span class="name">logout-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:map-location-outline')" title="Click to copy">
+            <hd-icon icon="basil:map-location-outline"></hd-icon>
+            <span class="name">map-location-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:map-location-solid')" title="Click to copy">
+            <hd-icon icon="basil:map-location-solid"></hd-icon>
+            <span class="name">map-location-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:medium-outline')" title="Click to copy">
+            <hd-icon icon="basil:medium-outline"></hd-icon>
+            <span class="name">medium-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:medium-solid')" title="Click to copy">
+            <hd-icon icon="basil:medium-solid"></hd-icon>
+            <span class="name">medium-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:medkit-outline')" title="Click to copy">
+            <hd-icon icon="basil:medkit-outline"></hd-icon>
+            <span class="name">medkit-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:medkit-solid')" title="Click to copy">
+            <hd-icon icon="basil:medkit-solid"></hd-icon>
+            <span class="name">medkit-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:menu-outline')" title="Click to copy">
+            <hd-icon icon="basil:menu-outline"></hd-icon>
+            <span class="name">menu-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:menu-solid')" title="Click to copy">
+            <hd-icon icon="basil:menu-solid"></hd-icon>
+            <span class="name">menu-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:microphone-off-outline')" title="Click to copy">
+            <hd-icon icon="basil:microphone-off-outline"></hd-icon>
+            <span class="name">microphone-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:microphone-off-solid')" title="Click to copy">
+            <hd-icon icon="basil:microphone-off-solid"></hd-icon>
+            <span class="name">microphone-off-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:microphone-outline')" title="Click to copy">
+            <hd-icon icon="basil:microphone-outline"></hd-icon>
+            <span class="name">microphone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:microphone-solid')" title="Click to copy">
+            <hd-icon icon="basil:microphone-solid"></hd-icon>
+            <span class="name">microphone-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:mobile-phone-outline')" title="Click to copy">
+            <hd-icon icon="basil:mobile-phone-outline"></hd-icon>
+            <span class="name">mobile-phone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:mobile-phone-solid')" title="Click to copy">
+            <hd-icon icon="basil:mobile-phone-solid"></hd-icon>
+            <span class="name">mobile-phone-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:moon-outline')" title="Click to copy">
+            <hd-icon icon="basil:moon-outline"></hd-icon>
+            <span class="name">moon-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:moon-solid')" title="Click to copy">
+            <hd-icon icon="basil:moon-solid"></hd-icon>
+            <span class="name">moon-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:mouse-alt-outline')" title="Click to copy">
+            <hd-icon icon="basil:mouse-alt-outline"></hd-icon>
+            <span class="name">mouse-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:mouse-alt-solid')" title="Click to copy">
+            <hd-icon icon="basil:mouse-alt-solid"></hd-icon>
+            <span class="name">mouse-alt-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:mouse-outline')" title="Click to copy">
+            <hd-icon icon="basil:mouse-outline"></hd-icon>
+            <span class="name">mouse-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:mouse-solid')" title="Click to copy">
+            <hd-icon icon="basil:mouse-solid"></hd-icon>
+            <span class="name">mouse-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:move-outline')" title="Click to copy">
+            <hd-icon icon="basil:move-outline"></hd-icon>
+            <span class="name">move-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:move-solid')" title="Click to copy">
+            <hd-icon icon="basil:move-solid"></hd-icon>
+            <span class="name">move-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:music-outline')" title="Click to copy">
+            <hd-icon icon="basil:music-outline"></hd-icon>
+            <span class="name">music-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:music-solid')" title="Click to copy">
+            <hd-icon icon="basil:music-solid"></hd-icon>
+            <span class="name">music-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:navigation-outline')" title="Click to copy">
+            <hd-icon icon="basil:navigation-outline"></hd-icon>
+            <span class="name">navigation-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:navigation-solid')" title="Click to copy">
+            <hd-icon icon="basil:navigation-solid"></hd-icon>
+            <span class="name">navigation-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:notification-off-outline')" title="Click to copy">
+            <hd-icon icon="basil:notification-off-outline"></hd-icon>
+            <span class="name">notification-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:notification-off-solid')" title="Click to copy">
+            <hd-icon icon="basil:notification-off-solid"></hd-icon>
+            <span class="name">notification-off-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:notification-on-outline')" title="Click to copy">
+            <hd-icon icon="basil:notification-on-outline"></hd-icon>
+            <span class="name">notification-on-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:notification-on-solid')" title="Click to copy">
+            <hd-icon icon="basil:notification-on-solid"></hd-icon>
+            <span class="name">notification-on-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:notification-outline')" title="Click to copy">
+            <hd-icon icon="basil:notification-outline"></hd-icon>
+            <span class="name">notification-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:notification-solid')" title="Click to copy">
+            <hd-icon icon="basil:notification-solid"></hd-icon>
+            <span class="name">notification-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:notion-outline')" title="Click to copy">
+            <hd-icon icon="basil:notion-outline"></hd-icon>
+            <span class="name">notion-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:notion-solid')" title="Click to copy">
+            <hd-icon icon="basil:notion-solid"></hd-icon>
+            <span class="name">notion-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:other-1-outline')" title="Click to copy">
+            <hd-icon icon="basil:other-1-outline"></hd-icon>
+            <span class="name">other-1-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:other-1-solid')" title="Click to copy">
+            <hd-icon icon="basil:other-1-solid"></hd-icon>
+            <span class="name">other-1-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:palette-outline')" title="Click to copy">
+            <hd-icon icon="basil:palette-outline"></hd-icon>
+            <span class="name">palette-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:palette-solid')" title="Click to copy">
+            <hd-icon icon="basil:palette-solid"></hd-icon>
+            <span class="name">palette-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:pause-outline')" title="Click to copy">
+            <hd-icon icon="basil:pause-outline"></hd-icon>
+            <span class="name">pause-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:pause-solid')" title="Click to copy">
+            <hd-icon icon="basil:pause-solid"></hd-icon>
+            <span class="name">pause-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:phone-in-outline')" title="Click to copy">
+            <hd-icon icon="basil:phone-in-outline"></hd-icon>
+            <span class="name">phone-in-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:phone-in-solid')" title="Click to copy">
+            <hd-icon icon="basil:phone-in-solid"></hd-icon>
+            <span class="name">phone-in-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:phone-miss-outline')" title="Click to copy">
+            <hd-icon icon="basil:phone-miss-outline"></hd-icon>
+            <span class="name">phone-miss-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:phone-miss-solid')" title="Click to copy">
+            <hd-icon icon="basil:phone-miss-solid"></hd-icon>
+            <span class="name">phone-miss-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:phone-off-outline')" title="Click to copy">
+            <hd-icon icon="basil:phone-off-outline"></hd-icon>
+            <span class="name">phone-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:phone-off-solid')" title="Click to copy">
+            <hd-icon icon="basil:phone-off-solid"></hd-icon>
+            <span class="name">phone-off-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:phone-out-outline')" title="Click to copy">
+            <hd-icon icon="basil:phone-out-outline"></hd-icon>
+            <span class="name">phone-out-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:phone-out-solid')" title="Click to copy">
+            <hd-icon icon="basil:phone-out-solid"></hd-icon>
+            <span class="name">phone-out-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:phone-outline')" title="Click to copy">
+            <hd-icon icon="basil:phone-outline"></hd-icon>
+            <span class="name">phone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:phone-solid')" title="Click to copy">
+            <hd-icon icon="basil:phone-solid"></hd-icon>
+            <span class="name">phone-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:picture-outline')" title="Click to copy">
+            <hd-icon icon="basil:picture-outline"></hd-icon>
+            <span class="name">picture-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:picture-solid')" title="Click to copy">
+            <hd-icon icon="basil:picture-solid"></hd-icon>
+            <span class="name">picture-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:pin-outline')" title="Click to copy">
+            <hd-icon icon="basil:pin-outline"></hd-icon>
+            <span class="name">pin-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:pin-solid')" title="Click to copy">
+            <hd-icon icon="basil:pin-solid"></hd-icon>
+            <span class="name">pin-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:pinterest-outline')" title="Click to copy">
+            <hd-icon icon="basil:pinterest-outline"></hd-icon>
+            <span class="name">pinterest-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:pinterest-solid')" title="Click to copy">
+            <hd-icon icon="basil:pinterest-solid"></hd-icon>
+            <span class="name">pinterest-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:play-outline')" title="Click to copy">
+            <hd-icon icon="basil:play-outline"></hd-icon>
+            <span class="name">play-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:play-solid')" title="Click to copy">
+            <hd-icon icon="basil:play-solid"></hd-icon>
+            <span class="name">play-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:plus-outline')" title="Click to copy">
+            <hd-icon icon="basil:plus-outline"></hd-icon>
+            <span class="name">plus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:plus-solid')" title="Click to copy">
+            <hd-icon icon="basil:plus-solid"></hd-icon>
+            <span class="name">plus-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:power-button-outline')" title="Click to copy">
+            <hd-icon icon="basil:power-button-outline"></hd-icon>
+            <span class="name">power-button-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:power-button-solid')" title="Click to copy">
+            <hd-icon icon="basil:power-button-solid"></hd-icon>
+            <span class="name">power-button-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:present-outline')" title="Click to copy">
+            <hd-icon icon="basil:present-outline"></hd-icon>
+            <span class="name">present-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:present-solid')" title="Click to copy">
+            <hd-icon icon="basil:present-solid"></hd-icon>
+            <span class="name">present-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:printer-outline')" title="Click to copy">
+            <hd-icon icon="basil:printer-outline"></hd-icon>
+            <span class="name">printer-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:printer-solid')" title="Click to copy">
+            <hd-icon icon="basil:printer-solid"></hd-icon>
+            <span class="name">printer-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:processor-outline')" title="Click to copy">
+            <hd-icon icon="basil:processor-outline"></hd-icon>
+            <span class="name">processor-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:processor-solid')" title="Click to copy">
+            <hd-icon icon="basil:processor-solid"></hd-icon>
+            <span class="name">processor-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:pulse-outline')" title="Click to copy">
+            <hd-icon icon="basil:pulse-outline"></hd-icon>
+            <span class="name">pulse-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:pulse-solid')" title="Click to copy">
+            <hd-icon icon="basil:pulse-solid"></hd-icon>
+            <span class="name">pulse-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:qq-outline')" title="Click to copy">
+            <hd-icon icon="basil:qq-outline"></hd-icon>
+            <span class="name">qq-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:qq-solid')" title="Click to copy">
+            <hd-icon icon="basil:qq-solid"></hd-icon>
+            <span class="name">qq-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:reddit-outline')" title="Click to copy">
+            <hd-icon icon="basil:reddit-outline"></hd-icon>
+            <span class="name">reddit-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:reddit-solid')" title="Click to copy">
+            <hd-icon icon="basil:reddit-solid"></hd-icon>
+            <span class="name">reddit-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:refresh-outline')" title="Click to copy">
+            <hd-icon icon="basil:refresh-outline"></hd-icon>
+            <span class="name">refresh-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:refresh-solid')" title="Click to copy">
+            <hd-icon icon="basil:refresh-solid"></hd-icon>
+            <span class="name">refresh-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:reply-outline')" title="Click to copy">
+            <hd-icon icon="basil:reply-outline"></hd-icon>
+            <span class="name">reply-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:reply-solid')" title="Click to copy">
+            <hd-icon icon="basil:reply-solid"></hd-icon>
+            <span class="name">reply-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:rows-outline')" title="Click to copy">
+            <hd-icon icon="basil:rows-outline"></hd-icon>
+            <span class="name">rows-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:rows-solid')" title="Click to copy">
+            <hd-icon icon="basil:rows-solid"></hd-icon>
+            <span class="name">rows-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:sand-watch-outline')" title="Click to copy">
+            <hd-icon icon="basil:sand-watch-outline"></hd-icon>
+            <span class="name">sand-watch-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:sand-watch-solid')" title="Click to copy">
+            <hd-icon icon="basil:sand-watch-solid"></hd-icon>
+            <span class="name">sand-watch-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:save-outline')" title="Click to copy">
+            <hd-icon icon="basil:save-outline"></hd-icon>
+            <span class="name">save-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:save-solid')" title="Click to copy">
+            <hd-icon icon="basil:save-solid"></hd-icon>
+            <span class="name">save-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:search-outline')" title="Click to copy">
+            <hd-icon icon="basil:search-outline"></hd-icon>
+            <span class="name">search-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:search-solid')" title="Click to copy">
+            <hd-icon icon="basil:search-solid"></hd-icon>
+            <span class="name">search-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:send-outline')" title="Click to copy">
+            <hd-icon icon="basil:send-outline"></hd-icon>
+            <span class="name">send-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:send-solid')" title="Click to copy">
+            <hd-icon icon="basil:send-solid"></hd-icon>
+            <span class="name">send-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:server-outline')" title="Click to copy">
+            <hd-icon icon="basil:server-outline"></hd-icon>
+            <span class="name">server-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:server-solid')" title="Click to copy">
+            <hd-icon icon="basil:server-solid"></hd-icon>
+            <span class="name">server-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:settings-adjust-outline')" title="Click to copy">
+            <hd-icon icon="basil:settings-adjust-outline"></hd-icon>
+            <span class="name">settings-adjust-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:settings-adjust-solid')" title="Click to copy">
+            <hd-icon icon="basil:settings-adjust-solid"></hd-icon>
+            <span class="name">settings-adjust-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:settings-alt-outline')" title="Click to copy">
+            <hd-icon icon="basil:settings-alt-outline"></hd-icon>
+            <span class="name">settings-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:settings-alt-solid')" title="Click to copy">
+            <hd-icon icon="basil:settings-alt-solid"></hd-icon>
+            <span class="name">settings-alt-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:settings-outline')" title="Click to copy">
+            <hd-icon icon="basil:settings-outline"></hd-icon>
+            <span class="name">settings-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:settings-solid')" title="Click to copy">
+            <hd-icon icon="basil:settings-solid"></hd-icon>
+            <span class="name">settings-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:share-box-outline')" title="Click to copy">
+            <hd-icon icon="basil:share-box-outline"></hd-icon>
+            <span class="name">share-box-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:share-box-solid')" title="Click to copy">
+            <hd-icon icon="basil:share-box-solid"></hd-icon>
+            <span class="name">share-box-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:share-outline')" title="Click to copy">
+            <hd-icon icon="basil:share-outline"></hd-icon>
+            <span class="name">share-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:share-solid')" title="Click to copy">
+            <hd-icon icon="basil:share-solid"></hd-icon>
+            <span class="name">share-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:shield-outline')" title="Click to copy">
+            <hd-icon icon="basil:shield-outline"></hd-icon>
+            <span class="name">shield-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:shield-solid')" title="Click to copy">
+            <hd-icon icon="basil:shield-solid"></hd-icon>
+            <span class="name">shield-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:shopping-bag-outline')" title="Click to copy">
+            <hd-icon icon="basil:shopping-bag-outline"></hd-icon>
+            <span class="name">shopping-bag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:shopping-bag-solid')" title="Click to copy">
+            <hd-icon icon="basil:shopping-bag-solid"></hd-icon>
+            <span class="name">shopping-bag-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:shopping-basket-outline')" title="Click to copy">
+            <hd-icon icon="basil:shopping-basket-outline"></hd-icon>
+            <span class="name">shopping-basket-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:shopping-basket-solid')" title="Click to copy">
+            <hd-icon icon="basil:shopping-basket-solid"></hd-icon>
+            <span class="name">shopping-basket-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:shopping-cart-outline')" title="Click to copy">
+            <hd-icon icon="basil:shopping-cart-outline"></hd-icon>
+            <span class="name">shopping-cart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:shopping-cart-solid')" title="Click to copy">
+            <hd-icon icon="basil:shopping-cart-solid"></hd-icon>
+            <span class="name">shopping-cart-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:shuffle-outline')" title="Click to copy">
+            <hd-icon icon="basil:shuffle-outline"></hd-icon>
+            <span class="name">shuffle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:shuffle-solid')" title="Click to copy">
+            <hd-icon icon="basil:shuffle-solid"></hd-icon>
+            <span class="name">shuffle-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:sketch-outline')" title="Click to copy">
+            <hd-icon icon="basil:sketch-outline"></hd-icon>
+            <span class="name">sketch-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:sketch-solid')" title="Click to copy">
+            <hd-icon icon="basil:sketch-solid"></hd-icon>
+            <span class="name">sketch-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:skip-next-outline')" title="Click to copy">
+            <hd-icon icon="basil:skip-next-outline"></hd-icon>
+            <span class="name">skip-next-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:skip-next-solid')" title="Click to copy">
+            <hd-icon icon="basil:skip-next-solid"></hd-icon>
+            <span class="name">skip-next-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:skip-prev-outline')" title="Click to copy">
+            <hd-icon icon="basil:skip-prev-outline"></hd-icon>
+            <span class="name">skip-prev-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:skip-prev-solid')" title="Click to copy">
+            <hd-icon icon="basil:skip-prev-solid"></hd-icon>
+            <span class="name">skip-prev-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:skype-outline')" title="Click to copy">
+            <hd-icon icon="basil:skype-outline"></hd-icon>
+            <span class="name">skype-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:skype-solid')" title="Click to copy">
+            <hd-icon icon="basil:skype-solid"></hd-icon>
+            <span class="name">skype-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:slack-outline')" title="Click to copy">
+            <hd-icon icon="basil:slack-outline"></hd-icon>
+            <span class="name">slack-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:slack-solid')" title="Click to copy">
+            <hd-icon icon="basil:slack-solid"></hd-icon>
+            <span class="name">slack-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:snapchat-outline')" title="Click to copy">
+            <hd-icon icon="basil:snapchat-outline"></hd-icon>
+            <span class="name">snapchat-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:snapchat-solid')" title="Click to copy">
+            <hd-icon icon="basil:snapchat-solid"></hd-icon>
+            <span class="name">snapchat-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:sort-outline')" title="Click to copy">
+            <hd-icon icon="basil:sort-outline"></hd-icon>
+            <span class="name">sort-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:sort-solid')" title="Click to copy">
+            <hd-icon icon="basil:sort-solid"></hd-icon>
+            <span class="name">sort-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:stack-outline')" title="Click to copy">
+            <hd-icon icon="basil:stack-outline"></hd-icon>
+            <span class="name">stack-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:stack-solid')" title="Click to copy">
+            <hd-icon icon="basil:stack-solid"></hd-icon>
+            <span class="name">stack-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:star-half-outline')" title="Click to copy">
+            <hd-icon icon="basil:star-half-outline"></hd-icon>
+            <span class="name">star-half-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:star-half-solid')" title="Click to copy">
+            <hd-icon icon="basil:star-half-solid"></hd-icon>
+            <span class="name">star-half-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:star-outline')" title="Click to copy">
+            <hd-icon icon="basil:star-outline"></hd-icon>
+            <span class="name">star-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:star-solid')" title="Click to copy">
+            <hd-icon icon="basil:star-solid"></hd-icon>
+            <span class="name">star-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:sun-outline')" title="Click to copy">
+            <hd-icon icon="basil:sun-outline"></hd-icon>
+            <span class="name">sun-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:sun-solid')" title="Click to copy">
+            <hd-icon icon="basil:sun-solid"></hd-icon>
+            <span class="name">sun-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:telegram-outline')" title="Click to copy">
+            <hd-icon icon="basil:telegram-outline"></hd-icon>
+            <span class="name">telegram-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:telegram-solid')" title="Click to copy">
+            <hd-icon icon="basil:telegram-solid"></hd-icon>
+            <span class="name">telegram-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:timer-outline')" title="Click to copy">
+            <hd-icon icon="basil:timer-outline"></hd-icon>
+            <span class="name">timer-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:timer-solid')" title="Click to copy">
+            <hd-icon icon="basil:timer-solid"></hd-icon>
+            <span class="name">timer-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:toggle-off-outline')" title="Click to copy">
+            <hd-icon icon="basil:toggle-off-outline"></hd-icon>
+            <span class="name">toggle-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:toggle-off-solid')" title="Click to copy">
+            <hd-icon icon="basil:toggle-off-solid"></hd-icon>
+            <span class="name">toggle-off-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:toggle-on-outline')" title="Click to copy">
+            <hd-icon icon="basil:toggle-on-outline"></hd-icon>
+            <span class="name">toggle-on-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:toggle-on-solid')" title="Click to copy">
+            <hd-icon icon="basil:toggle-on-solid"></hd-icon>
+            <span class="name">toggle-on-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:trash-alt-outline')" title="Click to copy">
+            <hd-icon icon="basil:trash-alt-outline"></hd-icon>
+            <span class="name">trash-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:trash-alt-solid')" title="Click to copy">
+            <hd-icon icon="basil:trash-alt-solid"></hd-icon>
+            <span class="name">trash-alt-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:trash-outline')" title="Click to copy">
+            <hd-icon icon="basil:trash-outline"></hd-icon>
+            <span class="name">trash-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:trash-solid')" title="Click to copy">
+            <hd-icon icon="basil:trash-solid"></hd-icon>
+            <span class="name">trash-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:trello-outline')" title="Click to copy">
+            <hd-icon icon="basil:trello-outline"></hd-icon>
+            <span class="name">trello-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:trello-solid')" title="Click to copy">
+            <hd-icon icon="basil:trello-solid"></hd-icon>
+            <span class="name">trello-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:tumblr-outline')" title="Click to copy">
+            <hd-icon icon="basil:tumblr-outline"></hd-icon>
+            <span class="name">tumblr-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:tumblr-solid')" title="Click to copy">
+            <hd-icon icon="basil:tumblr-solid"></hd-icon>
+            <span class="name">tumblr-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:twitch-outline')" title="Click to copy">
+            <hd-icon icon="basil:twitch-outline"></hd-icon>
+            <span class="name">twitch-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:twitch-solid')" title="Click to copy">
+            <hd-icon icon="basil:twitch-solid"></hd-icon>
+            <span class="name">twitch-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:twitter-outline')" title="Click to copy">
+            <hd-icon icon="basil:twitter-outline"></hd-icon>
+            <span class="name">twitter-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:twitter-solid')" title="Click to copy">
+            <hd-icon icon="basil:twitter-solid"></hd-icon>
+            <span class="name">twitter-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:umbrella-outline')" title="Click to copy">
+            <hd-icon icon="basil:umbrella-outline"></hd-icon>
+            <span class="name">umbrella-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:umbrella-solid')" title="Click to copy">
+            <hd-icon icon="basil:umbrella-solid"></hd-icon>
+            <span class="name">umbrella-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:university-outline')" title="Click to copy">
+            <hd-icon icon="basil:university-outline"></hd-icon>
+            <span class="name">university-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:university-solid')" title="Click to copy">
+            <hd-icon icon="basil:university-solid"></hd-icon>
+            <span class="name">university-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:unlock-outline')" title="Click to copy">
+            <hd-icon icon="basil:unlock-outline"></hd-icon>
+            <span class="name">unlock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:unlock-solid')" title="Click to copy">
+            <hd-icon icon="basil:unlock-solid"></hd-icon>
+            <span class="name">unlock-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:upload-outline')" title="Click to copy">
+            <hd-icon icon="basil:upload-outline"></hd-icon>
+            <span class="name">upload-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:upload-solid')" title="Click to copy">
+            <hd-icon icon="basil:upload-solid"></hd-icon>
+            <span class="name">upload-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:user-block-outline')" title="Click to copy">
+            <hd-icon icon="basil:user-block-outline"></hd-icon>
+            <span class="name">user-block-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:user-block-solid')" title="Click to copy">
+            <hd-icon icon="basil:user-block-solid"></hd-icon>
+            <span class="name">user-block-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:user-clock-outline')" title="Click to copy">
+            <hd-icon icon="basil:user-clock-outline"></hd-icon>
+            <span class="name">user-clock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:user-clock-solid')" title="Click to copy">
+            <hd-icon icon="basil:user-clock-solid"></hd-icon>
+            <span class="name">user-clock-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:user-outline')" title="Click to copy">
+            <hd-icon icon="basil:user-outline"></hd-icon>
+            <span class="name">user-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:user-plus-outline')" title="Click to copy">
+            <hd-icon icon="basil:user-plus-outline"></hd-icon>
+            <span class="name">user-plus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:user-plus-solid')" title="Click to copy">
+            <hd-icon icon="basil:user-plus-solid"></hd-icon>
+            <span class="name">user-plus-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:user-solid')" title="Click to copy">
+            <hd-icon icon="basil:user-solid"></hd-icon>
+            <span class="name">user-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:viber-outline')" title="Click to copy">
+            <hd-icon icon="basil:viber-outline"></hd-icon>
+            <span class="name">viber-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:viber-solid')" title="Click to copy">
+            <hd-icon icon="basil:viber-solid"></hd-icon>
+            <span class="name">viber-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:video-outline')" title="Click to copy">
+            <hd-icon icon="basil:video-outline"></hd-icon>
+            <span class="name">video-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:video-solid')" title="Click to copy">
+            <hd-icon icon="basil:video-solid"></hd-icon>
+            <span class="name">video-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:vk-outline')" title="Click to copy">
+            <hd-icon icon="basil:vk-outline"></hd-icon>
+            <span class="name">vk-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:vk-solid')" title="Click to copy">
+            <hd-icon icon="basil:vk-solid"></hd-icon>
+            <span class="name">vk-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:volume-down-outline')" title="Click to copy">
+            <hd-icon icon="basil:volume-down-outline"></hd-icon>
+            <span class="name">volume-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:volume-down-solid')" title="Click to copy">
+            <hd-icon icon="basil:volume-down-solid"></hd-icon>
+            <span class="name">volume-down-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:volume-off-outline')" title="Click to copy">
+            <hd-icon icon="basil:volume-off-outline"></hd-icon>
+            <span class="name">volume-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:volume-off-solid')" title="Click to copy">
+            <hd-icon icon="basil:volume-off-solid"></hd-icon>
+            <span class="name">volume-off-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:volume-up-outline')" title="Click to copy">
+            <hd-icon icon="basil:volume-up-outline"></hd-icon>
+            <span class="name">volume-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:volume-up-solid')" title="Click to copy">
+            <hd-icon icon="basil:volume-up-solid"></hd-icon>
+            <span class="name">volume-up-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:wallet-outline')" title="Click to copy">
+            <hd-icon icon="basil:wallet-outline"></hd-icon>
+            <span class="name">wallet-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:wallet-solid')" title="Click to copy">
+            <hd-icon icon="basil:wallet-solid"></hd-icon>
+            <span class="name">wallet-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:watch-outline')" title="Click to copy">
+            <hd-icon icon="basil:watch-outline"></hd-icon>
+            <span class="name">watch-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:watch-solid')" title="Click to copy">
+            <hd-icon icon="basil:watch-solid"></hd-icon>
+            <span class="name">watch-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:wechat-solid')" title="Click to copy">
+            <hd-icon icon="basil:wechat-solid"></hd-icon>
+            <span class="name">wechat-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:whatsapp-outline')" title="Click to copy">
+            <hd-icon icon="basil:whatsapp-outline"></hd-icon>
+            <span class="name">whatsapp-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:whatsapp-solid')" title="Click to copy">
+            <hd-icon icon="basil:whatsapp-solid"></hd-icon>
+            <span class="name">whatsapp-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:windows-outline')" title="Click to copy">
+            <hd-icon icon="basil:windows-outline"></hd-icon>
+            <span class="name">windows-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:windows-solid')" title="Click to copy">
+            <hd-icon icon="basil:windows-solid"></hd-icon>
+            <span class="name">windows-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:youtube-outline')" title="Click to copy">
+            <hd-icon icon="basil:youtube-outline"></hd-icon>
+            <span class="name">youtube-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:youtube-solid')" title="Click to copy">
+            <hd-icon icon="basil:youtube-solid"></hd-icon>
+            <span class="name">youtube-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:zoom-in-outline')" title="Click to copy">
+            <hd-icon icon="basil:zoom-in-outline"></hd-icon>
+            <span class="name">zoom-in-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:zoom-in-solid')" title="Click to copy">
+            <hd-icon icon="basil:zoom-in-solid"></hd-icon>
+            <span class="name">zoom-in-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:zoom-out-outline')" title="Click to copy">
+            <hd-icon icon="basil:zoom-out-outline"></hd-icon>
+            <span class="name">zoom-out-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('basil:zoom-out-solid')" title="Click to copy">
+            <hd-icon icon="basil:zoom-out-solid"></hd-icon>
+            <span class="name">zoom-out-solid</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

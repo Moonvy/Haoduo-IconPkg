@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wordpress - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>wordpress <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(322)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('wordpress:add-card')" title="Click to copy">
+            <hd-icon icon="wordpress:add-card"></hd-icon>
+            <span class="name">add-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:add-submenu')" title="Click to copy">
+            <hd-icon icon="wordpress:add-submenu"></hd-icon>
+            <span class="name">add-submenu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:add-template')" title="Click to copy">
+            <hd-icon icon="wordpress:add-template"></hd-icon>
+            <span class="name">add-template</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:align-center')" title="Click to copy">
+            <hd-icon icon="wordpress:align-center"></hd-icon>
+            <span class="name">align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:align-justify')" title="Click to copy">
+            <hd-icon icon="wordpress:align-justify"></hd-icon>
+            <span class="name">align-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:align-left')" title="Click to copy">
+            <hd-icon icon="wordpress:align-left"></hd-icon>
+            <span class="name">align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:align-none')" title="Click to copy">
+            <hd-icon icon="wordpress:align-none"></hd-icon>
+            <span class="name">align-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:align-right')" title="Click to copy">
+            <hd-icon icon="wordpress:align-right"></hd-icon>
+            <span class="name">align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:archive')" title="Click to copy">
+            <hd-icon icon="wordpress:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:arrow-down')" title="Click to copy">
+            <hd-icon icon="wordpress:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:arrow-down-left')" title="Click to copy">
+            <hd-icon icon="wordpress:arrow-down-left"></hd-icon>
+            <span class="name">arrow-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:arrow-down-right')" title="Click to copy">
+            <hd-icon icon="wordpress:arrow-down-right"></hd-icon>
+            <span class="name">arrow-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:arrow-left')" title="Click to copy">
+            <hd-icon icon="wordpress:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:arrow-right')" title="Click to copy">
+            <hd-icon icon="wordpress:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:arrow-up')" title="Click to copy">
+            <hd-icon icon="wordpress:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:arrow-up-left')" title="Click to copy">
+            <hd-icon icon="wordpress:arrow-up-left"></hd-icon>
+            <span class="name">arrow-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:arrow-up-right')" title="Click to copy">
+            <hd-icon icon="wordpress:arrow-up-right"></hd-icon>
+            <span class="name">arrow-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:aspect-ratio')" title="Click to copy">
+            <hd-icon icon="wordpress:aspect-ratio"></hd-icon>
+            <span class="name">aspect-ratio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:at-symbol')" title="Click to copy">
+            <hd-icon icon="wordpress:at-symbol"></hd-icon>
+            <span class="name">at-symbol</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:audio')" title="Click to copy">
+            <hd-icon icon="wordpress:audio"></hd-icon>
+            <span class="name">audio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:background')" title="Click to copy">
+            <hd-icon icon="wordpress:background"></hd-icon>
+            <span class="name">background</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:backup')" title="Click to copy">
+            <hd-icon icon="wordpress:backup"></hd-icon>
+            <span class="name">backup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:bell')" title="Click to copy">
+            <hd-icon icon="wordpress:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:bell-unread')" title="Click to copy">
+            <hd-icon icon="wordpress:bell-unread"></hd-icon>
+            <span class="name">bell-unread</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:block-default')" title="Click to copy">
+            <hd-icon icon="wordpress:block-default"></hd-icon>
+            <span class="name">block-default</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:block-meta')" title="Click to copy">
+            <hd-icon icon="wordpress:block-meta"></hd-icon>
+            <span class="name">block-meta</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:block-table')" title="Click to copy">
+            <hd-icon icon="wordpress:block-table"></hd-icon>
+            <span class="name">block-table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:border')" title="Click to copy">
+            <hd-icon icon="wordpress:border"></hd-icon>
+            <span class="name">border</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:box')" title="Click to copy">
+            <hd-icon icon="wordpress:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:breadcrumbs')" title="Click to copy">
+            <hd-icon icon="wordpress:breadcrumbs"></hd-icon>
+            <span class="name">breadcrumbs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:brush')" title="Click to copy">
+            <hd-icon icon="wordpress:brush"></hd-icon>
+            <span class="name">brush</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:bug')" title="Click to copy">
+            <hd-icon icon="wordpress:bug"></hd-icon>
+            <span class="name">bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:button')" title="Click to copy">
+            <hd-icon icon="wordpress:button"></hd-icon>
+            <span class="name">button</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:buttons')" title="Click to copy">
+            <hd-icon icon="wordpress:buttons"></hd-icon>
+            <span class="name">buttons</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:calendar')" title="Click to copy">
+            <hd-icon icon="wordpress:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:cancel-circle-filled')" title="Click to copy">
+            <hd-icon icon="wordpress:cancel-circle-filled"></hd-icon>
+            <span class="name">cancel-circle-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:caption')" title="Click to copy">
+            <hd-icon icon="wordpress:caption"></hd-icon>
+            <span class="name">caption</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:capture-photo')" title="Click to copy">
+            <hd-icon icon="wordpress:capture-photo"></hd-icon>
+            <span class="name">capture-photo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:capture-video')" title="Click to copy">
+            <hd-icon icon="wordpress:capture-video"></hd-icon>
+            <span class="name">capture-video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:cart')" title="Click to copy">
+            <hd-icon icon="wordpress:cart"></hd-icon>
+            <span class="name">cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:category')" title="Click to copy">
+            <hd-icon icon="wordpress:category"></hd-icon>
+            <span class="name">category</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:caution')" title="Click to copy">
+            <hd-icon icon="wordpress:caution"></hd-icon>
+            <span class="name">caution</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:caution-filled')" title="Click to copy">
+            <hd-icon icon="wordpress:caution-filled"></hd-icon>
+            <span class="name">caution-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:chart-bar')" title="Click to copy">
+            <hd-icon icon="wordpress:chart-bar"></hd-icon>
+            <span class="name">chart-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:check')" title="Click to copy">
+            <hd-icon icon="wordpress:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:chevron-down')" title="Click to copy">
+            <hd-icon icon="wordpress:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:chevron-down-small')" title="Click to copy">
+            <hd-icon icon="wordpress:chevron-down-small"></hd-icon>
+            <span class="name">chevron-down-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:chevron-left')" title="Click to copy">
+            <hd-icon icon="wordpress:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:chevron-left-small')" title="Click to copy">
+            <hd-icon icon="wordpress:chevron-left-small"></hd-icon>
+            <span class="name">chevron-left-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:chevron-right')" title="Click to copy">
+            <hd-icon icon="wordpress:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:chevron-right-small')" title="Click to copy">
+            <hd-icon icon="wordpress:chevron-right-small"></hd-icon>
+            <span class="name">chevron-right-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:chevron-up')" title="Click to copy">
+            <hd-icon icon="wordpress:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:chevron-up-down')" title="Click to copy">
+            <hd-icon icon="wordpress:chevron-up-down"></hd-icon>
+            <span class="name">chevron-up-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:chevron-up-small')" title="Click to copy">
+            <hd-icon icon="wordpress:chevron-up-small"></hd-icon>
+            <span class="name">chevron-up-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:classic')" title="Click to copy">
+            <hd-icon icon="wordpress:classic"></hd-icon>
+            <span class="name">classic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:close')" title="Click to copy">
+            <hd-icon icon="wordpress:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:close-small')" title="Click to copy">
+            <hd-icon icon="wordpress:close-small"></hd-icon>
+            <span class="name">close-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:cloud')" title="Click to copy">
+            <hd-icon icon="wordpress:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:cloud-download')" title="Click to copy">
+            <hd-icon icon="wordpress:cloud-download"></hd-icon>
+            <span class="name">cloud-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:cloud-upload')" title="Click to copy">
+            <hd-icon icon="wordpress:cloud-upload"></hd-icon>
+            <span class="name">cloud-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:code')" title="Click to copy">
+            <hd-icon icon="wordpress:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:cog')" title="Click to copy">
+            <hd-icon icon="wordpress:cog"></hd-icon>
+            <span class="name">cog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:color')" title="Click to copy">
+            <hd-icon icon="wordpress:color"></hd-icon>
+            <span class="name">color</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:column')" title="Click to copy">
+            <hd-icon icon="wordpress:column"></hd-icon>
+            <span class="name">column</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:columns')" title="Click to copy">
+            <hd-icon icon="wordpress:columns"></hd-icon>
+            <span class="name">columns</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:comment')" title="Click to copy">
+            <hd-icon icon="wordpress:comment"></hd-icon>
+            <span class="name">comment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:comment-author-avatar')" title="Click to copy">
+            <hd-icon icon="wordpress:comment-author-avatar"></hd-icon>
+            <span class="name">comment-author-avatar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:comment-author-name')" title="Click to copy">
+            <hd-icon icon="wordpress:comment-author-name"></hd-icon>
+            <span class="name">comment-author-name</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:comment-content')" title="Click to copy">
+            <hd-icon icon="wordpress:comment-content"></hd-icon>
+            <span class="name">comment-content</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:comment-edit-link')" title="Click to copy">
+            <hd-icon icon="wordpress:comment-edit-link"></hd-icon>
+            <span class="name">comment-edit-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:comment-reply-link')" title="Click to copy">
+            <hd-icon icon="wordpress:comment-reply-link"></hd-icon>
+            <span class="name">comment-reply-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:connection')" title="Click to copy">
+            <hd-icon icon="wordpress:connection"></hd-icon>
+            <span class="name">connection</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:copy')" title="Click to copy">
+            <hd-icon icon="wordpress:copy"></hd-icon>
+            <span class="name">copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:copy-small')" title="Click to copy">
+            <hd-icon icon="wordpress:copy-small"></hd-icon>
+            <span class="name">copy-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:corner-all')" title="Click to copy">
+            <hd-icon icon="wordpress:corner-all"></hd-icon>
+            <span class="name">corner-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:corner-bottom-left')" title="Click to copy">
+            <hd-icon icon="wordpress:corner-bottom-left"></hd-icon>
+            <span class="name">corner-bottom-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:corner-bottom-right')" title="Click to copy">
+            <hd-icon icon="wordpress:corner-bottom-right"></hd-icon>
+            <span class="name">corner-bottom-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:corner-top-left')" title="Click to copy">
+            <hd-icon icon="wordpress:corner-top-left"></hd-icon>
+            <span class="name">corner-top-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:corner-top-right')" title="Click to copy">
+            <hd-icon icon="wordpress:corner-top-right"></hd-icon>
+            <span class="name">corner-top-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:cover')" title="Click to copy">
+            <hd-icon icon="wordpress:cover"></hd-icon>
+            <span class="name">cover</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:create')" title="Click to copy">
+            <hd-icon icon="wordpress:create"></hd-icon>
+            <span class="name">create</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:crop')" title="Click to copy">
+            <hd-icon icon="wordpress:crop"></hd-icon>
+            <span class="name">crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:currency-dollar')" title="Click to copy">
+            <hd-icon icon="wordpress:currency-dollar"></hd-icon>
+            <span class="name">currency-dollar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:currency-euro')" title="Click to copy">
+            <hd-icon icon="wordpress:currency-euro"></hd-icon>
+            <span class="name">currency-euro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:currency-pound')" title="Click to copy">
+            <hd-icon icon="wordpress:currency-pound"></hd-icon>
+            <span class="name">currency-pound</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:custom-link')" title="Click to copy">
+            <hd-icon icon="wordpress:custom-link"></hd-icon>
+            <span class="name">custom-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:custom-post-type')" title="Click to copy">
+            <hd-icon icon="wordpress:custom-post-type"></hd-icon>
+            <span class="name">custom-post-type</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:dashboard')" title="Click to copy">
+            <hd-icon icon="wordpress:dashboard"></hd-icon>
+            <span class="name">dashboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:desktop')" title="Click to copy">
+            <hd-icon icon="wordpress:desktop"></hd-icon>
+            <span class="name">desktop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:details')" title="Click to copy">
+            <hd-icon icon="wordpress:details"></hd-icon>
+            <span class="name">details</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:download')" title="Click to copy">
+            <hd-icon icon="wordpress:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:drafts')" title="Click to copy">
+            <hd-icon icon="wordpress:drafts"></hd-icon>
+            <span class="name">drafts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:drag-handle')" title="Click to copy">
+            <hd-icon icon="wordpress:drag-handle"></hd-icon>
+            <span class="name">drag-handle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:drawer-left')" title="Click to copy">
+            <hd-icon icon="wordpress:drawer-left"></hd-icon>
+            <span class="name">drawer-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:drawer-right')" title="Click to copy">
+            <hd-icon icon="wordpress:drawer-right"></hd-icon>
+            <span class="name">drawer-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:envelope')" title="Click to copy">
+            <hd-icon icon="wordpress:envelope"></hd-icon>
+            <span class="name">envelope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:error')" title="Click to copy">
+            <hd-icon icon="wordpress:error"></hd-icon>
+            <span class="name">error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:external')" title="Click to copy">
+            <hd-icon icon="wordpress:external"></hd-icon>
+            <span class="name">external</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:file')" title="Click to copy">
+            <hd-icon icon="wordpress:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:filter')" title="Click to copy">
+            <hd-icon icon="wordpress:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:flip-horizontal')" title="Click to copy">
+            <hd-icon icon="wordpress:flip-horizontal"></hd-icon>
+            <span class="name">flip-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:flip-vertical')" title="Click to copy">
+            <hd-icon icon="wordpress:flip-vertical"></hd-icon>
+            <span class="name">flip-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:footer')" title="Click to copy">
+            <hd-icon icon="wordpress:footer"></hd-icon>
+            <span class="name">footer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-bold')" title="Click to copy">
+            <hd-icon icon="wordpress:format-bold"></hd-icon>
+            <span class="name">format-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-capitalize')" title="Click to copy">
+            <hd-icon icon="wordpress:format-capitalize"></hd-icon>
+            <span class="name">format-capitalize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-indent')" title="Click to copy">
+            <hd-icon icon="wordpress:format-indent"></hd-icon>
+            <span class="name">format-indent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-indent-rtl')" title="Click to copy">
+            <hd-icon icon="wordpress:format-indent-rtl"></hd-icon>
+            <span class="name">format-indent-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-italic')" title="Click to copy">
+            <hd-icon icon="wordpress:format-italic"></hd-icon>
+            <span class="name">format-italic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-list-bullets')" title="Click to copy">
+            <hd-icon icon="wordpress:format-list-bullets"></hd-icon>
+            <span class="name">format-list-bullets</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-list-bullets-rtl')" title="Click to copy">
+            <hd-icon icon="wordpress:format-list-bullets-rtl"></hd-icon>
+            <span class="name">format-list-bullets-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-list-numbered')" title="Click to copy">
+            <hd-icon icon="wordpress:format-list-numbered"></hd-icon>
+            <span class="name">format-list-numbered</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-list-numbered-rtl')" title="Click to copy">
+            <hd-icon icon="wordpress:format-list-numbered-rtl"></hd-icon>
+            <span class="name">format-list-numbered-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-lowercase')" title="Click to copy">
+            <hd-icon icon="wordpress:format-lowercase"></hd-icon>
+            <span class="name">format-lowercase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-ltr')" title="Click to copy">
+            <hd-icon icon="wordpress:format-ltr"></hd-icon>
+            <span class="name">format-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-outdent')" title="Click to copy">
+            <hd-icon icon="wordpress:format-outdent"></hd-icon>
+            <span class="name">format-outdent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-outdent-rtl')" title="Click to copy">
+            <hd-icon icon="wordpress:format-outdent-rtl"></hd-icon>
+            <span class="name">format-outdent-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-rtl')" title="Click to copy">
+            <hd-icon icon="wordpress:format-rtl"></hd-icon>
+            <span class="name">format-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-strikethrough')" title="Click to copy">
+            <hd-icon icon="wordpress:format-strikethrough"></hd-icon>
+            <span class="name">format-strikethrough</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-underline')" title="Click to copy">
+            <hd-icon icon="wordpress:format-underline"></hd-icon>
+            <span class="name">format-underline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:format-uppercase')" title="Click to copy">
+            <hd-icon icon="wordpress:format-uppercase"></hd-icon>
+            <span class="name">format-uppercase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:full-height')" title="Click to copy">
+            <hd-icon icon="wordpress:full-height"></hd-icon>
+            <span class="name">full-height</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:fullscreen')" title="Click to copy">
+            <hd-icon icon="wordpress:fullscreen"></hd-icon>
+            <span class="name">fullscreen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:funnel')" title="Click to copy">
+            <hd-icon icon="wordpress:funnel"></hd-icon>
+            <span class="name">funnel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:gallery')" title="Click to copy">
+            <hd-icon icon="wordpress:gallery"></hd-icon>
+            <span class="name">gallery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:gift')" title="Click to copy">
+            <hd-icon icon="wordpress:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:globe')" title="Click to copy">
+            <hd-icon icon="wordpress:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:grid')" title="Click to copy">
+            <hd-icon icon="wordpress:grid"></hd-icon>
+            <span class="name">grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:group')" title="Click to copy">
+            <hd-icon icon="wordpress:group"></hd-icon>
+            <span class="name">group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:handle')" title="Click to copy">
+            <hd-icon icon="wordpress:handle"></hd-icon>
+            <span class="name">handle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:header')" title="Click to copy">
+            <hd-icon icon="wordpress:header"></hd-icon>
+            <span class="name">header</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:heading')" title="Click to copy">
+            <hd-icon icon="wordpress:heading"></hd-icon>
+            <span class="name">heading</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:heading-level-1')" title="Click to copy">
+            <hd-icon icon="wordpress:heading-level-1"></hd-icon>
+            <span class="name">heading-level-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:heading-level-2')" title="Click to copy">
+            <hd-icon icon="wordpress:heading-level-2"></hd-icon>
+            <span class="name">heading-level-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:heading-level-3')" title="Click to copy">
+            <hd-icon icon="wordpress:heading-level-3"></hd-icon>
+            <span class="name">heading-level-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:heading-level-4')" title="Click to copy">
+            <hd-icon icon="wordpress:heading-level-4"></hd-icon>
+            <span class="name">heading-level-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:heading-level-5')" title="Click to copy">
+            <hd-icon icon="wordpress:heading-level-5"></hd-icon>
+            <span class="name">heading-level-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:heading-level-6')" title="Click to copy">
+            <hd-icon icon="wordpress:heading-level-6"></hd-icon>
+            <span class="name">heading-level-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:help')" title="Click to copy">
+            <hd-icon icon="wordpress:help"></hd-icon>
+            <span class="name">help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:help-filled')" title="Click to copy">
+            <hd-icon icon="wordpress:help-filled"></hd-icon>
+            <span class="name">help-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:home')" title="Click to copy">
+            <hd-icon icon="wordpress:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:home-button')" title="Click to copy">
+            <hd-icon icon="wordpress:home-button"></hd-icon>
+            <span class="name">home-button</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:html')" title="Click to copy">
+            <hd-icon icon="wordpress:html"></hd-icon>
+            <span class="name">html</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:image')" title="Click to copy">
+            <hd-icon icon="wordpress:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:inbox')" title="Click to copy">
+            <hd-icon icon="wordpress:inbox"></hd-icon>
+            <span class="name">inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:info')" title="Click to copy">
+            <hd-icon icon="wordpress:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:insert-after')" title="Click to copy">
+            <hd-icon icon="wordpress:insert-after"></hd-icon>
+            <span class="name">insert-after</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:insert-before')" title="Click to copy">
+            <hd-icon icon="wordpress:insert-before"></hd-icon>
+            <span class="name">insert-before</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:institution')" title="Click to copy">
+            <hd-icon icon="wordpress:institution"></hd-icon>
+            <span class="name">institution</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:justify-bottom')" title="Click to copy">
+            <hd-icon icon="wordpress:justify-bottom"></hd-icon>
+            <span class="name">justify-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:justify-center')" title="Click to copy">
+            <hd-icon icon="wordpress:justify-center"></hd-icon>
+            <span class="name">justify-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:justify-center-vertical')" title="Click to copy">
+            <hd-icon icon="wordpress:justify-center-vertical"></hd-icon>
+            <span class="name">justify-center-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:justify-left')" title="Click to copy">
+            <hd-icon icon="wordpress:justify-left"></hd-icon>
+            <span class="name">justify-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:justify-right')" title="Click to copy">
+            <hd-icon icon="wordpress:justify-right"></hd-icon>
+            <span class="name">justify-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:justify-space-between')" title="Click to copy">
+            <hd-icon icon="wordpress:justify-space-between"></hd-icon>
+            <span class="name">justify-space-between</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:justify-space-between-vertical')" title="Click to copy">
+            <hd-icon icon="wordpress:justify-space-between-vertical"></hd-icon>
+            <span class="name">justify-space-between-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:justify-stretch')" title="Click to copy">
+            <hd-icon icon="wordpress:justify-stretch"></hd-icon>
+            <span class="name">justify-stretch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:justify-stretch-vertical')" title="Click to copy">
+            <hd-icon icon="wordpress:justify-stretch-vertical"></hd-icon>
+            <span class="name">justify-stretch-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:justify-top')" title="Click to copy">
+            <hd-icon icon="wordpress:justify-top"></hd-icon>
+            <span class="name">justify-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:key')" title="Click to copy">
+            <hd-icon icon="wordpress:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:keyboard')" title="Click to copy">
+            <hd-icon icon="wordpress:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:keyboard-close')" title="Click to copy">
+            <hd-icon icon="wordpress:keyboard-close"></hd-icon>
+            <span class="name">keyboard-close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:keyboard-return')" title="Click to copy">
+            <hd-icon icon="wordpress:keyboard-return"></hd-icon>
+            <span class="name">keyboard-return</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:language')" title="Click to copy">
+            <hd-icon icon="wordpress:language"></hd-icon>
+            <span class="name">language</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:layout')" title="Click to copy">
+            <hd-icon icon="wordpress:layout"></hd-icon>
+            <span class="name">layout</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:level-up')" title="Click to copy">
+            <hd-icon icon="wordpress:level-up"></hd-icon>
+            <span class="name">level-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:lifesaver')" title="Click to copy">
+            <hd-icon icon="wordpress:lifesaver"></hd-icon>
+            <span class="name">lifesaver</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:line-dashed')" title="Click to copy">
+            <hd-icon icon="wordpress:line-dashed"></hd-icon>
+            <span class="name">line-dashed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:line-dotted')" title="Click to copy">
+            <hd-icon icon="wordpress:line-dotted"></hd-icon>
+            <span class="name">line-dotted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:line-solid')" title="Click to copy">
+            <hd-icon icon="wordpress:line-solid"></hd-icon>
+            <span class="name">line-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:link')" title="Click to copy">
+            <hd-icon icon="wordpress:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:link-off')" title="Click to copy">
+            <hd-icon icon="wordpress:link-off"></hd-icon>
+            <span class="name">link-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:list')" title="Click to copy">
+            <hd-icon icon="wordpress:list"></hd-icon>
+            <span class="name">list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:list-item')" title="Click to copy">
+            <hd-icon icon="wordpress:list-item"></hd-icon>
+            <span class="name">list-item</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:list-view')" title="Click to copy">
+            <hd-icon icon="wordpress:list-view"></hd-icon>
+            <span class="name">list-view</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:lock')" title="Click to copy">
+            <hd-icon icon="wordpress:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:lock-outline')" title="Click to copy">
+            <hd-icon icon="wordpress:lock-outline"></hd-icon>
+            <span class="name">lock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:lock-small')" title="Click to copy">
+            <hd-icon icon="wordpress:lock-small"></hd-icon>
+            <span class="name">lock-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:login')" title="Click to copy">
+            <hd-icon icon="wordpress:login"></hd-icon>
+            <span class="name">login</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:loop')" title="Click to copy">
+            <hd-icon icon="wordpress:loop"></hd-icon>
+            <span class="name">loop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:map-marker')" title="Click to copy">
+            <hd-icon icon="wordpress:map-marker"></hd-icon>
+            <span class="name">map-marker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:math')" title="Click to copy">
+            <hd-icon icon="wordpress:math"></hd-icon>
+            <span class="name">math</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:media')" title="Click to copy">
+            <hd-icon icon="wordpress:media"></hd-icon>
+            <span class="name">media</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:media-and-text')" title="Click to copy">
+            <hd-icon icon="wordpress:media-and-text"></hd-icon>
+            <span class="name">media-and-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:megaphone')" title="Click to copy">
+            <hd-icon icon="wordpress:megaphone"></hd-icon>
+            <span class="name">megaphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:menu')" title="Click to copy">
+            <hd-icon icon="wordpress:menu"></hd-icon>
+            <span class="name">menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:mobile')" title="Click to copy">
+            <hd-icon icon="wordpress:mobile"></hd-icon>
+            <span class="name">mobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:more')" title="Click to copy">
+            <hd-icon icon="wordpress:more"></hd-icon>
+            <span class="name">more</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:more-horizontal')" title="Click to copy">
+            <hd-icon icon="wordpress:more-horizontal"></hd-icon>
+            <span class="name">more-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:more-vertical')" title="Click to copy">
+            <hd-icon icon="wordpress:more-vertical"></hd-icon>
+            <span class="name">more-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:move-to')" title="Click to copy">
+            <hd-icon icon="wordpress:move-to"></hd-icon>
+            <span class="name">move-to</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:navigation')" title="Click to copy">
+            <hd-icon icon="wordpress:navigation"></hd-icon>
+            <span class="name">navigation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:next')" title="Click to copy">
+            <hd-icon icon="wordpress:next"></hd-icon>
+            <span class="name">next</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:not-allowed')" title="Click to copy">
+            <hd-icon icon="wordpress:not-allowed"></hd-icon>
+            <span class="name">not-allowed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:not-found')" title="Click to copy">
+            <hd-icon icon="wordpress:not-found"></hd-icon>
+            <span class="name">not-found</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:offline')" title="Click to copy">
+            <hd-icon icon="wordpress:offline"></hd-icon>
+            <span class="name">offline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:overlay-text')" title="Click to copy">
+            <hd-icon icon="wordpress:overlay-text"></hd-icon>
+            <span class="name">overlay-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:page')" title="Click to copy">
+            <hd-icon icon="wordpress:page"></hd-icon>
+            <span class="name">page</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:page-break')" title="Click to copy">
+            <hd-icon icon="wordpress:page-break"></hd-icon>
+            <span class="name">page-break</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:pages')" title="Click to copy">
+            <hd-icon icon="wordpress:pages"></hd-icon>
+            <span class="name">pages</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:paragraph')" title="Click to copy">
+            <hd-icon icon="wordpress:paragraph"></hd-icon>
+            <span class="name">paragraph</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:payment')" title="Click to copy">
+            <hd-icon icon="wordpress:payment"></hd-icon>
+            <span class="name">payment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:pencil')" title="Click to copy">
+            <hd-icon icon="wordpress:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:pending')" title="Click to copy">
+            <hd-icon icon="wordpress:pending"></hd-icon>
+            <span class="name">pending</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:people')" title="Click to copy">
+            <hd-icon icon="wordpress:people"></hd-icon>
+            <span class="name">people</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:percent')" title="Click to copy">
+            <hd-icon icon="wordpress:percent"></hd-icon>
+            <span class="name">percent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:pin')" title="Click to copy">
+            <hd-icon icon="wordpress:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:pin-small')" title="Click to copy">
+            <hd-icon icon="wordpress:pin-small"></hd-icon>
+            <span class="name">pin-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:plugins')" title="Click to copy">
+            <hd-icon icon="wordpress:plugins"></hd-icon>
+            <span class="name">plugins</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:plus')" title="Click to copy">
+            <hd-icon icon="wordpress:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:plus-circle')" title="Click to copy">
+            <hd-icon icon="wordpress:plus-circle"></hd-icon>
+            <span class="name">plus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:plus-circle-filled')" title="Click to copy">
+            <hd-icon icon="wordpress:plus-circle-filled"></hd-icon>
+            <span class="name">plus-circle-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:position-center')" title="Click to copy">
+            <hd-icon icon="wordpress:position-center"></hd-icon>
+            <span class="name">position-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:position-left')" title="Click to copy">
+            <hd-icon icon="wordpress:position-left"></hd-icon>
+            <span class="name">position-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:position-right')" title="Click to copy">
+            <hd-icon icon="wordpress:position-right"></hd-icon>
+            <span class="name">position-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post')" title="Click to copy">
+            <hd-icon icon="wordpress:post"></hd-icon>
+            <span class="name">post</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-author')" title="Click to copy">
+            <hd-icon icon="wordpress:post-author"></hd-icon>
+            <span class="name">post-author</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-categories')" title="Click to copy">
+            <hd-icon icon="wordpress:post-categories"></hd-icon>
+            <span class="name">post-categories</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-comments')" title="Click to copy">
+            <hd-icon icon="wordpress:post-comments"></hd-icon>
+            <span class="name">post-comments</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-comments-count')" title="Click to copy">
+            <hd-icon icon="wordpress:post-comments-count"></hd-icon>
+            <span class="name">post-comments-count</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-comments-form')" title="Click to copy">
+            <hd-icon icon="wordpress:post-comments-form"></hd-icon>
+            <span class="name">post-comments-form</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-content')" title="Click to copy">
+            <hd-icon icon="wordpress:post-content"></hd-icon>
+            <span class="name">post-content</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-date')" title="Click to copy">
+            <hd-icon icon="wordpress:post-date"></hd-icon>
+            <span class="name">post-date</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-excerpt')" title="Click to copy">
+            <hd-icon icon="wordpress:post-excerpt"></hd-icon>
+            <span class="name">post-excerpt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-featured-image')" title="Click to copy">
+            <hd-icon icon="wordpress:post-featured-image"></hd-icon>
+            <span class="name">post-featured-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-list')" title="Click to copy">
+            <hd-icon icon="wordpress:post-list"></hd-icon>
+            <span class="name">post-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:post-terms')" title="Click to copy">
+            <hd-icon icon="wordpress:post-terms"></hd-icon>
+            <span class="name">post-terms</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:preformatted')" title="Click to copy">
+            <hd-icon icon="wordpress:preformatted"></hd-icon>
+            <span class="name">preformatted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:previous')" title="Click to copy">
+            <hd-icon icon="wordpress:previous"></hd-icon>
+            <span class="name">previous</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:published')" title="Click to copy">
+            <hd-icon icon="wordpress:published"></hd-icon>
+            <span class="name">published</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:pull-left')" title="Click to copy">
+            <hd-icon icon="wordpress:pull-left"></hd-icon>
+            <span class="name">pull-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:pull-right')" title="Click to copy">
+            <hd-icon icon="wordpress:pull-right"></hd-icon>
+            <span class="name">pull-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:pullquote')" title="Click to copy">
+            <hd-icon icon="wordpress:pullquote"></hd-icon>
+            <span class="name">pullquote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:query-pagination')" title="Click to copy">
+            <hd-icon icon="wordpress:query-pagination"></hd-icon>
+            <span class="name">query-pagination</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:query-pagination-next')" title="Click to copy">
+            <hd-icon icon="wordpress:query-pagination-next"></hd-icon>
+            <span class="name">query-pagination-next</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:query-pagination-numbers')" title="Click to copy">
+            <hd-icon icon="wordpress:query-pagination-numbers"></hd-icon>
+            <span class="name">query-pagination-numbers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:query-pagination-previous')" title="Click to copy">
+            <hd-icon icon="wordpress:query-pagination-previous"></hd-icon>
+            <span class="name">query-pagination-previous</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:quote')" title="Click to copy">
+            <hd-icon icon="wordpress:quote"></hd-icon>
+            <span class="name">quote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:receipt')" title="Click to copy">
+            <hd-icon icon="wordpress:receipt"></hd-icon>
+            <span class="name">receipt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:redo')" title="Click to copy">
+            <hd-icon icon="wordpress:redo"></hd-icon>
+            <span class="name">redo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:remove-bug')" title="Click to copy">
+            <hd-icon icon="wordpress:remove-bug"></hd-icon>
+            <span class="name">remove-bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:remove-submenu')" title="Click to copy">
+            <hd-icon icon="wordpress:remove-submenu"></hd-icon>
+            <span class="name">remove-submenu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:replace')" title="Click to copy">
+            <hd-icon icon="wordpress:replace"></hd-icon>
+            <span class="name">replace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:reset')" title="Click to copy">
+            <hd-icon icon="wordpress:reset"></hd-icon>
+            <span class="name">reset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:resize-corner-n-e')" title="Click to copy">
+            <hd-icon icon="wordpress:resize-corner-n-e"></hd-icon>
+            <span class="name">resize-corner-n-e</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:reusable-block')" title="Click to copy">
+            <hd-icon icon="wordpress:reusable-block"></hd-icon>
+            <span class="name">reusable-block</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:rotate-left')" title="Click to copy">
+            <hd-icon icon="wordpress:rotate-left"></hd-icon>
+            <span class="name">rotate-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:rotate-right')" title="Click to copy">
+            <hd-icon icon="wordpress:rotate-right"></hd-icon>
+            <span class="name">rotate-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:row')" title="Click to copy">
+            <hd-icon icon="wordpress:row"></hd-icon>
+            <span class="name">row</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:rss')" title="Click to copy">
+            <hd-icon icon="wordpress:rss"></hd-icon>
+            <span class="name">rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:scheduled')" title="Click to copy">
+            <hd-icon icon="wordpress:scheduled"></hd-icon>
+            <span class="name">scheduled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:search')" title="Click to copy">
+            <hd-icon icon="wordpress:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:seen')" title="Click to copy">
+            <hd-icon icon="wordpress:seen"></hd-icon>
+            <span class="name">seen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:send')" title="Click to copy">
+            <hd-icon icon="wordpress:send"></hd-icon>
+            <span class="name">send</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:separator')" title="Click to copy">
+            <hd-icon icon="wordpress:separator"></hd-icon>
+            <span class="name">separator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:settings')" title="Click to copy">
+            <hd-icon icon="wordpress:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:shadow')" title="Click to copy">
+            <hd-icon icon="wordpress:shadow"></hd-icon>
+            <span class="name">shadow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:share')" title="Click to copy">
+            <hd-icon icon="wordpress:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:shield')" title="Click to copy">
+            <hd-icon icon="wordpress:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:shipping')" title="Click to copy">
+            <hd-icon icon="wordpress:shipping"></hd-icon>
+            <span class="name">shipping</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:shortcode')" title="Click to copy">
+            <hd-icon icon="wordpress:shortcode"></hd-icon>
+            <span class="name">shortcode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:shuffle')" title="Click to copy">
+            <hd-icon icon="wordpress:shuffle"></hd-icon>
+            <span class="name">shuffle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:sidebar')" title="Click to copy">
+            <hd-icon icon="wordpress:sidebar"></hd-icon>
+            <span class="name">sidebar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:sides-all')" title="Click to copy">
+            <hd-icon icon="wordpress:sides-all"></hd-icon>
+            <span class="name">sides-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:sides-axial')" title="Click to copy">
+            <hd-icon icon="wordpress:sides-axial"></hd-icon>
+            <span class="name">sides-axial</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:sides-bottom')" title="Click to copy">
+            <hd-icon icon="wordpress:sides-bottom"></hd-icon>
+            <span class="name">sides-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:sides-horizontal')" title="Click to copy">
+            <hd-icon icon="wordpress:sides-horizontal"></hd-icon>
+            <span class="name">sides-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:sides-left')" title="Click to copy">
+            <hd-icon icon="wordpress:sides-left"></hd-icon>
+            <span class="name">sides-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:sides-right')" title="Click to copy">
+            <hd-icon icon="wordpress:sides-right"></hd-icon>
+            <span class="name">sides-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:sides-top')" title="Click to copy">
+            <hd-icon icon="wordpress:sides-top"></hd-icon>
+            <span class="name">sides-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:sides-vertical')" title="Click to copy">
+            <hd-icon icon="wordpress:sides-vertical"></hd-icon>
+            <span class="name">sides-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:site-logo')" title="Click to copy">
+            <hd-icon icon="wordpress:site-logo"></hd-icon>
+            <span class="name">site-logo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:square')" title="Click to copy">
+            <hd-icon icon="wordpress:square"></hd-icon>
+            <span class="name">square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:stack')" title="Click to copy">
+            <hd-icon icon="wordpress:stack"></hd-icon>
+            <span class="name">stack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:star-empty')" title="Click to copy">
+            <hd-icon icon="wordpress:star-empty"></hd-icon>
+            <span class="name">star-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:star-filled')" title="Click to copy">
+            <hd-icon icon="wordpress:star-filled"></hd-icon>
+            <span class="name">star-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:star-half')" title="Click to copy">
+            <hd-icon icon="wordpress:star-half"></hd-icon>
+            <span class="name">star-half</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:store')" title="Click to copy">
+            <hd-icon icon="wordpress:store"></hd-icon>
+            <span class="name">store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:stretch-full-width')" title="Click to copy">
+            <hd-icon icon="wordpress:stretch-full-width"></hd-icon>
+            <span class="name">stretch-full-width</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:stretch-wide')" title="Click to copy">
+            <hd-icon icon="wordpress:stretch-wide"></hd-icon>
+            <span class="name">stretch-wide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:styles')" title="Click to copy">
+            <hd-icon icon="wordpress:styles"></hd-icon>
+            <span class="name">styles</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:subscript')" title="Click to copy">
+            <hd-icon icon="wordpress:subscript"></hd-icon>
+            <span class="name">subscript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:superscript')" title="Click to copy">
+            <hd-icon icon="wordpress:superscript"></hd-icon>
+            <span class="name">superscript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:swatch')" title="Click to copy">
+            <hd-icon icon="wordpress:swatch"></hd-icon>
+            <span class="name">swatch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:symbol')" title="Click to copy">
+            <hd-icon icon="wordpress:symbol"></hd-icon>
+            <span class="name">symbol</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:symbol-filled')" title="Click to copy">
+            <hd-icon icon="wordpress:symbol-filled"></hd-icon>
+            <span class="name">symbol-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:table')" title="Click to copy">
+            <hd-icon icon="wordpress:table"></hd-icon>
+            <span class="name">table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:table-column-after')" title="Click to copy">
+            <hd-icon icon="wordpress:table-column-after"></hd-icon>
+            <span class="name">table-column-after</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:table-column-before')" title="Click to copy">
+            <hd-icon icon="wordpress:table-column-before"></hd-icon>
+            <span class="name">table-column-before</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:table-column-delete')" title="Click to copy">
+            <hd-icon icon="wordpress:table-column-delete"></hd-icon>
+            <span class="name">table-column-delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:table-of-contents')" title="Click to copy">
+            <hd-icon icon="wordpress:table-of-contents"></hd-icon>
+            <span class="name">table-of-contents</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:table-row-after')" title="Click to copy">
+            <hd-icon icon="wordpress:table-row-after"></hd-icon>
+            <span class="name">table-row-after</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:table-row-before')" title="Click to copy">
+            <hd-icon icon="wordpress:table-row-before"></hd-icon>
+            <span class="name">table-row-before</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:table-row-delete')" title="Click to copy">
+            <hd-icon icon="wordpress:table-row-delete"></hd-icon>
+            <span class="name">table-row-delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:tablet')" title="Click to copy">
+            <hd-icon icon="wordpress:tablet"></hd-icon>
+            <span class="name">tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:tag')" title="Click to copy">
+            <hd-icon icon="wordpress:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:term-count')" title="Click to copy">
+            <hd-icon icon="wordpress:term-count"></hd-icon>
+            <span class="name">term-count</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:term-description')" title="Click to copy">
+            <hd-icon icon="wordpress:term-description"></hd-icon>
+            <span class="name">term-description</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:term-name')" title="Click to copy">
+            <hd-icon icon="wordpress:term-name"></hd-icon>
+            <span class="name">term-name</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:text-color')" title="Click to copy">
+            <hd-icon icon="wordpress:text-color"></hd-icon>
+            <span class="name">text-color</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:text-horizontal')" title="Click to copy">
+            <hd-icon icon="wordpress:text-horizontal"></hd-icon>
+            <span class="name">text-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:text-vertical')" title="Click to copy">
+            <hd-icon icon="wordpress:text-vertical"></hd-icon>
+            <span class="name">text-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:thumbs-down')" title="Click to copy">
+            <hd-icon icon="wordpress:thumbs-down"></hd-icon>
+            <span class="name">thumbs-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:thumbs-up')" title="Click to copy">
+            <hd-icon icon="wordpress:thumbs-up"></hd-icon>
+            <span class="name">thumbs-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:time-to-read')" title="Click to copy">
+            <hd-icon icon="wordpress:time-to-read"></hd-icon>
+            <span class="name">time-to-read</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:tip')" title="Click to copy">
+            <hd-icon icon="wordpress:tip"></hd-icon>
+            <span class="name">tip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:title')" title="Click to copy">
+            <hd-icon icon="wordpress:title"></hd-icon>
+            <span class="name">title</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:tool')" title="Click to copy">
+            <hd-icon icon="wordpress:tool"></hd-icon>
+            <span class="name">tool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:trash')" title="Click to copy">
+            <hd-icon icon="wordpress:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:trending-down')" title="Click to copy">
+            <hd-icon icon="wordpress:trending-down"></hd-icon>
+            <span class="name">trending-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:trending-up')" title="Click to copy">
+            <hd-icon icon="wordpress:trending-up"></hd-icon>
+            <span class="name">trending-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:typography')" title="Click to copy">
+            <hd-icon icon="wordpress:typography"></hd-icon>
+            <span class="name">typography</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:undo')" title="Click to copy">
+            <hd-icon icon="wordpress:undo"></hd-icon>
+            <span class="name">undo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:ungroup')" title="Click to copy">
+            <hd-icon icon="wordpress:ungroup"></hd-icon>
+            <span class="name">ungroup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:unlock')" title="Click to copy">
+            <hd-icon icon="wordpress:unlock"></hd-icon>
+            <span class="name">unlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:unseen')" title="Click to copy">
+            <hd-icon icon="wordpress:unseen"></hd-icon>
+            <span class="name">unseen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:update')" title="Click to copy">
+            <hd-icon icon="wordpress:update"></hd-icon>
+            <span class="name">update</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:upload')" title="Click to copy">
+            <hd-icon icon="wordpress:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:verse')" title="Click to copy">
+            <hd-icon icon="wordpress:verse"></hd-icon>
+            <span class="name">verse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:video')" title="Click to copy">
+            <hd-icon icon="wordpress:video"></hd-icon>
+            <span class="name">video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:widget')" title="Click to copy">
+            <hd-icon icon="wordpress:widget"></hd-icon>
+            <span class="name">widget</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:word-count')" title="Click to copy">
+            <hd-icon icon="wordpress:word-count"></hd-icon>
+            <span class="name">word-count</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wordpress:wordpress')" title="Click to copy">
+            <hd-icon icon="wordpress:wordpress"></hd-icon>
+            <span class="name">wordpress</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

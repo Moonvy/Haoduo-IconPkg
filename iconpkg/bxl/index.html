@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bxl - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>bxl <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(155)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('bxl:500px')" title="Click to copy">
+            <hd-icon icon="bxl:500px"></hd-icon>
+            <span class="name">500px</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:99designs')" title="Click to copy">
+            <hd-icon icon="bxl:99designs"></hd-icon>
+            <span class="name">99designs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:adobe')" title="Click to copy">
+            <hd-icon icon="bxl:adobe"></hd-icon>
+            <span class="name">adobe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:airbnb')" title="Click to copy">
+            <hd-icon icon="bxl:airbnb"></hd-icon>
+            <span class="name">airbnb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:algolia')" title="Click to copy">
+            <hd-icon icon="bxl:algolia"></hd-icon>
+            <span class="name">algolia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:amazon')" title="Click to copy">
+            <hd-icon icon="bxl:amazon"></hd-icon>
+            <span class="name">amazon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:android')" title="Click to copy">
+            <hd-icon icon="bxl:android"></hd-icon>
+            <span class="name">android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:angular')" title="Click to copy">
+            <hd-icon icon="bxl:angular"></hd-icon>
+            <span class="name">angular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:apple')" title="Click to copy">
+            <hd-icon icon="bxl:apple"></hd-icon>
+            <span class="name">apple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:audible')" title="Click to copy">
+            <hd-icon icon="bxl:audible"></hd-icon>
+            <span class="name">audible</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:aws')" title="Click to copy">
+            <hd-icon icon="bxl:aws"></hd-icon>
+            <span class="name">aws</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:baidu')" title="Click to copy">
+            <hd-icon icon="bxl:baidu"></hd-icon>
+            <span class="name">baidu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:behance')" title="Click to copy">
+            <hd-icon icon="bxl:behance"></hd-icon>
+            <span class="name">behance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:bing')" title="Click to copy">
+            <hd-icon icon="bxl:bing"></hd-icon>
+            <span class="name">bing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:bitcoin')" title="Click to copy">
+            <hd-icon icon="bxl:bitcoin"></hd-icon>
+            <span class="name">bitcoin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:blender')" title="Click to copy">
+            <hd-icon icon="bxl:blender"></hd-icon>
+            <span class="name">blender</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:blogger')" title="Click to copy">
+            <hd-icon icon="bxl:blogger"></hd-icon>
+            <span class="name">blogger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:bootstrap')" title="Click to copy">
+            <hd-icon icon="bxl:bootstrap"></hd-icon>
+            <span class="name">bootstrap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:c-plus-plus')" title="Click to copy">
+            <hd-icon icon="bxl:c-plus-plus"></hd-icon>
+            <span class="name">c-plus-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:chrome')" title="Click to copy">
+            <hd-icon icon="bxl:chrome"></hd-icon>
+            <span class="name">chrome</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:codepen')" title="Click to copy">
+            <hd-icon icon="bxl:codepen"></hd-icon>
+            <span class="name">codepen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:creative-commons')" title="Click to copy">
+            <hd-icon icon="bxl:creative-commons"></hd-icon>
+            <span class="name">creative-commons</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:css3')" title="Click to copy">
+            <hd-icon icon="bxl:css3"></hd-icon>
+            <span class="name">css3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:dailymotion')" title="Click to copy">
+            <hd-icon icon="bxl:dailymotion"></hd-icon>
+            <span class="name">dailymotion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:deezer')" title="Click to copy">
+            <hd-icon icon="bxl:deezer"></hd-icon>
+            <span class="name">deezer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:dev-to')" title="Click to copy">
+            <hd-icon icon="bxl:dev-to"></hd-icon>
+            <span class="name">dev-to</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:deviantart')" title="Click to copy">
+            <hd-icon icon="bxl:deviantart"></hd-icon>
+            <span class="name">deviantart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:digg')" title="Click to copy">
+            <hd-icon icon="bxl:digg"></hd-icon>
+            <span class="name">digg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:digitalocean')" title="Click to copy">
+            <hd-icon icon="bxl:digitalocean"></hd-icon>
+            <span class="name">digitalocean</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:discord')" title="Click to copy">
+            <hd-icon icon="bxl:discord"></hd-icon>
+            <span class="name">discord</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:discord-alt')" title="Click to copy">
+            <hd-icon icon="bxl:discord-alt"></hd-icon>
+            <span class="name">discord-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:discourse')" title="Click to copy">
+            <hd-icon icon="bxl:discourse"></hd-icon>
+            <span class="name">discourse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:django')" title="Click to copy">
+            <hd-icon icon="bxl:django"></hd-icon>
+            <span class="name">django</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:docker')" title="Click to copy">
+            <hd-icon icon="bxl:docker"></hd-icon>
+            <span class="name">docker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:dribbble')" title="Click to copy">
+            <hd-icon icon="bxl:dribbble"></hd-icon>
+            <span class="name">dribbble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:dropbox')" title="Click to copy">
+            <hd-icon icon="bxl:dropbox"></hd-icon>
+            <span class="name">dropbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:drupal')" title="Click to copy">
+            <hd-icon icon="bxl:drupal"></hd-icon>
+            <span class="name">drupal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:ebay')" title="Click to copy">
+            <hd-icon icon="bxl:ebay"></hd-icon>
+            <span class="name">ebay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:edge')" title="Click to copy">
+            <hd-icon icon="bxl:edge"></hd-icon>
+            <span class="name">edge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:etsy')" title="Click to copy">
+            <hd-icon icon="bxl:etsy"></hd-icon>
+            <span class="name">etsy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:facebook')" title="Click to copy">
+            <hd-icon icon="bxl:facebook"></hd-icon>
+            <span class="name">facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:facebook-circle')" title="Click to copy">
+            <hd-icon icon="bxl:facebook-circle"></hd-icon>
+            <span class="name">facebook-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:facebook-square')" title="Click to copy">
+            <hd-icon icon="bxl:facebook-square"></hd-icon>
+            <span class="name">facebook-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:figma')" title="Click to copy">
+            <hd-icon icon="bxl:figma"></hd-icon>
+            <span class="name">figma</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:firebase')" title="Click to copy">
+            <hd-icon icon="bxl:firebase"></hd-icon>
+            <span class="name">firebase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:firefox')" title="Click to copy">
+            <hd-icon icon="bxl:firefox"></hd-icon>
+            <span class="name">firefox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:flask')" title="Click to copy">
+            <hd-icon icon="bxl:flask"></hd-icon>
+            <span class="name">flask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:flickr')" title="Click to copy">
+            <hd-icon icon="bxl:flickr"></hd-icon>
+            <span class="name">flickr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:flickr-square')" title="Click to copy">
+            <hd-icon icon="bxl:flickr-square"></hd-icon>
+            <span class="name">flickr-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:flutter')" title="Click to copy">
+            <hd-icon icon="bxl:flutter"></hd-icon>
+            <span class="name">flutter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:foursquare')" title="Click to copy">
+            <hd-icon icon="bxl:foursquare"></hd-icon>
+            <span class="name">foursquare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:git')" title="Click to copy">
+            <hd-icon icon="bxl:git"></hd-icon>
+            <span class="name">git</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:github')" title="Click to copy">
+            <hd-icon icon="bxl:github"></hd-icon>
+            <span class="name">github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:gitlab')" title="Click to copy">
+            <hd-icon icon="bxl:gitlab"></hd-icon>
+            <span class="name">gitlab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:gmail')" title="Click to copy">
+            <hd-icon icon="bxl:gmail"></hd-icon>
+            <span class="name">gmail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:go-lang')" title="Click to copy">
+            <hd-icon icon="bxl:go-lang"></hd-icon>
+            <span class="name">go-lang</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:google')" title="Click to copy">
+            <hd-icon icon="bxl:google"></hd-icon>
+            <span class="name">google</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:google-cloud')" title="Click to copy">
+            <hd-icon icon="bxl:google-cloud"></hd-icon>
+            <span class="name">google-cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:google-plus')" title="Click to copy">
+            <hd-icon icon="bxl:google-plus"></hd-icon>
+            <span class="name">google-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:google-plus-circle')" title="Click to copy">
+            <hd-icon icon="bxl:google-plus-circle"></hd-icon>
+            <span class="name">google-plus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:graphql')" title="Click to copy">
+            <hd-icon icon="bxl:graphql"></hd-icon>
+            <span class="name">graphql</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:heroku')" title="Click to copy">
+            <hd-icon icon="bxl:heroku"></hd-icon>
+            <span class="name">heroku</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:html5')" title="Click to copy">
+            <hd-icon icon="bxl:html5"></hd-icon>
+            <span class="name">html5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:imdb')" title="Click to copy">
+            <hd-icon icon="bxl:imdb"></hd-icon>
+            <span class="name">imdb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:instagram')" title="Click to copy">
+            <hd-icon icon="bxl:instagram"></hd-icon>
+            <span class="name">instagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:instagram-alt')" title="Click to copy">
+            <hd-icon icon="bxl:instagram-alt"></hd-icon>
+            <span class="name">instagram-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:internet-explorer')" title="Click to copy">
+            <hd-icon icon="bxl:internet-explorer"></hd-icon>
+            <span class="name">internet-explorer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:invision')" title="Click to copy">
+            <hd-icon icon="bxl:invision"></hd-icon>
+            <span class="name">invision</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:java')" title="Click to copy">
+            <hd-icon icon="bxl:java"></hd-icon>
+            <span class="name">java</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:javascript')" title="Click to copy">
+            <hd-icon icon="bxl:javascript"></hd-icon>
+            <span class="name">javascript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:joomla')" title="Click to copy">
+            <hd-icon icon="bxl:joomla"></hd-icon>
+            <span class="name">joomla</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:jquery')" title="Click to copy">
+            <hd-icon icon="bxl:jquery"></hd-icon>
+            <span class="name">jquery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:jsfiddle')" title="Click to copy">
+            <hd-icon icon="bxl:jsfiddle"></hd-icon>
+            <span class="name">jsfiddle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:kickstarter')" title="Click to copy">
+            <hd-icon icon="bxl:kickstarter"></hd-icon>
+            <span class="name">kickstarter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:kubernetes')" title="Click to copy">
+            <hd-icon icon="bxl:kubernetes"></hd-icon>
+            <span class="name">kubernetes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:less')" title="Click to copy">
+            <hd-icon icon="bxl:less"></hd-icon>
+            <span class="name">less</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:linkedin')" title="Click to copy">
+            <hd-icon icon="bxl:linkedin"></hd-icon>
+            <span class="name">linkedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:linkedin-square')" title="Click to copy">
+            <hd-icon icon="bxl:linkedin-square"></hd-icon>
+            <span class="name">linkedin-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:magento')" title="Click to copy">
+            <hd-icon icon="bxl:magento"></hd-icon>
+            <span class="name">magento</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:mailchimp')" title="Click to copy">
+            <hd-icon icon="bxl:mailchimp"></hd-icon>
+            <span class="name">mailchimp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:markdown')" title="Click to copy">
+            <hd-icon icon="bxl:markdown"></hd-icon>
+            <span class="name">markdown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:mastercard')" title="Click to copy">
+            <hd-icon icon="bxl:mastercard"></hd-icon>
+            <span class="name">mastercard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:mastodon')" title="Click to copy">
+            <hd-icon icon="bxl:mastodon"></hd-icon>
+            <span class="name">mastodon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:medium')" title="Click to copy">
+            <hd-icon icon="bxl:medium"></hd-icon>
+            <span class="name">medium</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:medium-old')" title="Click to copy">
+            <hd-icon icon="bxl:medium-old"></hd-icon>
+            <span class="name">medium-old</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:medium-square')" title="Click to copy">
+            <hd-icon icon="bxl:medium-square"></hd-icon>
+            <span class="name">medium-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:messenger')" title="Click to copy">
+            <hd-icon icon="bxl:messenger"></hd-icon>
+            <span class="name">messenger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:meta')" title="Click to copy">
+            <hd-icon icon="bxl:meta"></hd-icon>
+            <span class="name">meta</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:microsoft')" title="Click to copy">
+            <hd-icon icon="bxl:microsoft"></hd-icon>
+            <span class="name">microsoft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:microsoft-teams')" title="Click to copy">
+            <hd-icon icon="bxl:microsoft-teams"></hd-icon>
+            <span class="name">microsoft-teams</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:mongodb')" title="Click to copy">
+            <hd-icon icon="bxl:mongodb"></hd-icon>
+            <span class="name">mongodb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:netlify')" title="Click to copy">
+            <hd-icon icon="bxl:netlify"></hd-icon>
+            <span class="name">netlify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:nodejs')" title="Click to copy">
+            <hd-icon icon="bxl:nodejs"></hd-icon>
+            <span class="name">nodejs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:ok-ru')" title="Click to copy">
+            <hd-icon icon="bxl:ok-ru"></hd-icon>
+            <span class="name">ok-ru</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:opera')" title="Click to copy">
+            <hd-icon icon="bxl:opera"></hd-icon>
+            <span class="name">opera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:patreon')" title="Click to copy">
+            <hd-icon icon="bxl:patreon"></hd-icon>
+            <span class="name">patreon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:paypal')" title="Click to copy">
+            <hd-icon icon="bxl:paypal"></hd-icon>
+            <span class="name">paypal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:periscope')" title="Click to copy">
+            <hd-icon icon="bxl:periscope"></hd-icon>
+            <span class="name">periscope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:php')" title="Click to copy">
+            <hd-icon icon="bxl:php"></hd-icon>
+            <span class="name">php</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:pinterest')" title="Click to copy">
+            <hd-icon icon="bxl:pinterest"></hd-icon>
+            <span class="name">pinterest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:pinterest-alt')" title="Click to copy">
+            <hd-icon icon="bxl:pinterest-alt"></hd-icon>
+            <span class="name">pinterest-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:play-store')" title="Click to copy">
+            <hd-icon icon="bxl:play-store"></hd-icon>
+            <span class="name">play-store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:pocket')" title="Click to copy">
+            <hd-icon icon="bxl:pocket"></hd-icon>
+            <span class="name">pocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:postgresql')" title="Click to copy">
+            <hd-icon icon="bxl:postgresql"></hd-icon>
+            <span class="name">postgresql</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:product-hunt')" title="Click to copy">
+            <hd-icon icon="bxl:product-hunt"></hd-icon>
+            <span class="name">product-hunt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:python')" title="Click to copy">
+            <hd-icon icon="bxl:python"></hd-icon>
+            <span class="name">python</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:quora')" title="Click to copy">
+            <hd-icon icon="bxl:quora"></hd-icon>
+            <span class="name">quora</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:react')" title="Click to copy">
+            <hd-icon icon="bxl:react"></hd-icon>
+            <span class="name">react</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:redbubble')" title="Click to copy">
+            <hd-icon icon="bxl:redbubble"></hd-icon>
+            <span class="name">redbubble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:reddit')" title="Click to copy">
+            <hd-icon icon="bxl:reddit"></hd-icon>
+            <span class="name">reddit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:redux')" title="Click to copy">
+            <hd-icon icon="bxl:redux"></hd-icon>
+            <span class="name">redux</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:sass')" title="Click to copy">
+            <hd-icon icon="bxl:sass"></hd-icon>
+            <span class="name">sass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:shopify')" title="Click to copy">
+            <hd-icon icon="bxl:shopify"></hd-icon>
+            <span class="name">shopify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:sketch')" title="Click to copy">
+            <hd-icon icon="bxl:sketch"></hd-icon>
+            <span class="name">sketch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:skype')" title="Click to copy">
+            <hd-icon icon="bxl:skype"></hd-icon>
+            <span class="name">skype</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:slack')" title="Click to copy">
+            <hd-icon icon="bxl:slack"></hd-icon>
+            <span class="name">slack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:slack-old')" title="Click to copy">
+            <hd-icon icon="bxl:slack-old"></hd-icon>
+            <span class="name">slack-old</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:snapchat')" title="Click to copy">
+            <hd-icon icon="bxl:snapchat"></hd-icon>
+            <span class="name">snapchat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:soundcloud')" title="Click to copy">
+            <hd-icon icon="bxl:soundcloud"></hd-icon>
+            <span class="name">soundcloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:spotify')" title="Click to copy">
+            <hd-icon icon="bxl:spotify"></hd-icon>
+            <span class="name">spotify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:spring-boot')" title="Click to copy">
+            <hd-icon icon="bxl:spring-boot"></hd-icon>
+            <span class="name">spring-boot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:squarespace')" title="Click to copy">
+            <hd-icon icon="bxl:squarespace"></hd-icon>
+            <span class="name">squarespace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:stack-overflow')" title="Click to copy">
+            <hd-icon icon="bxl:stack-overflow"></hd-icon>
+            <span class="name">stack-overflow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:steam')" title="Click to copy">
+            <hd-icon icon="bxl:steam"></hd-icon>
+            <span class="name">steam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:stripe')" title="Click to copy">
+            <hd-icon icon="bxl:stripe"></hd-icon>
+            <span class="name">stripe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:tailwind-css')" title="Click to copy">
+            <hd-icon icon="bxl:tailwind-css"></hd-icon>
+            <span class="name">tailwind-css</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:telegram')" title="Click to copy">
+            <hd-icon icon="bxl:telegram"></hd-icon>
+            <span class="name">telegram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:tiktok')" title="Click to copy">
+            <hd-icon icon="bxl:tiktok"></hd-icon>
+            <span class="name">tiktok</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:trello')" title="Click to copy">
+            <hd-icon icon="bxl:trello"></hd-icon>
+            <span class="name">trello</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:trip-advisor')" title="Click to copy">
+            <hd-icon icon="bxl:trip-advisor"></hd-icon>
+            <span class="name">trip-advisor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:tumblr')" title="Click to copy">
+            <hd-icon icon="bxl:tumblr"></hd-icon>
+            <span class="name">tumblr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:tux')" title="Click to copy">
+            <hd-icon icon="bxl:tux"></hd-icon>
+            <span class="name">tux</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:twitch')" title="Click to copy">
+            <hd-icon icon="bxl:twitch"></hd-icon>
+            <span class="name">twitch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:twitter')" title="Click to copy">
+            <hd-icon icon="bxl:twitter"></hd-icon>
+            <span class="name">twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:typescript')" title="Click to copy">
+            <hd-icon icon="bxl:typescript"></hd-icon>
+            <span class="name">typescript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:unity')" title="Click to copy">
+            <hd-icon icon="bxl:unity"></hd-icon>
+            <span class="name">unity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:unsplash')" title="Click to copy">
+            <hd-icon icon="bxl:unsplash"></hd-icon>
+            <span class="name">unsplash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:upwork')" title="Click to copy">
+            <hd-icon icon="bxl:upwork"></hd-icon>
+            <span class="name">upwork</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:venmo')" title="Click to copy">
+            <hd-icon icon="bxl:venmo"></hd-icon>
+            <span class="name">venmo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:vimeo')" title="Click to copy">
+            <hd-icon icon="bxl:vimeo"></hd-icon>
+            <span class="name">vimeo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:visa')" title="Click to copy">
+            <hd-icon icon="bxl:visa"></hd-icon>
+            <span class="name">visa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:visual-studio')" title="Click to copy">
+            <hd-icon icon="bxl:visual-studio"></hd-icon>
+            <span class="name">visual-studio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:vk')" title="Click to copy">
+            <hd-icon icon="bxl:vk"></hd-icon>
+            <span class="name">vk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:vuejs')" title="Click to copy">
+            <hd-icon icon="bxl:vuejs"></hd-icon>
+            <span class="name">vuejs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:whatsapp')" title="Click to copy">
+            <hd-icon icon="bxl:whatsapp"></hd-icon>
+            <span class="name">whatsapp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:whatsapp-square')" title="Click to copy">
+            <hd-icon icon="bxl:whatsapp-square"></hd-icon>
+            <span class="name">whatsapp-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:wikipedia')" title="Click to copy">
+            <hd-icon icon="bxl:wikipedia"></hd-icon>
+            <span class="name">wikipedia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:windows')" title="Click to copy">
+            <hd-icon icon="bxl:windows"></hd-icon>
+            <span class="name">windows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:wix')" title="Click to copy">
+            <hd-icon icon="bxl:wix"></hd-icon>
+            <span class="name">wix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:wordpress')" title="Click to copy">
+            <hd-icon icon="bxl:wordpress"></hd-icon>
+            <span class="name">wordpress</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:xing')" title="Click to copy">
+            <hd-icon icon="bxl:xing"></hd-icon>
+            <span class="name">xing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:yahoo')" title="Click to copy">
+            <hd-icon icon="bxl:yahoo"></hd-icon>
+            <span class="name">yahoo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:yelp')" title="Click to copy">
+            <hd-icon icon="bxl:yelp"></hd-icon>
+            <span class="name">yelp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:youtube')" title="Click to copy">
+            <hd-icon icon="bxl:youtube"></hd-icon>
+            <span class="name">youtube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bxl:zoom')" title="Click to copy">
+            <hd-icon icon="bxl:zoom"></hd-icon>
+            <span class="name">zoom</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

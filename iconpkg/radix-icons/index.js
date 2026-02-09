@@ -1,0 +1,15 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAAB4YkZAVYYRRo/Jjb2WCN2NkhiZTQkh2lVVlEiVVdmJnJoNQR4Q2V1QVVlUHdHdGU2BlhKaFQFkQIDT14DEgEEAu4BAccNdCYQDw0pAwEpAt4EIIMBQCgBkQKnAQMVAgLUBhYECRPIARslDj0aXxMcUq4CRQYUzgYbDb8BB1ECWQFWMywW3Ildkr9ZCIAkUtpuFGhtHzkF5uCMrHcbk7LazzCDHVemNmdmWKoHwFg6nX7BKh39wV+paR95zkFd8b6bCN11M7z+6oJhOzRlRM+IeL6dq2LwijWKNe2N9H+4cRLnoE9k8KV6utIs1FSjLrpXw5W+llMGgWunR+FCLoX3dDBtSpRpO8bu81+wf+pbdJx6lkFE53yFZg4pP7VhLnC739EYVuiz1tE3RTLQD7N0DtJWa/4x89NolIrWlTutEeiTWUrWqqnjrLFRcdkK2teUGx+UnMzQ97gRH3VXRXlDMEdtDF8CwnyE2uDHKvKQkOSCXWc8qPpt8kwxOMiblokkp/SHHzeX09AXke8eAbI4ULXcS+bqGxqVktHGc5xzW2AnD1d7zv5HN2FbbTKIOSmEecZI0HK90yRiUDWXQ43zKVkRcvJI6KWQu8lMo61s+0LcbBXc3D8fSSEAQAACAgQBAAAAAAACAAAAEnJhZGl4LWljb25zLTAxLnN2ZwAAABJyYWRpeC1pY29ucy0wMi5zdmf/////AAAAAgAAAFZFEQABEARQAAQFRVBABRUBREFBFEVEVBQQAUFQUAAQEVVRAFREEBABBQQEBRBQAEQRQQEEUABEBAQQQQAFVEUAEBVAUABBQEFFEARAVAVUBEEEFVBBBQAAAAA=";
+
+const chunks = {
+  "radix-icons-01.svg": new URL("./radix-icons-01.svg", import.meta.url).href,
+  "radix-icons-02.svg": new URL("./radix-icons-02.svg", import.meta.url).href
+};
+
+register('radix-icons', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>unjs - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>unjs <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(63)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('unjs:automd')" title="Click to copy">
+            <hd-icon icon="unjs:automd"></hd-icon>
+            <span class="name">automd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:bundle-runner')" title="Click to copy">
+            <hd-icon icon="unjs:bundle-runner"></hd-icon>
+            <span class="name">bundle-runner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:c12')" title="Click to copy">
+            <hd-icon icon="unjs:c12"></hd-icon>
+            <span class="name">c12</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:changelogen')" title="Click to copy">
+            <hd-icon icon="unjs:changelogen"></hd-icon>
+            <span class="name">changelogen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:citty')" title="Click to copy">
+            <hd-icon icon="unjs:citty"></hd-icon>
+            <span class="name">citty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:confbox')" title="Click to copy">
+            <hd-icon icon="unjs:confbox"></hd-icon>
+            <span class="name">confbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:consola')" title="Click to copy">
+            <hd-icon icon="unjs:consola"></hd-icon>
+            <span class="name">consola</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:cookie-es')" title="Click to copy">
+            <hd-icon icon="unjs:cookie-es"></hd-icon>
+            <span class="name">cookie-es</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:crossws')" title="Click to copy">
+            <hd-icon icon="unjs:crossws"></hd-icon>
+            <span class="name">crossws</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:db0')" title="Click to copy">
+            <hd-icon icon="unjs:db0"></hd-icon>
+            <span class="name">db0</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:defu')" title="Click to copy">
+            <hd-icon icon="unjs:defu"></hd-icon>
+            <span class="name">defu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:destr')" title="Click to copy">
+            <hd-icon icon="unjs:destr"></hd-icon>
+            <span class="name">destr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:fontaine')" title="Click to copy">
+            <hd-icon icon="unjs:fontaine"></hd-icon>
+            <span class="name">fontaine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:fs-memo')" title="Click to copy">
+            <hd-icon icon="unjs:fs-memo"></hd-icon>
+            <span class="name">fs-memo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:get-port-please')" title="Click to copy">
+            <hd-icon icon="unjs:get-port-please"></hd-icon>
+            <span class="name">get-port-please</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:giget')" title="Click to copy">
+            <hd-icon icon="unjs:giget"></hd-icon>
+            <span class="name">giget</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:h3')" title="Click to copy">
+            <hd-icon icon="unjs:h3"></hd-icon>
+            <span class="name">h3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:hookable')" title="Click to copy">
+            <hd-icon icon="unjs:hookable"></hd-icon>
+            <span class="name">hookable</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:httpxy')" title="Click to copy">
+            <hd-icon icon="unjs:httpxy"></hd-icon>
+            <span class="name">httpxy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:image-meta')" title="Click to copy">
+            <hd-icon icon="unjs:image-meta"></hd-icon>
+            <span class="name">image-meta</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:ipx')" title="Click to copy">
+            <hd-icon icon="unjs:ipx"></hd-icon>
+            <span class="name">ipx</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:jimp-compact')" title="Click to copy">
+            <hd-icon icon="unjs:jimp-compact"></hd-icon>
+            <span class="name">jimp-compact</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:jiti')" title="Click to copy">
+            <hd-icon icon="unjs:jiti"></hd-icon>
+            <span class="name">jiti</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:knitwork')" title="Click to copy">
+            <hd-icon icon="unjs:knitwork"></hd-icon>
+            <span class="name">knitwork</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:listhen')" title="Click to copy">
+            <hd-icon icon="unjs:listhen"></hd-icon>
+            <span class="name">listhen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:magic-regexp')" title="Click to copy">
+            <hd-icon icon="unjs:magic-regexp"></hd-icon>
+            <span class="name">magic-regexp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:magicast')" title="Click to copy">
+            <hd-icon icon="unjs:magicast"></hd-icon>
+            <span class="name">magicast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:mdbox')" title="Click to copy">
+            <hd-icon icon="unjs:mdbox"></hd-icon>
+            <span class="name">mdbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:mkdist')" title="Click to copy">
+            <hd-icon icon="unjs:mkdist"></hd-icon>
+            <span class="name">mkdist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:mlly')" title="Click to copy">
+            <hd-icon icon="unjs:mlly"></hd-icon>
+            <span class="name">mlly</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:mongoz')" title="Click to copy">
+            <hd-icon icon="unjs:mongoz"></hd-icon>
+            <span class="name">mongoz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:nanotar')" title="Click to copy">
+            <hd-icon icon="unjs:nanotar"></hd-icon>
+            <span class="name">nanotar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:nitro')" title="Click to copy">
+            <hd-icon icon="unjs:nitro"></hd-icon>
+            <span class="name">nitro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:node-fetch-native')" title="Click to copy">
+            <hd-icon icon="unjs:node-fetch-native"></hd-icon>
+            <span class="name">node-fetch-native</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:nypm')" title="Click to copy">
+            <hd-icon icon="unjs:nypm"></hd-icon>
+            <span class="name">nypm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:ofetch')" title="Click to copy">
+            <hd-icon icon="unjs:ofetch"></hd-icon>
+            <span class="name">ofetch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:ohash')" title="Click to copy">
+            <hd-icon icon="unjs:ohash"></hd-icon>
+            <span class="name">ohash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:pathe')" title="Click to copy">
+            <hd-icon icon="unjs:pathe"></hd-icon>
+            <span class="name">pathe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:perfect-debounce')" title="Click to copy">
+            <hd-icon icon="unjs:perfect-debounce"></hd-icon>
+            <span class="name">perfect-debounce</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:pkg-types')" title="Click to copy">
+            <hd-icon icon="unjs:pkg-types"></hd-icon>
+            <span class="name">pkg-types</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:radix3')" title="Click to copy">
+            <hd-icon icon="unjs:radix3"></hd-icon>
+            <span class="name">radix3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:rc9')" title="Click to copy">
+            <hd-icon icon="unjs:rc9"></hd-icon>
+            <span class="name">rc9</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:scule')" title="Click to copy">
+            <hd-icon icon="unjs:scule"></hd-icon>
+            <span class="name">scule</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:serve-placeholder')" title="Click to copy">
+            <hd-icon icon="unjs:serve-placeholder"></hd-icon>
+            <span class="name">serve-placeholder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:std-env')" title="Click to copy">
+            <hd-icon icon="unjs:std-env"></hd-icon>
+            <span class="name">std-env</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:theme-colors')" title="Click to copy">
+            <hd-icon icon="unjs:theme-colors"></hd-icon>
+            <span class="name">theme-colors</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:ufo')" title="Click to copy">
+            <hd-icon icon="unjs:ufo"></hd-icon>
+            <span class="name">ufo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:unbuild')" title="Click to copy">
+            <hd-icon icon="unjs:unbuild"></hd-icon>
+            <span class="name">unbuild</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:uncrypto')" title="Click to copy">
+            <hd-icon icon="unjs:uncrypto"></hd-icon>
+            <span class="name">uncrypto</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:unctx')" title="Click to copy">
+            <hd-icon icon="unjs:unctx"></hd-icon>
+            <span class="name">unctx</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:undocs')" title="Click to copy">
+            <hd-icon icon="unjs:undocs"></hd-icon>
+            <span class="name">undocs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:unenv')" title="Click to copy">
+            <hd-icon icon="unjs:unenv"></hd-icon>
+            <span class="name">unenv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:ungh')" title="Click to copy">
+            <hd-icon icon="unjs:ungh"></hd-icon>
+            <span class="name">ungh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:unhead')" title="Click to copy">
+            <hd-icon icon="unjs:unhead"></hd-icon>
+            <span class="name">unhead</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:unimport')" title="Click to copy">
+            <hd-icon icon="unjs:unimport"></hd-icon>
+            <span class="name">unimport</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:unpdf')" title="Click to copy">
+            <hd-icon icon="unjs:unpdf"></hd-icon>
+            <span class="name">unpdf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:unplugin')" title="Click to copy">
+            <hd-icon icon="unjs:unplugin"></hd-icon>
+            <span class="name">unplugin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:unstorage')" title="Click to copy">
+            <hd-icon icon="unjs:unstorage"></hd-icon>
+            <span class="name">unstorage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:untun')" title="Click to copy">
+            <hd-icon icon="unjs:untun"></hd-icon>
+            <span class="name">untun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:untyped')" title="Click to copy">
+            <hd-icon icon="unjs:untyped"></hd-icon>
+            <span class="name">untyped</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:unwasm')" title="Click to copy">
+            <hd-icon icon="unjs:unwasm"></hd-icon>
+            <span class="name">unwasm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:uqr')" title="Click to copy">
+            <hd-icon icon="unjs:uqr"></hd-icon>
+            <span class="name">uqr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('unjs:webpackbar')" title="Click to copy">
+            <hd-icon icon="unjs:webpackbar"></hd-icon>
+            <span class="name">webpackbar</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pajamas - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>pajamas <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(410)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('pajamas:abuse')" title="Click to copy">
+            <hd-icon icon="pajamas:abuse"></hd-icon>
+            <span class="name">abuse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:accessibility')" title="Click to copy">
+            <hd-icon icon="pajamas:accessibility"></hd-icon>
+            <span class="name">accessibility</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:account')" title="Click to copy">
+            <hd-icon icon="pajamas:account"></hd-icon>
+            <span class="name">account</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:admin')" title="Click to copy">
+            <hd-icon icon="pajamas:admin"></hd-icon>
+            <span class="name">admin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:agent-ai')" title="Click to copy">
+            <hd-icon icon="pajamas:agent-ai"></hd-icon>
+            <span class="name">agent-ai</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:api')" title="Click to copy">
+            <hd-icon icon="pajamas:api"></hd-icon>
+            <span class="name">api</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:appearance')" title="Click to copy">
+            <hd-icon icon="pajamas:appearance"></hd-icon>
+            <span class="name">appearance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:applications')" title="Click to copy">
+            <hd-icon icon="pajamas:applications"></hd-icon>
+            <span class="name">applications</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:approval')" title="Click to copy">
+            <hd-icon icon="pajamas:approval"></hd-icon>
+            <span class="name">approval</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:approval-solid')" title="Click to copy">
+            <hd-icon icon="pajamas:approval-solid"></hd-icon>
+            <span class="name">approval-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:archive')" title="Click to copy">
+            <hd-icon icon="pajamas:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:arrow-down')" title="Click to copy">
+            <hd-icon icon="pajamas:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:arrow-left')" title="Click to copy">
+            <hd-icon icon="pajamas:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:arrow-right')" title="Click to copy">
+            <hd-icon icon="pajamas:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:arrow-up')" title="Click to copy">
+            <hd-icon icon="pajamas:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:assignee')" title="Click to copy">
+            <hd-icon icon="pajamas:assignee"></hd-icon>
+            <span class="name">assignee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:at')" title="Click to copy">
+            <hd-icon icon="pajamas:at"></hd-icon>
+            <span class="name">at</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:attention')" title="Click to copy">
+            <hd-icon icon="pajamas:attention"></hd-icon>
+            <span class="name">attention</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:attention-solid')" title="Click to copy">
+            <hd-icon icon="pajamas:attention-solid"></hd-icon>
+            <span class="name">attention-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:attention-solid-sm')" title="Click to copy">
+            <hd-icon icon="pajamas:attention-solid-sm"></hd-icon>
+            <span class="name">attention-solid-sm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:autoplay')" title="Click to copy">
+            <hd-icon icon="pajamas:autoplay"></hd-icon>
+            <span class="name">autoplay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:bitbucket')" title="Click to copy">
+            <hd-icon icon="pajamas:bitbucket"></hd-icon>
+            <span class="name">bitbucket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:bold')" title="Click to copy">
+            <hd-icon icon="pajamas:bold"></hd-icon>
+            <span class="name">bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:book')" title="Click to copy">
+            <hd-icon icon="pajamas:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:bookmark')" title="Click to copy">
+            <hd-icon icon="pajamas:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:branch')" title="Click to copy">
+            <hd-icon icon="pajamas:branch"></hd-icon>
+            <span class="name">branch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:branch-deleted')" title="Click to copy">
+            <hd-icon icon="pajamas:branch-deleted"></hd-icon>
+            <span class="name">branch-deleted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:brand-zoom')" title="Click to copy">
+            <hd-icon icon="pajamas:brand-zoom"></hd-icon>
+            <span class="name">brand-zoom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:bug')" title="Click to copy">
+            <hd-icon icon="pajamas:bug"></hd-icon>
+            <span class="name">bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:building')" title="Click to copy">
+            <hd-icon icon="pajamas:building"></hd-icon>
+            <span class="name">building</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:bulb')" title="Click to copy">
+            <hd-icon icon="pajamas:bulb"></hd-icon>
+            <span class="name">bulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:bullhorn')" title="Click to copy">
+            <hd-icon icon="pajamas:bullhorn"></hd-icon>
+            <span class="name">bullhorn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:calendar')" title="Click to copy">
+            <hd-icon icon="pajamas:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:calendar-overdue')" title="Click to copy">
+            <hd-icon icon="pajamas:calendar-overdue"></hd-icon>
+            <span class="name">calendar-overdue</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:cancel')" title="Click to copy">
+            <hd-icon icon="pajamas:cancel"></hd-icon>
+            <span class="name">cancel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:canceled-circle')" title="Click to copy">
+            <hd-icon icon="pajamas:canceled-circle"></hd-icon>
+            <span class="name">canceled-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:car')" title="Click to copy">
+            <hd-icon icon="pajamas:car"></hd-icon>
+            <span class="name">car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:catalog-checkmark')" title="Click to copy">
+            <hd-icon icon="pajamas:catalog-checkmark"></hd-icon>
+            <span class="name">catalog-checkmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chart')" title="Click to copy">
+            <hd-icon icon="pajamas:chart"></hd-icon>
+            <span class="name">chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:check')" title="Click to copy">
+            <hd-icon icon="pajamas:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:check-circle')" title="Click to copy">
+            <hd-icon icon="pajamas:check-circle"></hd-icon>
+            <span class="name">check-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:check-circle-dashed')" title="Click to copy">
+            <hd-icon icon="pajamas:check-circle-dashed"></hd-icon>
+            <span class="name">check-circle-dashed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:check-circle-filled')" title="Click to copy">
+            <hd-icon icon="pajamas:check-circle-filled"></hd-icon>
+            <span class="name">check-circle-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:check-sm')" title="Click to copy">
+            <hd-icon icon="pajamas:check-sm"></hd-icon>
+            <span class="name">check-sm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:check-xs')" title="Click to copy">
+            <hd-icon icon="pajamas:check-xs"></hd-icon>
+            <span class="name">check-xs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:cherry-pick-commit')" title="Click to copy">
+            <hd-icon icon="pajamas:cherry-pick-commit"></hd-icon>
+            <span class="name">cherry-pick-commit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chevron-double-lg-left')" title="Click to copy">
+            <hd-icon icon="pajamas:chevron-double-lg-left"></hd-icon>
+            <span class="name">chevron-double-lg-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chevron-double-lg-right')" title="Click to copy">
+            <hd-icon icon="pajamas:chevron-double-lg-right"></hd-icon>
+            <span class="name">chevron-double-lg-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chevron-down')" title="Click to copy">
+            <hd-icon icon="pajamas:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chevron-left')" title="Click to copy">
+            <hd-icon icon="pajamas:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chevron-lg-down')" title="Click to copy">
+            <hd-icon icon="pajamas:chevron-lg-down"></hd-icon>
+            <span class="name">chevron-lg-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chevron-lg-left')" title="Click to copy">
+            <hd-icon icon="pajamas:chevron-lg-left"></hd-icon>
+            <span class="name">chevron-lg-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chevron-lg-right')" title="Click to copy">
+            <hd-icon icon="pajamas:chevron-lg-right"></hd-icon>
+            <span class="name">chevron-lg-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chevron-lg-up')" title="Click to copy">
+            <hd-icon icon="pajamas:chevron-lg-up"></hd-icon>
+            <span class="name">chevron-lg-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chevron-right')" title="Click to copy">
+            <hd-icon icon="pajamas:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:chevron-up')" title="Click to copy">
+            <hd-icon icon="pajamas:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:clear')" title="Click to copy">
+            <hd-icon icon="pajamas:clear"></hd-icon>
+            <span class="name">clear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:clear-all')" title="Click to copy">
+            <hd-icon icon="pajamas:clear-all"></hd-icon>
+            <span class="name">clear-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:clock')" title="Click to copy">
+            <hd-icon icon="pajamas:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:close')" title="Click to copy">
+            <hd-icon icon="pajamas:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:close-xs')" title="Click to copy">
+            <hd-icon icon="pajamas:close-xs"></hd-icon>
+            <span class="name">close-xs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:cloud-gear')" title="Click to copy">
+            <hd-icon icon="pajamas:cloud-gear"></hd-icon>
+            <span class="name">cloud-gear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:cloud-pod')" title="Click to copy">
+            <hd-icon icon="pajamas:cloud-pod"></hd-icon>
+            <span class="name">cloud-pod</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:cloud-terminal')" title="Click to copy">
+            <hd-icon icon="pajamas:cloud-terminal"></hd-icon>
+            <span class="name">cloud-terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:code')" title="Click to copy">
+            <hd-icon icon="pajamas:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:collapse')" title="Click to copy">
+            <hd-icon icon="pajamas:collapse"></hd-icon>
+            <span class="name">collapse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:collapse-left')" title="Click to copy">
+            <hd-icon icon="pajamas:collapse-left"></hd-icon>
+            <span class="name">collapse-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:collapse-right')" title="Click to copy">
+            <hd-icon icon="pajamas:collapse-right"></hd-icon>
+            <span class="name">collapse-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:collapse-solid')" title="Click to copy">
+            <hd-icon icon="pajamas:collapse-solid"></hd-icon>
+            <span class="name">collapse-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:comment')" title="Click to copy">
+            <hd-icon icon="pajamas:comment"></hd-icon>
+            <span class="name">comment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:comment-dots')" title="Click to copy">
+            <hd-icon icon="pajamas:comment-dots"></hd-icon>
+            <span class="name">comment-dots</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:comment-lines')" title="Click to copy">
+            <hd-icon icon="pajamas:comment-lines"></hd-icon>
+            <span class="name">comment-lines</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:comment-next')" title="Click to copy">
+            <hd-icon icon="pajamas:comment-next"></hd-icon>
+            <span class="name">comment-next</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:comments')" title="Click to copy">
+            <hd-icon icon="pajamas:comments"></hd-icon>
+            <span class="name">comments</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:commit')" title="Click to copy">
+            <hd-icon icon="pajamas:commit"></hd-icon>
+            <span class="name">commit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:comparison')" title="Click to copy">
+            <hd-icon icon="pajamas:comparison"></hd-icon>
+            <span class="name">comparison</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:compass')" title="Click to copy">
+            <hd-icon icon="pajamas:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:connected')" title="Click to copy">
+            <hd-icon icon="pajamas:connected"></hd-icon>
+            <span class="name">connected</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:container-image')" title="Click to copy">
+            <hd-icon icon="pajamas:container-image"></hd-icon>
+            <span class="name">container-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:copy-to-clipboard')" title="Click to copy">
+            <hd-icon icon="pajamas:copy-to-clipboard"></hd-icon>
+            <span class="name">copy-to-clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:credit-card')" title="Click to copy">
+            <hd-icon icon="pajamas:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:dash')" title="Click to copy">
+            <hd-icon icon="pajamas:dash"></hd-icon>
+            <span class="name">dash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:dash-circle')" title="Click to copy">
+            <hd-icon icon="pajamas:dash-circle"></hd-icon>
+            <span class="name">dash-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:dashboard')" title="Click to copy">
+            <hd-icon icon="pajamas:dashboard"></hd-icon>
+            <span class="name">dashboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:deployments')" title="Click to copy">
+            <hd-icon icon="pajamas:deployments"></hd-icon>
+            <span class="name">deployments</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:details-block')" title="Click to copy">
+            <hd-icon icon="pajamas:details-block"></hd-icon>
+            <span class="name">details-block</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:diagram')" title="Click to copy">
+            <hd-icon icon="pajamas:diagram"></hd-icon>
+            <span class="name">diagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:discord')" title="Click to copy">
+            <hd-icon icon="pajamas:discord"></hd-icon>
+            <span class="name">discord</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:disk')" title="Click to copy">
+            <hd-icon icon="pajamas:disk"></hd-icon>
+            <span class="name">disk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:doc-changes')" title="Click to copy">
+            <hd-icon icon="pajamas:doc-changes"></hd-icon>
+            <span class="name">doc-changes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:doc-chart')" title="Click to copy">
+            <hd-icon icon="pajamas:doc-chart"></hd-icon>
+            <span class="name">doc-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:doc-code')" title="Click to copy">
+            <hd-icon icon="pajamas:doc-code"></hd-icon>
+            <span class="name">doc-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:doc-compressed')" title="Click to copy">
+            <hd-icon icon="pajamas:doc-compressed"></hd-icon>
+            <span class="name">doc-compressed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:doc-expand')" title="Click to copy">
+            <hd-icon icon="pajamas:doc-expand"></hd-icon>
+            <span class="name">doc-expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:doc-image')" title="Click to copy">
+            <hd-icon icon="pajamas:doc-image"></hd-icon>
+            <span class="name">doc-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:doc-new')" title="Click to copy">
+            <hd-icon icon="pajamas:doc-new"></hd-icon>
+            <span class="name">doc-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:doc-symlink')" title="Click to copy">
+            <hd-icon icon="pajamas:doc-symlink"></hd-icon>
+            <span class="name">doc-symlink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:doc-text')" title="Click to copy">
+            <hd-icon icon="pajamas:doc-text"></hd-icon>
+            <span class="name">doc-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:doc-versions')" title="Click to copy">
+            <hd-icon icon="pajamas:doc-versions"></hd-icon>
+            <span class="name">doc-versions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:document')" title="Click to copy">
+            <hd-icon icon="pajamas:document"></hd-icon>
+            <span class="name">document</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:documents')" title="Click to copy">
+            <hd-icon icon="pajamas:documents"></hd-icon>
+            <span class="name">documents</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:dot-grid')" title="Click to copy">
+            <hd-icon icon="pajamas:dot-grid"></hd-icon>
+            <span class="name">dot-grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:download')" title="Click to copy">
+            <hd-icon icon="pajamas:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:dumbbell')" title="Click to copy">
+            <hd-icon icon="pajamas:dumbbell"></hd-icon>
+            <span class="name">dumbbell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:duo-agentic-chat')" title="Click to copy">
+            <hd-icon icon="pajamas:duo-agentic-chat"></hd-icon>
+            <span class="name">duo-agentic-chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:duo-chat')" title="Click to copy">
+            <hd-icon icon="pajamas:duo-chat"></hd-icon>
+            <span class="name">duo-chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:duo-chat-new')" title="Click to copy">
+            <hd-icon icon="pajamas:duo-chat-new"></hd-icon>
+            <span class="name">duo-chat-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:duo-chat-off')" title="Click to copy">
+            <hd-icon icon="pajamas:duo-chat-off"></hd-icon>
+            <span class="name">duo-chat-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:duplicate')" title="Click to copy">
+            <hd-icon icon="pajamas:duplicate"></hd-icon>
+            <span class="name">duplicate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:earth')" title="Click to copy">
+            <hd-icon icon="pajamas:earth"></hd-icon>
+            <span class="name">earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:ellipsis-h')" title="Click to copy">
+            <hd-icon icon="pajamas:ellipsis-h"></hd-icon>
+            <span class="name">ellipsis-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:ellipsis-v')" title="Click to copy">
+            <hd-icon icon="pajamas:ellipsis-v"></hd-icon>
+            <span class="name">ellipsis-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:entity-blocked')" title="Click to copy">
+            <hd-icon icon="pajamas:entity-blocked"></hd-icon>
+            <span class="name">entity-blocked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:entity-blocking')" title="Click to copy">
+            <hd-icon icon="pajamas:entity-blocking"></hd-icon>
+            <span class="name">entity-blocking</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:environment')" title="Click to copy">
+            <hd-icon icon="pajamas:environment"></hd-icon>
+            <span class="name">environment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:epic')" title="Click to copy">
+            <hd-icon icon="pajamas:epic"></hd-icon>
+            <span class="name">epic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:epic-closed')" title="Click to copy">
+            <hd-icon icon="pajamas:epic-closed"></hd-icon>
+            <span class="name">epic-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:error')" title="Click to copy">
+            <hd-icon icon="pajamas:error"></hd-icon>
+            <span class="name">error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:expand')" title="Click to copy">
+            <hd-icon icon="pajamas:expand"></hd-icon>
+            <span class="name">expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:expand-down')" title="Click to copy">
+            <hd-icon icon="pajamas:expand-down"></hd-icon>
+            <span class="name">expand-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:expand-left')" title="Click to copy">
+            <hd-icon icon="pajamas:expand-left"></hd-icon>
+            <span class="name">expand-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:expand-right')" title="Click to copy">
+            <hd-icon icon="pajamas:expand-right"></hd-icon>
+            <span class="name">expand-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:expand-up')" title="Click to copy">
+            <hd-icon icon="pajamas:expand-up"></hd-icon>
+            <span class="name">expand-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:expire')" title="Click to copy">
+            <hd-icon icon="pajamas:expire"></hd-icon>
+            <span class="name">expire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:export')" title="Click to copy">
+            <hd-icon icon="pajamas:export"></hd-icon>
+            <span class="name">export</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:external-link')" title="Click to copy">
+            <hd-icon icon="pajamas:external-link"></hd-icon>
+            <span class="name">external-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:eye')" title="Click to copy">
+            <hd-icon icon="pajamas:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:eye-slash')" title="Click to copy">
+            <hd-icon icon="pajamas:eye-slash"></hd-icon>
+            <span class="name">eye-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:face-neutral')" title="Click to copy">
+            <hd-icon icon="pajamas:face-neutral"></hd-icon>
+            <span class="name">face-neutral</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:face-unhappy')" title="Click to copy">
+            <hd-icon icon="pajamas:face-unhappy"></hd-icon>
+            <span class="name">face-unhappy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:false-positive')" title="Click to copy">
+            <hd-icon icon="pajamas:false-positive"></hd-icon>
+            <span class="name">false-positive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:feature-flag')" title="Click to copy">
+            <hd-icon icon="pajamas:feature-flag"></hd-icon>
+            <span class="name">feature-flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:feature-flag-disabled')" title="Click to copy">
+            <hd-icon icon="pajamas:feature-flag-disabled"></hd-icon>
+            <span class="name">feature-flag-disabled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:file-addition')" title="Click to copy">
+            <hd-icon icon="pajamas:file-addition"></hd-icon>
+            <span class="name">file-addition</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:file-addition-solid')" title="Click to copy">
+            <hd-icon icon="pajamas:file-addition-solid"></hd-icon>
+            <span class="name">file-addition-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:file-deletion')" title="Click to copy">
+            <hd-icon icon="pajamas:file-deletion"></hd-icon>
+            <span class="name">file-deletion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:file-deletion-solid')" title="Click to copy">
+            <hd-icon icon="pajamas:file-deletion-solid"></hd-icon>
+            <span class="name">file-deletion-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:file-modified')" title="Click to copy">
+            <hd-icon icon="pajamas:file-modified"></hd-icon>
+            <span class="name">file-modified</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:file-modified-solid')" title="Click to copy">
+            <hd-icon icon="pajamas:file-modified-solid"></hd-icon>
+            <span class="name">file-modified-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:file-tree')" title="Click to copy">
+            <hd-icon icon="pajamas:file-tree"></hd-icon>
+            <span class="name">file-tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:filter')" title="Click to copy">
+            <hd-icon icon="pajamas:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:fire')" title="Click to copy">
+            <hd-icon icon="pajamas:fire"></hd-icon>
+            <span class="name">fire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:first-contribution')" title="Click to copy">
+            <hd-icon icon="pajamas:first-contribution"></hd-icon>
+            <span class="name">first-contribution</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:flag')" title="Click to copy">
+            <hd-icon icon="pajamas:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:flow-ai')" title="Click to copy">
+            <hd-icon icon="pajamas:flow-ai"></hd-icon>
+            <span class="name">flow-ai</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:folder')" title="Click to copy">
+            <hd-icon icon="pajamas:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:folder-new')" title="Click to copy">
+            <hd-icon icon="pajamas:folder-new"></hd-icon>
+            <span class="name">folder-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:folder-o')" title="Click to copy">
+            <hd-icon icon="pajamas:folder-o"></hd-icon>
+            <span class="name">folder-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:folder-open')" title="Click to copy">
+            <hd-icon icon="pajamas:folder-open"></hd-icon>
+            <span class="name">folder-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:food')" title="Click to copy">
+            <hd-icon icon="pajamas:food"></hd-icon>
+            <span class="name">food</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:fork')" title="Click to copy">
+            <hd-icon icon="pajamas:fork"></hd-icon>
+            <span class="name">fork</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:formula')" title="Click to copy">
+            <hd-icon icon="pajamas:formula"></hd-icon>
+            <span class="name">formula</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:git')" title="Click to copy">
+            <hd-icon icon="pajamas:git"></hd-icon>
+            <span class="name">git</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:git-merge')" title="Click to copy">
+            <hd-icon icon="pajamas:git-merge"></hd-icon>
+            <span class="name">git-merge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:gitea')" title="Click to copy">
+            <hd-icon icon="pajamas:gitea"></hd-icon>
+            <span class="name">gitea</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:github')" title="Click to copy">
+            <hd-icon icon="pajamas:github"></hd-icon>
+            <span class="name">github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:go-back')" title="Click to copy">
+            <hd-icon icon="pajamas:go-back"></hd-icon>
+            <span class="name">go-back</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:google')" title="Click to copy">
+            <hd-icon icon="pajamas:google"></hd-icon>
+            <span class="name">google</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:grip')" title="Click to copy">
+            <hd-icon icon="pajamas:grip"></hd-icon>
+            <span class="name">grip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:group')" title="Click to copy">
+            <hd-icon icon="pajamas:group"></hd-icon>
+            <span class="name">group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:hamburger')" title="Click to copy">
+            <hd-icon icon="pajamas:hamburger"></hd-icon>
+            <span class="name">hamburger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:hash')" title="Click to copy">
+            <hd-icon icon="pajamas:hash"></hd-icon>
+            <span class="name">hash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:heading')" title="Click to copy">
+            <hd-icon icon="pajamas:heading"></hd-icon>
+            <span class="name">heading</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:heart')" title="Click to copy">
+            <hd-icon icon="pajamas:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:highlight')" title="Click to copy">
+            <hd-icon icon="pajamas:highlight"></hd-icon>
+            <span class="name">highlight</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:history')" title="Click to copy">
+            <hd-icon icon="pajamas:history"></hd-icon>
+            <span class="name">history</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:home')" title="Click to copy">
+            <hd-icon icon="pajamas:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:hook')" title="Click to copy">
+            <hd-icon icon="pajamas:hook"></hd-icon>
+            <span class="name">hook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:hourglass')" title="Click to copy">
+            <hd-icon icon="pajamas:hourglass"></hd-icon>
+            <span class="name">hourglass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:image-comment-dark')" title="Click to copy">
+            <hd-icon icon="pajamas:image-comment-dark"></hd-icon>
+            <span class="name">image-comment-dark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:image-comment-light')" title="Click to copy">
+            <hd-icon icon="pajamas:image-comment-light"></hd-icon>
+            <span class="name">image-comment-light</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:import')" title="Click to copy">
+            <hd-icon icon="pajamas:import"></hd-icon>
+            <span class="name">import</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:incognito')" title="Click to copy">
+            <hd-icon icon="pajamas:incognito"></hd-icon>
+            <span class="name">incognito</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:information')" title="Click to copy">
+            <hd-icon icon="pajamas:information"></hd-icon>
+            <span class="name">information</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:information-o')" title="Click to copy">
+            <hd-icon icon="pajamas:information-o"></hd-icon>
+            <span class="name">information-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:infrastructure-registry')" title="Click to copy">
+            <hd-icon icon="pajamas:infrastructure-registry"></hd-icon>
+            <span class="name">infrastructure-registry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:insert')" title="Click to copy">
+            <hd-icon icon="pajamas:insert"></hd-icon>
+            <span class="name">insert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-close')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-close"></hd-icon>
+            <span class="name">issue-close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-closed')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-closed"></hd-icon>
+            <span class="name">issue-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-new')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-new"></hd-icon>
+            <span class="name">issue-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-open-m')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-open-m"></hd-icon>
+            <span class="name">issue-open-m</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-enhancement')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-enhancement"></hd-icon>
+            <span class="name">issue-type-enhancement</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-feature')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-feature"></hd-icon>
+            <span class="name">issue-type-feature</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-feature-flag')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-feature-flag"></hd-icon>
+            <span class="name">issue-type-feature-flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-incident')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-incident"></hd-icon>
+            <span class="name">issue-type-incident</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-issue')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-issue"></hd-icon>
+            <span class="name">issue-type-issue</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-keyresult')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-keyresult"></hd-icon>
+            <span class="name">issue-type-keyresult</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-maintenance')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-maintenance"></hd-icon>
+            <span class="name">issue-type-maintenance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-objective')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-objective"></hd-icon>
+            <span class="name">issue-type-objective</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-requirements')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-requirements"></hd-icon>
+            <span class="name">issue-type-requirements</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-task')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-task"></hd-icon>
+            <span class="name">issue-type-task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-test-case')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-test-case"></hd-icon>
+            <span class="name">issue-type-test-case</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-type-ticket')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-type-ticket"></hd-icon>
+            <span class="name">issue-type-ticket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issue-update')" title="Click to copy">
+            <hd-icon icon="pajamas:issue-update"></hd-icon>
+            <span class="name">issue-update</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:issues')" title="Click to copy">
+            <hd-icon icon="pajamas:issues"></hd-icon>
+            <span class="name">issues</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:italic')" title="Click to copy">
+            <hd-icon icon="pajamas:italic"></hd-icon>
+            <span class="name">italic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:iteration')" title="Click to copy">
+            <hd-icon icon="pajamas:iteration"></hd-icon>
+            <span class="name">iteration</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:key')" title="Click to copy">
+            <hd-icon icon="pajamas:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:keyboard')" title="Click to copy">
+            <hd-icon icon="pajamas:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:kind')" title="Click to copy">
+            <hd-icon icon="pajamas:kind"></hd-icon>
+            <span class="name">kind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:kubernetes')" title="Click to copy">
+            <hd-icon icon="pajamas:kubernetes"></hd-icon>
+            <span class="name">kubernetes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:kubernetes-agent')" title="Click to copy">
+            <hd-icon icon="pajamas:kubernetes-agent"></hd-icon>
+            <span class="name">kubernetes-agent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:label')" title="Click to copy">
+            <hd-icon icon="pajamas:label"></hd-icon>
+            <span class="name">label</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:labels')" title="Click to copy">
+            <hd-icon icon="pajamas:labels"></hd-icon>
+            <span class="name">labels</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:leave')" title="Click to copy">
+            <hd-icon icon="pajamas:leave"></hd-icon>
+            <span class="name">leave</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:level-up')" title="Click to copy">
+            <hd-icon icon="pajamas:level-up"></hd-icon>
+            <span class="name">level-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:license')" title="Click to copy">
+            <hd-icon icon="pajamas:license"></hd-icon>
+            <span class="name">license</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:license-sm')" title="Click to copy">
+            <hd-icon icon="pajamas:license-sm"></hd-icon>
+            <span class="name">license-sm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:link')" title="Click to copy">
+            <hd-icon icon="pajamas:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:linkedin')" title="Click to copy">
+            <hd-icon icon="pajamas:linkedin"></hd-icon>
+            <span class="name">linkedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:list-bulleted')" title="Click to copy">
+            <hd-icon icon="pajamas:list-bulleted"></hd-icon>
+            <span class="name">list-bulleted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:list-indent')" title="Click to copy">
+            <hd-icon icon="pajamas:list-indent"></hd-icon>
+            <span class="name">list-indent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:list-numbered')" title="Click to copy">
+            <hd-icon icon="pajamas:list-numbered"></hd-icon>
+            <span class="name">list-numbered</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:list-outdent')" title="Click to copy">
+            <hd-icon icon="pajamas:list-outdent"></hd-icon>
+            <span class="name">list-outdent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:list-task')" title="Click to copy">
+            <hd-icon icon="pajamas:list-task"></hd-icon>
+            <span class="name">list-task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:live-preview')" title="Click to copy">
+            <hd-icon icon="pajamas:live-preview"></hd-icon>
+            <span class="name">live-preview</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:live-stream')" title="Click to copy">
+            <hd-icon icon="pajamas:live-stream"></hd-icon>
+            <span class="name">live-stream</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:location')" title="Click to copy">
+            <hd-icon icon="pajamas:location"></hd-icon>
+            <span class="name">location</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:location-dot')" title="Click to copy">
+            <hd-icon icon="pajamas:location-dot"></hd-icon>
+            <span class="name">location-dot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:lock')" title="Click to copy">
+            <hd-icon icon="pajamas:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:lock-open')" title="Click to copy">
+            <hd-icon icon="pajamas:lock-open"></hd-icon>
+            <span class="name">lock-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:log')" title="Click to copy">
+            <hd-icon icon="pajamas:log"></hd-icon>
+            <span class="name">log</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:long-arrow')" title="Click to copy">
+            <hd-icon icon="pajamas:long-arrow"></hd-icon>
+            <span class="name">long-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:machine-learning')" title="Click to copy">
+            <hd-icon icon="pajamas:machine-learning"></hd-icon>
+            <span class="name">machine-learning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:mail')" title="Click to copy">
+            <hd-icon icon="pajamas:mail"></hd-icon>
+            <span class="name">mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:markdown-mark')" title="Click to copy">
+            <hd-icon icon="pajamas:markdown-mark"></hd-icon>
+            <span class="name">markdown-mark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:markdown-mark-solid')" title="Click to copy">
+            <hd-icon icon="pajamas:markdown-mark-solid"></hd-icon>
+            <span class="name">markdown-mark-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:marquee-selection')" title="Click to copy">
+            <hd-icon icon="pajamas:marquee-selection"></hd-icon>
+            <span class="name">marquee-selection</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:mastodon')" title="Click to copy">
+            <hd-icon icon="pajamas:mastodon"></hd-icon>
+            <span class="name">mastodon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:maximize')" title="Click to copy">
+            <hd-icon icon="pajamas:maximize"></hd-icon>
+            <span class="name">maximize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:media')" title="Click to copy">
+            <hd-icon icon="pajamas:media"></hd-icon>
+            <span class="name">media</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:media-broken')" title="Click to copy">
+            <hd-icon icon="pajamas:media-broken"></hd-icon>
+            <span class="name">media-broken</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:merge')" title="Click to copy">
+            <hd-icon icon="pajamas:merge"></hd-icon>
+            <span class="name">merge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:merge-request')" title="Click to copy">
+            <hd-icon icon="pajamas:merge-request"></hd-icon>
+            <span class="name">merge-request</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:merge-request-close')" title="Click to copy">
+            <hd-icon icon="pajamas:merge-request-close"></hd-icon>
+            <span class="name">merge-request-close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:merge-request-close-m')" title="Click to copy">
+            <hd-icon icon="pajamas:merge-request-close-m"></hd-icon>
+            <span class="name">merge-request-close-m</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:merge-request-open')" title="Click to copy">
+            <hd-icon icon="pajamas:merge-request-open"></hd-icon>
+            <span class="name">merge-request-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:messages')" title="Click to copy">
+            <hd-icon icon="pajamas:messages"></hd-icon>
+            <span class="name">messages</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:milestone')" title="Click to copy">
+            <hd-icon icon="pajamas:milestone"></hd-icon>
+            <span class="name">milestone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:minimize')" title="Click to copy">
+            <hd-icon icon="pajamas:minimize"></hd-icon>
+            <span class="name">minimize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:mobile')" title="Click to copy">
+            <hd-icon icon="pajamas:mobile"></hd-icon>
+            <span class="name">mobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:mobile-issue-close')" title="Click to copy">
+            <hd-icon icon="pajamas:mobile-issue-close"></hd-icon>
+            <span class="name">mobile-issue-close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:monitor')" title="Click to copy">
+            <hd-icon icon="pajamas:monitor"></hd-icon>
+            <span class="name">monitor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:monitor-lines')" title="Click to copy">
+            <hd-icon icon="pajamas:monitor-lines"></hd-icon>
+            <span class="name">monitor-lines</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:monitor-o')" title="Click to copy">
+            <hd-icon icon="pajamas:monitor-o"></hd-icon>
+            <span class="name">monitor-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:multiple-choice')" title="Click to copy">
+            <hd-icon icon="pajamas:multiple-choice"></hd-icon>
+            <span class="name">multiple-choice</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:namespace')" title="Click to copy">
+            <hd-icon icon="pajamas:namespace"></hd-icon>
+            <span class="name">namespace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:nature')" title="Click to copy">
+            <hd-icon icon="pajamas:nature"></hd-icon>
+            <span class="name">nature</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:notifications')" title="Click to copy">
+            <hd-icon icon="pajamas:notifications"></hd-icon>
+            <span class="name">notifications</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:notifications-off')" title="Click to copy">
+            <hd-icon icon="pajamas:notifications-off"></hd-icon>
+            <span class="name">notifications-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:object')" title="Click to copy">
+            <hd-icon icon="pajamas:object"></hd-icon>
+            <span class="name">object</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:organization')" title="Click to copy">
+            <hd-icon icon="pajamas:organization"></hd-icon>
+            <span class="name">organization</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:overview')" title="Click to copy">
+            <hd-icon icon="pajamas:overview"></hd-icon>
+            <span class="name">overview</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:package')" title="Click to copy">
+            <hd-icon icon="pajamas:package"></hd-icon>
+            <span class="name">package</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:paper-airplane')" title="Click to copy">
+            <hd-icon icon="pajamas:paper-airplane"></hd-icon>
+            <span class="name">paper-airplane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:paperclip')" title="Click to copy">
+            <hd-icon icon="pajamas:paperclip"></hd-icon>
+            <span class="name">paperclip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:partner-verified')" title="Click to copy">
+            <hd-icon icon="pajamas:partner-verified"></hd-icon>
+            <span class="name">partner-verified</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:pause')" title="Click to copy">
+            <hd-icon icon="pajamas:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:pencil')" title="Click to copy">
+            <hd-icon icon="pajamas:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:pencil-square')" title="Click to copy">
+            <hd-icon icon="pajamas:pencil-square"></hd-icon>
+            <span class="name">pencil-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:pipeline')" title="Click to copy">
+            <hd-icon icon="pajamas:pipeline"></hd-icon>
+            <span class="name">pipeline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:planning')" title="Click to copy">
+            <hd-icon icon="pajamas:planning"></hd-icon>
+            <span class="name">planning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:play')" title="Click to copy">
+            <hd-icon icon="pajamas:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:plus')" title="Click to copy">
+            <hd-icon icon="pajamas:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:plus-square')" title="Click to copy">
+            <hd-icon icon="pajamas:plus-square"></hd-icon>
+            <span class="name">plus-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:plus-square-o')" title="Click to copy">
+            <hd-icon icon="pajamas:plus-square-o"></hd-icon>
+            <span class="name">plus-square-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:pod')" title="Click to copy">
+            <hd-icon icon="pajamas:pod"></hd-icon>
+            <span class="name">pod</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:podcast')" title="Click to copy">
+            <hd-icon icon="pajamas:podcast"></hd-icon>
+            <span class="name">podcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:power')" title="Click to copy">
+            <hd-icon icon="pajamas:power"></hd-icon>
+            <span class="name">power</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:preferences')" title="Click to copy">
+            <hd-icon icon="pajamas:preferences"></hd-icon>
+            <span class="name">preferences</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:profile')" title="Click to copy">
+            <hd-icon icon="pajamas:profile"></hd-icon>
+            <span class="name">profile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:progress')" title="Click to copy">
+            <hd-icon icon="pajamas:progress"></hd-icon>
+            <span class="name">progress</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:project')" title="Click to copy">
+            <hd-icon icon="pajamas:project"></hd-icon>
+            <span class="name">project</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:push-rules')" title="Click to copy">
+            <hd-icon icon="pajamas:push-rules"></hd-icon>
+            <span class="name">push-rules</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:question')" title="Click to copy">
+            <hd-icon icon="pajamas:question"></hd-icon>
+            <span class="name">question</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:question-o')" title="Click to copy">
+            <hd-icon icon="pajamas:question-o"></hd-icon>
+            <span class="name">question-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:quick-actions')" title="Click to copy">
+            <hd-icon icon="pajamas:quick-actions"></hd-icon>
+            <span class="name">quick-actions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:quota')" title="Click to copy">
+            <hd-icon icon="pajamas:quota"></hd-icon>
+            <span class="name">quota</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:quote')" title="Click to copy">
+            <hd-icon icon="pajamas:quote"></hd-icon>
+            <span class="name">quote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:recipe')" title="Click to copy">
+            <hd-icon icon="pajamas:recipe"></hd-icon>
+            <span class="name">recipe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:redo')" title="Click to copy">
+            <hd-icon icon="pajamas:redo"></hd-icon>
+            <span class="name">redo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:regular-expression')" title="Click to copy">
+            <hd-icon icon="pajamas:regular-expression"></hd-icon>
+            <span class="name">regular-expression</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:remove')" title="Click to copy">
+            <hd-icon icon="pajamas:remove"></hd-icon>
+            <span class="name">remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:remove-all')" title="Click to copy">
+            <hd-icon icon="pajamas:remove-all"></hd-icon>
+            <span class="name">remove-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:repeat')" title="Click to copy">
+            <hd-icon icon="pajamas:repeat"></hd-icon>
+            <span class="name">repeat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:reply')" title="Click to copy">
+            <hd-icon icon="pajamas:reply"></hd-icon>
+            <span class="name">reply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:requirements')" title="Click to copy">
+            <hd-icon icon="pajamas:requirements"></hd-icon>
+            <span class="name">requirements</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:resize')" title="Click to copy">
+            <hd-icon icon="pajamas:resize"></hd-icon>
+            <span class="name">resize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:retry')" title="Click to copy">
+            <hd-icon icon="pajamas:retry"></hd-icon>
+            <span class="name">retry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:review-checkmark')" title="Click to copy">
+            <hd-icon icon="pajamas:review-checkmark"></hd-icon>
+            <span class="name">review-checkmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:review-list')" title="Click to copy">
+            <hd-icon icon="pajamas:review-list"></hd-icon>
+            <span class="name">review-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:review-warning')" title="Click to copy">
+            <hd-icon icon="pajamas:review-warning"></hd-icon>
+            <span class="name">review-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:rocket')" title="Click to copy">
+            <hd-icon icon="pajamas:rocket"></hd-icon>
+            <span class="name">rocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:rocket-launch')" title="Click to copy">
+            <hd-icon icon="pajamas:rocket-launch"></hd-icon>
+            <span class="name">rocket-launch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:rss')" title="Click to copy">
+            <hd-icon icon="pajamas:rss"></hd-icon>
+            <span class="name">rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:scale')" title="Click to copy">
+            <hd-icon icon="pajamas:scale"></hd-icon>
+            <span class="name">scale</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:scroll-down')" title="Click to copy">
+            <hd-icon icon="pajamas:scroll-down"></hd-icon>
+            <span class="name">scroll-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:scroll-handle')" title="Click to copy">
+            <hd-icon icon="pajamas:scroll-handle"></hd-icon>
+            <span class="name">scroll-handle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:scroll-up')" title="Click to copy">
+            <hd-icon icon="pajamas:scroll-up"></hd-icon>
+            <span class="name">scroll-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:search')" title="Click to copy">
+            <hd-icon icon="pajamas:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:search-dot')" title="Click to copy">
+            <hd-icon icon="pajamas:search-dot"></hd-icon>
+            <span class="name">search-dot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:search-minus')" title="Click to copy">
+            <hd-icon icon="pajamas:search-minus"></hd-icon>
+            <span class="name">search-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:search-plus')" title="Click to copy">
+            <hd-icon icon="pajamas:search-plus"></hd-icon>
+            <span class="name">search-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:search-results')" title="Click to copy">
+            <hd-icon icon="pajamas:search-results"></hd-icon>
+            <span class="name">search-results</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:search-sm')" title="Click to copy">
+            <hd-icon icon="pajamas:search-sm"></hd-icon>
+            <span class="name">search-sm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:session-ai')" title="Click to copy">
+            <hd-icon icon="pajamas:session-ai"></hd-icon>
+            <span class="name">session-ai</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:settings')" title="Click to copy">
+            <hd-icon icon="pajamas:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:severity-critical')" title="Click to copy">
+            <hd-icon icon="pajamas:severity-critical"></hd-icon>
+            <span class="name">severity-critical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:severity-high')" title="Click to copy">
+            <hd-icon icon="pajamas:severity-high"></hd-icon>
+            <span class="name">severity-high</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:severity-info')" title="Click to copy">
+            <hd-icon icon="pajamas:severity-info"></hd-icon>
+            <span class="name">severity-info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:severity-low')" title="Click to copy">
+            <hd-icon icon="pajamas:severity-low"></hd-icon>
+            <span class="name">severity-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:severity-medium')" title="Click to copy">
+            <hd-icon icon="pajamas:severity-medium"></hd-icon>
+            <span class="name">severity-medium</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:severity-unknown')" title="Click to copy">
+            <hd-icon icon="pajamas:severity-unknown"></hd-icon>
+            <span class="name">severity-unknown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:share')" title="Click to copy">
+            <hd-icon icon="pajamas:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:shield')" title="Click to copy">
+            <hd-icon icon="pajamas:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:sidebar')" title="Click to copy">
+            <hd-icon icon="pajamas:sidebar"></hd-icon>
+            <span class="name">sidebar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:sidebar-right')" title="Click to copy">
+            <hd-icon icon="pajamas:sidebar-right"></hd-icon>
+            <span class="name">sidebar-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:skype')" title="Click to copy">
+            <hd-icon icon="pajamas:skype"></hd-icon>
+            <span class="name">skype</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:slight-frown')" title="Click to copy">
+            <hd-icon icon="pajamas:slight-frown"></hd-icon>
+            <span class="name">slight-frown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:slight-smile')" title="Click to copy">
+            <hd-icon icon="pajamas:slight-smile"></hd-icon>
+            <span class="name">slight-smile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:smart-card')" title="Click to copy">
+            <hd-icon icon="pajamas:smart-card"></hd-icon>
+            <span class="name">smart-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:smile')" title="Click to copy">
+            <hd-icon icon="pajamas:smile"></hd-icon>
+            <span class="name">smile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:smiley')" title="Click to copy">
+            <hd-icon icon="pajamas:smiley"></hd-icon>
+            <span class="name">smiley</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:snippet')" title="Click to copy">
+            <hd-icon icon="pajamas:snippet"></hd-icon>
+            <span class="name">snippet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:soft-unwrap')" title="Click to copy">
+            <hd-icon icon="pajamas:soft-unwrap"></hd-icon>
+            <span class="name">soft-unwrap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:soft-wrap')" title="Click to copy">
+            <hd-icon icon="pajamas:soft-wrap"></hd-icon>
+            <span class="name">soft-wrap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:sort-highest')" title="Click to copy">
+            <hd-icon icon="pajamas:sort-highest"></hd-icon>
+            <span class="name">sort-highest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:sort-lowest')" title="Click to copy">
+            <hd-icon icon="pajamas:sort-lowest"></hd-icon>
+            <span class="name">sort-lowest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:spam')" title="Click to copy">
+            <hd-icon icon="pajamas:spam"></hd-icon>
+            <span class="name">spam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:stage-all')" title="Click to copy">
+            <hd-icon icon="pajamas:stage-all"></hd-icon>
+            <span class="name">stage-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:star')" title="Click to copy">
+            <hd-icon icon="pajamas:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:star-o')" title="Click to copy">
+            <hd-icon icon="pajamas:star-o"></hd-icon>
+            <span class="name">star-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status')" title="Click to copy">
+            <hd-icon icon="pajamas:status"></hd-icon>
+            <span class="name">status</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status-active')" title="Click to copy">
+            <hd-icon icon="pajamas:status-active"></hd-icon>
+            <span class="name">status-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status-alert')" title="Click to copy">
+            <hd-icon icon="pajamas:status-alert"></hd-icon>
+            <span class="name">status-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status-cancelled')" title="Click to copy">
+            <hd-icon icon="pajamas:status-cancelled"></hd-icon>
+            <span class="name">status-cancelled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status-closed')" title="Click to copy">
+            <hd-icon icon="pajamas:status-closed"></hd-icon>
+            <span class="name">status-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status-health')" title="Click to copy">
+            <hd-icon icon="pajamas:status-health"></hd-icon>
+            <span class="name">status-health</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status-neutral')" title="Click to copy">
+            <hd-icon icon="pajamas:status-neutral"></hd-icon>
+            <span class="name">status-neutral</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status-paused')" title="Click to copy">
+            <hd-icon icon="pajamas:status-paused"></hd-icon>
+            <span class="name">status-paused</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status-preparing-borderless')" title="Click to copy">
+            <hd-icon icon="pajamas:status-preparing-borderless"></hd-icon>
+            <span class="name">status-preparing-borderless</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status-stopped')" title="Click to copy">
+            <hd-icon icon="pajamas:status-stopped"></hd-icon>
+            <span class="name">status-stopped</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:status-waiting')" title="Click to copy">
+            <hd-icon icon="pajamas:status-waiting"></hd-icon>
+            <span class="name">status-waiting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:stop')" title="Click to copy">
+            <hd-icon icon="pajamas:stop"></hd-icon>
+            <span class="name">stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:strikethrough')" title="Click to copy">
+            <hd-icon icon="pajamas:strikethrough"></hd-icon>
+            <span class="name">strikethrough</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:subgroup')" title="Click to copy">
+            <hd-icon icon="pajamas:subgroup"></hd-icon>
+            <span class="name">subgroup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:subscript')" title="Click to copy">
+            <hd-icon icon="pajamas:subscript"></hd-icon>
+            <span class="name">subscript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:substitute')" title="Click to copy">
+            <hd-icon icon="pajamas:substitute"></hd-icon>
+            <span class="name">substitute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:suggestion-ai')" title="Click to copy">
+            <hd-icon icon="pajamas:suggestion-ai"></hd-icon>
+            <span class="name">suggestion-ai</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:superscript')" title="Click to copy">
+            <hd-icon icon="pajamas:superscript"></hd-icon>
+            <span class="name">superscript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:symlink')" title="Click to copy">
+            <hd-icon icon="pajamas:symlink"></hd-icon>
+            <span class="name">symlink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:table')" title="Click to copy">
+            <hd-icon icon="pajamas:table"></hd-icon>
+            <span class="name">table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:tablet')" title="Click to copy">
+            <hd-icon icon="pajamas:tablet"></hd-icon>
+            <span class="name">tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:tachometer')" title="Click to copy">
+            <hd-icon icon="pajamas:tachometer"></hd-icon>
+            <span class="name">tachometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:tag')" title="Click to copy">
+            <hd-icon icon="pajamas:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:tanuki')" title="Click to copy">
+            <hd-icon icon="pajamas:tanuki"></hd-icon>
+            <span class="name">tanuki</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:tanuki-ai')" title="Click to copy">
+            <hd-icon icon="pajamas:tanuki-ai"></hd-icon>
+            <span class="name">tanuki-ai</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:tanuki-ai-off')" title="Click to copy">
+            <hd-icon icon="pajamas:tanuki-ai-off"></hd-icon>
+            <span class="name">tanuki-ai-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:tanuki-verified')" title="Click to copy">
+            <hd-icon icon="pajamas:tanuki-verified"></hd-icon>
+            <span class="name">tanuki-verified</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:task-done')" title="Click to copy">
+            <hd-icon icon="pajamas:task-done"></hd-icon>
+            <span class="name">task-done</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:template')" title="Click to copy">
+            <hd-icon icon="pajamas:template"></hd-icon>
+            <span class="name">template</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:terminal')" title="Click to copy">
+            <hd-icon icon="pajamas:terminal"></hd-icon>
+            <span class="name">terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:terraform')" title="Click to copy">
+            <hd-icon icon="pajamas:terraform"></hd-icon>
+            <span class="name">terraform</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:text-description')" title="Click to copy">
+            <hd-icon icon="pajamas:text-description"></hd-icon>
+            <span class="name">text-description</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:thumb-down')" title="Click to copy">
+            <hd-icon icon="pajamas:thumb-down"></hd-icon>
+            <span class="name">thumb-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:thumb-up')" title="Click to copy">
+            <hd-icon icon="pajamas:thumb-up"></hd-icon>
+            <span class="name">thumb-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:thumbtack')" title="Click to copy">
+            <hd-icon icon="pajamas:thumbtack"></hd-icon>
+            <span class="name">thumbtack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:thumbtack-solid')" title="Click to copy">
+            <hd-icon icon="pajamas:thumbtack-solid"></hd-icon>
+            <span class="name">thumbtack-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:time-out')" title="Click to copy">
+            <hd-icon icon="pajamas:time-out"></hd-icon>
+            <span class="name">time-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:timer')" title="Click to copy">
+            <hd-icon icon="pajamas:timer"></hd-icon>
+            <span class="name">timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:title')" title="Click to copy">
+            <hd-icon icon="pajamas:title"></hd-icon>
+            <span class="name">title</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:todo-add')" title="Click to copy">
+            <hd-icon icon="pajamas:todo-add"></hd-icon>
+            <span class="name">todo-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:todo-done')" title="Click to copy">
+            <hd-icon icon="pajamas:todo-done"></hd-icon>
+            <span class="name">todo-done</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:token')" title="Click to copy">
+            <hd-icon icon="pajamas:token"></hd-icon>
+            <span class="name">token</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:trend-down')" title="Click to copy">
+            <hd-icon icon="pajamas:trend-down"></hd-icon>
+            <span class="name">trend-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:trend-static')" title="Click to copy">
+            <hd-icon icon="pajamas:trend-static"></hd-icon>
+            <span class="name">trend-static</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:trend-up')" title="Click to copy">
+            <hd-icon icon="pajamas:trend-up"></hd-icon>
+            <span class="name">trend-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:trigger-source')" title="Click to copy">
+            <hd-icon icon="pajamas:trigger-source"></hd-icon>
+            <span class="name">trigger-source</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:unapproval')" title="Click to copy">
+            <hd-icon icon="pajamas:unapproval"></hd-icon>
+            <span class="name">unapproval</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:unassignee')" title="Click to copy">
+            <hd-icon icon="pajamas:unassignee"></hd-icon>
+            <span class="name">unassignee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:underline')" title="Click to copy">
+            <hd-icon icon="pajamas:underline"></hd-icon>
+            <span class="name">underline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:unlink')" title="Click to copy">
+            <hd-icon icon="pajamas:unlink"></hd-icon>
+            <span class="name">unlink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:unstage-all')" title="Click to copy">
+            <hd-icon icon="pajamas:unstage-all"></hd-icon>
+            <span class="name">unstage-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:upgrade')" title="Click to copy">
+            <hd-icon icon="pajamas:upgrade"></hd-icon>
+            <span class="name">upgrade</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:upload')" title="Click to copy">
+            <hd-icon icon="pajamas:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:user')" title="Click to copy">
+            <hd-icon icon="pajamas:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:users')" title="Click to copy">
+            <hd-icon icon="pajamas:users"></hd-icon>
+            <span class="name">users</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:volume-up')" title="Click to copy">
+            <hd-icon icon="pajamas:volume-up"></hd-icon>
+            <span class="name">volume-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:warning')" title="Click to copy">
+            <hd-icon icon="pajamas:warning"></hd-icon>
+            <span class="name">warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:warning-solid')" title="Click to copy">
+            <hd-icon icon="pajamas:warning-solid"></hd-icon>
+            <span class="name">warning-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:weight')" title="Click to copy">
+            <hd-icon icon="pajamas:weight"></hd-icon>
+            <span class="name">weight</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work')" title="Click to copy">
+            <hd-icon icon="pajamas:work"></hd-icon>
+            <span class="name">work</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-child')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-child"></hd-icon>
+            <span class="name">work-item-child</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-enhancement')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-enhancement"></hd-icon>
+            <span class="name">work-item-enhancement</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-epic')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-epic"></hd-icon>
+            <span class="name">work-item-epic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-feature')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-feature"></hd-icon>
+            <span class="name">work-item-feature</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-feature-flag')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-feature-flag"></hd-icon>
+            <span class="name">work-item-feature-flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-incident')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-incident"></hd-icon>
+            <span class="name">work-item-incident</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-issue')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-issue"></hd-icon>
+            <span class="name">work-item-issue</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-keyresult')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-keyresult"></hd-icon>
+            <span class="name">work-item-keyresult</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-maintenance')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-maintenance"></hd-icon>
+            <span class="name">work-item-maintenance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-new')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-new"></hd-icon>
+            <span class="name">work-item-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-objective')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-objective"></hd-icon>
+            <span class="name">work-item-objective</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-parent')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-parent"></hd-icon>
+            <span class="name">work-item-parent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-requirement')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-requirement"></hd-icon>
+            <span class="name">work-item-requirement</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-task')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-task"></hd-icon>
+            <span class="name">work-item-task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-test-case')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-test-case"></hd-icon>
+            <span class="name">work-item-test-case</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-item-ticket')" title="Click to copy">
+            <hd-icon icon="pajamas:work-item-ticket"></hd-icon>
+            <span class="name">work-item-ticket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:work-items')" title="Click to copy">
+            <hd-icon icon="pajamas:work-items"></hd-icon>
+            <span class="name">work-items</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('pajamas:x')" title="Click to copy">
+            <hd-icon icon="pajamas:x"></hd-icon>
+            <span class="name">x</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

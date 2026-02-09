@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>typcn - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>typcn <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(336)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('typcn:adjust-brightness')" title="Click to copy">
+            <hd-icon icon="typcn:adjust-brightness"></hd-icon>
+            <span class="name">adjust-brightness</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:adjust-contrast')" title="Click to copy">
+            <hd-icon icon="typcn:adjust-contrast"></hd-icon>
+            <span class="name">adjust-contrast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:anchor')" title="Click to copy">
+            <hd-icon icon="typcn:anchor"></hd-icon>
+            <span class="name">anchor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:anchor-outline')" title="Click to copy">
+            <hd-icon icon="typcn:anchor-outline"></hd-icon>
+            <span class="name">anchor-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:archive')" title="Click to copy">
+            <hd-icon icon="typcn:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-back')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-back"></hd-icon>
+            <span class="name">arrow-back</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-back-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-back-outline"></hd-icon>
+            <span class="name">arrow-back-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-down')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-down-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-down-outline"></hd-icon>
+            <span class="name">arrow-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-down-thick')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-down-thick"></hd-icon>
+            <span class="name">arrow-down-thick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-forward')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-forward"></hd-icon>
+            <span class="name">arrow-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-forward-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-forward-outline"></hd-icon>
+            <span class="name">arrow-forward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-left')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-left-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-left-outline"></hd-icon>
+            <span class="name">arrow-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-left-thick')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-left-thick"></hd-icon>
+            <span class="name">arrow-left-thick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-loop')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-loop"></hd-icon>
+            <span class="name">arrow-loop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-loop-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-loop-outline"></hd-icon>
+            <span class="name">arrow-loop-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-maximise')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-maximise"></hd-icon>
+            <span class="name">arrow-maximise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-maximise-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-maximise-outline"></hd-icon>
+            <span class="name">arrow-maximise-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-minimise')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-minimise"></hd-icon>
+            <span class="name">arrow-minimise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-minimise-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-minimise-outline"></hd-icon>
+            <span class="name">arrow-minimise-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-move')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-move"></hd-icon>
+            <span class="name">arrow-move</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-move-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-move-outline"></hd-icon>
+            <span class="name">arrow-move-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-repeat')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-repeat"></hd-icon>
+            <span class="name">arrow-repeat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-repeat-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-repeat-outline"></hd-icon>
+            <span class="name">arrow-repeat-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-right')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-right-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-right-outline"></hd-icon>
+            <span class="name">arrow-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-right-thick')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-right-thick"></hd-icon>
+            <span class="name">arrow-right-thick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-shuffle')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-shuffle"></hd-icon>
+            <span class="name">arrow-shuffle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-sorted-down')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-sorted-down"></hd-icon>
+            <span class="name">arrow-sorted-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-sorted-up')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-sorted-up"></hd-icon>
+            <span class="name">arrow-sorted-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-sync')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-sync"></hd-icon>
+            <span class="name">arrow-sync</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-sync-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-sync-outline"></hd-icon>
+            <span class="name">arrow-sync-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-unsorted')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-unsorted"></hd-icon>
+            <span class="name">arrow-unsorted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-up')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-up-outline')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-up-outline"></hd-icon>
+            <span class="name">arrow-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:arrow-up-thick')" title="Click to copy">
+            <hd-icon icon="typcn:arrow-up-thick"></hd-icon>
+            <span class="name">arrow-up-thick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:at')" title="Click to copy">
+            <hd-icon icon="typcn:at"></hd-icon>
+            <span class="name">at</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:attachment')" title="Click to copy">
+            <hd-icon icon="typcn:attachment"></hd-icon>
+            <span class="name">attachment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:attachment-outline')" title="Click to copy">
+            <hd-icon icon="typcn:attachment-outline"></hd-icon>
+            <span class="name">attachment-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:backspace')" title="Click to copy">
+            <hd-icon icon="typcn:backspace"></hd-icon>
+            <span class="name">backspace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:backspace-outline')" title="Click to copy">
+            <hd-icon icon="typcn:backspace-outline"></hd-icon>
+            <span class="name">backspace-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:battery-charge')" title="Click to copy">
+            <hd-icon icon="typcn:battery-charge"></hd-icon>
+            <span class="name">battery-charge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:battery-full')" title="Click to copy">
+            <hd-icon icon="typcn:battery-full"></hd-icon>
+            <span class="name">battery-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:battery-high')" title="Click to copy">
+            <hd-icon icon="typcn:battery-high"></hd-icon>
+            <span class="name">battery-high</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:battery-low')" title="Click to copy">
+            <hd-icon icon="typcn:battery-low"></hd-icon>
+            <span class="name">battery-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:battery-mid')" title="Click to copy">
+            <hd-icon icon="typcn:battery-mid"></hd-icon>
+            <span class="name">battery-mid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:beaker')" title="Click to copy">
+            <hd-icon icon="typcn:beaker"></hd-icon>
+            <span class="name">beaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:beer')" title="Click to copy">
+            <hd-icon icon="typcn:beer"></hd-icon>
+            <span class="name">beer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:bell')" title="Click to copy">
+            <hd-icon icon="typcn:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:book')" title="Click to copy">
+            <hd-icon icon="typcn:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:bookmark')" title="Click to copy">
+            <hd-icon icon="typcn:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:briefcase')" title="Click to copy">
+            <hd-icon icon="typcn:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:brush')" title="Click to copy">
+            <hd-icon icon="typcn:brush"></hd-icon>
+            <span class="name">brush</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:business-card')" title="Click to copy">
+            <hd-icon icon="typcn:business-card"></hd-icon>
+            <span class="name">business-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:calculator')" title="Click to copy">
+            <hd-icon icon="typcn:calculator"></hd-icon>
+            <span class="name">calculator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:calendar')" title="Click to copy">
+            <hd-icon icon="typcn:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:calendar-outline')" title="Click to copy">
+            <hd-icon icon="typcn:calendar-outline"></hd-icon>
+            <span class="name">calendar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:camera')" title="Click to copy">
+            <hd-icon icon="typcn:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:camera-outline')" title="Click to copy">
+            <hd-icon icon="typcn:camera-outline"></hd-icon>
+            <span class="name">camera-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:cancel')" title="Click to copy">
+            <hd-icon icon="typcn:cancel"></hd-icon>
+            <span class="name">cancel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:cancel-outline')" title="Click to copy">
+            <hd-icon icon="typcn:cancel-outline"></hd-icon>
+            <span class="name">cancel-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chart-area')" title="Click to copy">
+            <hd-icon icon="typcn:chart-area"></hd-icon>
+            <span class="name">chart-area</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chart-area-outline')" title="Click to copy">
+            <hd-icon icon="typcn:chart-area-outline"></hd-icon>
+            <span class="name">chart-area-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chart-bar')" title="Click to copy">
+            <hd-icon icon="typcn:chart-bar"></hd-icon>
+            <span class="name">chart-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chart-bar-outline')" title="Click to copy">
+            <hd-icon icon="typcn:chart-bar-outline"></hd-icon>
+            <span class="name">chart-bar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chart-line')" title="Click to copy">
+            <hd-icon icon="typcn:chart-line"></hd-icon>
+            <span class="name">chart-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chart-line-outline')" title="Click to copy">
+            <hd-icon icon="typcn:chart-line-outline"></hd-icon>
+            <span class="name">chart-line-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chart-pie')" title="Click to copy">
+            <hd-icon icon="typcn:chart-pie"></hd-icon>
+            <span class="name">chart-pie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chart-pie-outline')" title="Click to copy">
+            <hd-icon icon="typcn:chart-pie-outline"></hd-icon>
+            <span class="name">chart-pie-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chevron-left')" title="Click to copy">
+            <hd-icon icon="typcn:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chevron-left-outline')" title="Click to copy">
+            <hd-icon icon="typcn:chevron-left-outline"></hd-icon>
+            <span class="name">chevron-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chevron-right')" title="Click to copy">
+            <hd-icon icon="typcn:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:chevron-right-outline')" title="Click to copy">
+            <hd-icon icon="typcn:chevron-right-outline"></hd-icon>
+            <span class="name">chevron-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:clipboard')" title="Click to copy">
+            <hd-icon icon="typcn:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:cloud-storage')" title="Click to copy">
+            <hd-icon icon="typcn:cloud-storage"></hd-icon>
+            <span class="name">cloud-storage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:cloud-storage-outline')" title="Click to copy">
+            <hd-icon icon="typcn:cloud-storage-outline"></hd-icon>
+            <span class="name">cloud-storage-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:code')" title="Click to copy">
+            <hd-icon icon="typcn:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:code-outline')" title="Click to copy">
+            <hd-icon icon="typcn:code-outline"></hd-icon>
+            <span class="name">code-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:coffee')" title="Click to copy">
+            <hd-icon icon="typcn:coffee"></hd-icon>
+            <span class="name">coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:cog')" title="Click to copy">
+            <hd-icon icon="typcn:cog"></hd-icon>
+            <span class="name">cog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:cog-outline')" title="Click to copy">
+            <hd-icon icon="typcn:cog-outline"></hd-icon>
+            <span class="name">cog-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:compass')" title="Click to copy">
+            <hd-icon icon="typcn:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:contacts')" title="Click to copy">
+            <hd-icon icon="typcn:contacts"></hd-icon>
+            <span class="name">contacts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:credit-card')" title="Click to copy">
+            <hd-icon icon="typcn:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:css3')" title="Click to copy">
+            <hd-icon icon="typcn:css3"></hd-icon>
+            <span class="name">css3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:database')" title="Click to copy">
+            <hd-icon icon="typcn:database"></hd-icon>
+            <span class="name">database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:delete')" title="Click to copy">
+            <hd-icon icon="typcn:delete"></hd-icon>
+            <span class="name">delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:delete-outline')" title="Click to copy">
+            <hd-icon icon="typcn:delete-outline"></hd-icon>
+            <span class="name">delete-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:device-desktop')" title="Click to copy">
+            <hd-icon icon="typcn:device-desktop"></hd-icon>
+            <span class="name">device-desktop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:device-laptop')" title="Click to copy">
+            <hd-icon icon="typcn:device-laptop"></hd-icon>
+            <span class="name">device-laptop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:device-phone')" title="Click to copy">
+            <hd-icon icon="typcn:device-phone"></hd-icon>
+            <span class="name">device-phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:device-tablet')" title="Click to copy">
+            <hd-icon icon="typcn:device-tablet"></hd-icon>
+            <span class="name">device-tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:directions')" title="Click to copy">
+            <hd-icon icon="typcn:directions"></hd-icon>
+            <span class="name">directions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:divide')" title="Click to copy">
+            <hd-icon icon="typcn:divide"></hd-icon>
+            <span class="name">divide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:divide-outline')" title="Click to copy">
+            <hd-icon icon="typcn:divide-outline"></hd-icon>
+            <span class="name">divide-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:document')" title="Click to copy">
+            <hd-icon icon="typcn:document"></hd-icon>
+            <span class="name">document</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:document-add')" title="Click to copy">
+            <hd-icon icon="typcn:document-add"></hd-icon>
+            <span class="name">document-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:document-delete')" title="Click to copy">
+            <hd-icon icon="typcn:document-delete"></hd-icon>
+            <span class="name">document-delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:document-text')" title="Click to copy">
+            <hd-icon icon="typcn:document-text"></hd-icon>
+            <span class="name">document-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:download')" title="Click to copy">
+            <hd-icon icon="typcn:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:download-outline')" title="Click to copy">
+            <hd-icon icon="typcn:download-outline"></hd-icon>
+            <span class="name">download-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:dropbox')" title="Click to copy">
+            <hd-icon icon="typcn:dropbox"></hd-icon>
+            <span class="name">dropbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:edit')" title="Click to copy">
+            <hd-icon icon="typcn:edit"></hd-icon>
+            <span class="name">edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:eject')" title="Click to copy">
+            <hd-icon icon="typcn:eject"></hd-icon>
+            <span class="name">eject</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:eject-outline')" title="Click to copy">
+            <hd-icon icon="typcn:eject-outline"></hd-icon>
+            <span class="name">eject-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:equals')" title="Click to copy">
+            <hd-icon icon="typcn:equals"></hd-icon>
+            <span class="name">equals</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:equals-outline')" title="Click to copy">
+            <hd-icon icon="typcn:equals-outline"></hd-icon>
+            <span class="name">equals-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:export')" title="Click to copy">
+            <hd-icon icon="typcn:export"></hd-icon>
+            <span class="name">export</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:export-outline')" title="Click to copy">
+            <hd-icon icon="typcn:export-outline"></hd-icon>
+            <span class="name">export-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:eye')" title="Click to copy">
+            <hd-icon icon="typcn:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:eye-outline')" title="Click to copy">
+            <hd-icon icon="typcn:eye-outline"></hd-icon>
+            <span class="name">eye-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:feather')" title="Click to copy">
+            <hd-icon icon="typcn:feather"></hd-icon>
+            <span class="name">feather</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:film')" title="Click to copy">
+            <hd-icon icon="typcn:film"></hd-icon>
+            <span class="name">film</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:filter')" title="Click to copy">
+            <hd-icon icon="typcn:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:flag')" title="Click to copy">
+            <hd-icon icon="typcn:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:flag-outline')" title="Click to copy">
+            <hd-icon icon="typcn:flag-outline"></hd-icon>
+            <span class="name">flag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:flash')" title="Click to copy">
+            <hd-icon icon="typcn:flash"></hd-icon>
+            <span class="name">flash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:flash-outline')" title="Click to copy">
+            <hd-icon icon="typcn:flash-outline"></hd-icon>
+            <span class="name">flash-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:flow-children')" title="Click to copy">
+            <hd-icon icon="typcn:flow-children"></hd-icon>
+            <span class="name">flow-children</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:flow-merge')" title="Click to copy">
+            <hd-icon icon="typcn:flow-merge"></hd-icon>
+            <span class="name">flow-merge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:flow-parallel')" title="Click to copy">
+            <hd-icon icon="typcn:flow-parallel"></hd-icon>
+            <span class="name">flow-parallel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:flow-switch')" title="Click to copy">
+            <hd-icon icon="typcn:flow-switch"></hd-icon>
+            <span class="name">flow-switch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:folder')" title="Click to copy">
+            <hd-icon icon="typcn:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:folder-add')" title="Click to copy">
+            <hd-icon icon="typcn:folder-add"></hd-icon>
+            <span class="name">folder-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:folder-delete')" title="Click to copy">
+            <hd-icon icon="typcn:folder-delete"></hd-icon>
+            <span class="name">folder-delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:folder-open')" title="Click to copy">
+            <hd-icon icon="typcn:folder-open"></hd-icon>
+            <span class="name">folder-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:gift')" title="Click to copy">
+            <hd-icon icon="typcn:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:globe')" title="Click to copy">
+            <hd-icon icon="typcn:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:globe-outline')" title="Click to copy">
+            <hd-icon icon="typcn:globe-outline"></hd-icon>
+            <span class="name">globe-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:group')" title="Click to copy">
+            <hd-icon icon="typcn:group"></hd-icon>
+            <span class="name">group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:group-outline')" title="Click to copy">
+            <hd-icon icon="typcn:group-outline"></hd-icon>
+            <span class="name">group-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:headphones')" title="Click to copy">
+            <hd-icon icon="typcn:headphones"></hd-icon>
+            <span class="name">headphones</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:heart')" title="Click to copy">
+            <hd-icon icon="typcn:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:heart-full-outline')" title="Click to copy">
+            <hd-icon icon="typcn:heart-full-outline"></hd-icon>
+            <span class="name">heart-full-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:heart-half-outline')" title="Click to copy">
+            <hd-icon icon="typcn:heart-half-outline"></hd-icon>
+            <span class="name">heart-half-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:heart-outline')" title="Click to copy">
+            <hd-icon icon="typcn:heart-outline"></hd-icon>
+            <span class="name">heart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:home')" title="Click to copy">
+            <hd-icon icon="typcn:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:home-outline')" title="Click to copy">
+            <hd-icon icon="typcn:home-outline"></hd-icon>
+            <span class="name">home-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:html5')" title="Click to copy">
+            <hd-icon icon="typcn:html5"></hd-icon>
+            <span class="name">html5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:image')" title="Click to copy">
+            <hd-icon icon="typcn:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:image-outline')" title="Click to copy">
+            <hd-icon icon="typcn:image-outline"></hd-icon>
+            <span class="name">image-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:infinity')" title="Click to copy">
+            <hd-icon icon="typcn:infinity"></hd-icon>
+            <span class="name">infinity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:infinity-outline')" title="Click to copy">
+            <hd-icon icon="typcn:infinity-outline"></hd-icon>
+            <span class="name">infinity-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:info')" title="Click to copy">
+            <hd-icon icon="typcn:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:info-large')" title="Click to copy">
+            <hd-icon icon="typcn:info-large"></hd-icon>
+            <span class="name">info-large</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:info-large-outline')" title="Click to copy">
+            <hd-icon icon="typcn:info-large-outline"></hd-icon>
+            <span class="name">info-large-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:info-outline')" title="Click to copy">
+            <hd-icon icon="typcn:info-outline"></hd-icon>
+            <span class="name">info-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:input-checked')" title="Click to copy">
+            <hd-icon icon="typcn:input-checked"></hd-icon>
+            <span class="name">input-checked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:input-checked-outline')" title="Click to copy">
+            <hd-icon icon="typcn:input-checked-outline"></hd-icon>
+            <span class="name">input-checked-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:key')" title="Click to copy">
+            <hd-icon icon="typcn:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:key-outline')" title="Click to copy">
+            <hd-icon icon="typcn:key-outline"></hd-icon>
+            <span class="name">key-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:keyboard')" title="Click to copy">
+            <hd-icon icon="typcn:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:leaf')" title="Click to copy">
+            <hd-icon icon="typcn:leaf"></hd-icon>
+            <span class="name">leaf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:lightbulb')" title="Click to copy">
+            <hd-icon icon="typcn:lightbulb"></hd-icon>
+            <span class="name">lightbulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:link')" title="Click to copy">
+            <hd-icon icon="typcn:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:link-outline')" title="Click to copy">
+            <hd-icon icon="typcn:link-outline"></hd-icon>
+            <span class="name">link-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:location')" title="Click to copy">
+            <hd-icon icon="typcn:location"></hd-icon>
+            <span class="name">location</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:location-arrow')" title="Click to copy">
+            <hd-icon icon="typcn:location-arrow"></hd-icon>
+            <span class="name">location-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:location-arrow-outline')" title="Click to copy">
+            <hd-icon icon="typcn:location-arrow-outline"></hd-icon>
+            <span class="name">location-arrow-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:location-outline')" title="Click to copy">
+            <hd-icon icon="typcn:location-outline"></hd-icon>
+            <span class="name">location-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:lock-closed')" title="Click to copy">
+            <hd-icon icon="typcn:lock-closed"></hd-icon>
+            <span class="name">lock-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:lock-closed-outline')" title="Click to copy">
+            <hd-icon icon="typcn:lock-closed-outline"></hd-icon>
+            <span class="name">lock-closed-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:lock-open')" title="Click to copy">
+            <hd-icon icon="typcn:lock-open"></hd-icon>
+            <span class="name">lock-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:lock-open-outline')" title="Click to copy">
+            <hd-icon icon="typcn:lock-open-outline"></hd-icon>
+            <span class="name">lock-open-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:mail')" title="Click to copy">
+            <hd-icon icon="typcn:mail"></hd-icon>
+            <span class="name">mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:map')" title="Click to copy">
+            <hd-icon icon="typcn:map"></hd-icon>
+            <span class="name">map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-eject')" title="Click to copy">
+            <hd-icon icon="typcn:media-eject"></hd-icon>
+            <span class="name">media-eject</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-eject-outline')" title="Click to copy">
+            <hd-icon icon="typcn:media-eject-outline"></hd-icon>
+            <span class="name">media-eject-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-fast-forward')" title="Click to copy">
+            <hd-icon icon="typcn:media-fast-forward"></hd-icon>
+            <span class="name">media-fast-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-fast-forward-outline')" title="Click to copy">
+            <hd-icon icon="typcn:media-fast-forward-outline"></hd-icon>
+            <span class="name">media-fast-forward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-pause')" title="Click to copy">
+            <hd-icon icon="typcn:media-pause"></hd-icon>
+            <span class="name">media-pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-pause-outline')" title="Click to copy">
+            <hd-icon icon="typcn:media-pause-outline"></hd-icon>
+            <span class="name">media-pause-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-play')" title="Click to copy">
+            <hd-icon icon="typcn:media-play"></hd-icon>
+            <span class="name">media-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-play-outline')" title="Click to copy">
+            <hd-icon icon="typcn:media-play-outline"></hd-icon>
+            <span class="name">media-play-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-play-reverse')" title="Click to copy">
+            <hd-icon icon="typcn:media-play-reverse"></hd-icon>
+            <span class="name">media-play-reverse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-play-reverse-outline')" title="Click to copy">
+            <hd-icon icon="typcn:media-play-reverse-outline"></hd-icon>
+            <span class="name">media-play-reverse-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-record')" title="Click to copy">
+            <hd-icon icon="typcn:media-record"></hd-icon>
+            <span class="name">media-record</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-record-outline')" title="Click to copy">
+            <hd-icon icon="typcn:media-record-outline"></hd-icon>
+            <span class="name">media-record-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-rewind')" title="Click to copy">
+            <hd-icon icon="typcn:media-rewind"></hd-icon>
+            <span class="name">media-rewind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-rewind-outline')" title="Click to copy">
+            <hd-icon icon="typcn:media-rewind-outline"></hd-icon>
+            <span class="name">media-rewind-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-stop')" title="Click to copy">
+            <hd-icon icon="typcn:media-stop"></hd-icon>
+            <span class="name">media-stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:media-stop-outline')" title="Click to copy">
+            <hd-icon icon="typcn:media-stop-outline"></hd-icon>
+            <span class="name">media-stop-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:message')" title="Click to copy">
+            <hd-icon icon="typcn:message"></hd-icon>
+            <span class="name">message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:message-typing')" title="Click to copy">
+            <hd-icon icon="typcn:message-typing"></hd-icon>
+            <span class="name">message-typing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:messages')" title="Click to copy">
+            <hd-icon icon="typcn:messages"></hd-icon>
+            <span class="name">messages</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:microphone')" title="Click to copy">
+            <hd-icon icon="typcn:microphone"></hd-icon>
+            <span class="name">microphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:microphone-outline')" title="Click to copy">
+            <hd-icon icon="typcn:microphone-outline"></hd-icon>
+            <span class="name">microphone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:minus')" title="Click to copy">
+            <hd-icon icon="typcn:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:minus-outline')" title="Click to copy">
+            <hd-icon icon="typcn:minus-outline"></hd-icon>
+            <span class="name">minus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:mortar-board')" title="Click to copy">
+            <hd-icon icon="typcn:mortar-board"></hd-icon>
+            <span class="name">mortar-board</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:news')" title="Click to copy">
+            <hd-icon icon="typcn:news"></hd-icon>
+            <span class="name">news</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:notes')" title="Click to copy">
+            <hd-icon icon="typcn:notes"></hd-icon>
+            <span class="name">notes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:notes-outline')" title="Click to copy">
+            <hd-icon icon="typcn:notes-outline"></hd-icon>
+            <span class="name">notes-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:pen')" title="Click to copy">
+            <hd-icon icon="typcn:pen"></hd-icon>
+            <span class="name">pen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:pencil')" title="Click to copy">
+            <hd-icon icon="typcn:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:phone')" title="Click to copy">
+            <hd-icon icon="typcn:phone"></hd-icon>
+            <span class="name">phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:phone-outline')" title="Click to copy">
+            <hd-icon icon="typcn:phone-outline"></hd-icon>
+            <span class="name">phone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:pi')" title="Click to copy">
+            <hd-icon icon="typcn:pi"></hd-icon>
+            <span class="name">pi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:pi-outline')" title="Click to copy">
+            <hd-icon icon="typcn:pi-outline"></hd-icon>
+            <span class="name">pi-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:pin')" title="Click to copy">
+            <hd-icon icon="typcn:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:pin-outline')" title="Click to copy">
+            <hd-icon icon="typcn:pin-outline"></hd-icon>
+            <span class="name">pin-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:pipette')" title="Click to copy">
+            <hd-icon icon="typcn:pipette"></hd-icon>
+            <span class="name">pipette</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:plane')" title="Click to copy">
+            <hd-icon icon="typcn:plane"></hd-icon>
+            <span class="name">plane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:plane-outline')" title="Click to copy">
+            <hd-icon icon="typcn:plane-outline"></hd-icon>
+            <span class="name">plane-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:plug')" title="Click to copy">
+            <hd-icon icon="typcn:plug"></hd-icon>
+            <span class="name">plug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:plus')" title="Click to copy">
+            <hd-icon icon="typcn:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:plus-outline')" title="Click to copy">
+            <hd-icon icon="typcn:plus-outline"></hd-icon>
+            <span class="name">plus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:point-of-interest')" title="Click to copy">
+            <hd-icon icon="typcn:point-of-interest"></hd-icon>
+            <span class="name">point-of-interest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:point-of-interest-outline')" title="Click to copy">
+            <hd-icon icon="typcn:point-of-interest-outline"></hd-icon>
+            <span class="name">point-of-interest-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:power')" title="Click to copy">
+            <hd-icon icon="typcn:power"></hd-icon>
+            <span class="name">power</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:power-outline')" title="Click to copy">
+            <hd-icon icon="typcn:power-outline"></hd-icon>
+            <span class="name">power-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:printer')" title="Click to copy">
+            <hd-icon icon="typcn:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:puzzle')" title="Click to copy">
+            <hd-icon icon="typcn:puzzle"></hd-icon>
+            <span class="name">puzzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:puzzle-outline')" title="Click to copy">
+            <hd-icon icon="typcn:puzzle-outline"></hd-icon>
+            <span class="name">puzzle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:radar')" title="Click to copy">
+            <hd-icon icon="typcn:radar"></hd-icon>
+            <span class="name">radar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:radar-outline')" title="Click to copy">
+            <hd-icon icon="typcn:radar-outline"></hd-icon>
+            <span class="name">radar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:refresh')" title="Click to copy">
+            <hd-icon icon="typcn:refresh"></hd-icon>
+            <span class="name">refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:refresh-outline')" title="Click to copy">
+            <hd-icon icon="typcn:refresh-outline"></hd-icon>
+            <span class="name">refresh-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:rss')" title="Click to copy">
+            <hd-icon icon="typcn:rss"></hd-icon>
+            <span class="name">rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:rss-outline')" title="Click to copy">
+            <hd-icon icon="typcn:rss-outline"></hd-icon>
+            <span class="name">rss-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:scissors')" title="Click to copy">
+            <hd-icon icon="typcn:scissors"></hd-icon>
+            <span class="name">scissors</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:scissors-outline')" title="Click to copy">
+            <hd-icon icon="typcn:scissors-outline"></hd-icon>
+            <span class="name">scissors-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:shopping-bag')" title="Click to copy">
+            <hd-icon icon="typcn:shopping-bag"></hd-icon>
+            <span class="name">shopping-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:shopping-cart')" title="Click to copy">
+            <hd-icon icon="typcn:shopping-cart"></hd-icon>
+            <span class="name">shopping-cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-at-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-at-circular"></hd-icon>
+            <span class="name">social-at-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-dribbble')" title="Click to copy">
+            <hd-icon icon="typcn:social-dribbble"></hd-icon>
+            <span class="name">social-dribbble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-dribbble-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-dribbble-circular"></hd-icon>
+            <span class="name">social-dribbble-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-facebook')" title="Click to copy">
+            <hd-icon icon="typcn:social-facebook"></hd-icon>
+            <span class="name">social-facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-facebook-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-facebook-circular"></hd-icon>
+            <span class="name">social-facebook-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-flickr')" title="Click to copy">
+            <hd-icon icon="typcn:social-flickr"></hd-icon>
+            <span class="name">social-flickr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-flickr-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-flickr-circular"></hd-icon>
+            <span class="name">social-flickr-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-github')" title="Click to copy">
+            <hd-icon icon="typcn:social-github"></hd-icon>
+            <span class="name">social-github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-github-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-github-circular"></hd-icon>
+            <span class="name">social-github-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-google-plus')" title="Click to copy">
+            <hd-icon icon="typcn:social-google-plus"></hd-icon>
+            <span class="name">social-google-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-google-plus-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-google-plus-circular"></hd-icon>
+            <span class="name">social-google-plus-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-instagram')" title="Click to copy">
+            <hd-icon icon="typcn:social-instagram"></hd-icon>
+            <span class="name">social-instagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-instagram-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-instagram-circular"></hd-icon>
+            <span class="name">social-instagram-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-last-fm')" title="Click to copy">
+            <hd-icon icon="typcn:social-last-fm"></hd-icon>
+            <span class="name">social-last-fm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-last-fm-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-last-fm-circular"></hd-icon>
+            <span class="name">social-last-fm-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-linkedin')" title="Click to copy">
+            <hd-icon icon="typcn:social-linkedin"></hd-icon>
+            <span class="name">social-linkedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-linkedin-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-linkedin-circular"></hd-icon>
+            <span class="name">social-linkedin-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-pinterest')" title="Click to copy">
+            <hd-icon icon="typcn:social-pinterest"></hd-icon>
+            <span class="name">social-pinterest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-pinterest-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-pinterest-circular"></hd-icon>
+            <span class="name">social-pinterest-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-skype')" title="Click to copy">
+            <hd-icon icon="typcn:social-skype"></hd-icon>
+            <span class="name">social-skype</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-skype-outline')" title="Click to copy">
+            <hd-icon icon="typcn:social-skype-outline"></hd-icon>
+            <span class="name">social-skype-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-tumbler')" title="Click to copy">
+            <hd-icon icon="typcn:social-tumbler"></hd-icon>
+            <span class="name">social-tumbler</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-tumbler-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-tumbler-circular"></hd-icon>
+            <span class="name">social-tumbler-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-twitter')" title="Click to copy">
+            <hd-icon icon="typcn:social-twitter"></hd-icon>
+            <span class="name">social-twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-twitter-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-twitter-circular"></hd-icon>
+            <span class="name">social-twitter-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-vimeo')" title="Click to copy">
+            <hd-icon icon="typcn:social-vimeo"></hd-icon>
+            <span class="name">social-vimeo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-vimeo-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-vimeo-circular"></hd-icon>
+            <span class="name">social-vimeo-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-youtube')" title="Click to copy">
+            <hd-icon icon="typcn:social-youtube"></hd-icon>
+            <span class="name">social-youtube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:social-youtube-circular')" title="Click to copy">
+            <hd-icon icon="typcn:social-youtube-circular"></hd-icon>
+            <span class="name">social-youtube-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:sort-alphabetically')" title="Click to copy">
+            <hd-icon icon="typcn:sort-alphabetically"></hd-icon>
+            <span class="name">sort-alphabetically</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:sort-alphabetically-outline')" title="Click to copy">
+            <hd-icon icon="typcn:sort-alphabetically-outline"></hd-icon>
+            <span class="name">sort-alphabetically-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:sort-numerically')" title="Click to copy">
+            <hd-icon icon="typcn:sort-numerically"></hd-icon>
+            <span class="name">sort-numerically</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:sort-numerically-outline')" title="Click to copy">
+            <hd-icon icon="typcn:sort-numerically-outline"></hd-icon>
+            <span class="name">sort-numerically-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:spanner')" title="Click to copy">
+            <hd-icon icon="typcn:spanner"></hd-icon>
+            <span class="name">spanner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:spanner-outline')" title="Click to copy">
+            <hd-icon icon="typcn:spanner-outline"></hd-icon>
+            <span class="name">spanner-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:spiral')" title="Click to copy">
+            <hd-icon icon="typcn:spiral"></hd-icon>
+            <span class="name">spiral</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:star')" title="Click to copy">
+            <hd-icon icon="typcn:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:star-full-outline')" title="Click to copy">
+            <hd-icon icon="typcn:star-full-outline"></hd-icon>
+            <span class="name">star-full-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:star-half')" title="Click to copy">
+            <hd-icon icon="typcn:star-half"></hd-icon>
+            <span class="name">star-half</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:star-half-outline')" title="Click to copy">
+            <hd-icon icon="typcn:star-half-outline"></hd-icon>
+            <span class="name">star-half-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:star-outline')" title="Click to copy">
+            <hd-icon icon="typcn:star-outline"></hd-icon>
+            <span class="name">star-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:starburst')" title="Click to copy">
+            <hd-icon icon="typcn:starburst"></hd-icon>
+            <span class="name">starburst</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:starburst-outline')" title="Click to copy">
+            <hd-icon icon="typcn:starburst-outline"></hd-icon>
+            <span class="name">starburst-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:stopwatch')" title="Click to copy">
+            <hd-icon icon="typcn:stopwatch"></hd-icon>
+            <span class="name">stopwatch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:support')" title="Click to copy">
+            <hd-icon icon="typcn:support"></hd-icon>
+            <span class="name">support</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:tabs-outline')" title="Click to copy">
+            <hd-icon icon="typcn:tabs-outline"></hd-icon>
+            <span class="name">tabs-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:tag')" title="Click to copy">
+            <hd-icon icon="typcn:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:tags')" title="Click to copy">
+            <hd-icon icon="typcn:tags"></hd-icon>
+            <span class="name">tags</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:th-large')" title="Click to copy">
+            <hd-icon icon="typcn:th-large"></hd-icon>
+            <span class="name">th-large</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:th-large-outline')" title="Click to copy">
+            <hd-icon icon="typcn:th-large-outline"></hd-icon>
+            <span class="name">th-large-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:th-list')" title="Click to copy">
+            <hd-icon icon="typcn:th-list"></hd-icon>
+            <span class="name">th-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:th-list-outline')" title="Click to copy">
+            <hd-icon icon="typcn:th-list-outline"></hd-icon>
+            <span class="name">th-list-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:th-menu')" title="Click to copy">
+            <hd-icon icon="typcn:th-menu"></hd-icon>
+            <span class="name">th-menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:th-menu-outline')" title="Click to copy">
+            <hd-icon icon="typcn:th-menu-outline"></hd-icon>
+            <span class="name">th-menu-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:th-small')" title="Click to copy">
+            <hd-icon icon="typcn:th-small"></hd-icon>
+            <span class="name">th-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:th-small-outline')" title="Click to copy">
+            <hd-icon icon="typcn:th-small-outline"></hd-icon>
+            <span class="name">th-small-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:thermometer')" title="Click to copy">
+            <hd-icon icon="typcn:thermometer"></hd-icon>
+            <span class="name">thermometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:thumbs-down')" title="Click to copy">
+            <hd-icon icon="typcn:thumbs-down"></hd-icon>
+            <span class="name">thumbs-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:thumbs-ok')" title="Click to copy">
+            <hd-icon icon="typcn:thumbs-ok"></hd-icon>
+            <span class="name">thumbs-ok</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:thumbs-up')" title="Click to copy">
+            <hd-icon icon="typcn:thumbs-up"></hd-icon>
+            <span class="name">thumbs-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:tick')" title="Click to copy">
+            <hd-icon icon="typcn:tick"></hd-icon>
+            <span class="name">tick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:tick-outline')" title="Click to copy">
+            <hd-icon icon="typcn:tick-outline"></hd-icon>
+            <span class="name">tick-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:ticket')" title="Click to copy">
+            <hd-icon icon="typcn:ticket"></hd-icon>
+            <span class="name">ticket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:time')" title="Click to copy">
+            <hd-icon icon="typcn:time"></hd-icon>
+            <span class="name">time</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:times')" title="Click to copy">
+            <hd-icon icon="typcn:times"></hd-icon>
+            <span class="name">times</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:times-outline')" title="Click to copy">
+            <hd-icon icon="typcn:times-outline"></hd-icon>
+            <span class="name">times-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:trash')" title="Click to copy">
+            <hd-icon icon="typcn:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:tree')" title="Click to copy">
+            <hd-icon icon="typcn:tree"></hd-icon>
+            <span class="name">tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:upload')" title="Click to copy">
+            <hd-icon icon="typcn:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:upload-outline')" title="Click to copy">
+            <hd-icon icon="typcn:upload-outline"></hd-icon>
+            <span class="name">upload-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:user')" title="Click to copy">
+            <hd-icon icon="typcn:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:user-add')" title="Click to copy">
+            <hd-icon icon="typcn:user-add"></hd-icon>
+            <span class="name">user-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:user-add-outline')" title="Click to copy">
+            <hd-icon icon="typcn:user-add-outline"></hd-icon>
+            <span class="name">user-add-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:user-delete')" title="Click to copy">
+            <hd-icon icon="typcn:user-delete"></hd-icon>
+            <span class="name">user-delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:user-delete-outline')" title="Click to copy">
+            <hd-icon icon="typcn:user-delete-outline"></hd-icon>
+            <span class="name">user-delete-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:user-outline')" title="Click to copy">
+            <hd-icon icon="typcn:user-outline"></hd-icon>
+            <span class="name">user-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:vendor-android')" title="Click to copy">
+            <hd-icon icon="typcn:vendor-android"></hd-icon>
+            <span class="name">vendor-android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:vendor-apple')" title="Click to copy">
+            <hd-icon icon="typcn:vendor-apple"></hd-icon>
+            <span class="name">vendor-apple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:vendor-microsoft')" title="Click to copy">
+            <hd-icon icon="typcn:vendor-microsoft"></hd-icon>
+            <span class="name">vendor-microsoft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:video')" title="Click to copy">
+            <hd-icon icon="typcn:video"></hd-icon>
+            <span class="name">video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:video-outline')" title="Click to copy">
+            <hd-icon icon="typcn:video-outline"></hd-icon>
+            <span class="name">video-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:volume')" title="Click to copy">
+            <hd-icon icon="typcn:volume"></hd-icon>
+            <span class="name">volume</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:volume-down')" title="Click to copy">
+            <hd-icon icon="typcn:volume-down"></hd-icon>
+            <span class="name">volume-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:volume-mute')" title="Click to copy">
+            <hd-icon icon="typcn:volume-mute"></hd-icon>
+            <span class="name">volume-mute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:volume-up')" title="Click to copy">
+            <hd-icon icon="typcn:volume-up"></hd-icon>
+            <span class="name">volume-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:warning')" title="Click to copy">
+            <hd-icon icon="typcn:warning"></hd-icon>
+            <span class="name">warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:warning-outline')" title="Click to copy">
+            <hd-icon icon="typcn:warning-outline"></hd-icon>
+            <span class="name">warning-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:watch')" title="Click to copy">
+            <hd-icon icon="typcn:watch"></hd-icon>
+            <span class="name">watch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:waves')" title="Click to copy">
+            <hd-icon icon="typcn:waves"></hd-icon>
+            <span class="name">waves</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:waves-outline')" title="Click to copy">
+            <hd-icon icon="typcn:waves-outline"></hd-icon>
+            <span class="name">waves-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:weather-cloudy')" title="Click to copy">
+            <hd-icon icon="typcn:weather-cloudy"></hd-icon>
+            <span class="name">weather-cloudy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:weather-downpour')" title="Click to copy">
+            <hd-icon icon="typcn:weather-downpour"></hd-icon>
+            <span class="name">weather-downpour</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:weather-night')" title="Click to copy">
+            <hd-icon icon="typcn:weather-night"></hd-icon>
+            <span class="name">weather-night</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:weather-partly-sunny')" title="Click to copy">
+            <hd-icon icon="typcn:weather-partly-sunny"></hd-icon>
+            <span class="name">weather-partly-sunny</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:weather-shower')" title="Click to copy">
+            <hd-icon icon="typcn:weather-shower"></hd-icon>
+            <span class="name">weather-shower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:weather-snow')" title="Click to copy">
+            <hd-icon icon="typcn:weather-snow"></hd-icon>
+            <span class="name">weather-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:weather-stormy')" title="Click to copy">
+            <hd-icon icon="typcn:weather-stormy"></hd-icon>
+            <span class="name">weather-stormy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:weather-sunny')" title="Click to copy">
+            <hd-icon icon="typcn:weather-sunny"></hd-icon>
+            <span class="name">weather-sunny</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:weather-windy')" title="Click to copy">
+            <hd-icon icon="typcn:weather-windy"></hd-icon>
+            <span class="name">weather-windy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:weather-windy-cloudy')" title="Click to copy">
+            <hd-icon icon="typcn:weather-windy-cloudy"></hd-icon>
+            <span class="name">weather-windy-cloudy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:wi-fi')" title="Click to copy">
+            <hd-icon icon="typcn:wi-fi"></hd-icon>
+            <span class="name">wi-fi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:wi-fi-outline')" title="Click to copy">
+            <hd-icon icon="typcn:wi-fi-outline"></hd-icon>
+            <span class="name">wi-fi-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:wine')" title="Click to copy">
+            <hd-icon icon="typcn:wine"></hd-icon>
+            <span class="name">wine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:world')" title="Click to copy">
+            <hd-icon icon="typcn:world"></hd-icon>
+            <span class="name">world</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:world-outline')" title="Click to copy">
+            <hd-icon icon="typcn:world-outline"></hd-icon>
+            <span class="name">world-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:zoom')" title="Click to copy">
+            <hd-icon icon="typcn:zoom"></hd-icon>
+            <span class="name">zoom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:zoom-in')" title="Click to copy">
+            <hd-icon icon="typcn:zoom-in"></hd-icon>
+            <span class="name">zoom-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:zoom-in-outline')" title="Click to copy">
+            <hd-icon icon="typcn:zoom-in-outline"></hd-icon>
+            <span class="name">zoom-in-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:zoom-out')" title="Click to copy">
+            <hd-icon icon="typcn:zoom-out"></hd-icon>
+            <span class="name">zoom-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:zoom-out-outline')" title="Click to copy">
+            <hd-icon icon="typcn:zoom-out-outline"></hd-icon>
+            <span class="name">zoom-out-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('typcn:zoom-outline')" title="Click to copy">
+            <hd-icon icon="typcn:zoom-outline"></hd-icon>
+            <span class="name">zoom-outline</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

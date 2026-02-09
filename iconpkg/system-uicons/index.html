@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>system-uicons - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>system-uicons <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(430)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:airplay')" title="Click to copy">
+            <hd-icon icon="system-uicons:airplay"></hd-icon>
+            <span class="name">airplay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:alarm-clock')" title="Click to copy">
+            <hd-icon icon="system-uicons:alarm-clock"></hd-icon>
+            <span class="name">alarm-clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:align-horizontal')" title="Click to copy">
+            <hd-icon icon="system-uicons:align-horizontal"></hd-icon>
+            <span class="name">align-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:align-vertical')" title="Click to copy">
+            <hd-icon icon="system-uicons:align-vertical"></hd-icon>
+            <span class="name">align-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:angle')" title="Click to copy">
+            <hd-icon icon="system-uicons:angle"></hd-icon>
+            <span class="name">angle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:archive')" title="Click to copy">
+            <hd-icon icon="system-uicons:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-bottom-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-bottom-left"></hd-icon>
+            <span class="name">arrow-bottom-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-bottom-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-bottom-right"></hd-icon>
+            <span class="name">arrow-bottom-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-down')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-down-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-down-circle"></hd-icon>
+            <span class="name">arrow-down-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-left-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-left-circle"></hd-icon>
+            <span class="name">arrow-left-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-right-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-right-circle"></hd-icon>
+            <span class="name">arrow-right-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-top-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-top-left"></hd-icon>
+            <span class="name">arrow-top-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-top-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-top-right"></hd-icon>
+            <span class="name">arrow-top-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-up')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:arrow-up-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:arrow-up-circle"></hd-icon>
+            <span class="name">arrow-up-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:audio-wave')" title="Click to copy">
+            <hd-icon icon="system-uicons:audio-wave"></hd-icon>
+            <span class="name">audio-wave</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:backspace')" title="Click to copy">
+            <hd-icon icon="system-uicons:backspace"></hd-icon>
+            <span class="name">backspace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:backward')" title="Click to copy">
+            <hd-icon icon="system-uicons:backward"></hd-icon>
+            <span class="name">backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:bag')" title="Click to copy">
+            <hd-icon icon="system-uicons:bag"></hd-icon>
+            <span class="name">bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:battery-75')" title="Click to copy">
+            <hd-icon icon="system-uicons:battery-75"></hd-icon>
+            <span class="name">battery-75</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:battery-charging')" title="Click to copy">
+            <hd-icon icon="system-uicons:battery-charging"></hd-icon>
+            <span class="name">battery-charging</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:battery-empty')" title="Click to copy">
+            <hd-icon icon="system-uicons:battery-empty"></hd-icon>
+            <span class="name">battery-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:battery-full')" title="Click to copy">
+            <hd-icon icon="system-uicons:battery-full"></hd-icon>
+            <span class="name">battery-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:battery-half')" title="Click to copy">
+            <hd-icon icon="system-uicons:battery-half"></hd-icon>
+            <span class="name">battery-half</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:battery-low')" title="Click to copy">
+            <hd-icon icon="system-uicons:battery-low"></hd-icon>
+            <span class="name">battery-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:bell')" title="Click to copy">
+            <hd-icon icon="system-uicons:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:bell-disabled')" title="Click to copy">
+            <hd-icon icon="system-uicons:bell-disabled"></hd-icon>
+            <span class="name">bell-disabled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:bell-ringing')" title="Click to copy">
+            <hd-icon icon="system-uicons:bell-ringing"></hd-icon>
+            <span class="name">bell-ringing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:bell-snooze')" title="Click to copy">
+            <hd-icon icon="system-uicons:bell-snooze"></hd-icon>
+            <span class="name">bell-snooze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:bluetooth')" title="Click to copy">
+            <hd-icon icon="system-uicons:bluetooth"></hd-icon>
+            <span class="name">bluetooth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:book')" title="Click to copy">
+            <hd-icon icon="system-uicons:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:book-closed')" title="Click to copy">
+            <hd-icon icon="system-uicons:book-closed"></hd-icon>
+            <span class="name">book-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:book-text')" title="Click to copy">
+            <hd-icon icon="system-uicons:book-text"></hd-icon>
+            <span class="name">book-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:bookmark')" title="Click to copy">
+            <hd-icon icon="system-uicons:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:bookmark-book')" title="Click to copy">
+            <hd-icon icon="system-uicons:bookmark-book"></hd-icon>
+            <span class="name">bookmark-book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:box')" title="Click to copy">
+            <hd-icon icon="system-uicons:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:box-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:box-add"></hd-icon>
+            <span class="name">box-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:box-download')" title="Click to copy">
+            <hd-icon icon="system-uicons:box-download"></hd-icon>
+            <span class="name">box-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:box-open')" title="Click to copy">
+            <hd-icon icon="system-uicons:box-open"></hd-icon>
+            <span class="name">box-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:box-remove')" title="Click to copy">
+            <hd-icon icon="system-uicons:box-remove"></hd-icon>
+            <span class="name">box-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:boxes')" title="Click to copy">
+            <hd-icon icon="system-uicons:boxes"></hd-icon>
+            <span class="name">boxes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:branch')" title="Click to copy">
+            <hd-icon icon="system-uicons:branch"></hd-icon>
+            <span class="name">branch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:briefcase')" title="Click to copy">
+            <hd-icon icon="system-uicons:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:browser')" title="Click to copy">
+            <hd-icon icon="system-uicons:browser"></hd-icon>
+            <span class="name">browser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:browser-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:browser-alt"></hd-icon>
+            <span class="name">browser-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:button-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:button-add"></hd-icon>
+            <span class="name">button-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:button-minus')" title="Click to copy">
+            <hd-icon icon="system-uicons:button-minus"></hd-icon>
+            <span class="name">button-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calculator')" title="Click to copy">
+            <hd-icon icon="system-uicons:calculator"></hd-icon>
+            <span class="name">calculator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar-add"></hd-icon>
+            <span class="name">calendar-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar-date')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar-date"></hd-icon>
+            <span class="name">calendar-date</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar-day')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar-day"></hd-icon>
+            <span class="name">calendar-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar-days')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar-days"></hd-icon>
+            <span class="name">calendar-days</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar-last-day')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar-last-day"></hd-icon>
+            <span class="name">calendar-last-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar-month')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar-month"></hd-icon>
+            <span class="name">calendar-month</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar-move')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar-move"></hd-icon>
+            <span class="name">calendar-move</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar-remove')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar-remove"></hd-icon>
+            <span class="name">calendar-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar-split')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar-split"></hd-icon>
+            <span class="name">calendar-split</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:calendar-week')" title="Click to copy">
+            <hd-icon icon="system-uicons:calendar-week"></hd-icon>
+            <span class="name">calendar-week</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:camera')" title="Click to copy">
+            <hd-icon icon="system-uicons:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:camera-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:camera-alt"></hd-icon>
+            <span class="name">camera-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:camera-noflash')" title="Click to copy">
+            <hd-icon icon="system-uicons:camera-noflash"></hd-icon>
+            <span class="name">camera-noflash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:camera-noflash-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:camera-noflash-alt"></hd-icon>
+            <span class="name">camera-noflash-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:capture')" title="Click to copy">
+            <hd-icon icon="system-uicons:capture"></hd-icon>
+            <span class="name">capture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:card-timeline')" title="Click to copy">
+            <hd-icon icon="system-uicons:card-timeline"></hd-icon>
+            <span class="name">card-timeline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:card-view')" title="Click to copy">
+            <hd-icon icon="system-uicons:card-view"></hd-icon>
+            <span class="name">card-view</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:carousel')" title="Click to copy">
+            <hd-icon icon="system-uicons:carousel"></hd-icon>
+            <span class="name">carousel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cart')" title="Click to copy">
+            <hd-icon icon="system-uicons:cart"></hd-icon>
+            <span class="name">cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cast')" title="Click to copy">
+            <hd-icon icon="system-uicons:cast"></hd-icon>
+            <span class="name">cast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chain')" title="Click to copy">
+            <hd-icon icon="system-uicons:chain"></hd-icon>
+            <span class="name">chain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chat-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:chat-add"></hd-icon>
+            <span class="name">chat-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:check')" title="Click to copy">
+            <hd-icon icon="system-uicons:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:check-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:check-circle"></hd-icon>
+            <span class="name">check-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:check-circle-outside')" title="Click to copy">
+            <hd-icon icon="system-uicons:check-circle-outside"></hd-icon>
+            <span class="name">check-circle-outside</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:checkbox-checked')" title="Click to copy">
+            <hd-icon icon="system-uicons:checkbox-checked"></hd-icon>
+            <span class="name">checkbox-checked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:checkbox-empty')" title="Click to copy">
+            <hd-icon icon="system-uicons:checkbox-empty"></hd-icon>
+            <span class="name">checkbox-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-close')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-close"></hd-icon>
+            <span class="name">chevron-close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-down')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-down-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-down-circle"></hd-icon>
+            <span class="name">chevron-down-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-down-double')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-down-double"></hd-icon>
+            <span class="name">chevron-down-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-left-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-left-circle"></hd-icon>
+            <span class="name">chevron-left-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-left-double')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-left-double"></hd-icon>
+            <span class="name">chevron-left-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-open')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-open"></hd-icon>
+            <span class="name">chevron-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-right-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-right-circle"></hd-icon>
+            <span class="name">chevron-right-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-right-double')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-right-double"></hd-icon>
+            <span class="name">chevron-right-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-up')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-up-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-up-circle"></hd-icon>
+            <span class="name">chevron-up-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:chevron-up-double')" title="Click to copy">
+            <hd-icon icon="system-uicons:chevron-up-double"></hd-icon>
+            <span class="name">chevron-up-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:circle-menu')" title="Click to copy">
+            <hd-icon icon="system-uicons:circle-menu"></hd-icon>
+            <span class="name">circle-menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:circle-split')" title="Click to copy">
+            <hd-icon icon="system-uicons:circle-split"></hd-icon>
+            <span class="name">circle-split</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:clipboard')" title="Click to copy">
+            <hd-icon icon="system-uicons:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:clipboard-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:clipboard-add"></hd-icon>
+            <span class="name">clipboard-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:clipboard-check')" title="Click to copy">
+            <hd-icon icon="system-uicons:clipboard-check"></hd-icon>
+            <span class="name">clipboard-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:clipboard-copy')" title="Click to copy">
+            <hd-icon icon="system-uicons:clipboard-copy"></hd-icon>
+            <span class="name">clipboard-copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:clipboard-cross')" title="Click to copy">
+            <hd-icon icon="system-uicons:clipboard-cross"></hd-icon>
+            <span class="name">clipboard-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:clipboard-notes')" title="Click to copy">
+            <hd-icon icon="system-uicons:clipboard-notes"></hd-icon>
+            <span class="name">clipboard-notes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:clipboard-remove')" title="Click to copy">
+            <hd-icon icon="system-uicons:clipboard-remove"></hd-icon>
+            <span class="name">clipboard-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:clock')" title="Click to copy">
+            <hd-icon icon="system-uicons:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:close')" title="Click to copy">
+            <hd-icon icon="system-uicons:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cloud')" title="Click to copy">
+            <hd-icon icon="system-uicons:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cloud-disconnect')" title="Click to copy">
+            <hd-icon icon="system-uicons:cloud-disconnect"></hd-icon>
+            <span class="name">cloud-disconnect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cloud-download')" title="Click to copy">
+            <hd-icon icon="system-uicons:cloud-download"></hd-icon>
+            <span class="name">cloud-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cloud-download-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:cloud-download-alt"></hd-icon>
+            <span class="name">cloud-download-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cloud-upload')" title="Click to copy">
+            <hd-icon icon="system-uicons:cloud-upload"></hd-icon>
+            <span class="name">cloud-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cloud-upload-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:cloud-upload-alt"></hd-icon>
+            <span class="name">cloud-upload-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:code')" title="Click to copy">
+            <hd-icon icon="system-uicons:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:coffee')" title="Click to copy">
+            <hd-icon icon="system-uicons:coffee"></hd-icon>
+            <span class="name">coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:coin')" title="Click to copy">
+            <hd-icon icon="system-uicons:coin"></hd-icon>
+            <span class="name">coin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:coins')" title="Click to copy">
+            <hd-icon icon="system-uicons:coins"></hd-icon>
+            <span class="name">coins</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:compass')" title="Click to copy">
+            <hd-icon icon="system-uicons:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:component-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:component-add"></hd-icon>
+            <span class="name">component-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:contacts')" title="Click to copy">
+            <hd-icon icon="system-uicons:contacts"></hd-icon>
+            <span class="name">contacts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:contract')" title="Click to copy">
+            <hd-icon icon="system-uicons:contract"></hd-icon>
+            <span class="name">contract</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:create')" title="Click to copy">
+            <hd-icon icon="system-uicons:create"></hd-icon>
+            <span class="name">create</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:credit-card')" title="Click to copy">
+            <hd-icon icon="system-uicons:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:crop')" title="Click to copy">
+            <hd-icon icon="system-uicons:crop"></hd-icon>
+            <span class="name">crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cross')" title="Click to copy">
+            <hd-icon icon="system-uicons:cross"></hd-icon>
+            <span class="name">cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cross-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:cross-circle"></hd-icon>
+            <span class="name">cross-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:crosshair')" title="Click to copy">
+            <hd-icon icon="system-uicons:crosshair"></hd-icon>
+            <span class="name">crosshair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cube')" title="Click to copy">
+            <hd-icon icon="system-uicons:cube"></hd-icon>
+            <span class="name">cube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cubes')" title="Click to copy">
+            <hd-icon icon="system-uicons:cubes"></hd-icon>
+            <span class="name">cubes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:cylinder')" title="Click to copy">
+            <hd-icon icon="system-uicons:cylinder"></hd-icon>
+            <span class="name">cylinder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:database')" title="Click to copy">
+            <hd-icon icon="system-uicons:database"></hd-icon>
+            <span class="name">database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:diamond')" title="Click to copy">
+            <hd-icon icon="system-uicons:diamond"></hd-icon>
+            <span class="name">diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:directions')" title="Click to copy">
+            <hd-icon icon="system-uicons:directions"></hd-icon>
+            <span class="name">directions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:disc')" title="Click to copy">
+            <hd-icon icon="system-uicons:disc"></hd-icon>
+            <span class="name">disc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:display')" title="Click to copy">
+            <hd-icon icon="system-uicons:display"></hd-icon>
+            <span class="name">display</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:display-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:display-alt"></hd-icon>
+            <span class="name">display-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:document')" title="Click to copy">
+            <hd-icon icon="system-uicons:document"></hd-icon>
+            <span class="name">document</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:document-justified')" title="Click to copy">
+            <hd-icon icon="system-uicons:document-justified"></hd-icon>
+            <span class="name">document-justified</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:document-list')" title="Click to copy">
+            <hd-icon icon="system-uicons:document-list"></hd-icon>
+            <span class="name">document-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:document-stack')" title="Click to copy">
+            <hd-icon icon="system-uicons:document-stack"></hd-icon>
+            <span class="name">document-stack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:document-words')" title="Click to copy">
+            <hd-icon icon="system-uicons:document-words"></hd-icon>
+            <span class="name">document-words</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:door')" title="Click to copy">
+            <hd-icon icon="system-uicons:door"></hd-icon>
+            <span class="name">door</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:door-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:door-alt"></hd-icon>
+            <span class="name">door-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:download')" title="Click to copy">
+            <hd-icon icon="system-uicons:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:download-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:download-alt"></hd-icon>
+            <span class="name">download-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:downward')" title="Click to copy">
+            <hd-icon icon="system-uicons:downward"></hd-icon>
+            <span class="name">downward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:drag')" title="Click to copy">
+            <hd-icon icon="system-uicons:drag"></hd-icon>
+            <span class="name">drag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:drag-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:drag-circle"></hd-icon>
+            <span class="name">drag-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:drag-vertical')" title="Click to copy">
+            <hd-icon icon="system-uicons:drag-vertical"></hd-icon>
+            <span class="name">drag-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:duplicate')" title="Click to copy">
+            <hd-icon icon="system-uicons:duplicate"></hd-icon>
+            <span class="name">duplicate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:duplicate-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:duplicate-alt"></hd-icon>
+            <span class="name">duplicate-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:enter')" title="Click to copy">
+            <hd-icon icon="system-uicons:enter"></hd-icon>
+            <span class="name">enter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:enter-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:enter-alt"></hd-icon>
+            <span class="name">enter-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:episodes')" title="Click to copy">
+            <hd-icon icon="system-uicons:episodes"></hd-icon>
+            <span class="name">episodes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:exit-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:exit-left"></hd-icon>
+            <span class="name">exit-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:exit-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:exit-right"></hd-icon>
+            <span class="name">exit-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:expand')" title="Click to copy">
+            <hd-icon icon="system-uicons:expand"></hd-icon>
+            <span class="name">expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:expand-height')" title="Click to copy">
+            <hd-icon icon="system-uicons:expand-height"></hd-icon>
+            <span class="name">expand-height</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:expand-width')" title="Click to copy">
+            <hd-icon icon="system-uicons:expand-width"></hd-icon>
+            <span class="name">expand-width</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:external')" title="Click to copy">
+            <hd-icon icon="system-uicons:external"></hd-icon>
+            <span class="name">external</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:eye')" title="Click to copy">
+            <hd-icon icon="system-uicons:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:eye-closed')" title="Click to copy">
+            <hd-icon icon="system-uicons:eye-closed"></hd-icon>
+            <span class="name">eye-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:eye-no')" title="Click to copy">
+            <hd-icon icon="system-uicons:eye-no"></hd-icon>
+            <span class="name">eye-no</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:face-delighted')" title="Click to copy">
+            <hd-icon icon="system-uicons:face-delighted"></hd-icon>
+            <span class="name">face-delighted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:face-happy')" title="Click to copy">
+            <hd-icon icon="system-uicons:face-happy"></hd-icon>
+            <span class="name">face-happy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:face-neutral')" title="Click to copy">
+            <hd-icon icon="system-uicons:face-neutral"></hd-icon>
+            <span class="name">face-neutral</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:face-sad')" title="Click to copy">
+            <hd-icon icon="system-uicons:face-sad"></hd-icon>
+            <span class="name">face-sad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:file-download')" title="Click to copy">
+            <hd-icon icon="system-uicons:file-download"></hd-icon>
+            <span class="name">file-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:file-upload')" title="Click to copy">
+            <hd-icon icon="system-uicons:file-upload"></hd-icon>
+            <span class="name">file-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:files-history')" title="Click to copy">
+            <hd-icon icon="system-uicons:files-history"></hd-icon>
+            <span class="name">files-history</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:files-multi')" title="Click to copy">
+            <hd-icon icon="system-uicons:files-multi"></hd-icon>
+            <span class="name">files-multi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:files-stack')" title="Click to copy">
+            <hd-icon icon="system-uicons:files-stack"></hd-icon>
+            <span class="name">files-stack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:film')" title="Click to copy">
+            <hd-icon icon="system-uicons:film"></hd-icon>
+            <span class="name">film</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:filter')" title="Click to copy">
+            <hd-icon icon="system-uicons:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:filter-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:filter-circle"></hd-icon>
+            <span class="name">filter-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:filter-single')" title="Click to copy">
+            <hd-icon icon="system-uicons:filter-single"></hd-icon>
+            <span class="name">filter-single</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:filtering')" title="Click to copy">
+            <hd-icon icon="system-uicons:filtering"></hd-icon>
+            <span class="name">filtering</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:fingerprint')" title="Click to copy">
+            <hd-icon icon="system-uicons:fingerprint"></hd-icon>
+            <span class="name">fingerprint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:flag')" title="Click to copy">
+            <hd-icon icon="system-uicons:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:flame')" title="Click to copy">
+            <hd-icon icon="system-uicons:flame"></hd-icon>
+            <span class="name">flame</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:flame-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:flame-alt"></hd-icon>
+            <span class="name">flame-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:flip-view')" title="Click to copy">
+            <hd-icon icon="system-uicons:flip-view"></hd-icon>
+            <span class="name">flip-view</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:floppy')" title="Click to copy">
+            <hd-icon icon="system-uicons:floppy"></hd-icon>
+            <span class="name">floppy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:folder-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:folder-add"></hd-icon>
+            <span class="name">folder-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:folder-closed')" title="Click to copy">
+            <hd-icon icon="system-uicons:folder-closed"></hd-icon>
+            <span class="name">folder-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:folder-minus')" title="Click to copy">
+            <hd-icon icon="system-uicons:folder-minus"></hd-icon>
+            <span class="name">folder-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:folder-open')" title="Click to copy">
+            <hd-icon icon="system-uicons:folder-open"></hd-icon>
+            <span class="name">folder-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:fork-git')" title="Click to copy">
+            <hd-icon icon="system-uicons:fork-git"></hd-icon>
+            <span class="name">fork-git</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:forward')" title="Click to copy">
+            <hd-icon icon="system-uicons:forward"></hd-icon>
+            <span class="name">forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:frame')" title="Click to copy">
+            <hd-icon icon="system-uicons:frame"></hd-icon>
+            <span class="name">frame</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:fullscreen')" title="Click to copy">
+            <hd-icon icon="system-uicons:fullscreen"></hd-icon>
+            <span class="name">fullscreen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:funnel')" title="Click to copy">
+            <hd-icon icon="system-uicons:funnel"></hd-icon>
+            <span class="name">funnel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:gauge')" title="Click to copy">
+            <hd-icon icon="system-uicons:gauge"></hd-icon>
+            <span class="name">gauge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:gift')" title="Click to copy">
+            <hd-icon icon="system-uicons:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:globe')" title="Click to copy">
+            <hd-icon icon="system-uicons:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:gps')" title="Click to copy">
+            <hd-icon icon="system-uicons:gps"></hd-icon>
+            <span class="name">gps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:grab')" title="Click to copy">
+            <hd-icon icon="system-uicons:grab"></hd-icon>
+            <span class="name">grab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:graph-bar')" title="Click to copy">
+            <hd-icon icon="system-uicons:graph-bar"></hd-icon>
+            <span class="name">graph-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:graph-box')" title="Click to copy">
+            <hd-icon icon="system-uicons:graph-box"></hd-icon>
+            <span class="name">graph-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:graph-increase')" title="Click to copy">
+            <hd-icon icon="system-uicons:graph-increase"></hd-icon>
+            <span class="name">graph-increase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:grid')" title="Click to copy">
+            <hd-icon icon="system-uicons:grid"></hd-icon>
+            <span class="name">grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:grid-circles')" title="Click to copy">
+            <hd-icon icon="system-uicons:grid-circles"></hd-icon>
+            <span class="name">grid-circles</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:grid-circles-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:grid-circles-add"></hd-icon>
+            <span class="name">grid-circles-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:grid-small')" title="Click to copy">
+            <hd-icon icon="system-uicons:grid-small"></hd-icon>
+            <span class="name">grid-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:grid-squares')" title="Click to copy">
+            <hd-icon icon="system-uicons:grid-squares"></hd-icon>
+            <span class="name">grid-squares</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:grid-squares-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:grid-squares-add"></hd-icon>
+            <span class="name">grid-squares-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:hand')" title="Click to copy">
+            <hd-icon icon="system-uicons:hand"></hd-icon>
+            <span class="name">hand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:harddrive')" title="Click to copy">
+            <hd-icon icon="system-uicons:harddrive"></hd-icon>
+            <span class="name">harddrive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:hash')" title="Click to copy">
+            <hd-icon icon="system-uicons:hash"></hd-icon>
+            <span class="name">hash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:heart')" title="Click to copy">
+            <hd-icon icon="system-uicons:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:heart-rate')" title="Click to copy">
+            <hd-icon icon="system-uicons:heart-rate"></hd-icon>
+            <span class="name">heart-rate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:heart-remove')" title="Click to copy">
+            <hd-icon icon="system-uicons:heart-remove"></hd-icon>
+            <span class="name">heart-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:height')" title="Click to copy">
+            <hd-icon icon="system-uicons:height"></hd-icon>
+            <span class="name">height</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:hierarchy')" title="Click to copy">
+            <hd-icon icon="system-uicons:hierarchy"></hd-icon>
+            <span class="name">hierarchy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:home')" title="Click to copy">
+            <hd-icon icon="system-uicons:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:home-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:home-alt"></hd-icon>
+            <span class="name">home-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:home-check')" title="Click to copy">
+            <hd-icon icon="system-uicons:home-check"></hd-icon>
+            <span class="name">home-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:home-door')" title="Click to copy">
+            <hd-icon icon="system-uicons:home-door"></hd-icon>
+            <span class="name">home-door</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:import')" title="Click to copy">
+            <hd-icon icon="system-uicons:import"></hd-icon>
+            <span class="name">import</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:inbox')" title="Click to copy">
+            <hd-icon icon="system-uicons:inbox"></hd-icon>
+            <span class="name">inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:inbox-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:inbox-alt"></hd-icon>
+            <span class="name">inbox-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:info-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:info-circle"></hd-icon>
+            <span class="name">info-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:iphone-landscape')" title="Click to copy">
+            <hd-icon icon="system-uicons:iphone-landscape"></hd-icon>
+            <span class="name">iphone-landscape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:iphone-portrait')" title="Click to copy">
+            <hd-icon icon="system-uicons:iphone-portrait"></hd-icon>
+            <span class="name">iphone-portrait</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:jump-backward')" title="Click to copy">
+            <hd-icon icon="system-uicons:jump-backward"></hd-icon>
+            <span class="name">jump-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:jump-forward')" title="Click to copy">
+            <hd-icon icon="system-uicons:jump-forward"></hd-icon>
+            <span class="name">jump-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:jump-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:jump-left"></hd-icon>
+            <span class="name">jump-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:jump-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:jump-right"></hd-icon>
+            <span class="name">jump-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:keyboard')" title="Click to copy">
+            <hd-icon icon="system-uicons:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:laptop')" title="Click to copy">
+            <hd-icon icon="system-uicons:laptop"></hd-icon>
+            <span class="name">laptop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:lightbulb')" title="Click to copy">
+            <hd-icon icon="system-uicons:lightbulb"></hd-icon>
+            <span class="name">lightbulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:lightbulb-on')" title="Click to copy">
+            <hd-icon icon="system-uicons:lightbulb-on"></hd-icon>
+            <span class="name">lightbulb-on</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:lightning')" title="Click to copy">
+            <hd-icon icon="system-uicons:lightning"></hd-icon>
+            <span class="name">lightning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:lightning-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:lightning-alt"></hd-icon>
+            <span class="name">lightning-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:lineweight')" title="Click to copy">
+            <hd-icon icon="system-uicons:lineweight"></hd-icon>
+            <span class="name">lineweight</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:link')" title="Click to copy">
+            <hd-icon icon="system-uicons:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:link-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:link-alt"></hd-icon>
+            <span class="name">link-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:link-broken')" title="Click to copy">
+            <hd-icon icon="system-uicons:link-broken"></hd-icon>
+            <span class="name">link-broken</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:link-horizontal')" title="Click to copy">
+            <hd-icon icon="system-uicons:link-horizontal"></hd-icon>
+            <span class="name">link-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:link-vertical')" title="Click to copy">
+            <hd-icon icon="system-uicons:link-vertical"></hd-icon>
+            <span class="name">link-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:list')" title="Click to copy">
+            <hd-icon icon="system-uicons:list"></hd-icon>
+            <span class="name">list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:list-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:list-add"></hd-icon>
+            <span class="name">list-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:list-numbered')" title="Click to copy">
+            <hd-icon icon="system-uicons:list-numbered"></hd-icon>
+            <span class="name">list-numbered</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:loader')" title="Click to copy">
+            <hd-icon icon="system-uicons:loader"></hd-icon>
+            <span class="name">loader</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:location')" title="Click to copy">
+            <hd-icon icon="system-uicons:location"></hd-icon>
+            <span class="name">location</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:lock')" title="Click to copy">
+            <hd-icon icon="system-uicons:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:lock-open')" title="Click to copy">
+            <hd-icon icon="system-uicons:lock-open"></hd-icon>
+            <span class="name">lock-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:mail')" title="Click to copy">
+            <hd-icon icon="system-uicons:mail"></hd-icon>
+            <span class="name">mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:mail-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:mail-add"></hd-icon>
+            <span class="name">mail-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:mail-delete')" title="Click to copy">
+            <hd-icon icon="system-uicons:mail-delete"></hd-icon>
+            <span class="name">mail-delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:mail-minus')" title="Click to copy">
+            <hd-icon icon="system-uicons:mail-minus"></hd-icon>
+            <span class="name">mail-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:mail-new')" title="Click to copy">
+            <hd-icon icon="system-uicons:mail-new"></hd-icon>
+            <span class="name">mail-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:mail-open')" title="Click to copy">
+            <hd-icon icon="system-uicons:mail-open"></hd-icon>
+            <span class="name">mail-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:mail-remove')" title="Click to copy">
+            <hd-icon icon="system-uicons:mail-remove"></hd-icon>
+            <span class="name">mail-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:marquee')" title="Click to copy">
+            <hd-icon icon="system-uicons:marquee"></hd-icon>
+            <span class="name">marquee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:maximise')" title="Click to copy">
+            <hd-icon icon="system-uicons:maximise"></hd-icon>
+            <span class="name">maximise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:menu-hamburger')" title="Click to copy">
+            <hd-icon icon="system-uicons:menu-hamburger"></hd-icon>
+            <span class="name">menu-hamburger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:menu-horizontal')" title="Click to copy">
+            <hd-icon icon="system-uicons:menu-horizontal"></hd-icon>
+            <span class="name">menu-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:menu-vertical')" title="Click to copy">
+            <hd-icon icon="system-uicons:menu-vertical"></hd-icon>
+            <span class="name">menu-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:message')" title="Click to copy">
+            <hd-icon icon="system-uicons:message"></hd-icon>
+            <span class="name">message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:message-writing')" title="Click to copy">
+            <hd-icon icon="system-uicons:message-writing"></hd-icon>
+            <span class="name">message-writing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:microphone')" title="Click to copy">
+            <hd-icon icon="system-uicons:microphone"></hd-icon>
+            <span class="name">microphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:microphone-disabled')" title="Click to copy">
+            <hd-icon icon="system-uicons:microphone-disabled"></hd-icon>
+            <span class="name">microphone-disabled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:microphone-muted')" title="Click to copy">
+            <hd-icon icon="system-uicons:microphone-muted"></hd-icon>
+            <span class="name">microphone-muted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:midpoint')" title="Click to copy">
+            <hd-icon icon="system-uicons:midpoint"></hd-icon>
+            <span class="name">midpoint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:mini-player')" title="Click to copy">
+            <hd-icon icon="system-uicons:mini-player"></hd-icon>
+            <span class="name">mini-player</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:minimise')" title="Click to copy">
+            <hd-icon icon="system-uicons:minimise"></hd-icon>
+            <span class="name">minimise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:minus')" title="Click to copy">
+            <hd-icon icon="system-uicons:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:minus-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:minus-circle"></hd-icon>
+            <span class="name">minus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:moon')" title="Click to copy">
+            <hd-icon icon="system-uicons:moon"></hd-icon>
+            <span class="name">moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:move')" title="Click to copy">
+            <hd-icon icon="system-uicons:move"></hd-icon>
+            <span class="name">move</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:newspaper')" title="Click to copy">
+            <hd-icon icon="system-uicons:newspaper"></hd-icon>
+            <span class="name">newspaper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:no-sign')" title="Click to copy">
+            <hd-icon icon="system-uicons:no-sign"></hd-icon>
+            <span class="name">no-sign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:notebook')" title="Click to copy">
+            <hd-icon icon="system-uicons:notebook"></hd-icon>
+            <span class="name">notebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:notification')" title="Click to copy">
+            <hd-icon icon="system-uicons:notification"></hd-icon>
+            <span class="name">notification</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:nut')" title="Click to copy">
+            <hd-icon icon="system-uicons:nut"></hd-icon>
+            <span class="name">nut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:pages')" title="Click to copy">
+            <hd-icon icon="system-uicons:pages"></hd-icon>
+            <span class="name">pages</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:panel-bottom')" title="Click to copy">
+            <hd-icon icon="system-uicons:panel-bottom"></hd-icon>
+            <span class="name">panel-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:panel-center')" title="Click to copy">
+            <hd-icon icon="system-uicons:panel-center"></hd-icon>
+            <span class="name">panel-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:panel-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:panel-left"></hd-icon>
+            <span class="name">panel-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:panel-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:panel-right"></hd-icon>
+            <span class="name">panel-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:panel-sectioned')" title="Click to copy">
+            <hd-icon icon="system-uicons:panel-sectioned"></hd-icon>
+            <span class="name">panel-sectioned</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:panel-top')" title="Click to copy">
+            <hd-icon icon="system-uicons:panel-top"></hd-icon>
+            <span class="name">panel-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:paper')" title="Click to copy">
+            <hd-icon icon="system-uicons:paper"></hd-icon>
+            <span class="name">paper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:paper-folded')" title="Click to copy">
+            <hd-icon icon="system-uicons:paper-folded"></hd-icon>
+            <span class="name">paper-folded</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:paper-plane')" title="Click to copy">
+            <hd-icon icon="system-uicons:paper-plane"></hd-icon>
+            <span class="name">paper-plane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:paper-plane-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:paper-plane-alt"></hd-icon>
+            <span class="name">paper-plane-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:paperclip')" title="Click to copy">
+            <hd-icon icon="system-uicons:paperclip"></hd-icon>
+            <span class="name">paperclip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:paragraph-center')" title="Click to copy">
+            <hd-icon icon="system-uicons:paragraph-center"></hd-icon>
+            <span class="name">paragraph-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:paragraph-end')" title="Click to copy">
+            <hd-icon icon="system-uicons:paragraph-end"></hd-icon>
+            <span class="name">paragraph-end</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:paragraph-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:paragraph-left"></hd-icon>
+            <span class="name">paragraph-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:paragraph-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:paragraph-right"></hd-icon>
+            <span class="name">paragraph-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:paragraph-start')" title="Click to copy">
+            <hd-icon icon="system-uicons:paragraph-start"></hd-icon>
+            <span class="name">paragraph-start</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:pen')" title="Click to copy">
+            <hd-icon icon="system-uicons:pen"></hd-icon>
+            <span class="name">pen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:phone-landscape')" title="Click to copy">
+            <hd-icon icon="system-uicons:phone-landscape"></hd-icon>
+            <span class="name">phone-landscape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:phone-portrait')" title="Click to copy">
+            <hd-icon icon="system-uicons:phone-portrait"></hd-icon>
+            <span class="name">phone-portrait</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:picture')" title="Click to copy">
+            <hd-icon icon="system-uicons:picture"></hd-icon>
+            <span class="name">picture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:pie-half')" title="Click to copy">
+            <hd-icon icon="system-uicons:pie-half"></hd-icon>
+            <span class="name">pie-half</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:pie-quarter')" title="Click to copy">
+            <hd-icon icon="system-uicons:pie-quarter"></hd-icon>
+            <span class="name">pie-quarter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:pie-third')" title="Click to copy">
+            <hd-icon icon="system-uicons:pie-third"></hd-icon>
+            <span class="name">pie-third</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:pill')" title="Click to copy">
+            <hd-icon icon="system-uicons:pill"></hd-icon>
+            <span class="name">pill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:play-button')" title="Click to copy">
+            <hd-icon icon="system-uicons:play-button"></hd-icon>
+            <span class="name">play-button</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:plus')" title="Click to copy">
+            <hd-icon icon="system-uicons:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:plus-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:plus-circle"></hd-icon>
+            <span class="name">plus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:postcard')" title="Click to copy">
+            <hd-icon icon="system-uicons:postcard"></hd-icon>
+            <span class="name">postcard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:printer')" title="Click to copy">
+            <hd-icon icon="system-uicons:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:projector')" title="Click to copy">
+            <hd-icon icon="system-uicons:projector"></hd-icon>
+            <span class="name">projector</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:pull-down')" title="Click to copy">
+            <hd-icon icon="system-uicons:pull-down"></hd-icon>
+            <span class="name">pull-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:pull-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:pull-left"></hd-icon>
+            <span class="name">pull-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:pull-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:pull-right"></hd-icon>
+            <span class="name">pull-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:pull-up')" title="Click to copy">
+            <hd-icon icon="system-uicons:pull-up"></hd-icon>
+            <span class="name">pull-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:push-down')" title="Click to copy">
+            <hd-icon icon="system-uicons:push-down"></hd-icon>
+            <span class="name">push-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:push-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:push-left"></hd-icon>
+            <span class="name">push-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:push-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:push-right"></hd-icon>
+            <span class="name">push-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:push-up')" title="Click to copy">
+            <hd-icon icon="system-uicons:push-up"></hd-icon>
+            <span class="name">push-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:question-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:question-circle"></hd-icon>
+            <span class="name">question-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:radio-on')" title="Click to copy">
+            <hd-icon icon="system-uicons:radio-on"></hd-icon>
+            <span class="name">radio-on</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:receipt')" title="Click to copy">
+            <hd-icon icon="system-uicons:receipt"></hd-icon>
+            <span class="name">receipt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:record')" title="Click to copy">
+            <hd-icon icon="system-uicons:record"></hd-icon>
+            <span class="name">record</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:redo')" title="Click to copy">
+            <hd-icon icon="system-uicons:redo"></hd-icon>
+            <span class="name">redo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:refresh')" title="Click to copy">
+            <hd-icon icon="system-uicons:refresh"></hd-icon>
+            <span class="name">refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:refresh-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:refresh-alt"></hd-icon>
+            <span class="name">refresh-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:replicate')" title="Click to copy">
+            <hd-icon icon="system-uicons:replicate"></hd-icon>
+            <span class="name">replicate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:replicate-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:replicate-alt"></hd-icon>
+            <span class="name">replicate-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:reset')" title="Click to copy">
+            <hd-icon icon="system-uicons:reset"></hd-icon>
+            <span class="name">reset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:reset-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:reset-alt"></hd-icon>
+            <span class="name">reset-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:reset-forward')" title="Click to copy">
+            <hd-icon icon="system-uicons:reset-forward"></hd-icon>
+            <span class="name">reset-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:reset-hard')" title="Click to copy">
+            <hd-icon icon="system-uicons:reset-hard"></hd-icon>
+            <span class="name">reset-hard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:reset-temporary')" title="Click to copy">
+            <hd-icon icon="system-uicons:reset-temporary"></hd-icon>
+            <span class="name">reset-temporary</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:retweet')" title="Click to copy">
+            <hd-icon icon="system-uicons:retweet"></hd-icon>
+            <span class="name">retweet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:reuse')" title="Click to copy">
+            <hd-icon icon="system-uicons:reuse"></hd-icon>
+            <span class="name">reuse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:reverse')" title="Click to copy">
+            <hd-icon icon="system-uicons:reverse"></hd-icon>
+            <span class="name">reverse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:reverse-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:reverse-alt"></hd-icon>
+            <span class="name">reverse-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:revert')" title="Click to copy">
+            <hd-icon icon="system-uicons:revert"></hd-icon>
+            <span class="name">revert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:rocket')" title="Click to copy">
+            <hd-icon icon="system-uicons:rocket"></hd-icon>
+            <span class="name">rocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:ruler')" title="Click to copy">
+            <hd-icon icon="system-uicons:ruler"></hd-icon>
+            <span class="name">ruler</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:scale')" title="Click to copy">
+            <hd-icon icon="system-uicons:scale"></hd-icon>
+            <span class="name">scale</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:scale-contract')" title="Click to copy">
+            <hd-icon icon="system-uicons:scale-contract"></hd-icon>
+            <span class="name">scale-contract</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:scale-extend')" title="Click to copy">
+            <hd-icon icon="system-uicons:scale-extend"></hd-icon>
+            <span class="name">scale-extend</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:scalpel')" title="Click to copy">
+            <hd-icon icon="system-uicons:scalpel"></hd-icon>
+            <span class="name">scalpel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:search')" title="Click to copy">
+            <hd-icon icon="system-uicons:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:server')" title="Click to copy">
+            <hd-icon icon="system-uicons:server"></hd-icon>
+            <span class="name">server</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:settings')" title="Click to copy">
+            <hd-icon icon="system-uicons:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:share')" title="Click to copy">
+            <hd-icon icon="system-uicons:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:share-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:share-alt"></hd-icon>
+            <span class="name">share-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:shuffle')" title="Click to copy">
+            <hd-icon icon="system-uicons:shuffle"></hd-icon>
+            <span class="name">shuffle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:side-menu')" title="Click to copy">
+            <hd-icon icon="system-uicons:side-menu"></hd-icon>
+            <span class="name">side-menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:signal-full')" title="Click to copy">
+            <hd-icon icon="system-uicons:signal-full"></hd-icon>
+            <span class="name">signal-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:signal-low')" title="Click to copy">
+            <hd-icon icon="system-uicons:signal-low"></hd-icon>
+            <span class="name">signal-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:signal-medium')" title="Click to copy">
+            <hd-icon icon="system-uicons:signal-medium"></hd-icon>
+            <span class="name">signal-medium</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:signal-none')" title="Click to copy">
+            <hd-icon icon="system-uicons:signal-none"></hd-icon>
+            <span class="name">signal-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:slash-backward')" title="Click to copy">
+            <hd-icon icon="system-uicons:slash-backward"></hd-icon>
+            <span class="name">slash-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:slash-forward')" title="Click to copy">
+            <hd-icon icon="system-uicons:slash-forward"></hd-icon>
+            <span class="name">slash-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:sliders')" title="Click to copy">
+            <hd-icon icon="system-uicons:sliders"></hd-icon>
+            <span class="name">sliders</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:sort')" title="Click to copy">
+            <hd-icon icon="system-uicons:sort"></hd-icon>
+            <span class="name">sort</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:sort-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:sort-alt"></hd-icon>
+            <span class="name">sort-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:speaker')" title="Click to copy">
+            <hd-icon icon="system-uicons:speaker"></hd-icon>
+            <span class="name">speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:speech-bubble')" title="Click to copy">
+            <hd-icon icon="system-uicons:speech-bubble"></hd-icon>
+            <span class="name">speech-bubble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:speech-typing')" title="Click to copy">
+            <hd-icon icon="system-uicons:speech-typing"></hd-icon>
+            <span class="name">speech-typing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:split')" title="Click to copy">
+            <hd-icon icon="system-uicons:split"></hd-icon>
+            <span class="name">split</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:split-three')" title="Click to copy">
+            <hd-icon icon="system-uicons:split-three"></hd-icon>
+            <span class="name">split-three</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:star')" title="Click to copy">
+            <hd-icon icon="system-uicons:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:sun')" title="Click to copy">
+            <hd-icon icon="system-uicons:sun"></hd-icon>
+            <span class="name">sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:support')" title="Click to copy">
+            <hd-icon icon="system-uicons:support"></hd-icon>
+            <span class="name">support</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:swap')" title="Click to copy">
+            <hd-icon icon="system-uicons:swap"></hd-icon>
+            <span class="name">swap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:switch')" title="Click to copy">
+            <hd-icon icon="system-uicons:switch"></hd-icon>
+            <span class="name">switch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:table')" title="Click to copy">
+            <hd-icon icon="system-uicons:table"></hd-icon>
+            <span class="name">table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:table-header')" title="Click to copy">
+            <hd-icon icon="system-uicons:table-header"></hd-icon>
+            <span class="name">table-header</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:tag')" title="Click to copy">
+            <hd-icon icon="system-uicons:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:tag-milestone')" title="Click to copy">
+            <hd-icon icon="system-uicons:tag-milestone"></hd-icon>
+            <span class="name">tag-milestone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:tags')" title="Click to copy">
+            <hd-icon icon="system-uicons:tags"></hd-icon>
+            <span class="name">tags</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:target')" title="Click to copy">
+            <hd-icon icon="system-uicons:target"></hd-icon>
+            <span class="name">target</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:terminal')" title="Click to copy">
+            <hd-icon icon="system-uicons:terminal"></hd-icon>
+            <span class="name">terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:thread')" title="Click to copy">
+            <hd-icon icon="system-uicons:thread"></hd-icon>
+            <span class="name">thread</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:thumbs-down')" title="Click to copy">
+            <hd-icon icon="system-uicons:thumbs-down"></hd-icon>
+            <span class="name">thumbs-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:thumbs-up')" title="Click to copy">
+            <hd-icon icon="system-uicons:thumbs-up"></hd-icon>
+            <span class="name">thumbs-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:ticket')" title="Click to copy">
+            <hd-icon icon="system-uicons:ticket"></hd-icon>
+            <span class="name">ticket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:timeline')" title="Click to copy">
+            <hd-icon icon="system-uicons:timeline"></hd-icon>
+            <span class="name">timeline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:todo')" title="Click to copy">
+            <hd-icon icon="system-uicons:todo"></hd-icon>
+            <span class="name">todo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:toggle')" title="Click to copy">
+            <hd-icon icon="system-uicons:toggle"></hd-icon>
+            <span class="name">toggle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:toggles')" title="Click to copy">
+            <hd-icon icon="system-uicons:toggles"></hd-icon>
+            <span class="name">toggles</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:translate')" title="Click to copy">
+            <hd-icon icon="system-uicons:translate"></hd-icon>
+            <span class="name">translate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:trash')" title="Click to copy">
+            <hd-icon icon="system-uicons:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:trash-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:trash-alt"></hd-icon>
+            <span class="name">trash-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:trophy')" title="Click to copy">
+            <hd-icon icon="system-uicons:trophy"></hd-icon>
+            <span class="name">trophy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:tv-mode')" title="Click to copy">
+            <hd-icon icon="system-uicons:tv-mode"></hd-icon>
+            <span class="name">tv-mode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:unarchive')" title="Click to copy">
+            <hd-icon icon="system-uicons:unarchive"></hd-icon>
+            <span class="name">unarchive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:undo')" title="Click to copy">
+            <hd-icon icon="system-uicons:undo"></hd-icon>
+            <span class="name">undo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:undo-history')" title="Click to copy">
+            <hd-icon icon="system-uicons:undo-history"></hd-icon>
+            <span class="name">undo-history</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:unlink-horizontal')" title="Click to copy">
+            <hd-icon icon="system-uicons:unlink-horizontal"></hd-icon>
+            <span class="name">unlink-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:unlink-vertical')" title="Click to copy">
+            <hd-icon icon="system-uicons:unlink-vertical"></hd-icon>
+            <span class="name">unlink-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:upload')" title="Click to copy">
+            <hd-icon icon="system-uicons:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:upload-alt')" title="Click to copy">
+            <hd-icon icon="system-uicons:upload-alt"></hd-icon>
+            <span class="name">upload-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:upward')" title="Click to copy">
+            <hd-icon icon="system-uicons:upward"></hd-icon>
+            <span class="name">upward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:user')" title="Click to copy">
+            <hd-icon icon="system-uicons:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:user-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:user-add"></hd-icon>
+            <span class="name">user-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:user-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:user-circle"></hd-icon>
+            <span class="name">user-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:user-male')" title="Click to copy">
+            <hd-icon icon="system-uicons:user-male"></hd-icon>
+            <span class="name">user-male</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:user-male-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:user-male-circle"></hd-icon>
+            <span class="name">user-male-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:user-remove')" title="Click to copy">
+            <hd-icon icon="system-uicons:user-remove"></hd-icon>
+            <span class="name">user-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:users')" title="Click to copy">
+            <hd-icon icon="system-uicons:users"></hd-icon>
+            <span class="name">users</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:venn')" title="Click to copy">
+            <hd-icon icon="system-uicons:venn"></hd-icon>
+            <span class="name">venn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:version')" title="Click to copy">
+            <hd-icon icon="system-uicons:version"></hd-icon>
+            <span class="name">version</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:versions')" title="Click to copy">
+            <hd-icon icon="system-uicons:versions"></hd-icon>
+            <span class="name">versions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:video')" title="Click to copy">
+            <hd-icon icon="system-uicons:video"></hd-icon>
+            <span class="name">video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:volume-0')" title="Click to copy">
+            <hd-icon icon="system-uicons:volume-0"></hd-icon>
+            <span class="name">volume-0</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:volume-add')" title="Click to copy">
+            <hd-icon icon="system-uicons:volume-add"></hd-icon>
+            <span class="name">volume-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:volume-disabled')" title="Click to copy">
+            <hd-icon icon="system-uicons:volume-disabled"></hd-icon>
+            <span class="name">volume-disabled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:volume-high')" title="Click to copy">
+            <hd-icon icon="system-uicons:volume-high"></hd-icon>
+            <span class="name">volume-high</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:volume-low')" title="Click to copy">
+            <hd-icon icon="system-uicons:volume-low"></hd-icon>
+            <span class="name">volume-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:volume-minus')" title="Click to copy">
+            <hd-icon icon="system-uicons:volume-minus"></hd-icon>
+            <span class="name">volume-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:volume-muted')" title="Click to copy">
+            <hd-icon icon="system-uicons:volume-muted"></hd-icon>
+            <span class="name">volume-muted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:wallet')" title="Click to copy">
+            <hd-icon icon="system-uicons:wallet"></hd-icon>
+            <span class="name">wallet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:warning-circle')" title="Click to copy">
+            <hd-icon icon="system-uicons:warning-circle"></hd-icon>
+            <span class="name">warning-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:warning-hex')" title="Click to copy">
+            <hd-icon icon="system-uicons:warning-hex"></hd-icon>
+            <span class="name">warning-hex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:warning-triangle')" title="Click to copy">
+            <hd-icon icon="system-uicons:warning-triangle"></hd-icon>
+            <span class="name">warning-triangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:waves')" title="Click to copy">
+            <hd-icon icon="system-uicons:waves"></hd-icon>
+            <span class="name">waves</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:width')" title="Click to copy">
+            <hd-icon icon="system-uicons:width"></hd-icon>
+            <span class="name">width</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:wifi')" title="Click to copy">
+            <hd-icon icon="system-uicons:wifi"></hd-icon>
+            <span class="name">wifi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:wifi-error')" title="Click to copy">
+            <hd-icon icon="system-uicons:wifi-error"></hd-icon>
+            <span class="name">wifi-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:wifi-none')" title="Click to copy">
+            <hd-icon icon="system-uicons:wifi-none"></hd-icon>
+            <span class="name">wifi-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:window')" title="Click to copy">
+            <hd-icon icon="system-uicons:window"></hd-icon>
+            <span class="name">window</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:window-collapse-left')" title="Click to copy">
+            <hd-icon icon="system-uicons:window-collapse-left"></hd-icon>
+            <span class="name">window-collapse-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:window-collapse-right')" title="Click to copy">
+            <hd-icon icon="system-uicons:window-collapse-right"></hd-icon>
+            <span class="name">window-collapse-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:window-content')" title="Click to copy">
+            <hd-icon icon="system-uicons:window-content"></hd-icon>
+            <span class="name">window-content</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:wrap-back')" title="Click to copy">
+            <hd-icon icon="system-uicons:wrap-back"></hd-icon>
+            <span class="name">wrap-back</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:wrap-forward')" title="Click to copy">
+            <hd-icon icon="system-uicons:wrap-forward"></hd-icon>
+            <span class="name">wrap-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:write')" title="Click to copy">
+            <hd-icon icon="system-uicons:write"></hd-icon>
+            <span class="name">write</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:zoom-cancel')" title="Click to copy">
+            <hd-icon icon="system-uicons:zoom-cancel"></hd-icon>
+            <span class="name">zoom-cancel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:zoom-in')" title="Click to copy">
+            <hd-icon icon="system-uicons:zoom-in"></hd-icon>
+            <span class="name">zoom-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:zoom-out')" title="Click to copy">
+            <hd-icon icon="system-uicons:zoom-out"></hd-icon>
+            <span class="name">zoom-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('system-uicons:zoom-reset')" title="Click to copy">
+            <hd-icon icon="system-uicons:zoom-reset"></hd-icon>
+            <span class="name">zoom-reset</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

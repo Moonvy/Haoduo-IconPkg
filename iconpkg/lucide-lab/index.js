@@ -1,0 +1,15 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAACBIkZAXUYSxoZzWlGWCZDJASEMkNkKHclBXaZY3UTY2SEdWaCiTVmZjVGUXhDUlVih1aIA1hKBQEaExCHAwUKAg0/Q8oBYQoFaC6VAskCAXcD/wIFNQMMBVdYiAEpKUGFAYkFCSsVC5kCaAE+AgmOA3kHCwQXAQdFD3UxGQ+BAwECWQF1Cr9BodlSymB5jLWuvOhVEY+UwlHzswK70/WB0LBFZkvKiEIveSe/rpkn/Udpm3l1aZgPP6miDovvxfvG9JFp0OtPQGZqqMZjH92c5Nq06DLWxyHhEOJa9BGB6k3zL1J8B+jeyh2swheG6GtNdZ0GymxgAJmGFKsHSkDeBB0N2UY95Y8qz9Pe77JaJsaGgSeTD4Eiubv9OcNJmg6Y5e85AcZJ54EUcMV8M3jBtEetZ02cLzgkcI9C89fZL/nPCKPS5BJwQqeezFY7lwWP0Q3nTkECQmGtE/qarncqS6+KrFOQuyBgMaGg3VWoAfJWklQtA6joB6wOKwkmlXyCZZw4WZaLbivUmUx05I5XcnBM96ANF+QIWyflAE050/ii5KdUHsHuWScTA5NBHOMdoSEmRS4kpI1BenQB/9Qoh/8g1yq1vHi9vhSubyjtlz7zAMjK+NAOSuyCNlvTlXy5aSmy6uecjygQm9/cmf0hPqfe1pt4IYMdJEoohCjAAIQAAQQAAAAAAAIAAAARbHVjaWRlLWxhYi0wMS5zdmcAAAARbHVjaWRlLWxhYi0wMi5zdmf/////AAAAAgAAAF5EFFEVAQABFEVAVUAFUAQAERABQBBQRQEBERBABFUVQFQRVBEQAVAARRRURQBFQURBEUFFVBBAFEUEFRUBARAVRAURQABAREBVAVUUBEBBRFVUEFRBFEEERUBBBAEBAAAAAA==";
+
+const chunks = {
+  "lucide-lab-01.svg": new URL("./lucide-lab-01.svg", import.meta.url).href,
+  "lucide-lab-02.svg": new URL("./lucide-lab-02.svg", import.meta.url).href
+};
+
+register('lucide-lab', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

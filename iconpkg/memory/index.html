@@ -1,0 +1,2776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>memory - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>memory <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(651)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('memory:account')" title="Click to copy">
+            <hd-icon icon="memory:account"></hd-icon>
+            <span class="name">account</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:account-box')" title="Click to copy">
+            <hd-icon icon="memory:account-box"></hd-icon>
+            <span class="name">account-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alert')" title="Click to copy">
+            <hd-icon icon="memory:alert"></hd-icon>
+            <span class="name">alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alert-box')" title="Click to copy">
+            <hd-icon icon="memory:alert-box"></hd-icon>
+            <span class="name">alert-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alert-box-fill')" title="Click to copy">
+            <hd-icon icon="memory:alert-box-fill"></hd-icon>
+            <span class="name">alert-box-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alert-circle')" title="Click to copy">
+            <hd-icon icon="memory:alert-circle"></hd-icon>
+            <span class="name">alert-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alert-circle-fill')" title="Click to copy">
+            <hd-icon icon="memory:alert-circle-fill"></hd-icon>
+            <span class="name">alert-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alert-hexagon')" title="Click to copy">
+            <hd-icon icon="memory:alert-hexagon"></hd-icon>
+            <span class="name">alert-hexagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alert-hexagon-fill')" title="Click to copy">
+            <hd-icon icon="memory:alert-hexagon-fill"></hd-icon>
+            <span class="name">alert-hexagon-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alert-octagon')" title="Click to copy">
+            <hd-icon icon="memory:alert-octagon"></hd-icon>
+            <span class="name">alert-octagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alert-rhombus')" title="Click to copy">
+            <hd-icon icon="memory:alert-rhombus"></hd-icon>
+            <span class="name">alert-rhombus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alert-rhombus-fill')" title="Click to copy">
+            <hd-icon icon="memory:alert-rhombus-fill"></hd-icon>
+            <span class="name">alert-rhombus-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:align-horizontal-center')" title="Click to copy">
+            <hd-icon icon="memory:align-horizontal-center"></hd-icon>
+            <span class="name">align-horizontal-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:align-horizontal-distribute')" title="Click to copy">
+            <hd-icon icon="memory:align-horizontal-distribute"></hd-icon>
+            <span class="name">align-horizontal-distribute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:align-horizontal-left')" title="Click to copy">
+            <hd-icon icon="memory:align-horizontal-left"></hd-icon>
+            <span class="name">align-horizontal-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:align-horizontal-right')" title="Click to copy">
+            <hd-icon icon="memory:align-horizontal-right"></hd-icon>
+            <span class="name">align-horizontal-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:align-vertical-bottom')" title="Click to copy">
+            <hd-icon icon="memory:align-vertical-bottom"></hd-icon>
+            <span class="name">align-vertical-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:align-vertical-center')" title="Click to copy">
+            <hd-icon icon="memory:align-vertical-center"></hd-icon>
+            <span class="name">align-vertical-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:align-vertical-distribute')" title="Click to copy">
+            <hd-icon icon="memory:align-vertical-distribute"></hd-icon>
+            <span class="name">align-vertical-distribute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:align-vertical-top')" title="Click to copy">
+            <hd-icon icon="memory:align-vertical-top"></hd-icon>
+            <span class="name">align-vertical-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-a')" title="Click to copy">
+            <hd-icon icon="memory:alpha-a"></hd-icon>
+            <span class="name">alpha-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-a-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-a-fill"></hd-icon>
+            <span class="name">alpha-a-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-b')" title="Click to copy">
+            <hd-icon icon="memory:alpha-b"></hd-icon>
+            <span class="name">alpha-b</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-b-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-b-fill"></hd-icon>
+            <span class="name">alpha-b-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-c')" title="Click to copy">
+            <hd-icon icon="memory:alpha-c"></hd-icon>
+            <span class="name">alpha-c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-c-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-c-fill"></hd-icon>
+            <span class="name">alpha-c-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-d')" title="Click to copy">
+            <hd-icon icon="memory:alpha-d"></hd-icon>
+            <span class="name">alpha-d</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-d-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-d-fill"></hd-icon>
+            <span class="name">alpha-d-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-e')" title="Click to copy">
+            <hd-icon icon="memory:alpha-e"></hd-icon>
+            <span class="name">alpha-e</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-e-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-e-fill"></hd-icon>
+            <span class="name">alpha-e-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-f')" title="Click to copy">
+            <hd-icon icon="memory:alpha-f"></hd-icon>
+            <span class="name">alpha-f</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-f-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-f-fill"></hd-icon>
+            <span class="name">alpha-f-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-g')" title="Click to copy">
+            <hd-icon icon="memory:alpha-g"></hd-icon>
+            <span class="name">alpha-g</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-g-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-g-fill"></hd-icon>
+            <span class="name">alpha-g-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-h')" title="Click to copy">
+            <hd-icon icon="memory:alpha-h"></hd-icon>
+            <span class="name">alpha-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-h-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-h-fill"></hd-icon>
+            <span class="name">alpha-h-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-i')" title="Click to copy">
+            <hd-icon icon="memory:alpha-i"></hd-icon>
+            <span class="name">alpha-i</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-i-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-i-fill"></hd-icon>
+            <span class="name">alpha-i-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-j')" title="Click to copy">
+            <hd-icon icon="memory:alpha-j"></hd-icon>
+            <span class="name">alpha-j</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-j-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-j-fill"></hd-icon>
+            <span class="name">alpha-j-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-k')" title="Click to copy">
+            <hd-icon icon="memory:alpha-k"></hd-icon>
+            <span class="name">alpha-k</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-k-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-k-fill"></hd-icon>
+            <span class="name">alpha-k-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-l')" title="Click to copy">
+            <hd-icon icon="memory:alpha-l"></hd-icon>
+            <span class="name">alpha-l</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-l-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-l-fill"></hd-icon>
+            <span class="name">alpha-l-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-m')" title="Click to copy">
+            <hd-icon icon="memory:alpha-m"></hd-icon>
+            <span class="name">alpha-m</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-m-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-m-fill"></hd-icon>
+            <span class="name">alpha-m-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-n')" title="Click to copy">
+            <hd-icon icon="memory:alpha-n"></hd-icon>
+            <span class="name">alpha-n</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-n-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-n-fill"></hd-icon>
+            <span class="name">alpha-n-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-o')" title="Click to copy">
+            <hd-icon icon="memory:alpha-o"></hd-icon>
+            <span class="name">alpha-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-o-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-o-fill"></hd-icon>
+            <span class="name">alpha-o-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-p')" title="Click to copy">
+            <hd-icon icon="memory:alpha-p"></hd-icon>
+            <span class="name">alpha-p</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-p-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-p-fill"></hd-icon>
+            <span class="name">alpha-p-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-q')" title="Click to copy">
+            <hd-icon icon="memory:alpha-q"></hd-icon>
+            <span class="name">alpha-q</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-q-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-q-fill"></hd-icon>
+            <span class="name">alpha-q-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-r')" title="Click to copy">
+            <hd-icon icon="memory:alpha-r"></hd-icon>
+            <span class="name">alpha-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-r-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-r-fill"></hd-icon>
+            <span class="name">alpha-r-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-s')" title="Click to copy">
+            <hd-icon icon="memory:alpha-s"></hd-icon>
+            <span class="name">alpha-s</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-s-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-s-fill"></hd-icon>
+            <span class="name">alpha-s-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-t')" title="Click to copy">
+            <hd-icon icon="memory:alpha-t"></hd-icon>
+            <span class="name">alpha-t</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-t-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-t-fill"></hd-icon>
+            <span class="name">alpha-t-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-u')" title="Click to copy">
+            <hd-icon icon="memory:alpha-u"></hd-icon>
+            <span class="name">alpha-u</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-u-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-u-fill"></hd-icon>
+            <span class="name">alpha-u-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-v')" title="Click to copy">
+            <hd-icon icon="memory:alpha-v"></hd-icon>
+            <span class="name">alpha-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-v-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-v-fill"></hd-icon>
+            <span class="name">alpha-v-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-w')" title="Click to copy">
+            <hd-icon icon="memory:alpha-w"></hd-icon>
+            <span class="name">alpha-w</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-w-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-w-fill"></hd-icon>
+            <span class="name">alpha-w-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-x')" title="Click to copy">
+            <hd-icon icon="memory:alpha-x"></hd-icon>
+            <span class="name">alpha-x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-x-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-x-fill"></hd-icon>
+            <span class="name">alpha-x-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-y')" title="Click to copy">
+            <hd-icon icon="memory:alpha-y"></hd-icon>
+            <span class="name">alpha-y</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-y-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-y-fill"></hd-icon>
+            <span class="name">alpha-y-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-z')" title="Click to copy">
+            <hd-icon icon="memory:alpha-z"></hd-icon>
+            <span class="name">alpha-z</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:alpha-z-fill')" title="Click to copy">
+            <hd-icon icon="memory:alpha-z-fill"></hd-icon>
+            <span class="name">alpha-z-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:anvil')" title="Click to copy">
+            <hd-icon icon="memory:anvil"></hd-icon>
+            <span class="name">anvil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:application')" title="Click to copy">
+            <hd-icon icon="memory:application"></hd-icon>
+            <span class="name">application</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:application-code')" title="Click to copy">
+            <hd-icon icon="memory:application-code"></hd-icon>
+            <span class="name">application-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:apps')" title="Click to copy">
+            <hd-icon icon="memory:apps"></hd-icon>
+            <span class="name">apps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:apps-box')" title="Click to copy">
+            <hd-icon icon="memory:apps-box"></hd-icon>
+            <span class="name">apps-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:apps-box-fill')" title="Click to copy">
+            <hd-icon icon="memory:apps-box-fill"></hd-icon>
+            <span class="name">apps-box-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:archive')" title="Click to copy">
+            <hd-icon icon="memory:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow')" title="Click to copy">
+            <hd-icon icon="memory:arrow"></hd-icon>
+            <span class="name">arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-bottom-left')" title="Click to copy">
+            <hd-icon icon="memory:arrow-bottom-left"></hd-icon>
+            <span class="name">arrow-bottom-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-bottom-left-circle')" title="Click to copy">
+            <hd-icon icon="memory:arrow-bottom-left-circle"></hd-icon>
+            <span class="name">arrow-bottom-left-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-bottom-right')" title="Click to copy">
+            <hd-icon icon="memory:arrow-bottom-right"></hd-icon>
+            <span class="name">arrow-bottom-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-bottom-right-circle')" title="Click to copy">
+            <hd-icon icon="memory:arrow-bottom-right-circle"></hd-icon>
+            <span class="name">arrow-bottom-right-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-down')" title="Click to copy">
+            <hd-icon icon="memory:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-down-bold')" title="Click to copy">
+            <hd-icon icon="memory:arrow-down-bold"></hd-icon>
+            <span class="name">arrow-down-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-down-box')" title="Click to copy">
+            <hd-icon icon="memory:arrow-down-box"></hd-icon>
+            <span class="name">arrow-down-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-down-circle')" title="Click to copy">
+            <hd-icon icon="memory:arrow-down-circle"></hd-icon>
+            <span class="name">arrow-down-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-down-left')" title="Click to copy">
+            <hd-icon icon="memory:arrow-down-left"></hd-icon>
+            <span class="name">arrow-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-down-left-box')" title="Click to copy">
+            <hd-icon icon="memory:arrow-down-left-box"></hd-icon>
+            <span class="name">arrow-down-left-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-down-right')" title="Click to copy">
+            <hd-icon icon="memory:arrow-down-right"></hd-icon>
+            <span class="name">arrow-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-down-right-box')" title="Click to copy">
+            <hd-icon icon="memory:arrow-down-right-box"></hd-icon>
+            <span class="name">arrow-down-right-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-left')" title="Click to copy">
+            <hd-icon icon="memory:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-left-bold')" title="Click to copy">
+            <hd-icon icon="memory:arrow-left-bold"></hd-icon>
+            <span class="name">arrow-left-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-left-box')" title="Click to copy">
+            <hd-icon icon="memory:arrow-left-box"></hd-icon>
+            <span class="name">arrow-left-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-left-circle')" title="Click to copy">
+            <hd-icon icon="memory:arrow-left-circle"></hd-icon>
+            <span class="name">arrow-left-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-left-down')" title="Click to copy">
+            <hd-icon icon="memory:arrow-left-down"></hd-icon>
+            <span class="name">arrow-left-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-left-right')" title="Click to copy">
+            <hd-icon icon="memory:arrow-left-right"></hd-icon>
+            <span class="name">arrow-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-left-up')" title="Click to copy">
+            <hd-icon icon="memory:arrow-left-up"></hd-icon>
+            <span class="name">arrow-left-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-right')" title="Click to copy">
+            <hd-icon icon="memory:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-right-bold')" title="Click to copy">
+            <hd-icon icon="memory:arrow-right-bold"></hd-icon>
+            <span class="name">arrow-right-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-right-box')" title="Click to copy">
+            <hd-icon icon="memory:arrow-right-box"></hd-icon>
+            <span class="name">arrow-right-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-right-circle')" title="Click to copy">
+            <hd-icon icon="memory:arrow-right-circle"></hd-icon>
+            <span class="name">arrow-right-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-right-down')" title="Click to copy">
+            <hd-icon icon="memory:arrow-right-down"></hd-icon>
+            <span class="name">arrow-right-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-right-up')" title="Click to copy">
+            <hd-icon icon="memory:arrow-right-up"></hd-icon>
+            <span class="name">arrow-right-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-top-left')" title="Click to copy">
+            <hd-icon icon="memory:arrow-top-left"></hd-icon>
+            <span class="name">arrow-top-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-top-left-circle')" title="Click to copy">
+            <hd-icon icon="memory:arrow-top-left-circle"></hd-icon>
+            <span class="name">arrow-top-left-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-top-right')" title="Click to copy">
+            <hd-icon icon="memory:arrow-top-right"></hd-icon>
+            <span class="name">arrow-top-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-top-right-circle')" title="Click to copy">
+            <hd-icon icon="memory:arrow-top-right-circle"></hd-icon>
+            <span class="name">arrow-top-right-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-up')" title="Click to copy">
+            <hd-icon icon="memory:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-up-bold')" title="Click to copy">
+            <hd-icon icon="memory:arrow-up-bold"></hd-icon>
+            <span class="name">arrow-up-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-up-box')" title="Click to copy">
+            <hd-icon icon="memory:arrow-up-box"></hd-icon>
+            <span class="name">arrow-up-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-up-circle')" title="Click to copy">
+            <hd-icon icon="memory:arrow-up-circle"></hd-icon>
+            <span class="name">arrow-up-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-up-down')" title="Click to copy">
+            <hd-icon icon="memory:arrow-up-down"></hd-icon>
+            <span class="name">arrow-up-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-up-left')" title="Click to copy">
+            <hd-icon icon="memory:arrow-up-left"></hd-icon>
+            <span class="name">arrow-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-up-left-box')" title="Click to copy">
+            <hd-icon icon="memory:arrow-up-left-box"></hd-icon>
+            <span class="name">arrow-up-left-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-up-right')" title="Click to copy">
+            <hd-icon icon="memory:arrow-up-right"></hd-icon>
+            <span class="name">arrow-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:arrow-up-right-box')" title="Click to copy">
+            <hd-icon icon="memory:arrow-up-right-box"></hd-icon>
+            <span class="name">arrow-up-right-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:aspect-ratio')" title="Click to copy">
+            <hd-icon icon="memory:aspect-ratio"></hd-icon>
+            <span class="name">aspect-ratio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:axe')" title="Click to copy">
+            <hd-icon icon="memory:axe"></hd-icon>
+            <span class="name">axe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:bag-personal')" title="Click to copy">
+            <hd-icon icon="memory:bag-personal"></hd-icon>
+            <span class="name">bag-personal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:bag-personal-fill')" title="Click to copy">
+            <hd-icon icon="memory:bag-personal-fill"></hd-icon>
+            <span class="name">bag-personal-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:bank')" title="Click to copy">
+            <hd-icon icon="memory:bank"></hd-icon>
+            <span class="name">bank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:barcode')" title="Click to copy">
+            <hd-icon icon="memory:barcode"></hd-icon>
+            <span class="name">barcode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:battery-0')" title="Click to copy">
+            <hd-icon icon="memory:battery-0"></hd-icon>
+            <span class="name">battery-0</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:battery-100')" title="Click to copy">
+            <hd-icon icon="memory:battery-100"></hd-icon>
+            <span class="name">battery-100</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:battery-25')" title="Click to copy">
+            <hd-icon icon="memory:battery-25"></hd-icon>
+            <span class="name">battery-25</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:battery-50')" title="Click to copy">
+            <hd-icon icon="memory:battery-50"></hd-icon>
+            <span class="name">battery-50</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:battery-75')" title="Click to copy">
+            <hd-icon icon="memory:battery-75"></hd-icon>
+            <span class="name">battery-75</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:battle-axe')" title="Click to copy">
+            <hd-icon icon="memory:battle-axe"></hd-icon>
+            <span class="name">battle-axe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:beer')" title="Click to copy">
+            <hd-icon icon="memory:beer"></hd-icon>
+            <span class="name">beer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:bell')" title="Click to copy">
+            <hd-icon icon="memory:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:blood')" title="Click to copy">
+            <hd-icon icon="memory:blood"></hd-icon>
+            <span class="name">blood</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:book')" title="Click to copy">
+            <hd-icon icon="memory:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:bookmark')" title="Click to copy">
+            <hd-icon icon="memory:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-bottom')" title="Click to copy">
+            <hd-icon icon="memory:border-bottom"></hd-icon>
+            <span class="name">border-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-bottom-left')" title="Click to copy">
+            <hd-icon icon="memory:border-bottom-left"></hd-icon>
+            <span class="name">border-bottom-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-bottom-left-right')" title="Click to copy">
+            <hd-icon icon="memory:border-bottom-left-right"></hd-icon>
+            <span class="name">border-bottom-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-bottom-right')" title="Click to copy">
+            <hd-icon icon="memory:border-bottom-right"></hd-icon>
+            <span class="name">border-bottom-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-inside')" title="Click to copy">
+            <hd-icon icon="memory:border-inside"></hd-icon>
+            <span class="name">border-inside</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-left')" title="Click to copy">
+            <hd-icon icon="memory:border-left"></hd-icon>
+            <span class="name">border-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-left-right')" title="Click to copy">
+            <hd-icon icon="memory:border-left-right"></hd-icon>
+            <span class="name">border-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-none')" title="Click to copy">
+            <hd-icon icon="memory:border-none"></hd-icon>
+            <span class="name">border-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-outside')" title="Click to copy">
+            <hd-icon icon="memory:border-outside"></hd-icon>
+            <span class="name">border-outside</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-right')" title="Click to copy">
+            <hd-icon icon="memory:border-right"></hd-icon>
+            <span class="name">border-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-top')" title="Click to copy">
+            <hd-icon icon="memory:border-top"></hd-icon>
+            <span class="name">border-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-top-bottom')" title="Click to copy">
+            <hd-icon icon="memory:border-top-bottom"></hd-icon>
+            <span class="name">border-top-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-top-left')" title="Click to copy">
+            <hd-icon icon="memory:border-top-left"></hd-icon>
+            <span class="name">border-top-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-top-left-bottom')" title="Click to copy">
+            <hd-icon icon="memory:border-top-left-bottom"></hd-icon>
+            <span class="name">border-top-left-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-top-left-right')" title="Click to copy">
+            <hd-icon icon="memory:border-top-left-right"></hd-icon>
+            <span class="name">border-top-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-top-right')" title="Click to copy">
+            <hd-icon icon="memory:border-top-right"></hd-icon>
+            <span class="name">border-top-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:border-top-right-bottom')" title="Click to copy">
+            <hd-icon icon="memory:border-top-right-bottom"></hd-icon>
+            <span class="name">border-top-right-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:bow')" title="Click to copy">
+            <hd-icon icon="memory:bow"></hd-icon>
+            <span class="name">bow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:bow-arrow')" title="Click to copy">
+            <hd-icon icon="memory:bow-arrow"></hd-icon>
+            <span class="name">bow-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box')" title="Click to copy">
+            <hd-icon icon="memory:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-dashed-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-dashed-down-left"></hd-icon>
+            <span class="name">box-light-dashed-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-dashed-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-dashed-down-right"></hd-icon>
+            <span class="name">box-light-dashed-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-dashed-horizontal')" title="Click to copy">
+            <hd-icon icon="memory:box-light-dashed-horizontal"></hd-icon>
+            <span class="name">box-light-dashed-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-dashed-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-dashed-up-left"></hd-icon>
+            <span class="name">box-light-dashed-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-dashed-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-dashed-up-right"></hd-icon>
+            <span class="name">box-light-dashed-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-dashed-vertical')" title="Click to copy">
+            <hd-icon icon="memory:box-light-dashed-vertical"></hd-icon>
+            <span class="name">box-light-dashed-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-dashed-vertical-horizontal')" title="Click to copy">
+            <hd-icon icon="memory:box-light-dashed-vertical-horizontal"></hd-icon>
+            <span class="name">box-light-dashed-vertical-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-down-left"></hd-icon>
+            <span class="name">box-light-double-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-down-right"></hd-icon>
+            <span class="name">box-light-double-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-horizontal')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-horizontal"></hd-icon>
+            <span class="name">box-light-double-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-horizontal-down')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-horizontal-down"></hd-icon>
+            <span class="name">box-light-double-horizontal-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-horizontal-light-down')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-horizontal-light-down"></hd-icon>
+            <span class="name">box-light-double-horizontal-light-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-horizontal-light-up')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-horizontal-light-up"></hd-icon>
+            <span class="name">box-light-double-horizontal-light-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-horizontal-up')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-horizontal-up"></hd-icon>
+            <span class="name">box-light-double-horizontal-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-round-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-round-down-left"></hd-icon>
+            <span class="name">box-light-double-round-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-round-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-round-down-right"></hd-icon>
+            <span class="name">box-light-double-round-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-round-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-round-up-left"></hd-icon>
+            <span class="name">box-light-double-round-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-round-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-round-up-right"></hd-icon>
+            <span class="name">box-light-double-round-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-up-left"></hd-icon>
+            <span class="name">box-light-double-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-up-right"></hd-icon>
+            <span class="name">box-light-double-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-vertical')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-vertical"></hd-icon>
+            <span class="name">box-light-double-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-vertical-horizontal')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-vertical-horizontal"></hd-icon>
+            <span class="name">box-light-double-vertical-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-vertical-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-vertical-left"></hd-icon>
+            <span class="name">box-light-double-vertical-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-vertical-light-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-vertical-light-left"></hd-icon>
+            <span class="name">box-light-double-vertical-light-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-vertical-light-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-vertical-light-right"></hd-icon>
+            <span class="name">box-light-double-vertical-light-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-double-vertical-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-double-vertical-right"></hd-icon>
+            <span class="name">box-light-double-vertical-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-down-left"></hd-icon>
+            <span class="name">box-light-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-down-left-circle')" title="Click to copy">
+            <hd-icon icon="memory:box-light-down-left-circle"></hd-icon>
+            <span class="name">box-light-down-left-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-down-left-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-down-left-stipple"></hd-icon>
+            <span class="name">box-light-down-left-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-down-left-stipple-inner')" title="Click to copy">
+            <hd-icon icon="memory:box-light-down-left-stipple-inner"></hd-icon>
+            <span class="name">box-light-down-left-stipple-inner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-down-left-stipple-outer')" title="Click to copy">
+            <hd-icon icon="memory:box-light-down-left-stipple-outer"></hd-icon>
+            <span class="name">box-light-down-left-stipple-outer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-down-right"></hd-icon>
+            <span class="name">box-light-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-down-right-circle')" title="Click to copy">
+            <hd-icon icon="memory:box-light-down-right-circle"></hd-icon>
+            <span class="name">box-light-down-right-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-down-right-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-down-right-stipple"></hd-icon>
+            <span class="name">box-light-down-right-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-down-right-stipple-inner')" title="Click to copy">
+            <hd-icon icon="memory:box-light-down-right-stipple-inner"></hd-icon>
+            <span class="name">box-light-down-right-stipple-inner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-down-right-stipple-outer')" title="Click to copy">
+            <hd-icon icon="memory:box-light-down-right-stipple-outer"></hd-icon>
+            <span class="name">box-light-down-right-stipple-outer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-fold-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-fold-down-left"></hd-icon>
+            <span class="name">box-light-fold-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-fold-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-fold-down-right"></hd-icon>
+            <span class="name">box-light-fold-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-fold-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-fold-up-left"></hd-icon>
+            <span class="name">box-light-fold-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-fold-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-fold-up-right"></hd-icon>
+            <span class="name">box-light-fold-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal"></hd-icon>
+            <span class="name">box-light-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-circle')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-circle"></hd-icon>
+            <span class="name">box-light-horizontal-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-down')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-down"></hd-icon>
+            <span class="name">box-light-horizontal-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-down-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-down-stipple"></hd-icon>
+            <span class="name">box-light-horizontal-down-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-down-stipple-down')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-down-stipple-down"></hd-icon>
+            <span class="name">box-light-horizontal-down-stipple-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-down-stipple-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-down-stipple-down-left"></hd-icon>
+            <span class="name">box-light-horizontal-down-stipple-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-down-stipple-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-down-stipple-down-right"></hd-icon>
+            <span class="name">box-light-horizontal-down-stipple-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-menu-down')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-menu-down"></hd-icon>
+            <span class="name">box-light-horizontal-menu-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-menu-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-menu-left"></hd-icon>
+            <span class="name">box-light-horizontal-menu-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-menu-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-menu-right"></hd-icon>
+            <span class="name">box-light-horizontal-menu-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-menu-up')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-menu-up"></hd-icon>
+            <span class="name">box-light-horizontal-menu-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-stipple"></hd-icon>
+            <span class="name">box-light-horizontal-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-stipple-down')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-stipple-down"></hd-icon>
+            <span class="name">box-light-horizontal-stipple-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-stipple-up')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-stipple-up"></hd-icon>
+            <span class="name">box-light-horizontal-stipple-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-up')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-up"></hd-icon>
+            <span class="name">box-light-horizontal-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-up-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-up-stipple"></hd-icon>
+            <span class="name">box-light-horizontal-up-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-up-stipple-down')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-up-stipple-down"></hd-icon>
+            <span class="name">box-light-horizontal-up-stipple-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-up-stipple-up')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-up-stipple-up"></hd-icon>
+            <span class="name">box-light-horizontal-up-stipple-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-up-stipple-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-up-stipple-up-left"></hd-icon>
+            <span class="name">box-light-horizontal-up-stipple-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-horizontal-up-stipple-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-horizontal-up-stipple-up-right"></hd-icon>
+            <span class="name">box-light-horizontal-up-stipple-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-down-left"></hd-icon>
+            <span class="name">box-light-round-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-down-left-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-down-left-stipple"></hd-icon>
+            <span class="name">box-light-round-down-left-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-down-left-stipple-inner')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-down-left-stipple-inner"></hd-icon>
+            <span class="name">box-light-round-down-left-stipple-inner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-down-left-stipple-outer')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-down-left-stipple-outer"></hd-icon>
+            <span class="name">box-light-round-down-left-stipple-outer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-down-right"></hd-icon>
+            <span class="name">box-light-round-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-down-right-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-down-right-stipple"></hd-icon>
+            <span class="name">box-light-round-down-right-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-down-right-stipple-inner')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-down-right-stipple-inner"></hd-icon>
+            <span class="name">box-light-round-down-right-stipple-inner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-down-right-stipple-outer')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-down-right-stipple-outer"></hd-icon>
+            <span class="name">box-light-round-down-right-stipple-outer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-up-left"></hd-icon>
+            <span class="name">box-light-round-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-up-left-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-up-left-stipple"></hd-icon>
+            <span class="name">box-light-round-up-left-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-up-left-stipple-inner')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-up-left-stipple-inner"></hd-icon>
+            <span class="name">box-light-round-up-left-stipple-inner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-up-left-stipple-outer')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-up-left-stipple-outer"></hd-icon>
+            <span class="name">box-light-round-up-left-stipple-outer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-up-right"></hd-icon>
+            <span class="name">box-light-round-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-up-right-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-up-right-stipple"></hd-icon>
+            <span class="name">box-light-round-up-right-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-up-right-stipple-inner')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-up-right-stipple-inner"></hd-icon>
+            <span class="name">box-light-round-up-right-stipple-inner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-round-up-right-stipple-outer')" title="Click to copy">
+            <hd-icon icon="memory:box-light-round-up-right-stipple-outer"></hd-icon>
+            <span class="name">box-light-round-up-right-stipple-outer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-up-left"></hd-icon>
+            <span class="name">box-light-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-up-left-circle')" title="Click to copy">
+            <hd-icon icon="memory:box-light-up-left-circle"></hd-icon>
+            <span class="name">box-light-up-left-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-up-left-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-up-left-stipple"></hd-icon>
+            <span class="name">box-light-up-left-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-up-left-stipple-inner')" title="Click to copy">
+            <hd-icon icon="memory:box-light-up-left-stipple-inner"></hd-icon>
+            <span class="name">box-light-up-left-stipple-inner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-up-left-stipple-outer')" title="Click to copy">
+            <hd-icon icon="memory:box-light-up-left-stipple-outer"></hd-icon>
+            <span class="name">box-light-up-left-stipple-outer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-up-right"></hd-icon>
+            <span class="name">box-light-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-up-right-circle')" title="Click to copy">
+            <hd-icon icon="memory:box-light-up-right-circle"></hd-icon>
+            <span class="name">box-light-up-right-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-up-right-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-up-right-stipple"></hd-icon>
+            <span class="name">box-light-up-right-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-up-right-stipple-inner')" title="Click to copy">
+            <hd-icon icon="memory:box-light-up-right-stipple-inner"></hd-icon>
+            <span class="name">box-light-up-right-stipple-inner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-up-right-stipple-outer')" title="Click to copy">
+            <hd-icon icon="memory:box-light-up-right-stipple-outer"></hd-icon>
+            <span class="name">box-light-up-right-stipple-outer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical"></hd-icon>
+            <span class="name">box-light-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-circle')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-circle"></hd-icon>
+            <span class="name">box-light-vertical-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal"></hd-icon>
+            <span class="name">box-light-vertical-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-down')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-down"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-down-left"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-down-right"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-left"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-left-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-left-down-right"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-left-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-left-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-left-up-right"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-left-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-right"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-right-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-right-down-left"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-right-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-right-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-right-up-left"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-right-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-up')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-up"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-up-left"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-horizontal-stipple-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-horizontal-stipple-up-right"></hd-icon>
+            <span class="name">box-light-vertical-horizontal-stipple-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-left"></hd-icon>
+            <span class="name">box-light-vertical-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-left-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-left-stipple"></hd-icon>
+            <span class="name">box-light-vertical-left-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-left-stipple-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-left-stipple-down-left"></hd-icon>
+            <span class="name">box-light-vertical-left-stipple-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-left-stipple-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-left-stipple-left"></hd-icon>
+            <span class="name">box-light-vertical-left-stipple-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-left-stipple-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-left-stipple-up-left"></hd-icon>
+            <span class="name">box-light-vertical-left-stipple-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-menu-down')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-menu-down"></hd-icon>
+            <span class="name">box-light-vertical-menu-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-menu-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-menu-left"></hd-icon>
+            <span class="name">box-light-vertical-menu-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-menu-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-menu-right"></hd-icon>
+            <span class="name">box-light-vertical-menu-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-menu-up')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-menu-up"></hd-icon>
+            <span class="name">box-light-vertical-menu-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-right"></hd-icon>
+            <span class="name">box-light-vertical-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-right-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-right-stipple"></hd-icon>
+            <span class="name">box-light-vertical-right-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-right-stipple-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-right-stipple-down-right"></hd-icon>
+            <span class="name">box-light-vertical-right-stipple-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-right-stipple-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-right-stipple-left"></hd-icon>
+            <span class="name">box-light-vertical-right-stipple-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-right-stipple-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-right-stipple-right"></hd-icon>
+            <span class="name">box-light-vertical-right-stipple-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-right-stipple-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-right-stipple-up-right"></hd-icon>
+            <span class="name">box-light-vertical-right-stipple-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-stipple"></hd-icon>
+            <span class="name">box-light-vertical-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-stipple-left')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-stipple-left"></hd-icon>
+            <span class="name">box-light-vertical-stipple-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-light-vertical-stipple-right')" title="Click to copy">
+            <hd-icon icon="memory:box-light-vertical-stipple-right"></hd-icon>
+            <span class="name">box-light-vertical-stipple-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-all')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-all"></hd-icon>
+            <span class="name">box-outer-light-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-all')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-all"></hd-icon>
+            <span class="name">box-outer-light-dashed-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-down')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-down"></hd-icon>
+            <span class="name">box-outer-light-dashed-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-down-left"></hd-icon>
+            <span class="name">box-outer-light-dashed-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-down-left-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-down-left-right"></hd-icon>
+            <span class="name">box-outer-light-dashed-down-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-down-right"></hd-icon>
+            <span class="name">box-outer-light-dashed-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-fold-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-fold-down-left"></hd-icon>
+            <span class="name">box-outer-light-dashed-fold-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-fold-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-fold-down-right"></hd-icon>
+            <span class="name">box-outer-light-dashed-fold-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-fold-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-fold-up-left"></hd-icon>
+            <span class="name">box-outer-light-dashed-fold-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-fold-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-fold-up-right"></hd-icon>
+            <span class="name">box-outer-light-dashed-fold-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-left"></hd-icon>
+            <span class="name">box-outer-light-dashed-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-left-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-left-right"></hd-icon>
+            <span class="name">box-outer-light-dashed-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-right"></hd-icon>
+            <span class="name">box-outer-light-dashed-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-up')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-up"></hd-icon>
+            <span class="name">box-outer-light-dashed-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-up-down')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-up-down"></hd-icon>
+            <span class="name">box-outer-light-dashed-up-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-up-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-up-down-left"></hd-icon>
+            <span class="name">box-outer-light-dashed-up-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-up-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-up-down-right"></hd-icon>
+            <span class="name">box-outer-light-dashed-up-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-up-left"></hd-icon>
+            <span class="name">box-outer-light-dashed-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-up-left-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-up-left-right"></hd-icon>
+            <span class="name">box-outer-light-dashed-up-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-dashed-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-dashed-up-right"></hd-icon>
+            <span class="name">box-outer-light-dashed-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-down')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-down"></hd-icon>
+            <span class="name">box-outer-light-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-down-left"></hd-icon>
+            <span class="name">box-outer-light-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-down-left-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-down-left-right"></hd-icon>
+            <span class="name">box-outer-light-down-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-down-left-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-down-left-stipple"></hd-icon>
+            <span class="name">box-outer-light-down-left-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-down-right"></hd-icon>
+            <span class="name">box-outer-light-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-down-right-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-down-right-stipple"></hd-icon>
+            <span class="name">box-outer-light-down-right-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-down-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-down-stipple"></hd-icon>
+            <span class="name">box-outer-light-down-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-down-vertical-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-down-vertical-stipple"></hd-icon>
+            <span class="name">box-outer-light-down-vertical-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-down-vertical-stipple-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-down-vertical-stipple-left"></hd-icon>
+            <span class="name">box-outer-light-down-vertical-stipple-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-down-vertical-stipple-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-down-vertical-stipple-right"></hd-icon>
+            <span class="name">box-outer-light-down-vertical-stipple-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-left"></hd-icon>
+            <span class="name">box-outer-light-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-left-horizontal-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-left-horizontal-stipple"></hd-icon>
+            <span class="name">box-outer-light-left-horizontal-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-left-horizontal-stipple-down')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-left-horizontal-stipple-down"></hd-icon>
+            <span class="name">box-outer-light-left-horizontal-stipple-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-left-horizontal-stipple-up')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-left-horizontal-stipple-up"></hd-icon>
+            <span class="name">box-outer-light-left-horizontal-stipple-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-left-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-left-right"></hd-icon>
+            <span class="name">box-outer-light-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-left-right-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-left-right-stipple"></hd-icon>
+            <span class="name">box-outer-light-left-right-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-left-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-left-stipple"></hd-icon>
+            <span class="name">box-outer-light-left-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-right"></hd-icon>
+            <span class="name">box-outer-light-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-right-horizontal-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-right-horizontal-stipple"></hd-icon>
+            <span class="name">box-outer-light-right-horizontal-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-right-horizontal-stipple-down')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-right-horizontal-stipple-down"></hd-icon>
+            <span class="name">box-outer-light-right-horizontal-stipple-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-right-horizontal-stipple-up')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-right-horizontal-stipple-up"></hd-icon>
+            <span class="name">box-outer-light-right-horizontal-stipple-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-right-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-right-stipple"></hd-icon>
+            <span class="name">box-outer-light-right-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-round-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-round-down-left"></hd-icon>
+            <span class="name">box-outer-light-round-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-round-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-round-down-right"></hd-icon>
+            <span class="name">box-outer-light-round-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-round-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-round-up-left"></hd-icon>
+            <span class="name">box-outer-light-round-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-round-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-round-up-right"></hd-icon>
+            <span class="name">box-outer-light-round-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up"></hd-icon>
+            <span class="name">box-outer-light-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-down')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-down"></hd-icon>
+            <span class="name">box-outer-light-up-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-down-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-down-left"></hd-icon>
+            <span class="name">box-outer-light-up-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-down-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-down-right"></hd-icon>
+            <span class="name">box-outer-light-up-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-down-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-down-stipple"></hd-icon>
+            <span class="name">box-outer-light-up-down-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-left"></hd-icon>
+            <span class="name">box-outer-light-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-left-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-left-right"></hd-icon>
+            <span class="name">box-outer-light-up-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-left-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-left-stipple"></hd-icon>
+            <span class="name">box-outer-light-up-left-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-right"></hd-icon>
+            <span class="name">box-outer-light-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-right-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-right-stipple"></hd-icon>
+            <span class="name">box-outer-light-up-right-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-stipple"></hd-icon>
+            <span class="name">box-outer-light-up-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-vertical-stipple')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-vertical-stipple"></hd-icon>
+            <span class="name">box-outer-light-up-vertical-stipple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-vertical-stipple-left')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-vertical-stipple-left"></hd-icon>
+            <span class="name">box-outer-light-up-vertical-stipple-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:box-outer-light-up-vertical-stipple-right')" title="Click to copy">
+            <hd-icon icon="memory:box-outer-light-up-vertical-stipple-right"></hd-icon>
+            <span class="name">box-outer-light-up-vertical-stipple-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:briefcase')" title="Click to copy">
+            <hd-icon icon="memory:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:broadcast')" title="Click to copy">
+            <hd-icon icon="memory:broadcast"></hd-icon>
+            <span class="name">broadcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:bug')" title="Click to copy">
+            <hd-icon icon="memory:bug"></hd-icon>
+            <span class="name">bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:bug-fill')" title="Click to copy">
+            <hd-icon icon="memory:bug-fill"></hd-icon>
+            <span class="name">bug-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:calculator')" title="Click to copy">
+            <hd-icon icon="memory:calculator"></hd-icon>
+            <span class="name">calculator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:calendar')" title="Click to copy">
+            <hd-icon icon="memory:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:calendar-import')" title="Click to copy">
+            <hd-icon icon="memory:calendar-import"></hd-icon>
+            <span class="name">calendar-import</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:calendar-month')" title="Click to copy">
+            <hd-icon icon="memory:calendar-month"></hd-icon>
+            <span class="name">calendar-month</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:cancel')" title="Click to copy">
+            <hd-icon icon="memory:cancel"></hd-icon>
+            <span class="name">cancel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:card')" title="Click to copy">
+            <hd-icon icon="memory:card"></hd-icon>
+            <span class="name">card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:card-text')" title="Click to copy">
+            <hd-icon icon="memory:card-text"></hd-icon>
+            <span class="name">card-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:cart')" title="Click to copy">
+            <hd-icon icon="memory:cart"></hd-icon>
+            <span class="name">cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:cash')" title="Click to copy">
+            <hd-icon icon="memory:cash"></hd-icon>
+            <span class="name">cash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:cast')" title="Click to copy">
+            <hd-icon icon="memory:cast"></hd-icon>
+            <span class="name">cast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:castle')" title="Click to copy">
+            <hd-icon icon="memory:castle"></hd-icon>
+            <span class="name">castle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chart-bar')" title="Click to copy">
+            <hd-icon icon="memory:chart-bar"></hd-icon>
+            <span class="name">chart-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chat')" title="Click to copy">
+            <hd-icon icon="memory:chat"></hd-icon>
+            <span class="name">chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chat-processing')" title="Click to copy">
+            <hd-icon icon="memory:chat-processing"></hd-icon>
+            <span class="name">chat-processing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:check')" title="Click to copy">
+            <hd-icon icon="memory:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:checkbox-blank')" title="Click to copy">
+            <hd-icon icon="memory:checkbox-blank"></hd-icon>
+            <span class="name">checkbox-blank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:checkbox-cross')" title="Click to copy">
+            <hd-icon icon="memory:checkbox-cross"></hd-icon>
+            <span class="name">checkbox-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:checkbox-intermediate')" title="Click to copy">
+            <hd-icon icon="memory:checkbox-intermediate"></hd-icon>
+            <span class="name">checkbox-intermediate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:checkbox-intermediate-variant')" title="Click to copy">
+            <hd-icon icon="memory:checkbox-intermediate-variant"></hd-icon>
+            <span class="name">checkbox-intermediate-variant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:checkbox-marked')" title="Click to copy">
+            <hd-icon icon="memory:checkbox-marked"></hd-icon>
+            <span class="name">checkbox-marked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:checker-large')" title="Click to copy">
+            <hd-icon icon="memory:checker-large"></hd-icon>
+            <span class="name">checker-large</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:checker-medium')" title="Click to copy">
+            <hd-icon icon="memory:checker-medium"></hd-icon>
+            <span class="name">checker-medium</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:checker-small')" title="Click to copy">
+            <hd-icon icon="memory:checker-small"></hd-icon>
+            <span class="name">checker-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:checkerboard')" title="Click to copy">
+            <hd-icon icon="memory:checkerboard"></hd-icon>
+            <span class="name">checkerboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chest')" title="Click to copy">
+            <hd-icon icon="memory:chest"></hd-icon>
+            <span class="name">chest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chest-fill')" title="Click to copy">
+            <hd-icon icon="memory:chest-fill"></hd-icon>
+            <span class="name">chest-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chevron-down')" title="Click to copy">
+            <hd-icon icon="memory:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chevron-down-circle')" title="Click to copy">
+            <hd-icon icon="memory:chevron-down-circle"></hd-icon>
+            <span class="name">chevron-down-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chevron-left')" title="Click to copy">
+            <hd-icon icon="memory:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chevron-left-circle')" title="Click to copy">
+            <hd-icon icon="memory:chevron-left-circle"></hd-icon>
+            <span class="name">chevron-left-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chevron-right')" title="Click to copy">
+            <hd-icon icon="memory:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chevron-right-circle')" title="Click to copy">
+            <hd-icon icon="memory:chevron-right-circle"></hd-icon>
+            <span class="name">chevron-right-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chevron-up')" title="Click to copy">
+            <hd-icon icon="memory:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:chevron-up-circle')" title="Click to copy">
+            <hd-icon icon="memory:chevron-up-circle"></hd-icon>
+            <span class="name">chevron-up-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:circle')" title="Click to copy">
+            <hd-icon icon="memory:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:clipboard')" title="Click to copy">
+            <hd-icon icon="memory:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:clock')" title="Click to copy">
+            <hd-icon icon="memory:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:clock-fill')" title="Click to copy">
+            <hd-icon icon="memory:clock-fill"></hd-icon>
+            <span class="name">clock-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:close')" title="Click to copy">
+            <hd-icon icon="memory:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:close-outline')" title="Click to copy">
+            <hd-icon icon="memory:close-outline"></hd-icon>
+            <span class="name">close-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:cloud')" title="Click to copy">
+            <hd-icon icon="memory:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:cloud-down')" title="Click to copy">
+            <hd-icon icon="memory:cloud-down"></hd-icon>
+            <span class="name">cloud-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:cloud-up')" title="Click to copy">
+            <hd-icon icon="memory:cloud-up"></hd-icon>
+            <span class="name">cloud-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:coffee')" title="Click to copy">
+            <hd-icon icon="memory:coffee"></hd-icon>
+            <span class="name">coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:coin-copper')" title="Click to copy">
+            <hd-icon icon="memory:coin-copper"></hd-icon>
+            <span class="name">coin-copper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:coin-electrum')" title="Click to copy">
+            <hd-icon icon="memory:coin-electrum"></hd-icon>
+            <span class="name">coin-electrum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:coin-gold')" title="Click to copy">
+            <hd-icon icon="memory:coin-gold"></hd-icon>
+            <span class="name">coin-gold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:coin-platinum')" title="Click to copy">
+            <hd-icon icon="memory:coin-platinum"></hd-icon>
+            <span class="name">coin-platinum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:coin-silver')" title="Click to copy">
+            <hd-icon icon="memory:coin-silver"></hd-icon>
+            <span class="name">coin-silver</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:comment')" title="Click to copy">
+            <hd-icon icon="memory:comment"></hd-icon>
+            <span class="name">comment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:comment-text')" title="Click to copy">
+            <hd-icon icon="memory:comment-text"></hd-icon>
+            <span class="name">comment-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:comment-user')" title="Click to copy">
+            <hd-icon icon="memory:comment-user"></hd-icon>
+            <span class="name">comment-user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:compass')" title="Click to copy">
+            <hd-icon icon="memory:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:compass-east-arrow')" title="Click to copy">
+            <hd-icon icon="memory:compass-east-arrow"></hd-icon>
+            <span class="name">compass-east-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:compass-north-arrow')" title="Click to copy">
+            <hd-icon icon="memory:compass-north-arrow"></hd-icon>
+            <span class="name">compass-north-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:compass-north-east')" title="Click to copy">
+            <hd-icon icon="memory:compass-north-east"></hd-icon>
+            <span class="name">compass-north-east</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:compass-north-west')" title="Click to copy">
+            <hd-icon icon="memory:compass-north-west"></hd-icon>
+            <span class="name">compass-north-west</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:compass-south-arrow')" title="Click to copy">
+            <hd-icon icon="memory:compass-south-arrow"></hd-icon>
+            <span class="name">compass-south-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:compass-south-east')" title="Click to copy">
+            <hd-icon icon="memory:compass-south-east"></hd-icon>
+            <span class="name">compass-south-east</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:compass-south-west')" title="Click to copy">
+            <hd-icon icon="memory:compass-south-west"></hd-icon>
+            <span class="name">compass-south-west</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:compass-west-arrow')" title="Click to copy">
+            <hd-icon icon="memory:compass-west-arrow"></hd-icon>
+            <span class="name">compass-west-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:credit-card')" title="Click to copy">
+            <hd-icon icon="memory:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:crossbow')" title="Click to copy">
+            <hd-icon icon="memory:crossbow"></hd-icon>
+            <span class="name">crossbow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:crown')" title="Click to copy">
+            <hd-icon icon="memory:crown"></hd-icon>
+            <span class="name">crown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:cube')" title="Click to copy">
+            <hd-icon icon="memory:cube"></hd-icon>
+            <span class="name">cube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:cube-unfolded')" title="Click to copy">
+            <hd-icon icon="memory:cube-unfolded"></hd-icon>
+            <span class="name">cube-unfolded</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:dagger')" title="Click to copy">
+            <hd-icon icon="memory:dagger"></hd-icon>
+            <span class="name">dagger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:database')" title="Click to copy">
+            <hd-icon icon="memory:database"></hd-icon>
+            <span class="name">database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:device')" title="Click to copy">
+            <hd-icon icon="memory:device"></hd-icon>
+            <span class="name">device</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:diamond')" title="Click to copy">
+            <hd-icon icon="memory:diamond"></hd-icon>
+            <span class="name">diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:division')" title="Click to copy">
+            <hd-icon icon="memory:division"></hd-icon>
+            <span class="name">division</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:door')" title="Click to copy">
+            <hd-icon icon="memory:door"></hd-icon>
+            <span class="name">door</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:door-box')" title="Click to copy">
+            <hd-icon icon="memory:door-box"></hd-icon>
+            <span class="name">door-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:door-open')" title="Click to copy">
+            <hd-icon icon="memory:door-open"></hd-icon>
+            <span class="name">door-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:dot-hexagon')" title="Click to copy">
+            <hd-icon icon="memory:dot-hexagon"></hd-icon>
+            <span class="name">dot-hexagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:dot-hexagon-fill')" title="Click to copy">
+            <hd-icon icon="memory:dot-hexagon-fill"></hd-icon>
+            <span class="name">dot-hexagon-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:dot-octagon')" title="Click to copy">
+            <hd-icon icon="memory:dot-octagon"></hd-icon>
+            <span class="name">dot-octagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:dot-octagon-fill')" title="Click to copy">
+            <hd-icon icon="memory:dot-octagon-fill"></hd-icon>
+            <span class="name">dot-octagon-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:download')" title="Click to copy">
+            <hd-icon icon="memory:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:email')" title="Click to copy">
+            <hd-icon icon="memory:email"></hd-icon>
+            <span class="name">email</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:eye')" title="Click to copy">
+            <hd-icon icon="memory:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:eye-fill')" title="Click to copy">
+            <hd-icon icon="memory:eye-fill"></hd-icon>
+            <span class="name">eye-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:file')" title="Click to copy">
+            <hd-icon icon="memory:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:fill')" title="Click to copy">
+            <hd-icon icon="memory:fill"></hd-icon>
+            <span class="name">fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:filter')" title="Click to copy">
+            <hd-icon icon="memory:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:fire')" title="Click to copy">
+            <hd-icon icon="memory:fire"></hd-icon>
+            <span class="name">fire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:flask')" title="Click to copy">
+            <hd-icon icon="memory:flask"></hd-icon>
+            <span class="name">flask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:flask-empty')" title="Click to copy">
+            <hd-icon icon="memory:flask-empty"></hd-icon>
+            <span class="name">flask-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:flask-round-bottom')" title="Click to copy">
+            <hd-icon icon="memory:flask-round-bottom"></hd-icon>
+            <span class="name">flask-round-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:flask-round-bottom-empty')" title="Click to copy">
+            <hd-icon icon="memory:flask-round-bottom-empty"></hd-icon>
+            <span class="name">flask-round-bottom-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:floppy-disk')" title="Click to copy">
+            <hd-icon icon="memory:floppy-disk"></hd-icon>
+            <span class="name">floppy-disk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:folder')" title="Click to copy">
+            <hd-icon icon="memory:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:folder-open')" title="Click to copy">
+            <hd-icon icon="memory:folder-open"></hd-icon>
+            <span class="name">folder-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-align-bottom')" title="Click to copy">
+            <hd-icon icon="memory:format-align-bottom"></hd-icon>
+            <span class="name">format-align-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-align-center')" title="Click to copy">
+            <hd-icon icon="memory:format-align-center"></hd-icon>
+            <span class="name">format-align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-align-justify')" title="Click to copy">
+            <hd-icon icon="memory:format-align-justify"></hd-icon>
+            <span class="name">format-align-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-align-left')" title="Click to copy">
+            <hd-icon icon="memory:format-align-left"></hd-icon>
+            <span class="name">format-align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-align-right')" title="Click to copy">
+            <hd-icon icon="memory:format-align-right"></hd-icon>
+            <span class="name">format-align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-align-top')" title="Click to copy">
+            <hd-icon icon="memory:format-align-top"></hd-icon>
+            <span class="name">format-align-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-bold')" title="Click to copy">
+            <hd-icon icon="memory:format-bold"></hd-icon>
+            <span class="name">format-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-float-left')" title="Click to copy">
+            <hd-icon icon="memory:format-float-left"></hd-icon>
+            <span class="name">format-float-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-float-right')" title="Click to copy">
+            <hd-icon icon="memory:format-float-right"></hd-icon>
+            <span class="name">format-float-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-horizontal-align-center')" title="Click to copy">
+            <hd-icon icon="memory:format-horizontal-align-center"></hd-icon>
+            <span class="name">format-horizontal-align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-italic')" title="Click to copy">
+            <hd-icon icon="memory:format-italic"></hd-icon>
+            <span class="name">format-italic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-line-spacing')" title="Click to copy">
+            <hd-icon icon="memory:format-line-spacing"></hd-icon>
+            <span class="name">format-line-spacing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-text')" title="Click to copy">
+            <hd-icon icon="memory:format-text"></hd-icon>
+            <span class="name">format-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-text-multiline')" title="Click to copy">
+            <hd-icon icon="memory:format-text-multiline"></hd-icon>
+            <span class="name">format-text-multiline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-text-single-line')" title="Click to copy">
+            <hd-icon icon="memory:format-text-single-line"></hd-icon>
+            <span class="name">format-text-single-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:format-vertical-align-center')" title="Click to copy">
+            <hd-icon icon="memory:format-vertical-align-center"></hd-icon>
+            <span class="name">format-vertical-align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad')" title="Click to copy">
+            <hd-icon icon="memory:gamepad"></hd-icon>
+            <span class="name">gamepad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-center')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-center"></hd-icon>
+            <span class="name">gamepad-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-center-fill')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-center-fill"></hd-icon>
+            <span class="name">gamepad-center-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-down')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-down"></hd-icon>
+            <span class="name">gamepad-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-down-fill')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-down-fill"></hd-icon>
+            <span class="name">gamepad-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-down-left')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-down-left"></hd-icon>
+            <span class="name">gamepad-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-down-left-fill')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-down-left-fill"></hd-icon>
+            <span class="name">gamepad-down-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-down-right')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-down-right"></hd-icon>
+            <span class="name">gamepad-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-down-right-fill')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-down-right-fill"></hd-icon>
+            <span class="name">gamepad-down-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-fill')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-fill"></hd-icon>
+            <span class="name">gamepad-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-left')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-left"></hd-icon>
+            <span class="name">gamepad-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-left-fill')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-left-fill"></hd-icon>
+            <span class="name">gamepad-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-right')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-right"></hd-icon>
+            <span class="name">gamepad-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-right-fill')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-right-fill"></hd-icon>
+            <span class="name">gamepad-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-up')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-up"></hd-icon>
+            <span class="name">gamepad-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-up-fill')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-up-fill"></hd-icon>
+            <span class="name">gamepad-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-up-left')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-up-left"></hd-icon>
+            <span class="name">gamepad-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-up-left-fill')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-up-left-fill"></hd-icon>
+            <span class="name">gamepad-up-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-up-right')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-up-right"></hd-icon>
+            <span class="name">gamepad-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:gamepad-up-right-fill')" title="Click to copy">
+            <hd-icon icon="memory:gamepad-up-right-fill"></hd-icon>
+            <span class="name">gamepad-up-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:glaive')" title="Click to copy">
+            <hd-icon icon="memory:glaive"></hd-icon>
+            <span class="name">glaive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:glasses')" title="Click to copy">
+            <hd-icon icon="memory:glasses"></hd-icon>
+            <span class="name">glasses</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:halberd')" title="Click to copy">
+            <hd-icon icon="memory:halberd"></hd-icon>
+            <span class="name">halberd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:heart')" title="Click to copy">
+            <hd-icon icon="memory:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:heart-broken')" title="Click to copy">
+            <hd-icon icon="memory:heart-broken"></hd-icon>
+            <span class="name">heart-broken</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:help')" title="Click to copy">
+            <hd-icon icon="memory:help"></hd-icon>
+            <span class="name">help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:help-box')" title="Click to copy">
+            <hd-icon icon="memory:help-box"></hd-icon>
+            <span class="name">help-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:help-box-fill')" title="Click to copy">
+            <hd-icon icon="memory:help-box-fill"></hd-icon>
+            <span class="name">help-box-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:hexagon')" title="Click to copy">
+            <hd-icon icon="memory:hexagon"></hd-icon>
+            <span class="name">hexagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:home-thatched')" title="Click to copy">
+            <hd-icon icon="memory:home-thatched"></hd-icon>
+            <span class="name">home-thatched</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:image')" title="Click to copy">
+            <hd-icon icon="memory:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:javalin')" title="Click to copy">
+            <hd-icon icon="memory:javalin"></hd-icon>
+            <span class="name">javalin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:journal')" title="Click to copy">
+            <hd-icon icon="memory:journal"></hd-icon>
+            <span class="name">journal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:key')" title="Click to copy">
+            <hd-icon icon="memory:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:label')" title="Click to copy">
+            <hd-icon icon="memory:label"></hd-icon>
+            <span class="name">label</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:label-variant')" title="Click to copy">
+            <hd-icon icon="memory:label-variant"></hd-icon>
+            <span class="name">label-variant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:lance')" title="Click to copy">
+            <hd-icon icon="memory:lance"></hd-icon>
+            <span class="name">lance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:led')" title="Click to copy">
+            <hd-icon icon="memory:led"></hd-icon>
+            <span class="name">led</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:lightbulb')" title="Click to copy">
+            <hd-icon icon="memory:lightbulb"></hd-icon>
+            <span class="name">lightbulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:linen')" title="Click to copy">
+            <hd-icon icon="memory:linen"></hd-icon>
+            <span class="name">linen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:lock')" title="Click to copy">
+            <hd-icon icon="memory:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:lock-open')" title="Click to copy">
+            <hd-icon icon="memory:lock-open"></hd-icon>
+            <span class="name">lock-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:login')" title="Click to copy">
+            <hd-icon icon="memory:login"></hd-icon>
+            <span class="name">login</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:logout')" title="Click to copy">
+            <hd-icon icon="memory:logout"></hd-icon>
+            <span class="name">logout</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:magnify-minus')" title="Click to copy">
+            <hd-icon icon="memory:magnify-minus"></hd-icon>
+            <span class="name">magnify-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:magnify-plus')" title="Click to copy">
+            <hd-icon icon="memory:magnify-plus"></hd-icon>
+            <span class="name">magnify-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:map')" title="Click to copy">
+            <hd-icon icon="memory:map"></hd-icon>
+            <span class="name">map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-bottom-left')" title="Click to copy">
+            <hd-icon icon="memory:menu-bottom-left"></hd-icon>
+            <span class="name">menu-bottom-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-bottom-right')" title="Click to copy">
+            <hd-icon icon="memory:menu-bottom-right"></hd-icon>
+            <span class="name">menu-bottom-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-down')" title="Click to copy">
+            <hd-icon icon="memory:menu-down"></hd-icon>
+            <span class="name">menu-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-down-fill')" title="Click to copy">
+            <hd-icon icon="memory:menu-down-fill"></hd-icon>
+            <span class="name">menu-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-left')" title="Click to copy">
+            <hd-icon icon="memory:menu-left"></hd-icon>
+            <span class="name">menu-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-left-fill')" title="Click to copy">
+            <hd-icon icon="memory:menu-left-fill"></hd-icon>
+            <span class="name">menu-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-left-right')" title="Click to copy">
+            <hd-icon icon="memory:menu-left-right"></hd-icon>
+            <span class="name">menu-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-right')" title="Click to copy">
+            <hd-icon icon="memory:menu-right"></hd-icon>
+            <span class="name">menu-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-right-fill')" title="Click to copy">
+            <hd-icon icon="memory:menu-right-fill"></hd-icon>
+            <span class="name">menu-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-top-left')" title="Click to copy">
+            <hd-icon icon="memory:menu-top-left"></hd-icon>
+            <span class="name">menu-top-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-top-right')" title="Click to copy">
+            <hd-icon icon="memory:menu-top-right"></hd-icon>
+            <span class="name">menu-top-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-up')" title="Click to copy">
+            <hd-icon icon="memory:menu-up"></hd-icon>
+            <span class="name">menu-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-up-down')" title="Click to copy">
+            <hd-icon icon="memory:menu-up-down"></hd-icon>
+            <span class="name">menu-up-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:menu-up-fill')" title="Click to copy">
+            <hd-icon icon="memory:menu-up-fill"></hd-icon>
+            <span class="name">menu-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:message')" title="Click to copy">
+            <hd-icon icon="memory:message"></hd-icon>
+            <span class="name">message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:message-processing')" title="Click to copy">
+            <hd-icon icon="memory:message-processing"></hd-icon>
+            <span class="name">message-processing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:message-text')" title="Click to copy">
+            <hd-icon icon="memory:message-text"></hd-icon>
+            <span class="name">message-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:message-user')" title="Click to copy">
+            <hd-icon icon="memory:message-user"></hd-icon>
+            <span class="name">message-user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:microphone')" title="Click to copy">
+            <hd-icon icon="memory:microphone"></hd-icon>
+            <span class="name">microphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:minus')" title="Click to copy">
+            <hd-icon icon="memory:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:minus-box')" title="Click to copy">
+            <hd-icon icon="memory:minus-box"></hd-icon>
+            <span class="name">minus-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:minus-box-fill')" title="Click to copy">
+            <hd-icon icon="memory:minus-box-fill"></hd-icon>
+            <span class="name">minus-box-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:minus-circle')" title="Click to copy">
+            <hd-icon icon="memory:minus-circle"></hd-icon>
+            <span class="name">minus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:minus-circle-fill')" title="Click to copy">
+            <hd-icon icon="memory:minus-circle-fill"></hd-icon>
+            <span class="name">minus-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:monitor')" title="Click to copy">
+            <hd-icon icon="memory:monitor"></hd-icon>
+            <span class="name">monitor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:monitor-image')" title="Click to copy">
+            <hd-icon icon="memory:monitor-image"></hd-icon>
+            <span class="name">monitor-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:multiply')" title="Click to copy">
+            <hd-icon icon="memory:multiply"></hd-icon>
+            <span class="name">multiply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:music-note')" title="Click to copy">
+            <hd-icon icon="memory:music-note"></hd-icon>
+            <span class="name">music-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:necklace')" title="Click to copy">
+            <hd-icon icon="memory:necklace"></hd-icon>
+            <span class="name">necklace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:note')" title="Click to copy">
+            <hd-icon icon="memory:note"></hd-icon>
+            <span class="name">note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:note-nailed')" title="Click to copy">
+            <hd-icon icon="memory:note-nailed"></hd-icon>
+            <span class="name">note-nailed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:notebook')" title="Click to copy">
+            <hd-icon icon="memory:notebook"></hd-icon>
+            <span class="name">notebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:notification')" title="Click to copy">
+            <hd-icon icon="memory:notification"></hd-icon>
+            <span class="name">notification</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:number')" title="Click to copy">
+            <hd-icon icon="memory:number"></hd-icon>
+            <span class="name">number</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:octagon')" title="Click to copy">
+            <hd-icon icon="memory:octagon"></hd-icon>
+            <span class="name">octagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:paperclip')" title="Click to copy">
+            <hd-icon icon="memory:paperclip"></hd-icon>
+            <span class="name">paperclip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:pause')" title="Click to copy">
+            <hd-icon icon="memory:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:peace')" title="Click to copy">
+            <hd-icon icon="memory:peace"></hd-icon>
+            <span class="name">peace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:pencil')" title="Click to copy">
+            <hd-icon icon="memory:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:pickaxe')" title="Click to copy">
+            <hd-icon icon="memory:pickaxe"></hd-icon>
+            <span class="name">pickaxe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:pictogrammers')" title="Click to copy">
+            <hd-icon icon="memory:pictogrammers"></hd-icon>
+            <span class="name">pictogrammers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:pike')" title="Click to copy">
+            <hd-icon icon="memory:pike"></hd-icon>
+            <span class="name">pike</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:play')" title="Click to copy">
+            <hd-icon icon="memory:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:plus')" title="Click to copy">
+            <hd-icon icon="memory:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:plus-box')" title="Click to copy">
+            <hd-icon icon="memory:plus-box"></hd-icon>
+            <span class="name">plus-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:plus-box-fill')" title="Click to copy">
+            <hd-icon icon="memory:plus-box-fill"></hd-icon>
+            <span class="name">plus-box-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:plus-circle')" title="Click to copy">
+            <hd-icon icon="memory:plus-circle"></hd-icon>
+            <span class="name">plus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:plus-circle-fill')" title="Click to copy">
+            <hd-icon icon="memory:plus-circle-fill"></hd-icon>
+            <span class="name">plus-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:poll')" title="Click to copy">
+            <hd-icon icon="memory:poll"></hd-icon>
+            <span class="name">poll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:pound')" title="Click to copy">
+            <hd-icon icon="memory:pound"></hd-icon>
+            <span class="name">pound</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:quarterstaff')" title="Click to copy">
+            <hd-icon icon="memory:quarterstaff"></hd-icon>
+            <span class="name">quarterstaff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:radiobox')" title="Click to copy">
+            <hd-icon icon="memory:radiobox"></hd-icon>
+            <span class="name">radiobox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:radiobox-marked')" title="Click to copy">
+            <hd-icon icon="memory:radiobox-marked"></hd-icon>
+            <span class="name">radiobox-marked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:range')" title="Click to copy">
+            <hd-icon icon="memory:range"></hd-icon>
+            <span class="name">range</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:relative-scale')" title="Click to copy">
+            <hd-icon icon="memory:relative-scale"></hd-icon>
+            <span class="name">relative-scale</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:remove-circle')" title="Click to copy">
+            <hd-icon icon="memory:remove-circle"></hd-icon>
+            <span class="name">remove-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:ring')" title="Click to copy">
+            <hd-icon icon="memory:ring"></hd-icon>
+            <span class="name">ring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:rotate-clockwise')" title="Click to copy">
+            <hd-icon icon="memory:rotate-clockwise"></hd-icon>
+            <span class="name">rotate-clockwise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:rotate-counterclockwise')" title="Click to copy">
+            <hd-icon icon="memory:rotate-counterclockwise"></hd-icon>
+            <span class="name">rotate-counterclockwise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:scimitar')" title="Click to copy">
+            <hd-icon icon="memory:scimitar"></hd-icon>
+            <span class="name">scimitar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:script')" title="Click to copy">
+            <hd-icon icon="memory:script"></hd-icon>
+            <span class="name">script</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:search')" title="Click to copy">
+            <hd-icon icon="memory:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:shield')" title="Click to copy">
+            <hd-icon icon="memory:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:shovel')" title="Click to copy">
+            <hd-icon icon="memory:shovel"></hd-icon>
+            <span class="name">shovel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:skull')" title="Click to copy">
+            <hd-icon icon="memory:skull"></hd-icon>
+            <span class="name">skull</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:slider-end')" title="Click to copy">
+            <hd-icon icon="memory:slider-end"></hd-icon>
+            <span class="name">slider-end</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:slider-right')" title="Click to copy">
+            <hd-icon icon="memory:slider-right"></hd-icon>
+            <span class="name">slider-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:speaker')" title="Click to copy">
+            <hd-icon icon="memory:speaker"></hd-icon>
+            <span class="name">speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:spear')" title="Click to copy">
+            <hd-icon icon="memory:spear"></hd-icon>
+            <span class="name">spear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:stool')" title="Click to copy">
+            <hd-icon icon="memory:stool"></hd-icon>
+            <span class="name">stool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:stop')" title="Click to copy">
+            <hd-icon icon="memory:stop"></hd-icon>
+            <span class="name">stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:sword')" title="Click to copy">
+            <hd-icon icon="memory:sword"></hd-icon>
+            <span class="name">sword</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-door-horizontal')" title="Click to copy">
+            <hd-icon icon="memory:table-top-door-horizontal"></hd-icon>
+            <span class="name">table-top-door-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-door-one-way-down')" title="Click to copy">
+            <hd-icon icon="memory:table-top-door-one-way-down"></hd-icon>
+            <span class="name">table-top-door-one-way-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-door-one-way-left')" title="Click to copy">
+            <hd-icon icon="memory:table-top-door-one-way-left"></hd-icon>
+            <span class="name">table-top-door-one-way-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-door-one-way-right')" title="Click to copy">
+            <hd-icon icon="memory:table-top-door-one-way-right"></hd-icon>
+            <span class="name">table-top-door-one-way-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-door-one-way-up')" title="Click to copy">
+            <hd-icon icon="memory:table-top-door-one-way-up"></hd-icon>
+            <span class="name">table-top-door-one-way-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-door-secret-horizontal')" title="Click to copy">
+            <hd-icon icon="memory:table-top-door-secret-horizontal"></hd-icon>
+            <span class="name">table-top-door-secret-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-door-secret-vertical')" title="Click to copy">
+            <hd-icon icon="memory:table-top-door-secret-vertical"></hd-icon>
+            <span class="name">table-top-door-secret-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-door-vertical')" title="Click to copy">
+            <hd-icon icon="memory:table-top-door-vertical"></hd-icon>
+            <span class="name">table-top-door-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-horizontal-rotate-clockwise')" title="Click to copy">
+            <hd-icon icon="memory:table-top-horizontal-rotate-clockwise"></hd-icon>
+            <span class="name">table-top-horizontal-rotate-clockwise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-horizontal-rotate-counterclockwise')" title="Click to copy">
+            <hd-icon icon="memory:table-top-horizontal-rotate-counterclockwise"></hd-icon>
+            <span class="name">table-top-horizontal-rotate-counterclockwise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-horizontal-stairs-ascend-left')" title="Click to copy">
+            <hd-icon icon="memory:table-top-horizontal-stairs-ascend-left"></hd-icon>
+            <span class="name">table-top-horizontal-stairs-ascend-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-horizontal-stairs-ascend-right')" title="Click to copy">
+            <hd-icon icon="memory:table-top-horizontal-stairs-ascend-right"></hd-icon>
+            <span class="name">table-top-horizontal-stairs-ascend-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-horizontal-stairs-descend-down')" title="Click to copy">
+            <hd-icon icon="memory:table-top-horizontal-stairs-descend-down"></hd-icon>
+            <span class="name">table-top-horizontal-stairs-descend-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-horizontal-stairs-descend-left')" title="Click to copy">
+            <hd-icon icon="memory:table-top-horizontal-stairs-descend-left"></hd-icon>
+            <span class="name">table-top-horizontal-stairs-descend-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-horizontal-stairs-descend-right')" title="Click to copy">
+            <hd-icon icon="memory:table-top-horizontal-stairs-descend-right"></hd-icon>
+            <span class="name">table-top-horizontal-stairs-descend-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-horizontal-stairs-descend-up')" title="Click to copy">
+            <hd-icon icon="memory:table-top-horizontal-stairs-descend-up"></hd-icon>
+            <span class="name">table-top-horizontal-stairs-descend-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-spiral-stairs-down')" title="Click to copy">
+            <hd-icon icon="memory:table-top-spiral-stairs-down"></hd-icon>
+            <span class="name">table-top-spiral-stairs-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-spiral-stairs-left')" title="Click to copy">
+            <hd-icon icon="memory:table-top-spiral-stairs-left"></hd-icon>
+            <span class="name">table-top-spiral-stairs-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-spiral-stairs-right')" title="Click to copy">
+            <hd-icon icon="memory:table-top-spiral-stairs-right"></hd-icon>
+            <span class="name">table-top-spiral-stairs-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-spiral-stairs-round-down')" title="Click to copy">
+            <hd-icon icon="memory:table-top-spiral-stairs-round-down"></hd-icon>
+            <span class="name">table-top-spiral-stairs-round-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-spiral-stairs-round-left')" title="Click to copy">
+            <hd-icon icon="memory:table-top-spiral-stairs-round-left"></hd-icon>
+            <span class="name">table-top-spiral-stairs-round-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-spiral-stairs-round-right')" title="Click to copy">
+            <hd-icon icon="memory:table-top-spiral-stairs-round-right"></hd-icon>
+            <span class="name">table-top-spiral-stairs-round-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-spiral-stairs-round-up')" title="Click to copy">
+            <hd-icon icon="memory:table-top-spiral-stairs-round-up"></hd-icon>
+            <span class="name">table-top-spiral-stairs-round-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-spiral-stairs-up')" title="Click to copy">
+            <hd-icon icon="memory:table-top-spiral-stairs-up"></hd-icon>
+            <span class="name">table-top-spiral-stairs-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-stairs-down')" title="Click to copy">
+            <hd-icon icon="memory:table-top-stairs-down"></hd-icon>
+            <span class="name">table-top-stairs-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-stairs-left')" title="Click to copy">
+            <hd-icon icon="memory:table-top-stairs-left"></hd-icon>
+            <span class="name">table-top-stairs-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-stairs-right')" title="Click to copy">
+            <hd-icon icon="memory:table-top-stairs-right"></hd-icon>
+            <span class="name">table-top-stairs-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-stairs-up')" title="Click to copy">
+            <hd-icon icon="memory:table-top-stairs-up"></hd-icon>
+            <span class="name">table-top-stairs-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-vertical-rotate-clockwise')" title="Click to copy">
+            <hd-icon icon="memory:table-top-vertical-rotate-clockwise"></hd-icon>
+            <span class="name">table-top-vertical-rotate-clockwise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-vertical-rotate-counterclockwise')" title="Click to copy">
+            <hd-icon icon="memory:table-top-vertical-rotate-counterclockwise"></hd-icon>
+            <span class="name">table-top-vertical-rotate-counterclockwise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-vertical-stairs-ascend-down')" title="Click to copy">
+            <hd-icon icon="memory:table-top-vertical-stairs-ascend-down"></hd-icon>
+            <span class="name">table-top-vertical-stairs-ascend-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:table-top-vertical-stairs-ascend-up')" title="Click to copy">
+            <hd-icon icon="memory:table-top-vertical-stairs-ascend-up"></hd-icon>
+            <span class="name">table-top-vertical-stairs-ascend-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tag')" title="Click to copy">
+            <hd-icon icon="memory:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tag-text')" title="Click to copy">
+            <hd-icon icon="memory:tag-text"></hd-icon>
+            <span class="name">tag-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:target')" title="Click to copy">
+            <hd-icon icon="memory:target"></hd-icon>
+            <span class="name">target</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tent')" title="Click to copy">
+            <hd-icon icon="memory:tent"></hd-icon>
+            <span class="name">tent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:terminal')" title="Click to copy">
+            <hd-icon icon="memory:terminal"></hd-icon>
+            <span class="name">terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:text-box')" title="Click to copy">
+            <hd-icon icon="memory:text-box"></hd-icon>
+            <span class="name">text-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:text-image')" title="Click to copy">
+            <hd-icon icon="memory:text-image"></hd-icon>
+            <span class="name">text-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tile-caution-heavy')" title="Click to copy">
+            <hd-icon icon="memory:tile-caution-heavy"></hd-icon>
+            <span class="name">tile-caution-heavy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tile-caution-thin')" title="Click to copy">
+            <hd-icon icon="memory:tile-caution-thin"></hd-icon>
+            <span class="name">tile-caution-thin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tile-diamond-hex')" title="Click to copy">
+            <hd-icon icon="memory:tile-diamond-hex"></hd-icon>
+            <span class="name">tile-diamond-hex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:time-sand')" title="Click to copy">
+            <hd-icon icon="memory:time-sand"></hd-icon>
+            <span class="name">time-sand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:toggle-switch-off')" title="Click to copy">
+            <hd-icon icon="memory:toggle-switch-off"></hd-icon>
+            <span class="name">toggle-switch-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:toggle-switch-on')" title="Click to copy">
+            <hd-icon icon="memory:toggle-switch-on"></hd-icon>
+            <span class="name">toggle-switch-on</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:toolbox')" title="Click to copy">
+            <hd-icon icon="memory:toolbox"></hd-icon>
+            <span class="name">toolbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-above')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-above"></hd-icon>
+            <span class="name">tooltip-above</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-above-alert')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-above-alert"></hd-icon>
+            <span class="name">tooltip-above-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-above-help')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-above-help"></hd-icon>
+            <span class="name">tooltip-above-help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-above-text')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-above-text"></hd-icon>
+            <span class="name">tooltip-above-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-below')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-below"></hd-icon>
+            <span class="name">tooltip-below</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-below-alert')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-below-alert"></hd-icon>
+            <span class="name">tooltip-below-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-below-help')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-below-help"></hd-icon>
+            <span class="name">tooltip-below-help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-below-text')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-below-text"></hd-icon>
+            <span class="name">tooltip-below-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-end')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-end"></hd-icon>
+            <span class="name">tooltip-end</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-end-alert')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-end-alert"></hd-icon>
+            <span class="name">tooltip-end-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-end-help')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-end-help"></hd-icon>
+            <span class="name">tooltip-end-help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-end-text')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-end-text"></hd-icon>
+            <span class="name">tooltip-end-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-start')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-start"></hd-icon>
+            <span class="name">tooltip-start</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-start-alert')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-start-alert"></hd-icon>
+            <span class="name">tooltip-start-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-start-help')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-start-help"></hd-icon>
+            <span class="name">tooltip-start-help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:tooltip-start-text')" title="Click to copy">
+            <hd-icon icon="memory:tooltip-start-text"></hd-icon>
+            <span class="name">tooltip-start-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:torch')" title="Click to copy">
+            <hd-icon icon="memory:torch"></hd-icon>
+            <span class="name">torch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:toy-brick')" title="Click to copy">
+            <hd-icon icon="memory:toy-brick"></hd-icon>
+            <span class="name">toy-brick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:trash')" title="Click to copy">
+            <hd-icon icon="memory:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:trident')" title="Click to copy">
+            <hd-icon icon="memory:trident"></hd-icon>
+            <span class="name">trident</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:umbrella')" title="Click to copy">
+            <hd-icon icon="memory:umbrella"></hd-icon>
+            <span class="name">umbrella</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:upload')" title="Click to copy">
+            <hd-icon icon="memory:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:volume-high')" title="Click to copy">
+            <hd-icon icon="memory:volume-high"></hd-icon>
+            <span class="name">volume-high</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:volume-low')" title="Click to copy">
+            <hd-icon icon="memory:volume-low"></hd-icon>
+            <span class="name">volume-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:volume-medium')" title="Click to copy">
+            <hd-icon icon="memory:volume-medium"></hd-icon>
+            <span class="name">volume-medium</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:volume-mute')" title="Click to copy">
+            <hd-icon icon="memory:volume-mute"></hd-icon>
+            <span class="name">volume-mute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:wall')" title="Click to copy">
+            <hd-icon icon="memory:wall"></hd-icon>
+            <span class="name">wall</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:wall-fill')" title="Click to copy">
+            <hd-icon icon="memory:wall-fill"></hd-icon>
+            <span class="name">wall-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:wall-front')" title="Click to copy">
+            <hd-icon icon="memory:wall-front"></hd-icon>
+            <span class="name">wall-front</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:wall-front-damaged')" title="Click to copy">
+            <hd-icon icon="memory:wall-front-damaged"></hd-icon>
+            <span class="name">wall-front-damaged</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:wall-front-gate')" title="Click to copy">
+            <hd-icon icon="memory:wall-front-gate"></hd-icon>
+            <span class="name">wall-front-gate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:water')" title="Click to copy">
+            <hd-icon icon="memory:water"></hd-icon>
+            <span class="name">water</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:water-fill')" title="Click to copy">
+            <hd-icon icon="memory:water-fill"></hd-icon>
+            <span class="name">water-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:weight')" title="Click to copy">
+            <hd-icon icon="memory:weight"></hd-icon>
+            <span class="name">weight</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:weight-fill')" title="Click to copy">
+            <hd-icon icon="memory:weight-fill"></hd-icon>
+            <span class="name">weight-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:well')" title="Click to copy">
+            <hd-icon icon="memory:well"></hd-icon>
+            <span class="name">well</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:whip')" title="Click to copy">
+            <hd-icon icon="memory:whip"></hd-icon>
+            <span class="name">whip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('memory:wind')" title="Click to copy">
+            <hd-icon icon="memory:wind"></hd-icon>
+            <span class="name">wind</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bpmn - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>bpmn <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(112)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('bpmn:ad-hoc-marker')" title="Click to copy">
+            <hd-icon icon="bpmn:ad-hoc-marker"></hd-icon>
+            <span class="name">ad-hoc-marker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:business-rule')" title="Click to copy">
+            <hd-icon icon="bpmn:business-rule"></hd-icon>
+            <span class="name">business-rule</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:business-rule-task')" title="Click to copy">
+            <hd-icon icon="bpmn:business-rule-task"></hd-icon>
+            <span class="name">business-rule-task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:call-activity')" title="Click to copy">
+            <hd-icon icon="bpmn:call-activity"></hd-icon>
+            <span class="name">call-activity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:compensation-marker')" title="Click to copy">
+            <hd-icon icon="bpmn:compensation-marker"></hd-icon>
+            <span class="name">compensation-marker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:conditional-flow')" title="Click to copy">
+            <hd-icon icon="bpmn:conditional-flow"></hd-icon>
+            <span class="name">conditional-flow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:connection')" title="Click to copy">
+            <hd-icon icon="bpmn:connection"></hd-icon>
+            <span class="name">connection</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:connection-multi')" title="Click to copy">
+            <hd-icon icon="bpmn:connection-multi"></hd-icon>
+            <span class="name">connection-multi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:data-input')" title="Click to copy">
+            <hd-icon icon="bpmn:data-input"></hd-icon>
+            <span class="name">data-input</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:data-object')" title="Click to copy">
+            <hd-icon icon="bpmn:data-object"></hd-icon>
+            <span class="name">data-object</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:data-output')" title="Click to copy">
+            <hd-icon icon="bpmn:data-output"></hd-icon>
+            <span class="name">data-output</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:data-store')" title="Click to copy">
+            <hd-icon icon="bpmn:data-store"></hd-icon>
+            <span class="name">data-store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:default-flow')" title="Click to copy">
+            <hd-icon icon="bpmn:default-flow"></hd-icon>
+            <span class="name">default-flow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event"></hd-icon>
+            <span class="name">end-event</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event-cancel')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event-cancel"></hd-icon>
+            <span class="name">end-event-cancel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event-compensation')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event-compensation"></hd-icon>
+            <span class="name">end-event-compensation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event-error')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event-error"></hd-icon>
+            <span class="name">end-event-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event-escalation')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event-escalation"></hd-icon>
+            <span class="name">end-event-escalation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event-link')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event-link"></hd-icon>
+            <span class="name">end-event-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event-message')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event-message"></hd-icon>
+            <span class="name">end-event-message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event-multiple')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event-multiple"></hd-icon>
+            <span class="name">end-event-multiple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event-none')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event-none"></hd-icon>
+            <span class="name">end-event-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event-signal')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event-signal"></hd-icon>
+            <span class="name">end-event-signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:end-event-terminate')" title="Click to copy">
+            <hd-icon icon="bpmn:end-event-terminate"></hd-icon>
+            <span class="name">end-event-terminate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:event-subprocess-expanded')" title="Click to copy">
+            <hd-icon icon="bpmn:event-subprocess-expanded"></hd-icon>
+            <span class="name">event-subprocess-expanded</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:gateway')" title="Click to copy">
+            <hd-icon icon="bpmn:gateway"></hd-icon>
+            <span class="name">gateway</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:gateway-complex')" title="Click to copy">
+            <hd-icon icon="bpmn:gateway-complex"></hd-icon>
+            <span class="name">gateway-complex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:gateway-eventbased')" title="Click to copy">
+            <hd-icon icon="bpmn:gateway-eventbased"></hd-icon>
+            <span class="name">gateway-eventbased</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:gateway-none')" title="Click to copy">
+            <hd-icon icon="bpmn:gateway-none"></hd-icon>
+            <span class="name">gateway-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:gateway-or')" title="Click to copy">
+            <hd-icon icon="bpmn:gateway-or"></hd-icon>
+            <span class="name">gateway-or</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:gateway-parallel')" title="Click to copy">
+            <hd-icon icon="bpmn:gateway-parallel"></hd-icon>
+            <span class="name">gateway-parallel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:gateway-xor')" title="Click to copy">
+            <hd-icon icon="bpmn:gateway-xor"></hd-icon>
+            <span class="name">gateway-xor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:group')" title="Click to copy">
+            <hd-icon icon="bpmn:group"></hd-icon>
+            <span class="name">group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:hand-tool')" title="Click to copy">
+            <hd-icon icon="bpmn:hand-tool"></hd-icon>
+            <span class="name">hand-tool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event"></hd-icon>
+            <span class="name">intermediate-event</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-cancel')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-cancel"></hd-icon>
+            <span class="name">intermediate-event-catch-cancel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-compensation')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-compensation"></hd-icon>
+            <span class="name">intermediate-event-catch-compensation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-condition')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-condition"></hd-icon>
+            <span class="name">intermediate-event-catch-condition</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-error')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-error"></hd-icon>
+            <span class="name">intermediate-event-catch-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-escalation')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-escalation"></hd-icon>
+            <span class="name">intermediate-event-catch-escalation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-link')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-link"></hd-icon>
+            <span class="name">intermediate-event-catch-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-message')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-message"></hd-icon>
+            <span class="name">intermediate-event-catch-message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-multiple')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-multiple"></hd-icon>
+            <span class="name">intermediate-event-catch-multiple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-non-interrupting-condition')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-non-interrupting-condition"></hd-icon>
+            <span class="name">intermediate-event-catch-non-interrupting-condition</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-non-interrupting-escalation')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-non-interrupting-escalation"></hd-icon>
+            <span class="name">intermediate-event-catch-non-interrupting-escalation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-non-interrupting-message')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-non-interrupting-message"></hd-icon>
+            <span class="name">intermediate-event-catch-non-interrupting-message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-non-interrupting-multiple')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-non-interrupting-multiple"></hd-icon>
+            <span class="name">intermediate-event-catch-non-interrupting-multiple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-non-interrupting-parallel-multiple')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-non-interrupting-parallel-multiple"></hd-icon>
+            <span class="name">intermediate-event-catch-non-interrupting-parallel-multiple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-non-interrupting-signal')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-non-interrupting-signal"></hd-icon>
+            <span class="name">intermediate-event-catch-non-interrupting-signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-non-interrupting-timer')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-non-interrupting-timer"></hd-icon>
+            <span class="name">intermediate-event-catch-non-interrupting-timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-parallel-multiple')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-parallel-multiple"></hd-icon>
+            <span class="name">intermediate-event-catch-parallel-multiple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-signal')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-signal"></hd-icon>
+            <span class="name">intermediate-event-catch-signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-catch-timer')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-catch-timer"></hd-icon>
+            <span class="name">intermediate-event-catch-timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-non-interrupting')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-non-interrupting"></hd-icon>
+            <span class="name">intermediate-event-non-interrupting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-none')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-none"></hd-icon>
+            <span class="name">intermediate-event-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-throw-compensation')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-throw-compensation"></hd-icon>
+            <span class="name">intermediate-event-throw-compensation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-throw-escalation')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-throw-escalation"></hd-icon>
+            <span class="name">intermediate-event-throw-escalation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-throw-link')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-throw-link"></hd-icon>
+            <span class="name">intermediate-event-throw-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-throw-message')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-throw-message"></hd-icon>
+            <span class="name">intermediate-event-throw-message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-throw-multiple')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-throw-multiple"></hd-icon>
+            <span class="name">intermediate-event-throw-multiple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:intermediate-event-throw-signal')" title="Click to copy">
+            <hd-icon icon="bpmn:intermediate-event-throw-signal"></hd-icon>
+            <span class="name">intermediate-event-throw-signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:lane')" title="Click to copy">
+            <hd-icon icon="bpmn:lane"></hd-icon>
+            <span class="name">lane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:lane-divide-three')" title="Click to copy">
+            <hd-icon icon="bpmn:lane-divide-three"></hd-icon>
+            <span class="name">lane-divide-three</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:lane-divide-two')" title="Click to copy">
+            <hd-icon icon="bpmn:lane-divide-two"></hd-icon>
+            <span class="name">lane-divide-two</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:lane-insert-above')" title="Click to copy">
+            <hd-icon icon="bpmn:lane-insert-above"></hd-icon>
+            <span class="name">lane-insert-above</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:lane-insert-below')" title="Click to copy">
+            <hd-icon icon="bpmn:lane-insert-below"></hd-icon>
+            <span class="name">lane-insert-below</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:lasso-tool')" title="Click to copy">
+            <hd-icon icon="bpmn:lasso-tool"></hd-icon>
+            <span class="name">lasso-tool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:loop-marker')" title="Click to copy">
+            <hd-icon icon="bpmn:loop-marker"></hd-icon>
+            <span class="name">loop-marker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:manual')" title="Click to copy">
+            <hd-icon icon="bpmn:manual"></hd-icon>
+            <span class="name">manual</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:manual-task')" title="Click to copy">
+            <hd-icon icon="bpmn:manual-task"></hd-icon>
+            <span class="name">manual-task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:parallel-mi-marker')" title="Click to copy">
+            <hd-icon icon="bpmn:parallel-mi-marker"></hd-icon>
+            <span class="name">parallel-mi-marker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:participant')" title="Click to copy">
+            <hd-icon icon="bpmn:participant"></hd-icon>
+            <span class="name">participant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:receive')" title="Click to copy">
+            <hd-icon icon="bpmn:receive"></hd-icon>
+            <span class="name">receive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:receive-task')" title="Click to copy">
+            <hd-icon icon="bpmn:receive-task"></hd-icon>
+            <span class="name">receive-task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:screw-wrench')" title="Click to copy">
+            <hd-icon icon="bpmn:screw-wrench"></hd-icon>
+            <span class="name">screw-wrench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:script')" title="Click to copy">
+            <hd-icon icon="bpmn:script"></hd-icon>
+            <span class="name">script</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:script-task')" title="Click to copy">
+            <hd-icon icon="bpmn:script-task"></hd-icon>
+            <span class="name">script-task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:send')" title="Click to copy">
+            <hd-icon icon="bpmn:send"></hd-icon>
+            <span class="name">send</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:send-task')" title="Click to copy">
+            <hd-icon icon="bpmn:send-task"></hd-icon>
+            <span class="name">send-task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:sequential-mi-marker')" title="Click to copy">
+            <hd-icon icon="bpmn:sequential-mi-marker"></hd-icon>
+            <span class="name">sequential-mi-marker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:service')" title="Click to copy">
+            <hd-icon icon="bpmn:service"></hd-icon>
+            <span class="name">service</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:service-task')" title="Click to copy">
+            <hd-icon icon="bpmn:service-task"></hd-icon>
+            <span class="name">service-task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:space-tool')" title="Click to copy">
+            <hd-icon icon="bpmn:space-tool"></hd-icon>
+            <span class="name">space-tool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event"></hd-icon>
+            <span class="name">start-event</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-compensation')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-compensation"></hd-icon>
+            <span class="name">start-event-compensation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-condition')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-condition"></hd-icon>
+            <span class="name">start-event-condition</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-error')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-error"></hd-icon>
+            <span class="name">start-event-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-escalation')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-escalation"></hd-icon>
+            <span class="name">start-event-escalation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-message')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-message"></hd-icon>
+            <span class="name">start-event-message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-multiple')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-multiple"></hd-icon>
+            <span class="name">start-event-multiple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-non-interrupting')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-non-interrupting"></hd-icon>
+            <span class="name">start-event-non-interrupting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-non-interrupting-condition')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-non-interrupting-condition"></hd-icon>
+            <span class="name">start-event-non-interrupting-condition</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-non-interrupting-escalation')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-non-interrupting-escalation"></hd-icon>
+            <span class="name">start-event-non-interrupting-escalation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-non-interrupting-message')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-non-interrupting-message"></hd-icon>
+            <span class="name">start-event-non-interrupting-message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-non-interrupting-multiple')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-non-interrupting-multiple"></hd-icon>
+            <span class="name">start-event-non-interrupting-multiple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-non-interrupting-parallel-multiple')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-non-interrupting-parallel-multiple"></hd-icon>
+            <span class="name">start-event-non-interrupting-parallel-multiple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-non-interrupting-signal')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-non-interrupting-signal"></hd-icon>
+            <span class="name">start-event-non-interrupting-signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-non-interrupting-timer')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-non-interrupting-timer"></hd-icon>
+            <span class="name">start-event-non-interrupting-timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-none')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-none"></hd-icon>
+            <span class="name">start-event-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-parallel-multiple')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-parallel-multiple"></hd-icon>
+            <span class="name">start-event-parallel-multiple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-signal')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-signal"></hd-icon>
+            <span class="name">start-event-signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:start-event-timer')" title="Click to copy">
+            <hd-icon icon="bpmn:start-event-timer"></hd-icon>
+            <span class="name">start-event-timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:sub-process-marker')" title="Click to copy">
+            <hd-icon icon="bpmn:sub-process-marker"></hd-icon>
+            <span class="name">sub-process-marker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:subprocess-collapsed')" title="Click to copy">
+            <hd-icon icon="bpmn:subprocess-collapsed"></hd-icon>
+            <span class="name">subprocess-collapsed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:subprocess-expanded')" title="Click to copy">
+            <hd-icon icon="bpmn:subprocess-expanded"></hd-icon>
+            <span class="name">subprocess-expanded</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:task')" title="Click to copy">
+            <hd-icon icon="bpmn:task"></hd-icon>
+            <span class="name">task</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:task-none')" title="Click to copy">
+            <hd-icon icon="bpmn:task-none"></hd-icon>
+            <span class="name">task-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:text-annotation')" title="Click to copy">
+            <hd-icon icon="bpmn:text-annotation"></hd-icon>
+            <span class="name">text-annotation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:transaction')" title="Click to copy">
+            <hd-icon icon="bpmn:transaction"></hd-icon>
+            <span class="name">transaction</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:trash')" title="Click to copy">
+            <hd-icon icon="bpmn:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:user')" title="Click to copy">
+            <hd-icon icon="bpmn:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('bpmn:user-task')" title="Click to copy">
+            <hd-icon icon="bpmn:user-task"></hd-icon>
+            <span class="name">user-task</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

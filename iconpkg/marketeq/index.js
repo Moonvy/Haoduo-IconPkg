@@ -1,0 +1,16 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAADLokZAk4YdhphcEkWWDs2czRFQoZWdXY3IUYXuHc0VkWDVjg0UqQqVHQZNGcVUgFUVYVTo0WXN2R2UlciY0OWUElHZ3ZxJ3VoRFiBDQEF0QEBCREKBAQv9QNPASMDEAavAQMLXo4DoVmFBXsbpgFFFwKoAqIBINsCAQ0NJiG+AY8JAgoTfMcPA5UBMUYBLwEBDBgJlQIIGZMDFA9ZogKkAQQGBrMCGw6zAxMBApYBAxC+AYsBOt8DDGEPwwEHDzOfA8MBAj/TA60GPwUMAlkCTi+sdOL60GEk8yPuURPmuQ2Js2UD0xxhR8+nYkDomxWnxBuIJpaLCIwZuz0nEY/0pLUE15Clnf1cHaELr/LTT/7nbX9XMwr59+lCn08sqtmkp5DSKQZQ/X16UiwZ31ULFv49AsNkpiJqiqvIPMyViMDzT2bE5l31D5jV5F+dnl6xjfSJApZ9oxUqR/FpOtESvhD/W1NCaOdpK5AwbwFkG1mRvlTcFPRHeT/h2Troy+OV8qOoL5NwID20KDyvZeyFMhk7ERr1v0pho4QrEhiO2gi/1QUW1LcLLHJ/HRwcU0Hodr3Btg2lx90xzTis+EHqLdV50SkC7tZN+QVeLigm1oiJbkmw7405jFKh2rdvk9cJWdMx1uDSpcL4nqS7jFYGWDOF/yKktrNbApJdRVIBvObYwwN7iGf6Z4Ok57A9NJy/qWBmsYliVW7pAdscGqc06oR53YNz/ouGHyKhXfyC64CQUMTA6UjVi4vxcDfkekXu1gsort2f0/R8Q8CV4bmLwVMfoyN5/srLux+UHe/tnU+5GbysXcQl6Xd0M41xPNj+4S9bwTPFMUSEajLR/D/56Cal+fi19X5ucpTIhSez2o6WBkqUQpSmQhKdpbhcbOGU6tZdRh4/IMibznb5SBb5S8iYlYDRmZ0/1A8BQ3tMltVVZ1hou3g2ZHD+rjBC20Lnq0Vd1y06g6oJO/0YPSGRuDMiBZMPV25+yH4ZT4eANpCz4Ul37NzmgWklwSTt69aw2wqhM4K2H9jbsZykHOiasp/VtjkYH8PC1hGBZNKoTwAAWIIQEJAiAwRABAQQAAAAAAADAAAAD21hcmtldGVxLTAxLnN2ZwAAAA9tYXJrZXRlcS0wMi5zdmcAAAAPbWFya2V0ZXEtMDMuc3Zn/////wAAAAIAAACUWQgWVBBAmgYYVgGiGAoBJZESkBqSkJkBCqJkCkiGailipIhZhQCJmBAoBFZJRGZoWlhEBiKhJAmqQiCIFBFWiZKCmFFACgkJVhJggmGaZGKVRYgImKGmQpUVaCJkRGKZVJmYlikYIpJSihhFBFamaZgEElUlJogWYImQZIRYBJGBRZEqRgJVoVpIVSkUVlIWRgmACgAAAAA=";
+
+const chunks = {
+  "marketeq-01.svg": new URL("./marketeq-01.svg", import.meta.url).href,
+  "marketeq-02.svg": new URL("./marketeq-02.svg", import.meta.url).href,
+  "marketeq-03.svg": new URL("./marketeq-03.svg", import.meta.url).href
+};
+
+register('marketeq', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

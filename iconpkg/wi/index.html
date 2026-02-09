@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wi - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>wi <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(219)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('wi:alien')" title="Click to copy">
+            <hd-icon icon="wi:alien"></hd-icon>
+            <span class="name">alien</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:barometer')" title="Click to copy">
+            <hd-icon icon="wi:barometer"></hd-icon>
+            <span class="name">barometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:celsius')" title="Click to copy">
+            <hd-icon icon="wi:celsius"></hd-icon>
+            <span class="name">celsius</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:cloud')" title="Click to copy">
+            <hd-icon icon="wi:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:cloud-down')" title="Click to copy">
+            <hd-icon icon="wi:cloud-down"></hd-icon>
+            <span class="name">cloud-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:cloud-refresh')" title="Click to copy">
+            <hd-icon icon="wi:cloud-refresh"></hd-icon>
+            <span class="name">cloud-refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:cloud-up')" title="Click to copy">
+            <hd-icon icon="wi:cloud-up"></hd-icon>
+            <span class="name">cloud-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:cloudy')" title="Click to copy">
+            <hd-icon icon="wi:cloudy"></hd-icon>
+            <span class="name">cloudy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:cloudy-gusts')" title="Click to copy">
+            <hd-icon icon="wi:cloudy-gusts"></hd-icon>
+            <span class="name">cloudy-gusts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:cloudy-windy')" title="Click to copy">
+            <hd-icon icon="wi:cloudy-windy"></hd-icon>
+            <span class="name">cloudy-windy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-cloudy')" title="Click to copy">
+            <hd-icon icon="wi:day-cloudy"></hd-icon>
+            <span class="name">day-cloudy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-cloudy-gusts')" title="Click to copy">
+            <hd-icon icon="wi:day-cloudy-gusts"></hd-icon>
+            <span class="name">day-cloudy-gusts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-cloudy-high')" title="Click to copy">
+            <hd-icon icon="wi:day-cloudy-high"></hd-icon>
+            <span class="name">day-cloudy-high</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-cloudy-windy')" title="Click to copy">
+            <hd-icon icon="wi:day-cloudy-windy"></hd-icon>
+            <span class="name">day-cloudy-windy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-fog')" title="Click to copy">
+            <hd-icon icon="wi:day-fog"></hd-icon>
+            <span class="name">day-fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-hail')" title="Click to copy">
+            <hd-icon icon="wi:day-hail"></hd-icon>
+            <span class="name">day-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-haze')" title="Click to copy">
+            <hd-icon icon="wi:day-haze"></hd-icon>
+            <span class="name">day-haze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-light-wind')" title="Click to copy">
+            <hd-icon icon="wi:day-light-wind"></hd-icon>
+            <span class="name">day-light-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-lightning')" title="Click to copy">
+            <hd-icon icon="wi:day-lightning"></hd-icon>
+            <span class="name">day-lightning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-rain')" title="Click to copy">
+            <hd-icon icon="wi:day-rain"></hd-icon>
+            <span class="name">day-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-rain-mix')" title="Click to copy">
+            <hd-icon icon="wi:day-rain-mix"></hd-icon>
+            <span class="name">day-rain-mix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-rain-wind')" title="Click to copy">
+            <hd-icon icon="wi:day-rain-wind"></hd-icon>
+            <span class="name">day-rain-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-showers')" title="Click to copy">
+            <hd-icon icon="wi:day-showers"></hd-icon>
+            <span class="name">day-showers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-sleet')" title="Click to copy">
+            <hd-icon icon="wi:day-sleet"></hd-icon>
+            <span class="name">day-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-sleet-storm')" title="Click to copy">
+            <hd-icon icon="wi:day-sleet-storm"></hd-icon>
+            <span class="name">day-sleet-storm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-snow')" title="Click to copy">
+            <hd-icon icon="wi:day-snow"></hd-icon>
+            <span class="name">day-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-snow-thunderstorm')" title="Click to copy">
+            <hd-icon icon="wi:day-snow-thunderstorm"></hd-icon>
+            <span class="name">day-snow-thunderstorm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-snow-wind')" title="Click to copy">
+            <hd-icon icon="wi:day-snow-wind"></hd-icon>
+            <span class="name">day-snow-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-sprinkle')" title="Click to copy">
+            <hd-icon icon="wi:day-sprinkle"></hd-icon>
+            <span class="name">day-sprinkle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-storm-showers')" title="Click to copy">
+            <hd-icon icon="wi:day-storm-showers"></hd-icon>
+            <span class="name">day-storm-showers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-sunny')" title="Click to copy">
+            <hd-icon icon="wi:day-sunny"></hd-icon>
+            <span class="name">day-sunny</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-sunny-overcast')" title="Click to copy">
+            <hd-icon icon="wi:day-sunny-overcast"></hd-icon>
+            <span class="name">day-sunny-overcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-thunderstorm')" title="Click to copy">
+            <hd-icon icon="wi:day-thunderstorm"></hd-icon>
+            <span class="name">day-thunderstorm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:day-windy')" title="Click to copy">
+            <hd-icon icon="wi:day-windy"></hd-icon>
+            <span class="name">day-windy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:degrees')" title="Click to copy">
+            <hd-icon icon="wi:degrees"></hd-icon>
+            <span class="name">degrees</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:direction-down')" title="Click to copy">
+            <hd-icon icon="wi:direction-down"></hd-icon>
+            <span class="name">direction-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:direction-down-left')" title="Click to copy">
+            <hd-icon icon="wi:direction-down-left"></hd-icon>
+            <span class="name">direction-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:direction-down-right')" title="Click to copy">
+            <hd-icon icon="wi:direction-down-right"></hd-icon>
+            <span class="name">direction-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:direction-left')" title="Click to copy">
+            <hd-icon icon="wi:direction-left"></hd-icon>
+            <span class="name">direction-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:direction-right')" title="Click to copy">
+            <hd-icon icon="wi:direction-right"></hd-icon>
+            <span class="name">direction-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:direction-up')" title="Click to copy">
+            <hd-icon icon="wi:direction-up"></hd-icon>
+            <span class="name">direction-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:direction-up-left')" title="Click to copy">
+            <hd-icon icon="wi:direction-up-left"></hd-icon>
+            <span class="name">direction-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:direction-up-right')" title="Click to copy">
+            <hd-icon icon="wi:direction-up-right"></hd-icon>
+            <span class="name">direction-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:dust')" title="Click to copy">
+            <hd-icon icon="wi:dust"></hd-icon>
+            <span class="name">dust</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:earthquake')" title="Click to copy">
+            <hd-icon icon="wi:earthquake"></hd-icon>
+            <span class="name">earthquake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:fahrenheit')" title="Click to copy">
+            <hd-icon icon="wi:fahrenheit"></hd-icon>
+            <span class="name">fahrenheit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:fire')" title="Click to copy">
+            <hd-icon icon="wi:fire"></hd-icon>
+            <span class="name">fire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:flood')" title="Click to copy">
+            <hd-icon icon="wi:flood"></hd-icon>
+            <span class="name">flood</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:fog')" title="Click to copy">
+            <hd-icon icon="wi:fog"></hd-icon>
+            <span class="name">fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:gale-warning')" title="Click to copy">
+            <hd-icon icon="wi:gale-warning"></hd-icon>
+            <span class="name">gale-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:hail')" title="Click to copy">
+            <hd-icon icon="wi:hail"></hd-icon>
+            <span class="name">hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:horizon')" title="Click to copy">
+            <hd-icon icon="wi:horizon"></hd-icon>
+            <span class="name">horizon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:horizon-alt')" title="Click to copy">
+            <hd-icon icon="wi:horizon-alt"></hd-icon>
+            <span class="name">horizon-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:hot')" title="Click to copy">
+            <hd-icon icon="wi:hot"></hd-icon>
+            <span class="name">hot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:humidity')" title="Click to copy">
+            <hd-icon icon="wi:humidity"></hd-icon>
+            <span class="name">humidity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:hurricane')" title="Click to copy">
+            <hd-icon icon="wi:hurricane"></hd-icon>
+            <span class="name">hurricane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:hurricane-warning')" title="Click to copy">
+            <hd-icon icon="wi:hurricane-warning"></hd-icon>
+            <span class="name">hurricane-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:lightning')" title="Click to copy">
+            <hd-icon icon="wi:lightning"></hd-icon>
+            <span class="name">lightning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:lunar-eclipse')" title="Click to copy">
+            <hd-icon icon="wi:lunar-eclipse"></hd-icon>
+            <span class="name">lunar-eclipse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:meteor')" title="Click to copy">
+            <hd-icon icon="wi:meteor"></hd-icon>
+            <span class="name">meteor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-first-quarter')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-first-quarter"></hd-icon>
+            <span class="name">moon-alt-first-quarter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-full')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-full"></hd-icon>
+            <span class="name">moon-alt-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-new')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-new"></hd-icon>
+            <span class="name">moon-alt-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-third-quarter')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-third-quarter"></hd-icon>
+            <span class="name">moon-alt-third-quarter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-crescent-1')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-crescent-1"></hd-icon>
+            <span class="name">moon-alt-waning-crescent-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-crescent-2')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-crescent-2"></hd-icon>
+            <span class="name">moon-alt-waning-crescent-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-crescent-3')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-crescent-3"></hd-icon>
+            <span class="name">moon-alt-waning-crescent-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-crescent-4')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-crescent-4"></hd-icon>
+            <span class="name">moon-alt-waning-crescent-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-crescent-5')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-crescent-5"></hd-icon>
+            <span class="name">moon-alt-waning-crescent-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-crescent-6')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-crescent-6"></hd-icon>
+            <span class="name">moon-alt-waning-crescent-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-gibbous-1')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-gibbous-1"></hd-icon>
+            <span class="name">moon-alt-waning-gibbous-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-gibbous-2')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-gibbous-2"></hd-icon>
+            <span class="name">moon-alt-waning-gibbous-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-gibbous-3')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-gibbous-3"></hd-icon>
+            <span class="name">moon-alt-waning-gibbous-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-gibbous-4')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-gibbous-4"></hd-icon>
+            <span class="name">moon-alt-waning-gibbous-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-gibbous-5')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-gibbous-5"></hd-icon>
+            <span class="name">moon-alt-waning-gibbous-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waning-gibbous-6')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waning-gibbous-6"></hd-icon>
+            <span class="name">moon-alt-waning-gibbous-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-crescent-1')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-crescent-1"></hd-icon>
+            <span class="name">moon-alt-waxing-crescent-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-crescent-2')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-crescent-2"></hd-icon>
+            <span class="name">moon-alt-waxing-crescent-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-crescent-3')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-crescent-3"></hd-icon>
+            <span class="name">moon-alt-waxing-crescent-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-crescent-4')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-crescent-4"></hd-icon>
+            <span class="name">moon-alt-waxing-crescent-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-crescent-5')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-crescent-5"></hd-icon>
+            <span class="name">moon-alt-waxing-crescent-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-crescent-6')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-crescent-6"></hd-icon>
+            <span class="name">moon-alt-waxing-crescent-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-gibbous-1')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-gibbous-1"></hd-icon>
+            <span class="name">moon-alt-waxing-gibbous-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-gibbous-2')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-gibbous-2"></hd-icon>
+            <span class="name">moon-alt-waxing-gibbous-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-gibbous-3')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-gibbous-3"></hd-icon>
+            <span class="name">moon-alt-waxing-gibbous-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-gibbous-4')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-gibbous-4"></hd-icon>
+            <span class="name">moon-alt-waxing-gibbous-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-gibbous-5')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-gibbous-5"></hd-icon>
+            <span class="name">moon-alt-waxing-gibbous-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-alt-waxing-gibbous-6')" title="Click to copy">
+            <hd-icon icon="wi:moon-alt-waxing-gibbous-6"></hd-icon>
+            <span class="name">moon-alt-waxing-gibbous-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-first-quarter')" title="Click to copy">
+            <hd-icon icon="wi:moon-first-quarter"></hd-icon>
+            <span class="name">moon-first-quarter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-full')" title="Click to copy">
+            <hd-icon icon="wi:moon-full"></hd-icon>
+            <span class="name">moon-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-new')" title="Click to copy">
+            <hd-icon icon="wi:moon-new"></hd-icon>
+            <span class="name">moon-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-third-quarter')" title="Click to copy">
+            <hd-icon icon="wi:moon-third-quarter"></hd-icon>
+            <span class="name">moon-third-quarter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-crescent-1')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-crescent-1"></hd-icon>
+            <span class="name">moon-waning-crescent-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-crescent-2')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-crescent-2"></hd-icon>
+            <span class="name">moon-waning-crescent-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-crescent-3')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-crescent-3"></hd-icon>
+            <span class="name">moon-waning-crescent-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-crescent-4')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-crescent-4"></hd-icon>
+            <span class="name">moon-waning-crescent-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-crescent-5')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-crescent-5"></hd-icon>
+            <span class="name">moon-waning-crescent-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-crescent-6')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-crescent-6"></hd-icon>
+            <span class="name">moon-waning-crescent-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-gibbous-1')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-gibbous-1"></hd-icon>
+            <span class="name">moon-waning-gibbous-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-gibbous-2')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-gibbous-2"></hd-icon>
+            <span class="name">moon-waning-gibbous-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-gibbous-3')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-gibbous-3"></hd-icon>
+            <span class="name">moon-waning-gibbous-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-gibbous-4')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-gibbous-4"></hd-icon>
+            <span class="name">moon-waning-gibbous-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-gibbous-5')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-gibbous-5"></hd-icon>
+            <span class="name">moon-waning-gibbous-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waning-gibbous-6')" title="Click to copy">
+            <hd-icon icon="wi:moon-waning-gibbous-6"></hd-icon>
+            <span class="name">moon-waning-gibbous-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-6')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-6"></hd-icon>
+            <span class="name">moon-waxing-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-crescent-1')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-crescent-1"></hd-icon>
+            <span class="name">moon-waxing-crescent-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-crescent-2')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-crescent-2"></hd-icon>
+            <span class="name">moon-waxing-crescent-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-crescent-3')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-crescent-3"></hd-icon>
+            <span class="name">moon-waxing-crescent-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-crescent-4')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-crescent-4"></hd-icon>
+            <span class="name">moon-waxing-crescent-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-crescent-5')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-crescent-5"></hd-icon>
+            <span class="name">moon-waxing-crescent-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-gibbous-1')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-gibbous-1"></hd-icon>
+            <span class="name">moon-waxing-gibbous-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-gibbous-2')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-gibbous-2"></hd-icon>
+            <span class="name">moon-waxing-gibbous-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-gibbous-3')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-gibbous-3"></hd-icon>
+            <span class="name">moon-waxing-gibbous-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-gibbous-4')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-gibbous-4"></hd-icon>
+            <span class="name">moon-waxing-gibbous-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-gibbous-5')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-gibbous-5"></hd-icon>
+            <span class="name">moon-waxing-gibbous-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moon-waxing-gibbous-6')" title="Click to copy">
+            <hd-icon icon="wi:moon-waxing-gibbous-6"></hd-icon>
+            <span class="name">moon-waxing-gibbous-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moonrise')" title="Click to copy">
+            <hd-icon icon="wi:moonrise"></hd-icon>
+            <span class="name">moonrise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:moonset')" title="Click to copy">
+            <hd-icon icon="wi:moonset"></hd-icon>
+            <span class="name">moonset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:na')" title="Click to copy">
+            <hd-icon icon="wi:na"></hd-icon>
+            <span class="name">na</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-cloudy')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-cloudy"></hd-icon>
+            <span class="name">night-alt-cloudy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-cloudy-gusts')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-cloudy-gusts"></hd-icon>
+            <span class="name">night-alt-cloudy-gusts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-cloudy-high')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-cloudy-high"></hd-icon>
+            <span class="name">night-alt-cloudy-high</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-cloudy-windy')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-cloudy-windy"></hd-icon>
+            <span class="name">night-alt-cloudy-windy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-hail')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-hail"></hd-icon>
+            <span class="name">night-alt-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-lightning')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-lightning"></hd-icon>
+            <span class="name">night-alt-lightning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-partly-cloudy')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-partly-cloudy"></hd-icon>
+            <span class="name">night-alt-partly-cloudy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-rain')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-rain"></hd-icon>
+            <span class="name">night-alt-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-rain-mix')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-rain-mix"></hd-icon>
+            <span class="name">night-alt-rain-mix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-rain-wind')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-rain-wind"></hd-icon>
+            <span class="name">night-alt-rain-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-showers')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-showers"></hd-icon>
+            <span class="name">night-alt-showers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-sleet')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-sleet"></hd-icon>
+            <span class="name">night-alt-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-sleet-storm')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-sleet-storm"></hd-icon>
+            <span class="name">night-alt-sleet-storm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-snow')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-snow"></hd-icon>
+            <span class="name">night-alt-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-snow-thunderstorm')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-snow-thunderstorm"></hd-icon>
+            <span class="name">night-alt-snow-thunderstorm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-snow-wind')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-snow-wind"></hd-icon>
+            <span class="name">night-alt-snow-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-sprinkle')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-sprinkle"></hd-icon>
+            <span class="name">night-alt-sprinkle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-storm-showers')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-storm-showers"></hd-icon>
+            <span class="name">night-alt-storm-showers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-alt-thunderstorm')" title="Click to copy">
+            <hd-icon icon="wi:night-alt-thunderstorm"></hd-icon>
+            <span class="name">night-alt-thunderstorm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-clear')" title="Click to copy">
+            <hd-icon icon="wi:night-clear"></hd-icon>
+            <span class="name">night-clear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-cloudy')" title="Click to copy">
+            <hd-icon icon="wi:night-cloudy"></hd-icon>
+            <span class="name">night-cloudy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-cloudy-gusts')" title="Click to copy">
+            <hd-icon icon="wi:night-cloudy-gusts"></hd-icon>
+            <span class="name">night-cloudy-gusts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-cloudy-high')" title="Click to copy">
+            <hd-icon icon="wi:night-cloudy-high"></hd-icon>
+            <span class="name">night-cloudy-high</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-cloudy-windy')" title="Click to copy">
+            <hd-icon icon="wi:night-cloudy-windy"></hd-icon>
+            <span class="name">night-cloudy-windy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-fog')" title="Click to copy">
+            <hd-icon icon="wi:night-fog"></hd-icon>
+            <span class="name">night-fog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-hail')" title="Click to copy">
+            <hd-icon icon="wi:night-hail"></hd-icon>
+            <span class="name">night-hail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-lightning')" title="Click to copy">
+            <hd-icon icon="wi:night-lightning"></hd-icon>
+            <span class="name">night-lightning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-partly-cloudy')" title="Click to copy">
+            <hd-icon icon="wi:night-partly-cloudy"></hd-icon>
+            <span class="name">night-partly-cloudy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-rain')" title="Click to copy">
+            <hd-icon icon="wi:night-rain"></hd-icon>
+            <span class="name">night-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-rain-mix')" title="Click to copy">
+            <hd-icon icon="wi:night-rain-mix"></hd-icon>
+            <span class="name">night-rain-mix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-rain-wind')" title="Click to copy">
+            <hd-icon icon="wi:night-rain-wind"></hd-icon>
+            <span class="name">night-rain-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-showers')" title="Click to copy">
+            <hd-icon icon="wi:night-showers"></hd-icon>
+            <span class="name">night-showers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-sleet')" title="Click to copy">
+            <hd-icon icon="wi:night-sleet"></hd-icon>
+            <span class="name">night-sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-sleet-storm')" title="Click to copy">
+            <hd-icon icon="wi:night-sleet-storm"></hd-icon>
+            <span class="name">night-sleet-storm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-snow')" title="Click to copy">
+            <hd-icon icon="wi:night-snow"></hd-icon>
+            <span class="name">night-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-snow-thunderstorm')" title="Click to copy">
+            <hd-icon icon="wi:night-snow-thunderstorm"></hd-icon>
+            <span class="name">night-snow-thunderstorm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-snow-wind')" title="Click to copy">
+            <hd-icon icon="wi:night-snow-wind"></hd-icon>
+            <span class="name">night-snow-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-sprinkle')" title="Click to copy">
+            <hd-icon icon="wi:night-sprinkle"></hd-icon>
+            <span class="name">night-sprinkle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-storm-showers')" title="Click to copy">
+            <hd-icon icon="wi:night-storm-showers"></hd-icon>
+            <span class="name">night-storm-showers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:night-thunderstorm')" title="Click to copy">
+            <hd-icon icon="wi:night-thunderstorm"></hd-icon>
+            <span class="name">night-thunderstorm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:rain')" title="Click to copy">
+            <hd-icon icon="wi:rain"></hd-icon>
+            <span class="name">rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:rain-mix')" title="Click to copy">
+            <hd-icon icon="wi:rain-mix"></hd-icon>
+            <span class="name">rain-mix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:rain-wind')" title="Click to copy">
+            <hd-icon icon="wi:rain-wind"></hd-icon>
+            <span class="name">rain-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:raindrop')" title="Click to copy">
+            <hd-icon icon="wi:raindrop"></hd-icon>
+            <span class="name">raindrop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:raindrops')" title="Click to copy">
+            <hd-icon icon="wi:raindrops"></hd-icon>
+            <span class="name">raindrops</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:refresh')" title="Click to copy">
+            <hd-icon icon="wi:refresh"></hd-icon>
+            <span class="name">refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:refresh-alt')" title="Click to copy">
+            <hd-icon icon="wi:refresh-alt"></hd-icon>
+            <span class="name">refresh-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:sandstorm')" title="Click to copy">
+            <hd-icon icon="wi:sandstorm"></hd-icon>
+            <span class="name">sandstorm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:showers')" title="Click to copy">
+            <hd-icon icon="wi:showers"></hd-icon>
+            <span class="name">showers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:sleet')" title="Click to copy">
+            <hd-icon icon="wi:sleet"></hd-icon>
+            <span class="name">sleet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:small-craft-advisory')" title="Click to copy">
+            <hd-icon icon="wi:small-craft-advisory"></hd-icon>
+            <span class="name">small-craft-advisory</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:smog')" title="Click to copy">
+            <hd-icon icon="wi:smog"></hd-icon>
+            <span class="name">smog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:smoke')" title="Click to copy">
+            <hd-icon icon="wi:smoke"></hd-icon>
+            <span class="name">smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:snow')" title="Click to copy">
+            <hd-icon icon="wi:snow"></hd-icon>
+            <span class="name">snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:snow-wind')" title="Click to copy">
+            <hd-icon icon="wi:snow-wind"></hd-icon>
+            <span class="name">snow-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:snowflake-cold')" title="Click to copy">
+            <hd-icon icon="wi:snowflake-cold"></hd-icon>
+            <span class="name">snowflake-cold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:solar-eclipse')" title="Click to copy">
+            <hd-icon icon="wi:solar-eclipse"></hd-icon>
+            <span class="name">solar-eclipse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:sprinkle')" title="Click to copy">
+            <hd-icon icon="wi:sprinkle"></hd-icon>
+            <span class="name">sprinkle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:stars')" title="Click to copy">
+            <hd-icon icon="wi:stars"></hd-icon>
+            <span class="name">stars</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:storm-showers')" title="Click to copy">
+            <hd-icon icon="wi:storm-showers"></hd-icon>
+            <span class="name">storm-showers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:storm-warning')" title="Click to copy">
+            <hd-icon icon="wi:storm-warning"></hd-icon>
+            <span class="name">storm-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:strong-wind')" title="Click to copy">
+            <hd-icon icon="wi:strong-wind"></hd-icon>
+            <span class="name">strong-wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:sunrise')" title="Click to copy">
+            <hd-icon icon="wi:sunrise"></hd-icon>
+            <span class="name">sunrise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:sunset')" title="Click to copy">
+            <hd-icon icon="wi:sunset"></hd-icon>
+            <span class="name">sunset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:thermometer')" title="Click to copy">
+            <hd-icon icon="wi:thermometer"></hd-icon>
+            <span class="name">thermometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:thermometer-exterior')" title="Click to copy">
+            <hd-icon icon="wi:thermometer-exterior"></hd-icon>
+            <span class="name">thermometer-exterior</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:thermometer-internal')" title="Click to copy">
+            <hd-icon icon="wi:thermometer-internal"></hd-icon>
+            <span class="name">thermometer-internal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:thunderstorm')" title="Click to copy">
+            <hd-icon icon="wi:thunderstorm"></hd-icon>
+            <span class="name">thunderstorm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-1')" title="Click to copy">
+            <hd-icon icon="wi:time-1"></hd-icon>
+            <span class="name">time-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-10')" title="Click to copy">
+            <hd-icon icon="wi:time-10"></hd-icon>
+            <span class="name">time-10</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-11')" title="Click to copy">
+            <hd-icon icon="wi:time-11"></hd-icon>
+            <span class="name">time-11</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-12')" title="Click to copy">
+            <hd-icon icon="wi:time-12"></hd-icon>
+            <span class="name">time-12</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-2')" title="Click to copy">
+            <hd-icon icon="wi:time-2"></hd-icon>
+            <span class="name">time-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-3')" title="Click to copy">
+            <hd-icon icon="wi:time-3"></hd-icon>
+            <span class="name">time-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-4')" title="Click to copy">
+            <hd-icon icon="wi:time-4"></hd-icon>
+            <span class="name">time-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-5')" title="Click to copy">
+            <hd-icon icon="wi:time-5"></hd-icon>
+            <span class="name">time-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-6')" title="Click to copy">
+            <hd-icon icon="wi:time-6"></hd-icon>
+            <span class="name">time-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-7')" title="Click to copy">
+            <hd-icon icon="wi:time-7"></hd-icon>
+            <span class="name">time-7</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-8')" title="Click to copy">
+            <hd-icon icon="wi:time-8"></hd-icon>
+            <span class="name">time-8</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:time-9')" title="Click to copy">
+            <hd-icon icon="wi:time-9"></hd-icon>
+            <span class="name">time-9</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:tornado')" title="Click to copy">
+            <hd-icon icon="wi:tornado"></hd-icon>
+            <span class="name">tornado</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:train')" title="Click to copy">
+            <hd-icon icon="wi:train"></hd-icon>
+            <span class="name">train</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:tsunami')" title="Click to copy">
+            <hd-icon icon="wi:tsunami"></hd-icon>
+            <span class="name">tsunami</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:umbrella')" title="Click to copy">
+            <hd-icon icon="wi:umbrella"></hd-icon>
+            <span class="name">umbrella</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:volcano')" title="Click to copy">
+            <hd-icon icon="wi:volcano"></hd-icon>
+            <span class="name">volcano</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-0')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-0"></hd-icon>
+            <span class="name">wind-beaufort-0</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-1')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-1"></hd-icon>
+            <span class="name">wind-beaufort-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-10')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-10"></hd-icon>
+            <span class="name">wind-beaufort-10</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-11')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-11"></hd-icon>
+            <span class="name">wind-beaufort-11</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-12')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-12"></hd-icon>
+            <span class="name">wind-beaufort-12</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-2')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-2"></hd-icon>
+            <span class="name">wind-beaufort-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-3')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-3"></hd-icon>
+            <span class="name">wind-beaufort-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-4')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-4"></hd-icon>
+            <span class="name">wind-beaufort-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-5')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-5"></hd-icon>
+            <span class="name">wind-beaufort-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-6')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-6"></hd-icon>
+            <span class="name">wind-beaufort-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-7')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-7"></hd-icon>
+            <span class="name">wind-beaufort-7</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-8')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-8"></hd-icon>
+            <span class="name">wind-beaufort-8</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-beaufort-9')" title="Click to copy">
+            <hd-icon icon="wi:wind-beaufort-9"></hd-icon>
+            <span class="name">wind-beaufort-9</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:wind-deg')" title="Click to copy">
+            <hd-icon icon="wi:wind-deg"></hd-icon>
+            <span class="name">wind-deg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('wi:windy')" title="Click to copy">
+            <hd-icon icon="wi:windy"></hd-icon>
+            <span class="name">windy</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

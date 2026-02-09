@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>brandico - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>brandico <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(45)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('brandico:amex')" title="Click to copy">
+            <hd-icon icon="brandico:amex"></hd-icon>
+            <span class="name">amex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:bandcamp')" title="Click to copy">
+            <hd-icon icon="brandico:bandcamp"></hd-icon>
+            <span class="name">bandcamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:blogger')" title="Click to copy">
+            <hd-icon icon="brandico:blogger"></hd-icon>
+            <span class="name">blogger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:blogger-rect')" title="Click to copy">
+            <hd-icon icon="brandico:blogger-rect"></hd-icon>
+            <span class="name">blogger-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:box')" title="Click to copy">
+            <hd-icon icon="brandico:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:box-rect')" title="Click to copy">
+            <hd-icon icon="brandico:box-rect"></hd-icon>
+            <span class="name">box-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:codepen')" title="Click to copy">
+            <hd-icon icon="brandico:codepen"></hd-icon>
+            <span class="name">codepen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:deviantart')" title="Click to copy">
+            <hd-icon icon="brandico:deviantart"></hd-icon>
+            <span class="name">deviantart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:diigo')" title="Click to copy">
+            <hd-icon icon="brandico:diigo"></hd-icon>
+            <span class="name">diigo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:discover')" title="Click to copy">
+            <hd-icon icon="brandico:discover"></hd-icon>
+            <span class="name">discover</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:facebook')" title="Click to copy">
+            <hd-icon icon="brandico:facebook"></hd-icon>
+            <span class="name">facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:facebook-rect')" title="Click to copy">
+            <hd-icon icon="brandico:facebook-rect"></hd-icon>
+            <span class="name">facebook-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:friendfeed')" title="Click to copy">
+            <hd-icon icon="brandico:friendfeed"></hd-icon>
+            <span class="name">friendfeed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:friendfeed-rect')" title="Click to copy">
+            <hd-icon icon="brandico:friendfeed-rect"></hd-icon>
+            <span class="name">friendfeed-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:github')" title="Click to copy">
+            <hd-icon icon="brandico:github"></hd-icon>
+            <span class="name">github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:github-text')" title="Click to copy">
+            <hd-icon icon="brandico:github-text"></hd-icon>
+            <span class="name">github-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:googleplus-rect')" title="Click to copy">
+            <hd-icon icon="brandico:googleplus-rect"></hd-icon>
+            <span class="name">googleplus-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:houzz')" title="Click to copy">
+            <hd-icon icon="brandico:houzz"></hd-icon>
+            <span class="name">houzz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:icq')" title="Click to copy">
+            <hd-icon icon="brandico:icq"></hd-icon>
+            <span class="name">icq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:instagram')" title="Click to copy">
+            <hd-icon icon="brandico:instagram"></hd-icon>
+            <span class="name">instagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:instagram-filled')" title="Click to copy">
+            <hd-icon icon="brandico:instagram-filled"></hd-icon>
+            <span class="name">instagram-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:jabber')" title="Click to copy">
+            <hd-icon icon="brandico:jabber"></hd-icon>
+            <span class="name">jabber</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:lastfm')" title="Click to copy">
+            <hd-icon icon="brandico:lastfm"></hd-icon>
+            <span class="name">lastfm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:lastfm-rect')" title="Click to copy">
+            <hd-icon icon="brandico:lastfm-rect"></hd-icon>
+            <span class="name">lastfm-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:linkedin')" title="Click to copy">
+            <hd-icon icon="brandico:linkedin"></hd-icon>
+            <span class="name">linkedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:linkedin-rect')" title="Click to copy">
+            <hd-icon icon="brandico:linkedin-rect"></hd-icon>
+            <span class="name">linkedin-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:mastercard')" title="Click to copy">
+            <hd-icon icon="brandico:mastercard"></hd-icon>
+            <span class="name">mastercard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:odnoklassniki')" title="Click to copy">
+            <hd-icon icon="brandico:odnoklassniki"></hd-icon>
+            <span class="name">odnoklassniki</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:odnoklassniki-rect')" title="Click to copy">
+            <hd-icon icon="brandico:odnoklassniki-rect"></hd-icon>
+            <span class="name">odnoklassniki-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:picasa')" title="Click to copy">
+            <hd-icon icon="brandico:picasa"></hd-icon>
+            <span class="name">picasa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:skype')" title="Click to copy">
+            <hd-icon icon="brandico:skype"></hd-icon>
+            <span class="name">skype</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:tudou')" title="Click to copy">
+            <hd-icon icon="brandico:tudou"></hd-icon>
+            <span class="name">tudou</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:tumblr')" title="Click to copy">
+            <hd-icon icon="brandico:tumblr"></hd-icon>
+            <span class="name">tumblr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:tumblr-rect')" title="Click to copy">
+            <hd-icon icon="brandico:tumblr-rect"></hd-icon>
+            <span class="name">tumblr-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:twitter')" title="Click to copy">
+            <hd-icon icon="brandico:twitter"></hd-icon>
+            <span class="name">twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:twitter-bird')" title="Click to copy">
+            <hd-icon icon="brandico:twitter-bird"></hd-icon>
+            <span class="name">twitter-bird</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:vimeo')" title="Click to copy">
+            <hd-icon icon="brandico:vimeo"></hd-icon>
+            <span class="name">vimeo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:vimeo-rect')" title="Click to copy">
+            <hd-icon icon="brandico:vimeo-rect"></hd-icon>
+            <span class="name">vimeo-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:visa')" title="Click to copy">
+            <hd-icon icon="brandico:visa"></hd-icon>
+            <span class="name">visa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:vkontakte-rect')" title="Click to copy">
+            <hd-icon icon="brandico:vkontakte-rect"></hd-icon>
+            <span class="name">vkontakte-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:win8')" title="Click to copy">
+            <hd-icon icon="brandico:win8"></hd-icon>
+            <span class="name">win8</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:wordpress')" title="Click to copy">
+            <hd-icon icon="brandico:wordpress"></hd-icon>
+            <span class="name">wordpress</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:yandex')" title="Click to copy">
+            <hd-icon icon="brandico:yandex"></hd-icon>
+            <span class="name">yandex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:yandex-rect')" title="Click to copy">
+            <hd-icon icon="brandico:yandex-rect"></hd-icon>
+            <span class="name">yandex-rect</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('brandico:youku')" title="Click to copy">
+            <hd-icon icon="brandico:youku"></hd-icon>
+            <span class="name">youku</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

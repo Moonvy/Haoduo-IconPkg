@@ -1,0 +1,15 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAABxYkZAUIYQRqF4IkRWCEnh3FVNlGMVjgidDQzUoOYdUGmM0mFQSNVUiZSdDhTVwtYRDpEzgpCCwQDAg3DJ6sBKQW6BAEBEKkBBwIXAg4UMoYHhxMqngIBItccBJgEDRUJBgE9Ez4vAQQaDs0BtgkFATNUBp0oAlkBQk14HXe5FiJMJu0kSX4xeNWyh4OglTUKw3BBvR5SuRsVOY0wxOIbbG1j4smkMDUAG9pIP5Z/jN1n8SAptMHLMOkuYO2hrC810YauV2H9QIA0bBG4+c+lpnByA2lgREcZuwG+8npfiMytEaixBWa79wlcyJmUGGC6U63NqaWEeXmdlLyHLRpz/n6bJsGwUBF5mv0grKM1oYS5YBhVUIEolI0417SL9PLEGEEPULsWvzn3nWxg+31M99w7e5eY4mG+tXVLQW1TAQZoiGYDix8zR5UqAs5k5hTlf06e0mg20XPXkhH5MoF6CayHRk4SgrYlWSxlYH4PbSmSDQBzL6tEltwu6avBo6lrxiibv1RoXZ/B/+0AAD8eKorm5SRSwVQsnwGoPpZ9X+Z6YtMcMnCCsHEkShKMam9EMPbkglgD076Na3JJEgQIBIQwBAAAAAAAAAIAAAAQd29yZHByZXNzLTAxLnN2ZwAAABB3b3JkcHJlc3MtMDIuc3Zn/////wAAAAIAAABRBUEFRAQEUQUEFEARBERUQRABAARAVBEBAAQBBQRVRQRBQBVAQRBBRUREQABAVBBRBQBEAREQRAEEAEAFABBABUVRABQVAABAQABEABQUBFABAAAAAA==";
+
+const chunks = {
+  "wordpress-01.svg": new URL("./wordpress-01.svg", import.meta.url).href,
+  "wordpress-02.svg": new URL("./wordpress-02.svg", import.meta.url).href
+};
+
+register('wordpress', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

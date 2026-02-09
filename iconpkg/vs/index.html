@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vs - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>vs <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(159)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('vs:0-square')" title="Click to copy">
+            <hd-icon icon="vs:0-square"></hd-icon>
+            <span class="name">0-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:1-square')" title="Click to copy">
+            <hd-icon icon="vs:1-square"></hd-icon>
+            <span class="name">1-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:2-square')" title="Click to copy">
+            <hd-icon icon="vs:2-square"></hd-icon>
+            <span class="name">2-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:3-square')" title="Click to copy">
+            <hd-icon icon="vs:3-square"></hd-icon>
+            <span class="name">3-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:4-square')" title="Click to copy">
+            <hd-icon icon="vs:4-square"></hd-icon>
+            <span class="name">4-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:5-square')" title="Click to copy">
+            <hd-icon icon="vs:5-square"></hd-icon>
+            <span class="name">5-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:6-square')" title="Click to copy">
+            <hd-icon icon="vs:6-square"></hd-icon>
+            <span class="name">6-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:7-square')" title="Click to copy">
+            <hd-icon icon="vs:7-square"></hd-icon>
+            <span class="name">7-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:8-square')" title="Click to copy">
+            <hd-icon icon="vs:8-square"></hd-icon>
+            <span class="name">8-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:9-square')" title="Click to copy">
+            <hd-icon icon="vs:9-square"></hd-icon>
+            <span class="name">9-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:a-square')" title="Click to copy">
+            <hd-icon icon="vs:a-square"></hd-icon>
+            <span class="name">a-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:b-square')" title="Click to copy">
+            <hd-icon icon="vs:b-square"></hd-icon>
+            <span class="name">b-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:baby')" title="Click to copy">
+            <hd-icon icon="vs:baby"></hd-icon>
+            <span class="name">baby</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:bc-card')" title="Click to copy">
+            <hd-icon icon="vs:bc-card"></hd-icon>
+            <span class="name">bc-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:butterfly')" title="Click to copy">
+            <hd-icon icon="vs:butterfly"></hd-icon>
+            <span class="name">butterfly</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:c-square')" title="Click to copy">
+            <hd-icon icon="vs:c-square"></hd-icon>
+            <span class="name">c-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:calendar')" title="Click to copy">
+            <hd-icon icon="vs:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:calendar-alt')" title="Click to copy">
+            <hd-icon icon="vs:calendar-alt"></hd-icon>
+            <span class="name">calendar-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:calendar-alt-2')" title="Click to copy">
+            <hd-icon icon="vs:calendar-alt-2"></hd-icon>
+            <span class="name">calendar-alt-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:camel')" title="Click to copy">
+            <hd-icon icon="vs:camel"></hd-icon>
+            <span class="name">camel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:cat-face')" title="Click to copy">
+            <hd-icon icon="vs:cat-face"></hd-icon>
+            <span class="name">cat-face</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:cc-card')" title="Click to copy">
+            <hd-icon icon="vs:cc-card"></hd-icon>
+            <span class="name">cc-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:chair')" title="Click to copy">
+            <hd-icon icon="vs:chair"></hd-icon>
+            <span class="name">chair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:chair-alt')" title="Click to copy">
+            <hd-icon icon="vs:chair-alt"></hd-icon>
+            <span class="name">chair-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:chicken')" title="Click to copy">
+            <hd-icon icon="vs:chicken"></hd-icon>
+            <span class="name">chicken</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:clip-note')" title="Click to copy">
+            <hd-icon icon="vs:clip-note"></hd-icon>
+            <span class="name">clip-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:clip-note-o')" title="Click to copy">
+            <hd-icon icon="vs:clip-note-o"></hd-icon>
+            <span class="name">clip-note-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:clipboard')" title="Click to copy">
+            <hd-icon icon="vs:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:clock')" title="Click to copy">
+            <hd-icon icon="vs:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:clock-alt')" title="Click to copy">
+            <hd-icon icon="vs:clock-alt"></hd-icon>
+            <span class="name">clock-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:comment')" title="Click to copy">
+            <hd-icon icon="vs:comment"></hd-icon>
+            <span class="name">comment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:comment-bubble')" title="Click to copy">
+            <hd-icon icon="vs:comment-bubble"></hd-icon>
+            <span class="name">comment-bubble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:comments')" title="Click to copy">
+            <hd-icon icon="vs:comments"></hd-icon>
+            <span class="name">comments</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:cow')" title="Click to copy">
+            <hd-icon icon="vs:cow"></hd-icon>
+            <span class="name">cow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:crown')" title="Click to copy">
+            <hd-icon icon="vs:crown"></hd-icon>
+            <span class="name">crown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:cutlery')" title="Click to copy">
+            <hd-icon icon="vs:cutlery"></hd-icon>
+            <span class="name">cutlery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:d-square')" title="Click to copy">
+            <hd-icon icon="vs:d-square"></hd-icon>
+            <span class="name">d-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:door-closed')" title="Click to copy">
+            <hd-icon icon="vs:door-closed"></hd-icon>
+            <span class="name">door-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:door-open')" title="Click to copy">
+            <hd-icon icon="vs:door-open"></hd-icon>
+            <span class="name">door-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:drumstick')" title="Click to copy">
+            <hd-icon icon="vs:drumstick"></hd-icon>
+            <span class="name">drumstick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:e-square')" title="Click to copy">
+            <hd-icon icon="vs:e-square"></hd-icon>
+            <span class="name">e-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:edit-page')" title="Click to copy">
+            <hd-icon icon="vs:edit-page"></hd-icon>
+            <span class="name">edit-page</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:f-square')" title="Click to copy">
+            <hd-icon icon="vs:f-square"></hd-icon>
+            <span class="name">f-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:face-allergy')" title="Click to copy">
+            <hd-icon icon="vs:face-allergy"></hd-icon>
+            <span class="name">face-allergy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:face-dislike')" title="Click to copy">
+            <hd-icon icon="vs:face-dislike"></hd-icon>
+            <span class="name">face-dislike</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:face-like')" title="Click to copy">
+            <hd-icon icon="vs:face-like"></hd-icon>
+            <span class="name">face-like</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:file-download')" title="Click to copy">
+            <hd-icon icon="vs:file-download"></hd-icon>
+            <span class="name">file-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:file-download-o')" title="Click to copy">
+            <hd-icon icon="vs:file-download-o"></hd-icon>
+            <span class="name">file-download-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:file-move-o')" title="Click to copy">
+            <hd-icon icon="vs:file-move-o"></hd-icon>
+            <span class="name">file-move-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:fish')" title="Click to copy">
+            <hd-icon icon="vs:fish"></hd-icon>
+            <span class="name">fish</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:floors')" title="Click to copy">
+            <hd-icon icon="vs:floors"></hd-icon>
+            <span class="name">floors</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:flower')" title="Click to copy">
+            <hd-icon icon="vs:flower"></hd-icon>
+            <span class="name">flower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:g-square')" title="Click to copy">
+            <hd-icon icon="vs:g-square"></hd-icon>
+            <span class="name">g-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:gantt')" title="Click to copy">
+            <hd-icon icon="vs:gantt"></hd-icon>
+            <span class="name">gantt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:gantt-o')" title="Click to copy">
+            <hd-icon icon="vs:gantt-o"></hd-icon>
+            <span class="name">gantt-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:globe')" title="Click to copy">
+            <hd-icon icon="vs:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:grapes')" title="Click to copy">
+            <hd-icon icon="vs:grapes"></hd-icon>
+            <span class="name">grapes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:h-square')" title="Click to copy">
+            <hd-icon icon="vs:h-square"></hd-icon>
+            <span class="name">h-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:highchair')" title="Click to copy">
+            <hd-icon icon="vs:highchair"></hd-icon>
+            <span class="name">highchair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:hourglass')" title="Click to copy">
+            <hd-icon icon="vs:hourglass"></hd-icon>
+            <span class="name">hourglass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:i-square')" title="Click to copy">
+            <hd-icon icon="vs:i-square"></hd-icon>
+            <span class="name">i-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:id-badge-alt')" title="Click to copy">
+            <hd-icon icon="vs:id-badge-alt"></hd-icon>
+            <span class="name">id-badge-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:id-card')" title="Click to copy">
+            <hd-icon icon="vs:id-card"></hd-icon>
+            <span class="name">id-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:id-card-alt')" title="Click to copy">
+            <hd-icon icon="vs:id-card-alt"></hd-icon>
+            <span class="name">id-card-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:j-square')" title="Click to copy">
+            <hd-icon icon="vs:j-square"></hd-icon>
+            <span class="name">j-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:k-square')" title="Click to copy">
+            <hd-icon icon="vs:k-square"></hd-icon>
+            <span class="name">k-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:kakao')" title="Click to copy">
+            <hd-icon icon="vs:kakao"></hd-icon>
+            <span class="name">kakao</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:kakao-square')" title="Click to copy">
+            <hd-icon icon="vs:kakao-square"></hd-icon>
+            <span class="name">kakao-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:kakaotalk')" title="Click to copy">
+            <hd-icon icon="vs:kakaotalk"></hd-icon>
+            <span class="name">kakaotalk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:kakaotalk-square')" title="Click to copy">
+            <hd-icon icon="vs:kakaotalk-square"></hd-icon>
+            <span class="name">kakaotalk-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:kanji-chu')" title="Click to copy">
+            <hd-icon icon="vs:kanji-chu"></hd-icon>
+            <span class="name">kanji-chu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:kanji-utage')" title="Click to copy">
+            <hd-icon icon="vs:kanji-utage"></hd-icon>
+            <span class="name">kanji-utage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:kanji-yubi')" title="Click to copy">
+            <hd-icon icon="vs:kanji-yubi"></hd-icon>
+            <span class="name">kanji-yubi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:keyboard')" title="Click to copy">
+            <hd-icon icon="vs:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:l-square')" title="Click to copy">
+            <hd-icon icon="vs:l-square"></hd-icon>
+            <span class="name">l-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:language')" title="Click to copy">
+            <hd-icon icon="vs:language"></hd-icon>
+            <span class="name">language</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:line')" title="Click to copy">
+            <hd-icon icon="vs:line"></hd-icon>
+            <span class="name">line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:line-square')" title="Click to copy">
+            <hd-icon icon="vs:line-square"></hd-icon>
+            <span class="name">line-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:m-square')" title="Click to copy">
+            <hd-icon icon="vs:m-square"></hd-icon>
+            <span class="name">m-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:magnet-note')" title="Click to copy">
+            <hd-icon icon="vs:magnet-note"></hd-icon>
+            <span class="name">magnet-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:male-female')" title="Click to copy">
+            <hd-icon icon="vs:male-female"></hd-icon>
+            <span class="name">male-female</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:mic')" title="Click to copy">
+            <hd-icon icon="vs:mic"></hd-icon>
+            <span class="name">mic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:mobile')" title="Click to copy">
+            <hd-icon icon="vs:mobile"></hd-icon>
+            <span class="name">mobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:moon')" title="Click to copy">
+            <hd-icon icon="vs:moon"></hd-icon>
+            <span class="name">moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:multi-arrow')" title="Click to copy">
+            <hd-icon icon="vs:multi-arrow"></hd-icon>
+            <span class="name">multi-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:n-square')" title="Click to copy">
+            <hd-icon icon="vs:n-square"></hd-icon>
+            <span class="name">n-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:naver')" title="Click to copy">
+            <hd-icon icon="vs:naver"></hd-icon>
+            <span class="name">naver</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:naver-square')" title="Click to copy">
+            <hd-icon icon="vs:naver-square"></hd-icon>
+            <span class="name">naver-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:neko')" title="Click to copy">
+            <hd-icon icon="vs:neko"></hd-icon>
+            <span class="name">neko</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:neko-sleep')" title="Click to copy">
+            <hd-icon icon="vs:neko-sleep"></hd-icon>
+            <span class="name">neko-sleep</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:ninja')" title="Click to copy">
+            <hd-icon icon="vs:ninja"></hd-icon>
+            <span class="name">ninja</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:no-comment-bubble')" title="Click to copy">
+            <hd-icon icon="vs:no-comment-bubble"></hd-icon>
+            <span class="name">no-comment-bubble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:no-smoking-alt')" title="Click to copy">
+            <hd-icon icon="vs:no-smoking-alt"></hd-icon>
+            <span class="name">no-smoking-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:o-square')" title="Click to copy">
+            <hd-icon icon="vs:o-square"></hd-icon>
+            <span class="name">o-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:p')" title="Click to copy">
+            <hd-icon icon="vs:p"></hd-icon>
+            <span class="name">p</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:p-square')" title="Click to copy">
+            <hd-icon icon="vs:p-square"></hd-icon>
+            <span class="name">p-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:panther')" title="Click to copy">
+            <hd-icon icon="vs:panther"></hd-icon>
+            <span class="name">panther</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:party')" title="Click to copy">
+            <hd-icon icon="vs:party"></hd-icon>
+            <span class="name">party</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:people-group')" title="Click to copy">
+            <hd-icon icon="vs:people-group"></hd-icon>
+            <span class="name">people-group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:person')" title="Click to copy">
+            <hd-icon icon="vs:person"></hd-icon>
+            <span class="name">person</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:pig')" title="Click to copy">
+            <hd-icon icon="vs:pig"></hd-icon>
+            <span class="name">pig</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:pregnant')" title="Click to copy">
+            <hd-icon icon="vs:pregnant"></hd-icon>
+            <span class="name">pregnant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:profile')" title="Click to copy">
+            <hd-icon icon="vs:profile"></hd-icon>
+            <span class="name">profile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:q-square')" title="Click to copy">
+            <hd-icon icon="vs:q-square"></hd-icon>
+            <span class="name">q-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:question-square')" title="Click to copy">
+            <hd-icon icon="vs:question-square"></hd-icon>
+            <span class="name">question-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:r-square')" title="Click to copy">
+            <hd-icon icon="vs:r-square"></hd-icon>
+            <span class="name">r-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:rose')" title="Click to copy">
+            <hd-icon icon="vs:rose"></hd-icon>
+            <span class="name">rose</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:s-square')" title="Click to copy">
+            <hd-icon icon="vs:s-square"></hd-icon>
+            <span class="name">s-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:senior')" title="Click to copy">
+            <hd-icon icon="vs:senior"></hd-icon>
+            <span class="name">senior</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sex-female')" title="Click to copy">
+            <hd-icon icon="vs:sex-female"></hd-icon>
+            <span class="name">sex-female</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sex-male')" title="Click to copy">
+            <hd-icon icon="vs:sex-male"></hd-icon>
+            <span class="name">sex-male</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sheep')" title="Click to copy">
+            <hd-icon icon="vs:sheep"></hd-icon>
+            <span class="name">sheep</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:shield-check')" title="Click to copy">
+            <hd-icon icon="vs:shield-check"></hd-icon>
+            <span class="name">shield-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:shield-times')" title="Click to copy">
+            <hd-icon icon="vs:shield-times"></hd-icon>
+            <span class="name">shield-times</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:shop')" title="Click to copy">
+            <hd-icon icon="vs:shop"></hd-icon>
+            <span class="name">shop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sleep')" title="Click to copy">
+            <hd-icon icon="vs:sleep"></hd-icon>
+            <span class="name">sleep</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sleep-square')" title="Click to copy">
+            <hd-icon icon="vs:sleep-square"></hd-icon>
+            <span class="name">sleep-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:smoking')" title="Click to copy">
+            <hd-icon icon="vs:smoking"></hd-icon>
+            <span class="name">smoking</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:smoking-alt')" title="Click to copy">
+            <hd-icon icon="vs:smoking-alt"></hd-icon>
+            <span class="name">smoking-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sms')" title="Click to copy">
+            <hd-icon icon="vs:sms"></hd-icon>
+            <span class="name">sms</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sofa')" title="Click to copy">
+            <hd-icon icon="vs:sofa"></hd-icon>
+            <span class="name">sofa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:speech')" title="Click to copy">
+            <hd-icon icon="vs:speech"></hd-icon>
+            <span class="name">speech</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:spinner')" title="Click to copy">
+            <hd-icon icon="vs:spinner"></hd-icon>
+            <span class="name">spinner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sticky-note')" title="Click to copy">
+            <hd-icon icon="vs:sticky-note"></hd-icon>
+            <span class="name">sticky-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:stroller')" title="Click to copy">
+            <hd-icon icon="vs:stroller"></hd-icon>
+            <span class="name">stroller</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sun')" title="Click to copy">
+            <hd-icon icon="vs:sun"></hd-icon>
+            <span class="name">sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sunrise')" title="Click to copy">
+            <hd-icon icon="vs:sunrise"></hd-icon>
+            <span class="name">sunrise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:sunrise-o')" title="Click to copy">
+            <hd-icon icon="vs:sunrise-o"></hd-icon>
+            <span class="name">sunrise-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:t-square')" title="Click to copy">
+            <hd-icon icon="vs:t-square"></hd-icon>
+            <span class="name">t-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:table')" title="Click to copy">
+            <hd-icon icon="vs:table"></hd-icon>
+            <span class="name">table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:table-alt')" title="Click to copy">
+            <hd-icon icon="vs:table-alt"></hd-icon>
+            <span class="name">table-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:table-o')" title="Click to copy">
+            <hd-icon icon="vs:table-o"></hd-icon>
+            <span class="name">table-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:table-question')" title="Click to copy">
+            <hd-icon icon="vs:table-question"></hd-icon>
+            <span class="name">table-question</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:tables')" title="Click to copy">
+            <hd-icon icon="vs:tables"></hd-icon>
+            <span class="name">tables</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:tablesolution')" title="Click to copy">
+            <hd-icon icon="vs:tablesolution"></hd-icon>
+            <span class="name">tablesolution</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:timeslot')" title="Click to copy">
+            <hd-icon icon="vs:timeslot"></hd-icon>
+            <span class="name">timeslot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:timeslot-question')" title="Click to copy">
+            <hd-icon icon="vs:timeslot-question"></hd-icon>
+            <span class="name">timeslot-question</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:timeslots')" title="Click to copy">
+            <hd-icon icon="vs:timeslots"></hd-icon>
+            <span class="name">timeslots</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:u-square')" title="Click to copy">
+            <hd-icon icon="vs:u-square"></hd-icon>
+            <span class="name">u-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:user-boss')" title="Click to copy">
+            <hd-icon icon="vs:user-boss"></hd-icon>
+            <span class="name">user-boss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:user-group')" title="Click to copy">
+            <hd-icon icon="vs:user-group"></hd-icon>
+            <span class="name">user-group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:user-suit')" title="Click to copy">
+            <hd-icon icon="vs:user-suit"></hd-icon>
+            <span class="name">user-suit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:user-suit-female')" title="Click to copy">
+            <hd-icon icon="vs:user-suit-female"></hd-icon>
+            <span class="name">user-suit-female</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:user-waiter')" title="Click to copy">
+            <hd-icon icon="vs:user-waiter"></hd-icon>
+            <span class="name">user-waiter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:user-waiter-female')" title="Click to copy">
+            <hd-icon icon="vs:user-waiter-female"></hd-icon>
+            <span class="name">user-waiter-female</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:v-square')" title="Click to copy">
+            <hd-icon icon="vs:v-square"></hd-icon>
+            <span class="name">v-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:volume-on')" title="Click to copy">
+            <hd-icon icon="vs:volume-on"></hd-icon>
+            <span class="name">volume-on</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:volume-times')" title="Click to copy">
+            <hd-icon icon="vs:volume-times"></hd-icon>
+            <span class="name">volume-times</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:w-square')" title="Click to copy">
+            <hd-icon icon="vs:w-square"></hd-icon>
+            <span class="name">w-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:walk')" title="Click to copy">
+            <hd-icon icon="vs:walk"></hd-icon>
+            <span class="name">walk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:wedding-cake')" title="Click to copy">
+            <hd-icon icon="vs:wedding-cake"></hd-icon>
+            <span class="name">wedding-cake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:whiteboard')" title="Click to copy">
+            <hd-icon icon="vs:whiteboard"></hd-icon>
+            <span class="name">whiteboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:window')" title="Click to copy">
+            <hd-icon icon="vs:window"></hd-icon>
+            <span class="name">window</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:wine')" title="Click to copy">
+            <hd-icon icon="vs:wine"></hd-icon>
+            <span class="name">wine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:wine-o')" title="Click to copy">
+            <hd-icon icon="vs:wine-o"></hd-icon>
+            <span class="name">wine-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:x-square')" title="Click to copy">
+            <hd-icon icon="vs:x-square"></hd-icon>
+            <span class="name">x-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:y-square')" title="Click to copy">
+            <hd-icon icon="vs:y-square"></hd-icon>
+            <span class="name">y-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:yahoo-japan')" title="Click to copy">
+            <hd-icon icon="vs:yahoo-japan"></hd-icon>
+            <span class="name">yahoo-japan</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('vs:z-square')" title="Click to copy">
+            <hd-icon icon="vs:z-square"></hd-icon>
+            <span class="name">z-square</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

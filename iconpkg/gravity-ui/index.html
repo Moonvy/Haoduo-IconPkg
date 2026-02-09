@@ -1,0 +1,3296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gravity-ui - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>gravity-ui <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(781)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:abbr-api')" title="Click to copy">
+            <hd-icon icon="gravity-ui:abbr-api"></hd-icon>
+            <span class="name">abbr-api</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:abbr-ml')" title="Click to copy">
+            <hd-icon icon="gravity-ui:abbr-ml"></hd-icon>
+            <span class="name">abbr-ml</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:abbr-ql')" title="Click to copy">
+            <hd-icon icon="gravity-ui:abbr-ql"></hd-icon>
+            <span class="name">abbr-ql</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:abbr-sql')" title="Click to copy">
+            <hd-icon icon="gravity-ui:abbr-sql"></hd-icon>
+            <span class="name">abbr-sql</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:abbr-zip')" title="Click to copy">
+            <hd-icon icon="gravity-ui:abbr-zip"></hd-icon>
+            <span class="name">abbr-zip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:alarm')" title="Click to copy">
+            <hd-icon icon="gravity-ui:alarm"></hd-icon>
+            <span class="name">alarm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:alarm-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:alarm-fill"></hd-icon>
+            <span class="name">alarm-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:almost-equal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:almost-equal"></hd-icon>
+            <span class="name">almost-equal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:antenna-signal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:antenna-signal"></hd-icon>
+            <span class="name">antenna-signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:aperture')" title="Click to copy">
+            <hd-icon icon="gravity-ui:aperture"></hd-icon>
+            <span class="name">aperture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:archive')" title="Click to copy">
+            <hd-icon icon="gravity-ui:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-chevron-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-chevron-down"></hd-icon>
+            <span class="name">arrow-chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-chevron-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-chevron-left"></hd-icon>
+            <span class="name">arrow-chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-chevron-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-chevron-right"></hd-icon>
+            <span class="name">arrow-chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-chevron-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-chevron-up"></hd-icon>
+            <span class="name">arrow-chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-down-from-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-down-from-line"></hd-icon>
+            <span class="name">arrow-down-from-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-down-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-down-left"></hd-icon>
+            <span class="name">arrow-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-down-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-down-right"></hd-icon>
+            <span class="name">arrow-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-down-to-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-down-to-line"></hd-icon>
+            <span class="name">arrow-down-to-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-down-to-square')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-down-to-square"></hd-icon>
+            <span class="name">arrow-down-to-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-left-from-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-left-from-line"></hd-icon>
+            <span class="name">arrow-left-from-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-left-to-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-left-to-line"></hd-icon>
+            <span class="name">arrow-left-to-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-right-arrow-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-right-arrow-left"></hd-icon>
+            <span class="name">arrow-right-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-right-from-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-right-from-line"></hd-icon>
+            <span class="name">arrow-right-from-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-right-from-square')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-right-from-square"></hd-icon>
+            <span class="name">arrow-right-from-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-right-to-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-right-to-line"></hd-icon>
+            <span class="name">arrow-right-to-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-right-to-square')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-right-to-square"></hd-icon>
+            <span class="name">arrow-right-to-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-rotate-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-rotate-left"></hd-icon>
+            <span class="name">arrow-rotate-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-rotate-left-number-5')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-rotate-left-number-5"></hd-icon>
+            <span class="name">arrow-rotate-left-number-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-rotate-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-rotate-right"></hd-icon>
+            <span class="name">arrow-rotate-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-rotate-right-number-5')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-rotate-right-number-5"></hd-icon>
+            <span class="name">arrow-rotate-right-number-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-down"></hd-icon>
+            <span class="name">arrow-shape-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-down-from-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-down-from-line"></hd-icon>
+            <span class="name">arrow-shape-down-from-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-down-to-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-down-to-line"></hd-icon>
+            <span class="name">arrow-shape-down-to-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-left"></hd-icon>
+            <span class="name">arrow-shape-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-left-from-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-left-from-line"></hd-icon>
+            <span class="name">arrow-shape-left-from-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-left-to-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-left-to-line"></hd-icon>
+            <span class="name">arrow-shape-left-to-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-right"></hd-icon>
+            <span class="name">arrow-shape-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-right-from-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-right-from-line"></hd-icon>
+            <span class="name">arrow-shape-right-from-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-right-to-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-right-to-line"></hd-icon>
+            <span class="name">arrow-shape-right-to-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-turn-up-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-turn-up-left"></hd-icon>
+            <span class="name">arrow-shape-turn-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-turn-up-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-turn-up-right"></hd-icon>
+            <span class="name">arrow-shape-turn-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-up"></hd-icon>
+            <span class="name">arrow-shape-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-up-from-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-up-from-line"></hd-icon>
+            <span class="name">arrow-shape-up-from-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-shape-up-to-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-shape-up-to-line"></hd-icon>
+            <span class="name">arrow-shape-up-to-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-up-arrow-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-up-arrow-down"></hd-icon>
+            <span class="name">arrow-up-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-up-from-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-up-from-line"></hd-icon>
+            <span class="name">arrow-up-from-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-up-from-square')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-up-from-square"></hd-icon>
+            <span class="name">arrow-up-from-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-up-from-square-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-up-from-square-slash"></hd-icon>
+            <span class="name">arrow-up-from-square-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-up-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-up-left"></hd-icon>
+            <span class="name">arrow-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-up-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-up-right"></hd-icon>
+            <span class="name">arrow-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-up-right-from-square')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-up-right-from-square"></hd-icon>
+            <span class="name">arrow-up-right-from-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-up-to-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-up-to-line"></hd-icon>
+            <span class="name">arrow-up-to-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-uturn-ccw-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-uturn-ccw-down"></hd-icon>
+            <span class="name">arrow-uturn-ccw-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-uturn-ccw-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-uturn-ccw-left"></hd-icon>
+            <span class="name">arrow-uturn-ccw-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-uturn-ccw-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-uturn-ccw-right"></hd-icon>
+            <span class="name">arrow-uturn-ccw-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-uturn-cw-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-uturn-cw-down"></hd-icon>
+            <span class="name">arrow-uturn-cw-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-uturn-cw-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-uturn-cw-left"></hd-icon>
+            <span class="name">arrow-uturn-cw-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrow-uturn-cw-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrow-uturn-cw-right"></hd-icon>
+            <span class="name">arrow-uturn-cw-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-3-rotate-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-3-rotate-left"></hd-icon>
+            <span class="name">arrows-3-rotate-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-3-rotate-left-letter-a')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-3-rotate-left-letter-a"></hd-icon>
+            <span class="name">arrows-3-rotate-left-letter-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-3-rotate-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-3-rotate-right"></hd-icon>
+            <span class="name">arrows-3-rotate-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-expand')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-expand"></hd-icon>
+            <span class="name">arrows-expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-expand-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-expand-horizontal"></hd-icon>
+            <span class="name">arrows-expand-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-expand-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-expand-vertical"></hd-icon>
+            <span class="name">arrows-expand-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-opposite-to-dots')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-opposite-to-dots"></hd-icon>
+            <span class="name">arrows-opposite-to-dots</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-rotate-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-rotate-left"></hd-icon>
+            <span class="name">arrows-rotate-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-rotate-left-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-rotate-left-slash"></hd-icon>
+            <span class="name">arrows-rotate-left-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-rotate-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-rotate-right"></hd-icon>
+            <span class="name">arrows-rotate-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:arrows-rotate-right-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:arrows-rotate-right-slash"></hd-icon>
+            <span class="name">arrows-rotate-right-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:at')" title="Click to copy">
+            <hd-icon icon="gravity-ui:at"></hd-icon>
+            <span class="name">at</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:backward-step')" title="Click to copy">
+            <hd-icon icon="gravity-ui:backward-step"></hd-icon>
+            <span class="name">backward-step</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:backward-step-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:backward-step-fill"></hd-icon>
+            <span class="name">backward-step-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:ban')" title="Click to copy">
+            <hd-icon icon="gravity-ui:ban"></hd-icon>
+            <span class="name">ban</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars"></hd-icon>
+            <span class="name">bars</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-ascending-align-center')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-ascending-align-center"></hd-icon>
+            <span class="name">bars-ascending-align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-ascending-align-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-ascending-align-left"></hd-icon>
+            <span class="name">bars-ascending-align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-ascending-align-left-arrow-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-ascending-align-left-arrow-down"></hd-icon>
+            <span class="name">bars-ascending-align-left-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-ascending-align-left-arrow-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-ascending-align-left-arrow-up"></hd-icon>
+            <span class="name">bars-ascending-align-left-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-ascending-align-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-ascending-align-right"></hd-icon>
+            <span class="name">bars-ascending-align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-descending-align-center')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-descending-align-center"></hd-icon>
+            <span class="name">bars-descending-align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-descending-align-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-descending-align-left"></hd-icon>
+            <span class="name">bars-descending-align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-descending-align-left-arrow-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-descending-align-left-arrow-down"></hd-icon>
+            <span class="name">bars-descending-align-left-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-descending-align-left-arrow-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-descending-align-left-arrow-up"></hd-icon>
+            <span class="name">bars-descending-align-left-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-descending-align-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-descending-align-right"></hd-icon>
+            <span class="name">bars-descending-align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-play')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-play"></hd-icon>
+            <span class="name">bars-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bars-unaligned')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bars-unaligned"></hd-icon>
+            <span class="name">bars-unaligned</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bell')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bell-dot')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bell-dot"></hd-icon>
+            <span class="name">bell-dot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bell-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bell-fill"></hd-icon>
+            <span class="name">bell-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bell-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bell-slash"></hd-icon>
+            <span class="name">bell-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:binoculars')" title="Click to copy">
+            <hd-icon icon="gravity-ui:binoculars"></hd-icon>
+            <span class="name">binoculars</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bold')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bold"></hd-icon>
+            <span class="name">bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:book')" title="Click to copy">
+            <hd-icon icon="gravity-ui:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:book-open')" title="Click to copy">
+            <hd-icon icon="gravity-ui:book-open"></hd-icon>
+            <span class="name">book-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bookmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bookmark-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bookmark-fill"></hd-icon>
+            <span class="name">bookmark-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:books')" title="Click to copy">
+            <hd-icon icon="gravity-ui:books"></hd-icon>
+            <span class="name">books</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:box')" title="Click to copy">
+            <hd-icon icon="gravity-ui:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:boxes-3')" title="Click to copy">
+            <hd-icon icon="gravity-ui:boxes-3"></hd-icon>
+            <span class="name">boxes-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:branches-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:branches-down"></hd-icon>
+            <span class="name">branches-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:branches-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:branches-right"></hd-icon>
+            <span class="name">branches-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:branches-right-arrow-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:branches-right-arrow-right"></hd-icon>
+            <span class="name">branches-right-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:briefcase')" title="Click to copy">
+            <hd-icon icon="gravity-ui:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:briefcase-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:briefcase-fill"></hd-icon>
+            <span class="name">briefcase-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:broadcast-signal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:broadcast-signal"></hd-icon>
+            <span class="name">broadcast-signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:broom-motion')" title="Click to copy">
+            <hd-icon icon="gravity-ui:broom-motion"></hd-icon>
+            <span class="name">broom-motion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:broom-motion-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:broom-motion-fill"></hd-icon>
+            <span class="name">broom-motion-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:brush')" title="Click to copy">
+            <hd-icon icon="gravity-ui:brush"></hd-icon>
+            <span class="name">brush</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bucket')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bucket"></hd-icon>
+            <span class="name">bucket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bucket-paint')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bucket-paint"></hd-icon>
+            <span class="name">bucket-paint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bug')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bug"></hd-icon>
+            <span class="name">bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:bulb')" title="Click to copy">
+            <hd-icon icon="gravity-ui:bulb"></hd-icon>
+            <span class="name">bulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:calculator')" title="Click to copy">
+            <hd-icon icon="gravity-ui:calculator"></hd-icon>
+            <span class="name">calculator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:calendar')" title="Click to copy">
+            <hd-icon icon="gravity-ui:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:calendar-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:calendar-xmark"></hd-icon>
+            <span class="name">calendar-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:camera')" title="Click to copy">
+            <hd-icon icon="gravity-ui:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:car')" title="Click to copy">
+            <hd-icon icon="gravity-ui:car"></hd-icon>
+            <span class="name">car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:card-club')" title="Click to copy">
+            <hd-icon icon="gravity-ui:card-club"></hd-icon>
+            <span class="name">card-club</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:card-diamond')" title="Click to copy">
+            <hd-icon icon="gravity-ui:card-diamond"></hd-icon>
+            <span class="name">card-diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:card-heart')" title="Click to copy">
+            <hd-icon icon="gravity-ui:card-heart"></hd-icon>
+            <span class="name">card-heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:card-spade')" title="Click to copy">
+            <hd-icon icon="gravity-ui:card-spade"></hd-icon>
+            <span class="name">card-spade</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:caret-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:caret-down"></hd-icon>
+            <span class="name">caret-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:caret-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:caret-left"></hd-icon>
+            <span class="name">caret-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:caret-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:caret-right"></hd-icon>
+            <span class="name">caret-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:caret-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:caret-up"></hd-icon>
+            <span class="name">caret-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:carets-expand-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:carets-expand-vertical"></hd-icon>
+            <span class="name">carets-expand-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-area-stacked')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-area-stacked"></hd-icon>
+            <span class="name">chart-area-stacked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-area-stacked-normalized')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-area-stacked-normalized"></hd-icon>
+            <span class="name">chart-area-stacked-normalized</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-bar')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-bar"></hd-icon>
+            <span class="name">chart-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-bar-stacked')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-bar-stacked"></hd-icon>
+            <span class="name">chart-bar-stacked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-column')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-column"></hd-icon>
+            <span class="name">chart-column</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-column-stacked')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-column-stacked"></hd-icon>
+            <span class="name">chart-column-stacked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-donut')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-donut"></hd-icon>
+            <span class="name">chart-donut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-line"></hd-icon>
+            <span class="name">chart-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-line-arrow-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-line-arrow-up"></hd-icon>
+            <span class="name">chart-line-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-line-label')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-line-label"></hd-icon>
+            <span class="name">chart-line-label</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-line-points')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-line-points"></hd-icon>
+            <span class="name">chart-line-points</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-mixed')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-mixed"></hd-icon>
+            <span class="name">chart-mixed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-pie')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-pie"></hd-icon>
+            <span class="name">chart-pie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chart-treemap')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chart-treemap"></hd-icon>
+            <span class="name">chart-treemap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:check-double')" title="Click to copy">
+            <hd-icon icon="gravity-ui:check-double"></hd-icon>
+            <span class="name">check-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:check-shape')" title="Click to copy">
+            <hd-icon icon="gravity-ui:check-shape"></hd-icon>
+            <span class="name">check-shape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:check-shape-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:check-shape-fill"></hd-icon>
+            <span class="name">check-shape-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cherry')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cherry"></hd-icon>
+            <span class="name">cherry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevron-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevron-down-wide')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevron-down-wide"></hd-icon>
+            <span class="name">chevron-down-wide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevron-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevron-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevron-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevron-up-wide')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevron-up-wide"></hd-icon>
+            <span class="name">chevron-up-wide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-collapse-from-lines')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-collapse-from-lines"></hd-icon>
+            <span class="name">chevrons-collapse-from-lines</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-collapse-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-collapse-horizontal"></hd-icon>
+            <span class="name">chevrons-collapse-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-collapse-to-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-collapse-to-line"></hd-icon>
+            <span class="name">chevrons-collapse-to-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-collapse-up-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-collapse-up-right"></hd-icon>
+            <span class="name">chevrons-collapse-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-collapse-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-collapse-vertical"></hd-icon>
+            <span class="name">chevrons-collapse-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-down"></hd-icon>
+            <span class="name">chevrons-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-down-wide')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-down-wide"></hd-icon>
+            <span class="name">chevrons-down-wide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-expand-from-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-expand-from-line"></hd-icon>
+            <span class="name">chevrons-expand-from-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-expand-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-expand-horizontal"></hd-icon>
+            <span class="name">chevrons-expand-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-expand-to-lines')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-expand-to-lines"></hd-icon>
+            <span class="name">chevrons-expand-to-lines</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-expand-up-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-expand-up-right"></hd-icon>
+            <span class="name">chevrons-expand-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-expand-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-expand-vertical"></hd-icon>
+            <span class="name">chevrons-expand-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-left"></hd-icon>
+            <span class="name">chevrons-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-right"></hd-icon>
+            <span class="name">chevrons-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-up"></hd-icon>
+            <span class="name">chevrons-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:chevrons-up-wide')" title="Click to copy">
+            <hd-icon icon="gravity-ui:chevrons-up-wide"></hd-icon>
+            <span class="name">chevrons-up-wide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-arrow-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-arrow-down"></hd-icon>
+            <span class="name">circle-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-arrow-down-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-arrow-down-fill"></hd-icon>
+            <span class="name">circle-arrow-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-arrow-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-arrow-left"></hd-icon>
+            <span class="name">circle-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-arrow-left-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-arrow-left-fill"></hd-icon>
+            <span class="name">circle-arrow-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-arrow-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-arrow-right"></hd-icon>
+            <span class="name">circle-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-arrow-right-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-arrow-right-fill"></hd-icon>
+            <span class="name">circle-arrow-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-arrow-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-arrow-up"></hd-icon>
+            <span class="name">circle-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-arrow-up-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-arrow-up-fill"></hd-icon>
+            <span class="name">circle-arrow-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-check"></hd-icon>
+            <span class="name">circle-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-check-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-check-fill"></hd-icon>
+            <span class="name">circle-check-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevron-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevron-down"></hd-icon>
+            <span class="name">circle-chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevron-down-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevron-down-fill"></hd-icon>
+            <span class="name">circle-chevron-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevron-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevron-left"></hd-icon>
+            <span class="name">circle-chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevron-left-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevron-left-fill"></hd-icon>
+            <span class="name">circle-chevron-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevron-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevron-right"></hd-icon>
+            <span class="name">circle-chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevron-right-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevron-right-fill"></hd-icon>
+            <span class="name">circle-chevron-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevron-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevron-up"></hd-icon>
+            <span class="name">circle-chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevron-up-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevron-up-fill"></hd-icon>
+            <span class="name">circle-chevron-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevrons-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevrons-down"></hd-icon>
+            <span class="name">circle-chevrons-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevrons-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevrons-left"></hd-icon>
+            <span class="name">circle-chevrons-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevrons-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevrons-right"></hd-icon>
+            <span class="name">circle-chevrons-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-chevrons-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-chevrons-up"></hd-icon>
+            <span class="name">circle-chevrons-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-dashed')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-dashed"></hd-icon>
+            <span class="name">circle-dashed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-dollar')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-dollar"></hd-icon>
+            <span class="name">circle-dollar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-exclamation')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-exclamation"></hd-icon>
+            <span class="name">circle-exclamation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-exclamation-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-exclamation-fill"></hd-icon>
+            <span class="name">circle-exclamation-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-fill"></hd-icon>
+            <span class="name">circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-info')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-info"></hd-icon>
+            <span class="name">circle-info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-info-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-info-fill"></hd-icon>
+            <span class="name">circle-info-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-a')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-a"></hd-icon>
+            <span class="name">circle-letter-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-b')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-b"></hd-icon>
+            <span class="name">circle-letter-b</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-c')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-c"></hd-icon>
+            <span class="name">circle-letter-c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-d')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-d"></hd-icon>
+            <span class="name">circle-letter-d</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-e')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-e"></hd-icon>
+            <span class="name">circle-letter-e</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-f')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-f"></hd-icon>
+            <span class="name">circle-letter-f</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-g')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-g"></hd-icon>
+            <span class="name">circle-letter-g</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-h')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-h"></hd-icon>
+            <span class="name">circle-letter-h</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-i')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-i"></hd-icon>
+            <span class="name">circle-letter-i</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-j')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-j"></hd-icon>
+            <span class="name">circle-letter-j</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-k')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-k"></hd-icon>
+            <span class="name">circle-letter-k</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-l')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-l"></hd-icon>
+            <span class="name">circle-letter-l</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-m')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-m"></hd-icon>
+            <span class="name">circle-letter-m</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-n')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-n"></hd-icon>
+            <span class="name">circle-letter-n</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-o')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-o"></hd-icon>
+            <span class="name">circle-letter-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-p')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-p"></hd-icon>
+            <span class="name">circle-letter-p</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-q')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-q"></hd-icon>
+            <span class="name">circle-letter-q</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-r')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-r"></hd-icon>
+            <span class="name">circle-letter-r</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-s')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-s"></hd-icon>
+            <span class="name">circle-letter-s</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-t')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-t"></hd-icon>
+            <span class="name">circle-letter-t</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-u')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-u"></hd-icon>
+            <span class="name">circle-letter-u</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-v')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-v"></hd-icon>
+            <span class="name">circle-letter-v</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-w')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-w"></hd-icon>
+            <span class="name">circle-letter-w</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-x')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-x"></hd-icon>
+            <span class="name">circle-letter-x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-y')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-y"></hd-icon>
+            <span class="name">circle-letter-y</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-letter-z')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-letter-z"></hd-icon>
+            <span class="name">circle-letter-z</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-link')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-link"></hd-icon>
+            <span class="name">circle-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-minus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-minus"></hd-icon>
+            <span class="name">circle-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-minus-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-minus-fill"></hd-icon>
+            <span class="name">circle-minus-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-number-0')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-number-0"></hd-icon>
+            <span class="name">circle-number-0</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-number-1')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-number-1"></hd-icon>
+            <span class="name">circle-number-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-number-2')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-number-2"></hd-icon>
+            <span class="name">circle-number-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-number-3')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-number-3"></hd-icon>
+            <span class="name">circle-number-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-number-4')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-number-4"></hd-icon>
+            <span class="name">circle-number-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-number-5')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-number-5"></hd-icon>
+            <span class="name">circle-number-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-number-6')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-number-6"></hd-icon>
+            <span class="name">circle-number-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-number-7')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-number-7"></hd-icon>
+            <span class="name">circle-number-7</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-number-8')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-number-8"></hd-icon>
+            <span class="name">circle-number-8</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-number-9')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-number-9"></hd-icon>
+            <span class="name">circle-number-9</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-pause')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-pause"></hd-icon>
+            <span class="name">circle-pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-pause-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-pause-fill"></hd-icon>
+            <span class="name">circle-pause-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-play')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-play"></hd-icon>
+            <span class="name">circle-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-play-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-play-fill"></hd-icon>
+            <span class="name">circle-play-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-plus"></hd-icon>
+            <span class="name">circle-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-plus-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-plus-fill"></hd-icon>
+            <span class="name">circle-plus-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-question')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-question"></hd-icon>
+            <span class="name">circle-question</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-question-dot')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-question-dot"></hd-icon>
+            <span class="name">circle-question-dot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-question-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-question-fill"></hd-icon>
+            <span class="name">circle-question-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-ruble')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-ruble"></hd-icon>
+            <span class="name">circle-ruble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-stop')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-stop"></hd-icon>
+            <span class="name">circle-stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-stop-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-stop-fill"></hd-icon>
+            <span class="name">circle-stop-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-tree')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-tree"></hd-icon>
+            <span class="name">circle-tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-xmark"></hd-icon>
+            <span class="name">circle-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circle-xmark-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circle-xmark-fill"></hd-icon>
+            <span class="name">circle-xmark-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circles-3-plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circles-3-plus"></hd-icon>
+            <span class="name">circles-3-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circles-4-diamond')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circles-4-diamond"></hd-icon>
+            <span class="name">circles-4-diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circles-4-square')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circles-4-square"></hd-icon>
+            <span class="name">circles-4-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circles-5-random')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circles-5-random"></hd-icon>
+            <span class="name">circles-5-random</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circles-concentric')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circles-concentric"></hd-icon>
+            <span class="name">circles-concentric</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:circles-intersection')" title="Click to copy">
+            <hd-icon icon="gravity-ui:circles-intersection"></hd-icon>
+            <span class="name">circles-intersection</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:clock')" title="Click to copy">
+            <hd-icon icon="gravity-ui:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:clock-arrow-rotate-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:clock-arrow-rotate-left"></hd-icon>
+            <span class="name">clock-arrow-rotate-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:clock-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:clock-fill"></hd-icon>
+            <span class="name">clock-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cloud')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cloud-arrow-up-in')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cloud-arrow-up-in"></hd-icon>
+            <span class="name">cloud-arrow-up-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cloud-check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cloud-check"></hd-icon>
+            <span class="name">cloud-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cloud-gear')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cloud-gear"></hd-icon>
+            <span class="name">cloud-gear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cloud-nut-hex')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cloud-nut-hex"></hd-icon>
+            <span class="name">cloud-nut-hex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cloud-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cloud-slash"></hd-icon>
+            <span class="name">cloud-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:clouds')" title="Click to copy">
+            <hd-icon icon="gravity-ui:clouds"></hd-icon>
+            <span class="name">clouds</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-commit')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-commit"></hd-icon>
+            <span class="name">code-commit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-commit-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-commit-horizontal"></hd-icon>
+            <span class="name">code-commit-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-commits')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-commits"></hd-icon>
+            <span class="name">code-commits</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-compare')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-compare"></hd-icon>
+            <span class="name">code-compare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-fork')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-fork"></hd-icon>
+            <span class="name">code-fork</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-merge')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-merge"></hd-icon>
+            <span class="name">code-merge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-pull-request')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-pull-request"></hd-icon>
+            <span class="name">code-pull-request</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-pull-request-arrow-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-pull-request-arrow-left"></hd-icon>
+            <span class="name">code-pull-request-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-pull-request-arrow-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-pull-request-arrow-right"></hd-icon>
+            <span class="name">code-pull-request-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-pull-request-check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-pull-request-check"></hd-icon>
+            <span class="name">code-pull-request-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-pull-request-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-pull-request-xmark"></hd-icon>
+            <span class="name">code-pull-request-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:code-trunk')" title="Click to copy">
+            <hd-icon icon="gravity-ui:code-trunk"></hd-icon>
+            <span class="name">code-trunk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:comment')" title="Click to copy">
+            <hd-icon icon="gravity-ui:comment"></hd-icon>
+            <span class="name">comment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:comment-dot')" title="Click to copy">
+            <hd-icon icon="gravity-ui:comment-dot"></hd-icon>
+            <span class="name">comment-dot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:comment-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:comment-fill"></hd-icon>
+            <span class="name">comment-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:comment-plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:comment-plus"></hd-icon>
+            <span class="name">comment-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:comment-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:comment-slash"></hd-icon>
+            <span class="name">comment-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:comments')" title="Click to copy">
+            <hd-icon icon="gravity-ui:comments"></hd-icon>
+            <span class="name">comments</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:compass')" title="Click to copy">
+            <hd-icon icon="gravity-ui:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:copy')" title="Click to copy">
+            <hd-icon icon="gravity-ui:copy"></hd-icon>
+            <span class="name">copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:copy-arrow-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:copy-arrow-right"></hd-icon>
+            <span class="name">copy-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:copy-check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:copy-check"></hd-icon>
+            <span class="name">copy-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:copy-check-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:copy-check-xmark"></hd-icon>
+            <span class="name">copy-check-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:copy-chevron-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:copy-chevron-right"></hd-icon>
+            <span class="name">copy-chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:copy-minus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:copy-minus"></hd-icon>
+            <span class="name">copy-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:copy-picture')" title="Click to copy">
+            <hd-icon icon="gravity-ui:copy-picture"></hd-icon>
+            <span class="name">copy-picture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:copy-plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:copy-plus"></hd-icon>
+            <span class="name">copy-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:copy-transparent')" title="Click to copy">
+            <hd-icon icon="gravity-ui:copy-transparent"></hd-icon>
+            <span class="name">copy-transparent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:copy-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:copy-xmark"></hd-icon>
+            <span class="name">copy-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cpu')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cpu"></hd-icon>
+            <span class="name">cpu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cpus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cpus"></hd-icon>
+            <span class="name">cpus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:credit-card')" title="Click to copy">
+            <hd-icon icon="gravity-ui:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:crop')" title="Click to copy">
+            <hd-icon icon="gravity-ui:crop"></hd-icon>
+            <span class="name">crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:crown-diamond')" title="Click to copy">
+            <hd-icon icon="gravity-ui:crown-diamond"></hd-icon>
+            <span class="name">crown-diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cube')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cube"></hd-icon>
+            <span class="name">cube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cubes-3')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cubes-3"></hd-icon>
+            <span class="name">cubes-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cubes-3-overlap')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cubes-3-overlap"></hd-icon>
+            <span class="name">cubes-3-overlap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:cup')" title="Click to copy">
+            <hd-icon icon="gravity-ui:cup"></hd-icon>
+            <span class="name">cup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:curly-brackets')" title="Click to copy">
+            <hd-icon icon="gravity-ui:curly-brackets"></hd-icon>
+            <span class="name">curly-brackets</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:curly-brackets-function')" title="Click to copy">
+            <hd-icon icon="gravity-ui:curly-brackets-function"></hd-icon>
+            <span class="name">curly-brackets-function</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:curly-brackets-lock')" title="Click to copy">
+            <hd-icon icon="gravity-ui:curly-brackets-lock"></hd-icon>
+            <span class="name">curly-brackets-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:database')" title="Click to copy">
+            <hd-icon icon="gravity-ui:database"></hd-icon>
+            <span class="name">database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:database-arrow-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:database-arrow-right"></hd-icon>
+            <span class="name">database-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:database-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:database-fill"></hd-icon>
+            <span class="name">database-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:database-magnifier')" title="Click to copy">
+            <hd-icon icon="gravity-ui:database-magnifier"></hd-icon>
+            <span class="name">database-magnifier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:databases')" title="Click to copy">
+            <hd-icon icon="gravity-ui:databases"></hd-icon>
+            <span class="name">databases</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:databases-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:databases-fill"></hd-icon>
+            <span class="name">databases-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:delete')" title="Click to copy">
+            <hd-icon icon="gravity-ui:delete"></hd-icon>
+            <span class="name">delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:diamond')" title="Click to copy">
+            <hd-icon icon="gravity-ui:diamond"></hd-icon>
+            <span class="name">diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:diamond-exclamation')" title="Click to copy">
+            <hd-icon icon="gravity-ui:diamond-exclamation"></hd-icon>
+            <span class="name">diamond-exclamation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:diamond-exclamation-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:diamond-exclamation-fill"></hd-icon>
+            <span class="name">diamond-exclamation-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:diamond-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:diamond-fill"></hd-icon>
+            <span class="name">diamond-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:dice-1')" title="Click to copy">
+            <hd-icon icon="gravity-ui:dice-1"></hd-icon>
+            <span class="name">dice-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:dice-2')" title="Click to copy">
+            <hd-icon icon="gravity-ui:dice-2"></hd-icon>
+            <span class="name">dice-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:dice-3')" title="Click to copy">
+            <hd-icon icon="gravity-ui:dice-3"></hd-icon>
+            <span class="name">dice-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:dice-4')" title="Click to copy">
+            <hd-icon icon="gravity-ui:dice-4"></hd-icon>
+            <span class="name">dice-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:dice-5')" title="Click to copy">
+            <hd-icon icon="gravity-ui:dice-5"></hd-icon>
+            <span class="name">dice-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:dice-6')" title="Click to copy">
+            <hd-icon icon="gravity-ui:dice-6"></hd-icon>
+            <span class="name">dice-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:display')" title="Click to copy">
+            <hd-icon icon="gravity-ui:display"></hd-icon>
+            <span class="name">display</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:display-pulse')" title="Click to copy">
+            <hd-icon icon="gravity-ui:display-pulse"></hd-icon>
+            <span class="name">display-pulse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:dots-9')" title="Click to copy">
+            <hd-icon icon="gravity-ui:dots-9"></hd-icon>
+            <span class="name">dots-9</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:droplet')" title="Click to copy">
+            <hd-icon icon="gravity-ui:droplet"></hd-icon>
+            <span class="name">droplet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:ear')" title="Click to copy">
+            <hd-icon icon="gravity-ui:ear"></hd-icon>
+            <span class="name">ear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:ellipsis')" title="Click to copy">
+            <hd-icon icon="gravity-ui:ellipsis"></hd-icon>
+            <span class="name">ellipsis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:ellipsis-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:ellipsis-vertical"></hd-icon>
+            <span class="name">ellipsis-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:envelope')" title="Click to copy">
+            <hd-icon icon="gravity-ui:envelope"></hd-icon>
+            <span class="name">envelope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:envelope-open')" title="Click to copy">
+            <hd-icon icon="gravity-ui:envelope-open"></hd-icon>
+            <span class="name">envelope-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:envelope-open-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:envelope-open-xmark"></hd-icon>
+            <span class="name">envelope-open-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:equal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:equal"></hd-icon>
+            <span class="name">equal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:eraser')" title="Click to copy">
+            <hd-icon icon="gravity-ui:eraser"></hd-icon>
+            <span class="name">eraser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:exclamation-shape')" title="Click to copy">
+            <hd-icon icon="gravity-ui:exclamation-shape"></hd-icon>
+            <span class="name">exclamation-shape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:exclamation-shape-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:exclamation-shape-fill"></hd-icon>
+            <span class="name">exclamation-shape-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:eye')" title="Click to copy">
+            <hd-icon icon="gravity-ui:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:eye-closed')" title="Click to copy">
+            <hd-icon icon="gravity-ui:eye-closed"></hd-icon>
+            <span class="name">eye-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:eye-dashed')" title="Click to copy">
+            <hd-icon icon="gravity-ui:eye-dashed"></hd-icon>
+            <span class="name">eye-dashed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:eye-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:eye-slash"></hd-icon>
+            <span class="name">eye-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:eyes-look-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:eyes-look-left"></hd-icon>
+            <span class="name">eyes-look-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:eyes-look-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:eyes-look-right"></hd-icon>
+            <span class="name">eyes-look-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:face-alien')" title="Click to copy">
+            <hd-icon icon="gravity-ui:face-alien"></hd-icon>
+            <span class="name">face-alien</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:face-angry')" title="Click to copy">
+            <hd-icon icon="gravity-ui:face-angry"></hd-icon>
+            <span class="name">face-angry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:face-fun')" title="Click to copy">
+            <hd-icon icon="gravity-ui:face-fun"></hd-icon>
+            <span class="name">face-fun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:face-neutral')" title="Click to copy">
+            <hd-icon icon="gravity-ui:face-neutral"></hd-icon>
+            <span class="name">face-neutral</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:face-neutral-dashed')" title="Click to copy">
+            <hd-icon icon="gravity-ui:face-neutral-dashed"></hd-icon>
+            <span class="name">face-neutral-dashed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:face-robot')" title="Click to copy">
+            <hd-icon icon="gravity-ui:face-robot"></hd-icon>
+            <span class="name">face-robot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:face-robot-smile')" title="Click to copy">
+            <hd-icon icon="gravity-ui:face-robot-smile"></hd-icon>
+            <span class="name">face-robot-smile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:face-sad')" title="Click to copy">
+            <hd-icon icon="gravity-ui:face-sad"></hd-icon>
+            <span class="name">face-sad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:face-smile')" title="Click to copy">
+            <hd-icon icon="gravity-ui:face-smile"></hd-icon>
+            <span class="name">face-smile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:face-surprise')" title="Click to copy">
+            <hd-icon icon="gravity-ui:face-surprise"></hd-icon>
+            <span class="name">face-surprise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:factory')" title="Click to copy">
+            <hd-icon icon="gravity-ui:factory"></hd-icon>
+            <span class="name">factory</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-arrow-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-arrow-down"></hd-icon>
+            <span class="name">file-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-arrow-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-arrow-left"></hd-icon>
+            <span class="name">file-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-arrow-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-arrow-right"></hd-icon>
+            <span class="name">file-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-arrow-right-out')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-arrow-right-out"></hd-icon>
+            <span class="name">file-arrow-right-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-arrow-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-arrow-up"></hd-icon>
+            <span class="name">file-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-check"></hd-icon>
+            <span class="name">file-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-code')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-code"></hd-icon>
+            <span class="name">file-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-dollar')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-dollar"></hd-icon>
+            <span class="name">file-dollar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-exclamation')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-exclamation"></hd-icon>
+            <span class="name">file-exclamation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-letter-p')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-letter-p"></hd-icon>
+            <span class="name">file-letter-p</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-letter-w')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-letter-w"></hd-icon>
+            <span class="name">file-letter-w</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-letter-x')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-letter-x"></hd-icon>
+            <span class="name">file-letter-x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-magnifier')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-magnifier"></hd-icon>
+            <span class="name">file-magnifier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-minus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-minus"></hd-icon>
+            <span class="name">file-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-plus"></hd-icon>
+            <span class="name">file-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-question')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-question"></hd-icon>
+            <span class="name">file-question</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-ruble')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-ruble"></hd-icon>
+            <span class="name">file-ruble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-text')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-text"></hd-icon>
+            <span class="name">file-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-xmark"></hd-icon>
+            <span class="name">file-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:file-zipper')" title="Click to copy">
+            <hd-icon icon="gravity-ui:file-zipper"></hd-icon>
+            <span class="name">file-zipper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:files')" title="Click to copy">
+            <hd-icon icon="gravity-ui:files"></hd-icon>
+            <span class="name">files</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:filmstrip')" title="Click to copy">
+            <hd-icon icon="gravity-ui:filmstrip"></hd-icon>
+            <span class="name">filmstrip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:fingerprint')" title="Click to copy">
+            <hd-icon icon="gravity-ui:fingerprint"></hd-icon>
+            <span class="name">fingerprint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:firewall')" title="Click to copy">
+            <hd-icon icon="gravity-ui:firewall"></hd-icon>
+            <span class="name">firewall</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:flag')" title="Click to copy">
+            <hd-icon icon="gravity-ui:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:flame')" title="Click to copy">
+            <hd-icon icon="gravity-ui:flame"></hd-icon>
+            <span class="name">flame</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:flask')" title="Click to copy">
+            <hd-icon icon="gravity-ui:flask"></hd-icon>
+            <span class="name">flask</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:floppy-disk')" title="Click to copy">
+            <hd-icon icon="gravity-ui:floppy-disk"></hd-icon>
+            <span class="name">floppy-disk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-arrow-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-arrow-down"></hd-icon>
+            <span class="name">folder-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-arrow-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-arrow-left"></hd-icon>
+            <span class="name">folder-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-arrow-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-arrow-right"></hd-icon>
+            <span class="name">folder-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-arrow-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-arrow-up"></hd-icon>
+            <span class="name">folder-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-arrow-up-in')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-arrow-up-in"></hd-icon>
+            <span class="name">folder-arrow-up-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-check"></hd-icon>
+            <span class="name">folder-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-code')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-code"></hd-icon>
+            <span class="name">folder-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-exclamation')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-exclamation"></hd-icon>
+            <span class="name">folder-exclamation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-fill"></hd-icon>
+            <span class="name">folder-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-flows')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-flows"></hd-icon>
+            <span class="name">folder-flows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-house')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-house"></hd-icon>
+            <span class="name">folder-house</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-keyhole')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-keyhole"></hd-icon>
+            <span class="name">folder-keyhole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-lock')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-lock"></hd-icon>
+            <span class="name">folder-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-magnifier')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-magnifier"></hd-icon>
+            <span class="name">folder-magnifier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-open')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-open"></hd-icon>
+            <span class="name">folder-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-open-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-open-fill"></hd-icon>
+            <span class="name">folder-open-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-plus"></hd-icon>
+            <span class="name">folder-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folder-tree')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folder-tree"></hd-icon>
+            <span class="name">folder-tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:folders')" title="Click to copy">
+            <hd-icon icon="gravity-ui:folders"></hd-icon>
+            <span class="name">folders</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:font')" title="Click to copy">
+            <hd-icon icon="gravity-ui:font"></hd-icon>
+            <span class="name">font</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:font-case')" title="Click to copy">
+            <hd-icon icon="gravity-ui:font-case"></hd-icon>
+            <span class="name">font-case</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:font-cursor')" title="Click to copy">
+            <hd-icon icon="gravity-ui:font-cursor"></hd-icon>
+            <span class="name">font-cursor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:forward-step')" title="Click to copy">
+            <hd-icon icon="gravity-ui:forward-step"></hd-icon>
+            <span class="name">forward-step</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:forward-step-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:forward-step-fill"></hd-icon>
+            <span class="name">forward-step-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:frame')" title="Click to copy">
+            <hd-icon icon="gravity-ui:frame"></hd-icon>
+            <span class="name">frame</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:frames')" title="Click to copy">
+            <hd-icon icon="gravity-ui:frames"></hd-icon>
+            <span class="name">frames</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:function')" title="Click to copy">
+            <hd-icon icon="gravity-ui:function"></hd-icon>
+            <span class="name">function</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:funnel')" title="Click to copy">
+            <hd-icon icon="gravity-ui:funnel"></hd-icon>
+            <span class="name">funnel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:funnel-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:funnel-xmark"></hd-icon>
+            <span class="name">funnel-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:gear')" title="Click to copy">
+            <hd-icon icon="gravity-ui:gear"></hd-icon>
+            <span class="name">gear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:gear-branches')" title="Click to copy">
+            <hd-icon icon="gravity-ui:gear-branches"></hd-icon>
+            <span class="name">gear-branches</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:gear-dot')" title="Click to copy">
+            <hd-icon icon="gravity-ui:gear-dot"></hd-icon>
+            <span class="name">gear-dot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:gear-play')" title="Click to copy">
+            <hd-icon icon="gravity-ui:gear-play"></hd-icon>
+            <span class="name">gear-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:gem')" title="Click to copy">
+            <hd-icon icon="gravity-ui:gem"></hd-icon>
+            <span class="name">gem</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:geo')" title="Click to copy">
+            <hd-icon icon="gravity-ui:geo"></hd-icon>
+            <span class="name">geo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:geo-dots')" title="Click to copy">
+            <hd-icon icon="gravity-ui:geo-dots"></hd-icon>
+            <span class="name">geo-dots</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:geo-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:geo-fill"></hd-icon>
+            <span class="name">geo-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:geo-pin')" title="Click to copy">
+            <hd-icon icon="gravity-ui:geo-pin"></hd-icon>
+            <span class="name">geo-pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:geo-polygons')" title="Click to copy">
+            <hd-icon icon="gravity-ui:geo-polygons"></hd-icon>
+            <span class="name">geo-polygons</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:ghost')" title="Click to copy">
+            <hd-icon icon="gravity-ui:ghost"></hd-icon>
+            <span class="name">ghost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:gift')" title="Click to copy">
+            <hd-icon icon="gravity-ui:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:globe')" title="Click to copy">
+            <hd-icon icon="gravity-ui:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:gpu')" title="Click to copy">
+            <hd-icon icon="gravity-ui:gpu"></hd-icon>
+            <span class="name">gpu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:graduation-cap')" title="Click to copy">
+            <hd-icon icon="gravity-ui:graduation-cap"></hd-icon>
+            <span class="name">graduation-cap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:graph-node')" title="Click to copy">
+            <hd-icon icon="gravity-ui:graph-node"></hd-icon>
+            <span class="name">graph-node</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:grip')" title="Click to copy">
+            <hd-icon icon="gravity-ui:grip"></hd-icon>
+            <span class="name">grip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:grip-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:grip-horizontal"></hd-icon>
+            <span class="name">grip-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hammer')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hammer"></hd-icon>
+            <span class="name">hammer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hand')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hand"></hd-icon>
+            <span class="name">hand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hand-ok')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hand-ok"></hd-icon>
+            <span class="name">hand-ok</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hand-point-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hand-point-down"></hd-icon>
+            <span class="name">hand-point-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hand-point-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hand-point-left"></hd-icon>
+            <span class="name">hand-point-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hand-point-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hand-point-right"></hd-icon>
+            <span class="name">hand-point-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hand-point-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hand-point-up"></hd-icon>
+            <span class="name">hand-point-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hand-stop')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hand-stop"></hd-icon>
+            <span class="name">hand-stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:handset')" title="Click to copy">
+            <hd-icon icon="gravity-ui:handset"></hd-icon>
+            <span class="name">handset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:handset-arrow-in')" title="Click to copy">
+            <hd-icon icon="gravity-ui:handset-arrow-in"></hd-icon>
+            <span class="name">handset-arrow-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:handset-arrow-out')" title="Click to copy">
+            <hd-icon icon="gravity-ui:handset-arrow-out"></hd-icon>
+            <span class="name">handset-arrow-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hard-drive')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hard-drive"></hd-icon>
+            <span class="name">hard-drive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hashtag')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hashtag"></hd-icon>
+            <span class="name">hashtag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heading')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heading"></hd-icon>
+            <span class="name">heading</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heading-1')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heading-1"></hd-icon>
+            <span class="name">heading-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heading-2')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heading-2"></hd-icon>
+            <span class="name">heading-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heading-3')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heading-3"></hd-icon>
+            <span class="name">heading-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heading-4')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heading-4"></hd-icon>
+            <span class="name">heading-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heading-5')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heading-5"></hd-icon>
+            <span class="name">heading-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heading-6')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heading-6"></hd-icon>
+            <span class="name">heading-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:headphones')" title="Click to copy">
+            <hd-icon icon="gravity-ui:headphones"></hd-icon>
+            <span class="name">headphones</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heart')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heart-crack')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heart-crack"></hd-icon>
+            <span class="name">heart-crack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heart-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heart-fill"></hd-icon>
+            <span class="name">heart-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:heart-pulse')" title="Click to copy">
+            <hd-icon icon="gravity-ui:heart-pulse"></hd-icon>
+            <span class="name">heart-pulse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:hierarchy')" title="Click to copy">
+            <hd-icon icon="gravity-ui:hierarchy"></hd-icon>
+            <span class="name">hierarchy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:house')" title="Click to copy">
+            <hd-icon icon="gravity-ui:house"></hd-icon>
+            <span class="name">house</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:house-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:house-fill"></hd-icon>
+            <span class="name">house-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:italic')" title="Click to copy">
+            <hd-icon icon="gravity-ui:italic"></hd-icon>
+            <span class="name">italic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:key')" title="Click to copy">
+            <hd-icon icon="gravity-ui:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:keyboard')" title="Click to copy">
+            <hd-icon icon="gravity-ui:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layers')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layers"></hd-icon>
+            <span class="name">layers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layers-3-diagonal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layers-3-diagonal"></hd-icon>
+            <span class="name">layers-3-diagonal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layers-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layers-vertical"></hd-icon>
+            <span class="name">layers-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-cells')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-cells"></hd-icon>
+            <span class="name">layout-cells</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-cells-large')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-cells-large"></hd-icon>
+            <span class="name">layout-cells-large</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-columns')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-columns"></hd-icon>
+            <span class="name">layout-columns</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-columns-3')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-columns-3"></hd-icon>
+            <span class="name">layout-columns-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-footer')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-footer"></hd-icon>
+            <span class="name">layout-footer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-header')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-header"></hd-icon>
+            <span class="name">layout-header</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-header-cells')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-header-cells"></hd-icon>
+            <span class="name">layout-header-cells</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-header-cells-large')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-header-cells-large"></hd-icon>
+            <span class="name">layout-header-cells-large</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-header-cells-large-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-header-cells-large-fill"></hd-icon>
+            <span class="name">layout-header-cells-large-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-header-cells-large-letter-d')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-header-cells-large-letter-d"></hd-icon>
+            <span class="name">layout-header-cells-large-letter-d</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-header-cells-large-thunderbolt')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-header-cells-large-thunderbolt"></hd-icon>
+            <span class="name">layout-header-cells-large-thunderbolt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-header-columns')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-header-columns"></hd-icon>
+            <span class="name">layout-header-columns</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-header-cursor')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-header-cursor"></hd-icon>
+            <span class="name">layout-header-cursor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-header-side-content')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-header-side-content"></hd-icon>
+            <span class="name">layout-header-side-content</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-list')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-list"></hd-icon>
+            <span class="name">layout-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-rows')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-rows"></hd-icon>
+            <span class="name">layout-rows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-rows-3')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-rows-3"></hd-icon>
+            <span class="name">layout-rows-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-side-content')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-side-content"></hd-icon>
+            <span class="name">layout-side-content</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-side-content-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-side-content-left"></hd-icon>
+            <span class="name">layout-side-content-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-side-content-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-side-content-right"></hd-icon>
+            <span class="name">layout-side-content-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-split-columns')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-split-columns"></hd-icon>
+            <span class="name">layout-split-columns</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-split-columns-3')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-split-columns-3"></hd-icon>
+            <span class="name">layout-split-columns-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-split-rows')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-split-rows"></hd-icon>
+            <span class="name">layout-split-rows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-split-side-content-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-split-side-content-left"></hd-icon>
+            <span class="name">layout-split-side-content-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-split-side-content-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-split-side-content-right"></hd-icon>
+            <span class="name">layout-split-side-content-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:layout-tabs')" title="Click to copy">
+            <hd-icon icon="gravity-ui:layout-tabs"></hd-icon>
+            <span class="name">layout-tabs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:letter-a-underline')" title="Click to copy">
+            <hd-icon icon="gravity-ui:letter-a-underline"></hd-icon>
+            <span class="name">letter-a-underline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:letter-group')" title="Click to copy">
+            <hd-icon icon="gravity-ui:letter-group"></hd-icon>
+            <span class="name">letter-group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:letter-m')" title="Click to copy">
+            <hd-icon icon="gravity-ui:letter-m"></hd-icon>
+            <span class="name">letter-m</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:life-ring')" title="Click to copy">
+            <hd-icon icon="gravity-ui:life-ring"></hd-icon>
+            <span class="name">life-ring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:link')" title="Click to copy">
+            <hd-icon icon="gravity-ui:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:link-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:link-slash"></hd-icon>
+            <span class="name">link-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:list-check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:list-check"></hd-icon>
+            <span class="name">list-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:list-check-lock')" title="Click to copy">
+            <hd-icon icon="gravity-ui:list-check-lock"></hd-icon>
+            <span class="name">list-check-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:list-ol')" title="Click to copy">
+            <hd-icon icon="gravity-ui:list-ol"></hd-icon>
+            <span class="name">list-ol</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:list-timeline')" title="Click to copy">
+            <hd-icon icon="gravity-ui:list-timeline"></hd-icon>
+            <span class="name">list-timeline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:list-ul')" title="Click to copy">
+            <hd-icon icon="gravity-ui:list-ul"></hd-icon>
+            <span class="name">list-ul</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:location-arrow')" title="Click to copy">
+            <hd-icon icon="gravity-ui:location-arrow"></hd-icon>
+            <span class="name">location-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:location-arrow-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:location-arrow-fill"></hd-icon>
+            <span class="name">location-arrow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:lock')" title="Click to copy">
+            <hd-icon icon="gravity-ui:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:lock-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:lock-fill"></hd-icon>
+            <span class="name">lock-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:lock-open')" title="Click to copy">
+            <hd-icon icon="gravity-ui:lock-open"></hd-icon>
+            <span class="name">lock-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:lock-open-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:lock-open-fill"></hd-icon>
+            <span class="name">lock-open-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-acrobat')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-acrobat"></hd-icon>
+            <span class="name">logo-acrobat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-android')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-android"></hd-icon>
+            <span class="name">logo-android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-debian')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-debian"></hd-icon>
+            <span class="name">logo-debian</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-docker')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-docker"></hd-icon>
+            <span class="name">logo-docker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-draw-io')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-draw-io"></hd-icon>
+            <span class="name">logo-draw-io</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-facebook')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-facebook"></hd-icon>
+            <span class="name">logo-facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-figma')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-figma"></hd-icon>
+            <span class="name">logo-figma</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-github')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-github"></hd-icon>
+            <span class="name">logo-github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-gitlab')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-gitlab"></hd-icon>
+            <span class="name">logo-gitlab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-linkedin')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-linkedin"></hd-icon>
+            <span class="name">logo-linkedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-linux')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-linux"></hd-icon>
+            <span class="name">logo-linux</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-macos')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-macos"></hd-icon>
+            <span class="name">logo-macos</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-markdown')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-markdown"></hd-icon>
+            <span class="name">logo-markdown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-mcp')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-mcp"></hd-icon>
+            <span class="name">logo-mcp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-mermaid')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-mermaid"></hd-icon>
+            <span class="name">logo-mermaid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-microsoft-office')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-microsoft-office"></hd-icon>
+            <span class="name">logo-microsoft-office</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-nodejs')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-nodejs"></hd-icon>
+            <span class="name">logo-nodejs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-notion')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-notion"></hd-icon>
+            <span class="name">logo-notion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-osi')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-osi"></hd-icon>
+            <span class="name">logo-osi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-python')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-python"></hd-icon>
+            <span class="name">logo-python</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-slack')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-slack"></hd-icon>
+            <span class="name">logo-slack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-stack-overflow')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-stack-overflow"></hd-icon>
+            <span class="name">logo-stack-overflow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-telegram')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-telegram"></hd-icon>
+            <span class="name">logo-telegram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-ubuntu')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-ubuntu"></hd-icon>
+            <span class="name">logo-ubuntu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-windows')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-windows"></hd-icon>
+            <span class="name">logo-windows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-yandex')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-yandex"></hd-icon>
+            <span class="name">logo-yandex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-yandex-cloud')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-yandex-cloud"></hd-icon>
+            <span class="name">logo-yandex-cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-yandex-messenger')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-yandex-messenger"></hd-icon>
+            <span class="name">logo-yandex-messenger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:logo-yandex-tracker')" title="Click to copy">
+            <hd-icon icon="gravity-ui:logo-yandex-tracker"></hd-icon>
+            <span class="name">logo-yandex-tracker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:magic-wand')" title="Click to copy">
+            <hd-icon icon="gravity-ui:magic-wand"></hd-icon>
+            <span class="name">magic-wand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:magnet')" title="Click to copy">
+            <hd-icon icon="gravity-ui:magnet"></hd-icon>
+            <span class="name">magnet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:magnifier')" title="Click to copy">
+            <hd-icon icon="gravity-ui:magnifier"></hd-icon>
+            <span class="name">magnifier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:magnifier-minus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:magnifier-minus"></hd-icon>
+            <span class="name">magnifier-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:magnifier-plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:magnifier-plus"></hd-icon>
+            <span class="name">magnifier-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:map-pin')" title="Click to copy">
+            <hd-icon icon="gravity-ui:map-pin"></hd-icon>
+            <span class="name">map-pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:map-pin-minus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:map-pin-minus"></hd-icon>
+            <span class="name">map-pin-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:map-pin-plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:map-pin-plus"></hd-icon>
+            <span class="name">map-pin-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:math-intersection-shape')" title="Click to copy">
+            <hd-icon icon="gravity-ui:math-intersection-shape"></hd-icon>
+            <span class="name">math-intersection-shape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:math-operations')" title="Click to copy">
+            <hd-icon icon="gravity-ui:math-operations"></hd-icon>
+            <span class="name">math-operations</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:math-union-shape')" title="Click to copy">
+            <hd-icon icon="gravity-ui:math-union-shape"></hd-icon>
+            <span class="name">math-union-shape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:medal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:medal"></hd-icon>
+            <span class="name">medal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:megaphone')" title="Click to copy">
+            <hd-icon icon="gravity-ui:megaphone"></hd-icon>
+            <span class="name">megaphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:microphone')" title="Click to copy">
+            <hd-icon icon="gravity-ui:microphone"></hd-icon>
+            <span class="name">microphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:microphone-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:microphone-slash"></hd-icon>
+            <span class="name">microphone-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:microscope')" title="Click to copy">
+            <hd-icon icon="gravity-ui:microscope"></hd-icon>
+            <span class="name">microscope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:minus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:minus-shape')" title="Click to copy">
+            <hd-icon icon="gravity-ui:minus-shape"></hd-icon>
+            <span class="name">minus-shape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:minus-shape-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:minus-shape-fill"></hd-icon>
+            <span class="name">minus-shape-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:molecule')" title="Click to copy">
+            <hd-icon icon="gravity-ui:molecule"></hd-icon>
+            <span class="name">molecule</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:moon')" title="Click to copy">
+            <hd-icon icon="gravity-ui:moon"></hd-icon>
+            <span class="name">moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:mug')" title="Click to copy">
+            <hd-icon icon="gravity-ui:mug"></hd-icon>
+            <span class="name">mug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:music-note')" title="Click to copy">
+            <hd-icon icon="gravity-ui:music-note"></hd-icon>
+            <span class="name">music-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:nodes-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:nodes-down"></hd-icon>
+            <span class="name">nodes-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:nodes-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:nodes-left"></hd-icon>
+            <span class="name">nodes-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:nodes-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:nodes-right"></hd-icon>
+            <span class="name">nodes-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:nodes-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:nodes-up"></hd-icon>
+            <span class="name">nodes-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:nut-hex')" title="Click to copy">
+            <hd-icon icon="gravity-ui:nut-hex"></hd-icon>
+            <span class="name">nut-hex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:object-align-bottom')" title="Click to copy">
+            <hd-icon icon="gravity-ui:object-align-bottom"></hd-icon>
+            <span class="name">object-align-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:object-align-center-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:object-align-center-horizontal"></hd-icon>
+            <span class="name">object-align-center-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:object-align-center-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:object-align-center-vertical"></hd-icon>
+            <span class="name">object-align-center-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:object-align-justify-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:object-align-justify-horizontal"></hd-icon>
+            <span class="name">object-align-justify-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:object-align-justify-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:object-align-justify-vertical"></hd-icon>
+            <span class="name">object-align-justify-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:object-align-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:object-align-left"></hd-icon>
+            <span class="name">object-align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:object-align-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:object-align-right"></hd-icon>
+            <span class="name">object-align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:object-align-top')" title="Click to copy">
+            <hd-icon icon="gravity-ui:object-align-top"></hd-icon>
+            <span class="name">object-align-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:objects-align-bottom')" title="Click to copy">
+            <hd-icon icon="gravity-ui:objects-align-bottom"></hd-icon>
+            <span class="name">objects-align-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:objects-align-center-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:objects-align-center-horizontal"></hd-icon>
+            <span class="name">objects-align-center-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:objects-align-center-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:objects-align-center-vertical"></hd-icon>
+            <span class="name">objects-align-center-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:objects-align-justify-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:objects-align-justify-horizontal"></hd-icon>
+            <span class="name">objects-align-justify-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:objects-align-justify-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:objects-align-justify-vertical"></hd-icon>
+            <span class="name">objects-align-justify-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:objects-align-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:objects-align-left"></hd-icon>
+            <span class="name">objects-align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:objects-align-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:objects-align-right"></hd-icon>
+            <span class="name">objects-align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:objects-align-top')" title="Click to copy">
+            <hd-icon icon="gravity-ui:objects-align-top"></hd-icon>
+            <span class="name">objects-align-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:octagon-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:octagon-xmark"></hd-icon>
+            <span class="name">octagon-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:office-badge')" title="Click to copy">
+            <hd-icon icon="gravity-ui:office-badge"></hd-icon>
+            <span class="name">office-badge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:paintbrush')" title="Click to copy">
+            <hd-icon icon="gravity-ui:paintbrush"></hd-icon>
+            <span class="name">paintbrush</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:palette')" title="Click to copy">
+            <hd-icon icon="gravity-ui:palette"></hd-icon>
+            <span class="name">palette</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:paper-plane')" title="Click to copy">
+            <hd-icon icon="gravity-ui:paper-plane"></hd-icon>
+            <span class="name">paper-plane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:paperclip')" title="Click to copy">
+            <hd-icon icon="gravity-ui:paperclip"></hd-icon>
+            <span class="name">paperclip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:passport')" title="Click to copy">
+            <hd-icon icon="gravity-ui:passport"></hd-icon>
+            <span class="name">passport</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pause')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pause-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pause-fill"></hd-icon>
+            <span class="name">pause-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pencil')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pencil-to-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pencil-to-line"></hd-icon>
+            <span class="name">pencil-to-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pencil-to-square')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pencil-to-square"></hd-icon>
+            <span class="name">pencil-to-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:percent')" title="Click to copy">
+            <hd-icon icon="gravity-ui:percent"></hd-icon>
+            <span class="name">percent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person"></hd-icon>
+            <span class="name">person</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person-fill"></hd-icon>
+            <span class="name">person-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person-gear')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person-gear"></hd-icon>
+            <span class="name">person-gear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person-magnifier')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person-magnifier"></hd-icon>
+            <span class="name">person-magnifier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person-nut-hex')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person-nut-hex"></hd-icon>
+            <span class="name">person-nut-hex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person-pencil')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person-pencil"></hd-icon>
+            <span class="name">person-pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person-planet-earth')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person-planet-earth"></hd-icon>
+            <span class="name">person-planet-earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person-plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person-plus"></hd-icon>
+            <span class="name">person-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person-speaker')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person-speaker"></hd-icon>
+            <span class="name">person-speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person-worker')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person-worker"></hd-icon>
+            <span class="name">person-worker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:person-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:person-xmark"></hd-icon>
+            <span class="name">person-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:persons')" title="Click to copy">
+            <hd-icon icon="gravity-ui:persons"></hd-icon>
+            <span class="name">persons</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:persons-lock')" title="Click to copy">
+            <hd-icon icon="gravity-ui:persons-lock"></hd-icon>
+            <span class="name">persons-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:picture')" title="Click to copy">
+            <hd-icon icon="gravity-ui:picture"></hd-icon>
+            <span class="name">picture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pill"></hd-icon>
+            <span class="name">pill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pin')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pin-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pin-fill"></hd-icon>
+            <span class="name">pin-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pin-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pin-slash"></hd-icon>
+            <span class="name">pin-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pin-slash-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pin-slash-fill"></hd-icon>
+            <span class="name">pin-slash-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pipeline')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pipeline"></hd-icon>
+            <span class="name">pipeline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:plane')" title="Click to copy">
+            <hd-icon icon="gravity-ui:plane"></hd-icon>
+            <span class="name">plane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:plane-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:plane-fill"></hd-icon>
+            <span class="name">plane-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:planet-earth')" title="Click to copy">
+            <hd-icon icon="gravity-ui:planet-earth"></hd-icon>
+            <span class="name">planet-earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:play')" title="Click to copy">
+            <hd-icon icon="gravity-ui:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:play-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:play-fill"></hd-icon>
+            <span class="name">play-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:plug-connection')" title="Click to copy">
+            <hd-icon icon="gravity-ui:plug-connection"></hd-icon>
+            <span class="name">plug-connection</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:plug-wire')" title="Click to copy">
+            <hd-icon icon="gravity-ui:plug-wire"></hd-icon>
+            <span class="name">plug-wire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:plus-shape')" title="Click to copy">
+            <hd-icon icon="gravity-ui:plus-shape"></hd-icon>
+            <span class="name">plus-shape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:plus-shape-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:plus-shape-fill"></hd-icon>
+            <span class="name">plus-shape-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:power')" title="Click to copy">
+            <hd-icon icon="gravity-ui:power"></hd-icon>
+            <span class="name">power</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:printer')" title="Click to copy">
+            <hd-icon icon="gravity-ui:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:pulse')" title="Click to copy">
+            <hd-icon icon="gravity-ui:pulse"></hd-icon>
+            <span class="name">pulse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:puzzle')" title="Click to copy">
+            <hd-icon icon="gravity-ui:puzzle"></hd-icon>
+            <span class="name">puzzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:qr-code')" title="Click to copy">
+            <hd-icon icon="gravity-ui:qr-code"></hd-icon>
+            <span class="name">qr-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:quote-close')" title="Click to copy">
+            <hd-icon icon="gravity-ui:quote-close"></hd-icon>
+            <span class="name">quote-close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:quote-open')" title="Click to copy">
+            <hd-icon icon="gravity-ui:quote-open"></hd-icon>
+            <span class="name">quote-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:receipt')" title="Click to copy">
+            <hd-icon icon="gravity-ui:receipt"></hd-icon>
+            <span class="name">receipt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:rectangle-pulse')" title="Click to copy">
+            <hd-icon icon="gravity-ui:rectangle-pulse"></hd-icon>
+            <span class="name">rectangle-pulse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:rectangles-4')" title="Click to copy">
+            <hd-icon icon="gravity-ui:rectangles-4"></hd-icon>
+            <span class="name">rectangles-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:rocket')" title="Click to copy">
+            <hd-icon icon="gravity-ui:rocket"></hd-icon>
+            <span class="name">rocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:round-brackets')" title="Click to copy">
+            <hd-icon icon="gravity-ui:round-brackets"></hd-icon>
+            <span class="name">round-brackets</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:route')" title="Click to copy">
+            <hd-icon icon="gravity-ui:route"></hd-icon>
+            <span class="name">route</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:sack')" title="Click to copy">
+            <hd-icon icon="gravity-ui:sack"></hd-icon>
+            <span class="name">sack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:scales-balanced')" title="Click to copy">
+            <hd-icon icon="gravity-ui:scales-balanced"></hd-icon>
+            <span class="name">scales-balanced</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:scales-unbalanced')" title="Click to copy">
+            <hd-icon icon="gravity-ui:scales-unbalanced"></hd-icon>
+            <span class="name">scales-unbalanced</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:scissors')" title="Click to copy">
+            <hd-icon icon="gravity-ui:scissors"></hd-icon>
+            <span class="name">scissors</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:seal-check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:seal-check"></hd-icon>
+            <span class="name">seal-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:seal-percent')" title="Click to copy">
+            <hd-icon icon="gravity-ui:seal-percent"></hd-icon>
+            <span class="name">seal-percent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:server')" title="Click to copy">
+            <hd-icon icon="gravity-ui:server"></hd-icon>
+            <span class="name">server</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:shapes-3')" title="Click to copy">
+            <hd-icon icon="gravity-ui:shapes-3"></hd-icon>
+            <span class="name">shapes-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:shapes-4')" title="Click to copy">
+            <hd-icon icon="gravity-ui:shapes-4"></hd-icon>
+            <span class="name">shapes-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:shield')" title="Click to copy">
+            <hd-icon icon="gravity-ui:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:shield-check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:shield-check"></hd-icon>
+            <span class="name">shield-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:shield-exclamation')" title="Click to copy">
+            <hd-icon icon="gravity-ui:shield-exclamation"></hd-icon>
+            <span class="name">shield-exclamation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:shield-keyhole')" title="Click to copy">
+            <hd-icon icon="gravity-ui:shield-keyhole"></hd-icon>
+            <span class="name">shield-keyhole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:shopping-bag')" title="Click to copy">
+            <hd-icon icon="gravity-ui:shopping-bag"></hd-icon>
+            <span class="name">shopping-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:shopping-basket')" title="Click to copy">
+            <hd-icon icon="gravity-ui:shopping-basket"></hd-icon>
+            <span class="name">shopping-basket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:shopping-cart')" title="Click to copy">
+            <hd-icon icon="gravity-ui:shopping-cart"></hd-icon>
+            <span class="name">shopping-cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:shuffle')" title="Click to copy">
+            <hd-icon icon="gravity-ui:shuffle"></hd-icon>
+            <span class="name">shuffle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:signal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:signal"></hd-icon>
+            <span class="name">signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:skull')" title="Click to copy">
+            <hd-icon icon="gravity-ui:skull"></hd-icon>
+            <span class="name">skull</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:sliders')" title="Click to copy">
+            <hd-icon icon="gravity-ui:sliders"></hd-icon>
+            <span class="name">sliders</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:sliders-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:sliders-vertical"></hd-icon>
+            <span class="name">sliders-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:smartphone')" title="Click to copy">
+            <hd-icon icon="gravity-ui:smartphone"></hd-icon>
+            <span class="name">smartphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:snail')" title="Click to copy">
+            <hd-icon icon="gravity-ui:snail"></hd-icon>
+            <span class="name">snail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:snowflake')" title="Click to copy">
+            <hd-icon icon="gravity-ui:snowflake"></hd-icon>
+            <span class="name">snowflake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:sparkles')" title="Click to copy">
+            <hd-icon icon="gravity-ui:sparkles"></hd-icon>
+            <span class="name">sparkles</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:sparkles-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:sparkles-fill"></hd-icon>
+            <span class="name">sparkles-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:speedometer')" title="Click to copy">
+            <hd-icon icon="gravity-ui:speedometer"></hd-icon>
+            <span class="name">speedometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:sphere')" title="Click to copy">
+            <hd-icon icon="gravity-ui:sphere"></hd-icon>
+            <span class="name">sphere</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square"></hd-icon>
+            <span class="name">square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-article')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-article"></hd-icon>
+            <span class="name">square-article</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-bars')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-bars"></hd-icon>
+            <span class="name">square-bars</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-bars-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-bars-vertical"></hd-icon>
+            <span class="name">square-bars-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-brackets')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-brackets"></hd-icon>
+            <span class="name">square-brackets</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-brackets-bars-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-brackets-bars-vertical"></hd-icon>
+            <span class="name">square-brackets-bars-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-brackets-letter-a')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-brackets-letter-a"></hd-icon>
+            <span class="name">square-brackets-letter-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-chart-bar')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-chart-bar"></hd-icon>
+            <span class="name">square-chart-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-chart-column')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-chart-column"></hd-icon>
+            <span class="name">square-chart-column</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-check')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-check"></hd-icon>
+            <span class="name">square-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-dashed')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-dashed"></hd-icon>
+            <span class="name">square-dashed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-dashed-circle')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-dashed-circle"></hd-icon>
+            <span class="name">square-dashed-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-dashed-letter-a')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-dashed-letter-a"></hd-icon>
+            <span class="name">square-dashed-letter-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-dashed-letter-t')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-dashed-letter-t"></hd-icon>
+            <span class="name">square-dashed-letter-t</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-dashed-text')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-dashed-text"></hd-icon>
+            <span class="name">square-dashed-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-dot')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-dot"></hd-icon>
+            <span class="name">square-dot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-exclamation')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-exclamation"></hd-icon>
+            <span class="name">square-exclamation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-fill"></hd-icon>
+            <span class="name">square-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-hashtag')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-hashtag"></hd-icon>
+            <span class="name">square-hashtag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-letter-p')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-letter-p"></hd-icon>
+            <span class="name">square-letter-p</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-letter-t')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-letter-t"></hd-icon>
+            <span class="name">square-letter-t</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-line-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-line-horizontal"></hd-icon>
+            <span class="name">square-line-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-line-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-line-vertical"></hd-icon>
+            <span class="name">square-line-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-list-ul')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-list-ul"></hd-icon>
+            <span class="name">square-list-ul</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-minus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-minus"></hd-icon>
+            <span class="name">square-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-plus')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-plus"></hd-icon>
+            <span class="name">square-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:square-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:square-xmark"></hd-icon>
+            <span class="name">square-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:star')" title="Click to copy">
+            <hd-icon icon="gravity-ui:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:star-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:star-fill"></hd-icon>
+            <span class="name">star-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:stethoscope')" title="Click to copy">
+            <hd-icon icon="gravity-ui:stethoscope"></hd-icon>
+            <span class="name">stethoscope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:sticker')" title="Click to copy">
+            <hd-icon icon="gravity-ui:sticker"></hd-icon>
+            <span class="name">sticker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:stop')" title="Click to copy">
+            <hd-icon icon="gravity-ui:stop"></hd-icon>
+            <span class="name">stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:stop-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:stop-fill"></hd-icon>
+            <span class="name">stop-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:stopwatch')" title="Click to copy">
+            <hd-icon icon="gravity-ui:stopwatch"></hd-icon>
+            <span class="name">stopwatch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:strikethrough')" title="Click to copy">
+            <hd-icon icon="gravity-ui:strikethrough"></hd-icon>
+            <span class="name">strikethrough</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:suitcase')" title="Click to copy">
+            <hd-icon icon="gravity-ui:suitcase"></hd-icon>
+            <span class="name">suitcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:sun')" title="Click to copy">
+            <hd-icon icon="gravity-ui:sun"></hd-icon>
+            <span class="name">sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:superscript')" title="Click to copy">
+            <hd-icon icon="gravity-ui:superscript"></hd-icon>
+            <span class="name">superscript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:t-shirt')" title="Click to copy">
+            <hd-icon icon="gravity-ui:t-shirt"></hd-icon>
+            <span class="name">t-shirt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:tachometer')" title="Click to copy">
+            <hd-icon icon="gravity-ui:tachometer"></hd-icon>
+            <span class="name">tachometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:tag')" title="Click to copy">
+            <hd-icon icon="gravity-ui:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:tag-dollar')" title="Click to copy">
+            <hd-icon icon="gravity-ui:tag-dollar"></hd-icon>
+            <span class="name">tag-dollar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:tag-ruble')" title="Click to copy">
+            <hd-icon icon="gravity-ui:tag-ruble"></hd-icon>
+            <span class="name">tag-ruble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:tags')" title="Click to copy">
+            <hd-icon icon="gravity-ui:tags"></hd-icon>
+            <span class="name">tags</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:target')" title="Click to copy">
+            <hd-icon icon="gravity-ui:target"></hd-icon>
+            <span class="name">target</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:target-dart')" title="Click to copy">
+            <hd-icon icon="gravity-ui:target-dart"></hd-icon>
+            <span class="name">target-dart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:terminal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:terminal"></hd-icon>
+            <span class="name">terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:terminal-line')" title="Click to copy">
+            <hd-icon icon="gravity-ui:terminal-line"></hd-icon>
+            <span class="name">terminal-line</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:text')" title="Click to copy">
+            <hd-icon icon="gravity-ui:text"></hd-icon>
+            <span class="name">text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:text-align-center')" title="Click to copy">
+            <hd-icon icon="gravity-ui:text-align-center"></hd-icon>
+            <span class="name">text-align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:text-align-justify')" title="Click to copy">
+            <hd-icon icon="gravity-ui:text-align-justify"></hd-icon>
+            <span class="name">text-align-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:text-align-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:text-align-left"></hd-icon>
+            <span class="name">text-align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:text-align-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:text-align-right"></hd-icon>
+            <span class="name">text-align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:text-indent')" title="Click to copy">
+            <hd-icon icon="gravity-ui:text-indent"></hd-icon>
+            <span class="name">text-indent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:text-outdent')" title="Click to copy">
+            <hd-icon icon="gravity-ui:text-outdent"></hd-icon>
+            <span class="name">text-outdent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:thumbs-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:thumbs-down"></hd-icon>
+            <span class="name">thumbs-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:thumbs-down-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:thumbs-down-fill"></hd-icon>
+            <span class="name">thumbs-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:thumbs-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:thumbs-up"></hd-icon>
+            <span class="name">thumbs-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:thumbs-up-2')" title="Click to copy">
+            <hd-icon icon="gravity-ui:thumbs-up-2"></hd-icon>
+            <span class="name">thumbs-up-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:thumbs-up-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:thumbs-up-fill"></hd-icon>
+            <span class="name">thumbs-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:thunderbolt')" title="Click to copy">
+            <hd-icon icon="gravity-ui:thunderbolt"></hd-icon>
+            <span class="name">thunderbolt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:thunderbolt-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:thunderbolt-fill"></hd-icon>
+            <span class="name">thunderbolt-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:ticket')" title="Click to copy">
+            <hd-icon icon="gravity-ui:ticket"></hd-icon>
+            <span class="name">ticket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:timeline')" title="Click to copy">
+            <hd-icon icon="gravity-ui:timeline"></hd-icon>
+            <span class="name">timeline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:timestamps')" title="Click to copy">
+            <hd-icon icon="gravity-ui:timestamps"></hd-icon>
+            <span class="name">timestamps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:toggle-off')" title="Click to copy">
+            <hd-icon icon="gravity-ui:toggle-off"></hd-icon>
+            <span class="name">toggle-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:toggle-on')" title="Click to copy">
+            <hd-icon icon="gravity-ui:toggle-on"></hd-icon>
+            <span class="name">toggle-on</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:traffic-light')" title="Click to copy">
+            <hd-icon icon="gravity-ui:traffic-light"></hd-icon>
+            <span class="name">traffic-light</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:trapezoid-left-line-horizontal')" title="Click to copy">
+            <hd-icon icon="gravity-ui:trapezoid-left-line-horizontal"></hd-icon>
+            <span class="name">trapezoid-left-line-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:trapezoid-up-line-vertical')" title="Click to copy">
+            <hd-icon icon="gravity-ui:trapezoid-up-line-vertical"></hd-icon>
+            <span class="name">trapezoid-up-line-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:trash-bin')" title="Click to copy">
+            <hd-icon icon="gravity-ui:trash-bin"></hd-icon>
+            <span class="name">trash-bin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:tray')" title="Click to copy">
+            <hd-icon icon="gravity-ui:tray"></hd-icon>
+            <span class="name">tray</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-down')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-down"></hd-icon>
+            <span class="name">triangle-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-down-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-down-fill"></hd-icon>
+            <span class="name">triangle-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-exclamation')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-exclamation"></hd-icon>
+            <span class="name">triangle-exclamation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-exclamation-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-exclamation-fill"></hd-icon>
+            <span class="name">triangle-exclamation-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-left')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-left"></hd-icon>
+            <span class="name">triangle-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-left-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-left-fill"></hd-icon>
+            <span class="name">triangle-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-right')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-right"></hd-icon>
+            <span class="name">triangle-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-right-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-right-fill"></hd-icon>
+            <span class="name">triangle-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-thunderbolt')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-thunderbolt"></hd-icon>
+            <span class="name">triangle-thunderbolt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-up')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-up"></hd-icon>
+            <span class="name">triangle-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:triangle-up-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:triangle-up-fill"></hd-icon>
+            <span class="name">triangle-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:trolley')" title="Click to copy">
+            <hd-icon icon="gravity-ui:trolley"></hd-icon>
+            <span class="name">trolley</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:tv')" title="Click to copy">
+            <hd-icon icon="gravity-ui:tv"></hd-icon>
+            <span class="name">tv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:tv-retro')" title="Click to copy">
+            <hd-icon icon="gravity-ui:tv-retro"></hd-icon>
+            <span class="name">tv-retro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:umbrella')" title="Click to copy">
+            <hd-icon icon="gravity-ui:umbrella"></hd-icon>
+            <span class="name">umbrella</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:underline')" title="Click to copy">
+            <hd-icon icon="gravity-ui:underline"></hd-icon>
+            <span class="name">underline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:universal-access')" title="Click to copy">
+            <hd-icon icon="gravity-ui:universal-access"></hd-icon>
+            <span class="name">universal-access</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:vault')" title="Click to copy">
+            <hd-icon icon="gravity-ui:vault"></hd-icon>
+            <span class="name">vault</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:vector-circle')" title="Click to copy">
+            <hd-icon icon="gravity-ui:vector-circle"></hd-icon>
+            <span class="name">vector-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:vector-square')" title="Click to copy">
+            <hd-icon icon="gravity-ui:vector-square"></hd-icon>
+            <span class="name">vector-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:video')" title="Click to copy">
+            <hd-icon icon="gravity-ui:video"></hd-icon>
+            <span class="name">video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:volume')" title="Click to copy">
+            <hd-icon icon="gravity-ui:volume"></hd-icon>
+            <span class="name">volume</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:volume-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:volume-fill"></hd-icon>
+            <span class="name">volume-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:volume-low')" title="Click to copy">
+            <hd-icon icon="gravity-ui:volume-low"></hd-icon>
+            <span class="name">volume-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:volume-low-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:volume-low-fill"></hd-icon>
+            <span class="name">volume-low-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:volume-off')" title="Click to copy">
+            <hd-icon icon="gravity-ui:volume-off"></hd-icon>
+            <span class="name">volume-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:volume-off-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:volume-off-fill"></hd-icon>
+            <span class="name">volume-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:volume-slash')" title="Click to copy">
+            <hd-icon icon="gravity-ui:volume-slash"></hd-icon>
+            <span class="name">volume-slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:volume-slash-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:volume-slash-fill"></hd-icon>
+            <span class="name">volume-slash-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:volume-xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:volume-xmark"></hd-icon>
+            <span class="name">volume-xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:volume-xmark-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:volume-xmark-fill"></hd-icon>
+            <span class="name">volume-xmark-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:weight-hanging')" title="Click to copy">
+            <hd-icon icon="gravity-ui:weight-hanging"></hd-icon>
+            <span class="name">weight-hanging</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:wrench')" title="Click to copy">
+            <hd-icon icon="gravity-ui:wrench"></hd-icon>
+            <span class="name">wrench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:xmark')" title="Click to copy">
+            <hd-icon icon="gravity-ui:xmark"></hd-icon>
+            <span class="name">xmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:xmark-shape')" title="Click to copy">
+            <hd-icon icon="gravity-ui:xmark-shape"></hd-icon>
+            <span class="name">xmark-shape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('gravity-ui:xmark-shape-fill')" title="Click to copy">
+            <hd-icon icon="gravity-ui:xmark-shape-fill"></hd-icon>
+            <span class="name">xmark-shape-fill</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nrk - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>nrk <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(236)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('nrk:360')" title="Click to copy">
+            <hd-icon icon="nrk:360"></hd-icon>
+            <span class="name">360</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:404')" title="Click to copy">
+            <hd-icon icon="nrk:404"></hd-icon>
+            <span class="name">404</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:alarm-clock')" title="Click to copy">
+            <hd-icon icon="nrk:alarm-clock"></hd-icon>
+            <span class="name">alarm-clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:arrange-list')" title="Click to copy">
+            <hd-icon icon="nrk:arrange-list"></hd-icon>
+            <span class="name">arrange-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:arrow-down')" title="Click to copy">
+            <hd-icon icon="nrk:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:arrow-dropdown')" title="Click to copy">
+            <hd-icon icon="nrk:arrow-dropdown"></hd-icon>
+            <span class="name">arrow-dropdown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:arrow-left')" title="Click to copy">
+            <hd-icon icon="nrk:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:arrow-left-long')" title="Click to copy">
+            <hd-icon icon="nrk:arrow-left-long"></hd-icon>
+            <span class="name">arrow-left-long</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:arrow-nested')" title="Click to copy">
+            <hd-icon icon="nrk:arrow-nested"></hd-icon>
+            <span class="name">arrow-nested</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:arrow-right')" title="Click to copy">
+            <hd-icon icon="nrk:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:arrow-right-long')" title="Click to copy">
+            <hd-icon icon="nrk:arrow-right-long"></hd-icon>
+            <span class="name">arrow-right-long</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:arrow-up')" title="Click to copy">
+            <hd-icon icon="nrk:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:article')" title="Click to copy">
+            <hd-icon icon="nrk:article"></hd-icon>
+            <span class="name">article</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:back')" title="Click to copy">
+            <hd-icon icon="nrk:back"></hd-icon>
+            <span class="name">back</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:bell')" title="Click to copy">
+            <hd-icon icon="nrk:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:bell-active')" title="Click to copy">
+            <hd-icon icon="nrk:bell-active"></hd-icon>
+            <span class="name">bell-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:bookmark')" title="Click to copy">
+            <hd-icon icon="nrk:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:bookmark-active')" title="Click to copy">
+            <hd-icon icon="nrk:bookmark-active"></hd-icon>
+            <span class="name">bookmark-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:broadcast')" title="Click to copy">
+            <hd-icon icon="nrk:broadcast"></hd-icon>
+            <span class="name">broadcast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:bullet-square')" title="Click to copy">
+            <hd-icon icon="nrk:bullet-square"></hd-icon>
+            <span class="name">bullet-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:bulleted-list')" title="Click to copy">
+            <hd-icon icon="nrk:bulleted-list"></hd-icon>
+            <span class="name">bulleted-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:calendar')" title="Click to copy">
+            <hd-icon icon="nrk:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:category')" title="Click to copy">
+            <hd-icon icon="nrk:category"></hd-icon>
+            <span class="name">category</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:category-active')" title="Click to copy">
+            <hd-icon icon="nrk:category-active"></hd-icon>
+            <span class="name">category-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:check')" title="Click to copy">
+            <hd-icon icon="nrk:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:check-active')" title="Click to copy">
+            <hd-icon icon="nrk:check-active"></hd-icon>
+            <span class="name">check-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:check-radio-unchecked')" title="Click to copy">
+            <hd-icon icon="nrk:check-radio-unchecked"></hd-icon>
+            <span class="name">check-radio-unchecked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:checkbox')" title="Click to copy">
+            <hd-icon icon="nrk:checkbox"></hd-icon>
+            <span class="name">checkbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:checkbox-active')" title="Click to copy">
+            <hd-icon icon="nrk:checkbox-active"></hd-icon>
+            <span class="name">checkbox-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:chevron-down')" title="Click to copy">
+            <hd-icon icon="nrk:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:chevron-left')" title="Click to copy">
+            <hd-icon icon="nrk:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:chevron-right')" title="Click to copy">
+            <hd-icon icon="nrk:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:chevron-up')" title="Click to copy">
+            <hd-icon icon="nrk:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:clock')" title="Click to copy">
+            <hd-icon icon="nrk:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:close')" title="Click to copy">
+            <hd-icon icon="nrk:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:close-active')" title="Click to copy">
+            <hd-icon icon="nrk:close-active"></hd-icon>
+            <span class="name">close-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:comment')" title="Click to copy">
+            <hd-icon icon="nrk:comment"></hd-icon>
+            <span class="name">comment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dialogue')" title="Click to copy">
+            <hd-icon icon="nrk:dialogue"></hd-icon>
+            <span class="name">dialogue</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-1')" title="Click to copy">
+            <hd-icon icon="nrk:dice-1"></hd-icon>
+            <span class="name">dice-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-1-active')" title="Click to copy">
+            <hd-icon icon="nrk:dice-1-active"></hd-icon>
+            <span class="name">dice-1-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-2')" title="Click to copy">
+            <hd-icon icon="nrk:dice-2"></hd-icon>
+            <span class="name">dice-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-2-active')" title="Click to copy">
+            <hd-icon icon="nrk:dice-2-active"></hd-icon>
+            <span class="name">dice-2-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-3')" title="Click to copy">
+            <hd-icon icon="nrk:dice-3"></hd-icon>
+            <span class="name">dice-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-3-active')" title="Click to copy">
+            <hd-icon icon="nrk:dice-3-active"></hd-icon>
+            <span class="name">dice-3-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-4')" title="Click to copy">
+            <hd-icon icon="nrk:dice-4"></hd-icon>
+            <span class="name">dice-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-4-active')" title="Click to copy">
+            <hd-icon icon="nrk:dice-4-active"></hd-icon>
+            <span class="name">dice-4-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-5')" title="Click to copy">
+            <hd-icon icon="nrk:dice-5"></hd-icon>
+            <span class="name">dice-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-5-active')" title="Click to copy">
+            <hd-icon icon="nrk:dice-5-active"></hd-icon>
+            <span class="name">dice-5-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-6')" title="Click to copy">
+            <hd-icon icon="nrk:dice-6"></hd-icon>
+            <span class="name">dice-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:dice-6-active')" title="Click to copy">
+            <hd-icon icon="nrk:dice-6-active"></hd-icon>
+            <span class="name">dice-6-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:download')" title="Click to copy">
+            <hd-icon icon="nrk:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:downloaded')" title="Click to copy">
+            <hd-icon icon="nrk:downloaded"></hd-icon>
+            <span class="name">downloaded</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:duration')" title="Click to copy">
+            <hd-icon icon="nrk:duration"></hd-icon>
+            <span class="name">duration</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:edit')" title="Click to copy">
+            <hd-icon icon="nrk:edit"></hd-icon>
+            <span class="name">edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:ellipsis')" title="Click to copy">
+            <hd-icon icon="nrk:ellipsis"></hd-icon>
+            <span class="name">ellipsis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:ellipsis-active')" title="Click to copy">
+            <hd-icon icon="nrk:ellipsis-active"></hd-icon>
+            <span class="name">ellipsis-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:fullscreen')" title="Click to copy">
+            <hd-icon icon="nrk:fullscreen"></hd-icon>
+            <span class="name">fullscreen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:fullscreen-active')" title="Click to copy">
+            <hd-icon icon="nrk:fullscreen-active"></hd-icon>
+            <span class="name">fullscreen-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:gallery')" title="Click to copy">
+            <hd-icon icon="nrk:gallery"></hd-icon>
+            <span class="name">gallery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:geo')" title="Click to copy">
+            <hd-icon icon="nrk:geo"></hd-icon>
+            <span class="name">geo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:geo-active')" title="Click to copy">
+            <hd-icon icon="nrk:geo-active"></hd-icon>
+            <span class="name">geo-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:geopoint')" title="Click to copy">
+            <hd-icon icon="nrk:geopoint"></hd-icon>
+            <span class="name">geopoint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:geopoint-active')" title="Click to copy">
+            <hd-icon icon="nrk:geopoint-active"></hd-icon>
+            <span class="name">geopoint-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:globe')" title="Click to copy">
+            <hd-icon icon="nrk:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-camera')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-camera"></hd-icon>
+            <span class="name">hardware-camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-computer')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-computer"></hd-icon>
+            <span class="name">hardware-computer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-game')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-game"></hd-icon>
+            <span class="name">hardware-game</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-headphones')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-headphones"></hd-icon>
+            <span class="name">hardware-headphones</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-laptop')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-laptop"></hd-icon>
+            <span class="name">hardware-laptop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-microphone')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-microphone"></hd-icon>
+            <span class="name">hardware-microphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-microphone-active')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-microphone-active"></hd-icon>
+            <span class="name">hardware-microphone-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-mobile')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-mobile"></hd-icon>
+            <span class="name">hardware-mobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-printer')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-printer"></hd-icon>
+            <span class="name">hardware-printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-radio')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-radio"></hd-icon>
+            <span class="name">hardware-radio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-smart-speaker')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-smart-speaker"></hd-icon>
+            <span class="name">hardware-smart-speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-smart-watch')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-smart-watch"></hd-icon>
+            <span class="name">hardware-smart-watch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-speaker')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-speaker"></hd-icon>
+            <span class="name">hardware-speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-tablet')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-tablet"></hd-icon>
+            <span class="name">hardware-tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-tv')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-tv"></hd-icon>
+            <span class="name">hardware-tv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hardware-watch')" title="Click to copy">
+            <hd-icon icon="nrk:hardware-watch"></hd-icon>
+            <span class="name">hardware-watch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:heart')" title="Click to copy">
+            <hd-icon icon="nrk:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:heart-active')" title="Click to copy">
+            <hd-icon icon="nrk:heart-active"></hd-icon>
+            <span class="name">heart-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:help')" title="Click to copy">
+            <hd-icon icon="nrk:help"></hd-icon>
+            <span class="name">help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:hide')" title="Click to copy">
+            <hd-icon icon="nrk:hide"></hd-icon>
+            <span class="name">hide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:home')" title="Click to copy">
+            <hd-icon icon="nrk:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:home-active')" title="Click to copy">
+            <hd-icon icon="nrk:home-active"></hd-icon>
+            <span class="name">home-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:info')" title="Click to copy">
+            <hd-icon icon="nrk:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:latest-news')" title="Click to copy">
+            <hd-icon icon="nrk:latest-news"></hd-icon>
+            <span class="name">latest-news</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:latest-news-active')" title="Click to copy">
+            <hd-icon icon="nrk:latest-news-active"></hd-icon>
+            <span class="name">latest-news-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:link')" title="Click to copy">
+            <hd-icon icon="nrk:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:list')" title="Click to copy">
+            <hd-icon icon="nrk:list"></hd-icon>
+            <span class="name">list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:list-active')" title="Click to copy">
+            <hd-icon icon="nrk:list-active"></hd-icon>
+            <span class="name">list-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:live-activity')" title="Click to copy">
+            <hd-icon icon="nrk:live-activity"></hd-icon>
+            <span class="name">live-activity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:live-activity-active')" title="Click to copy">
+            <hd-icon icon="nrk:live-activity-active"></hd-icon>
+            <span class="name">live-activity-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:lock')" title="Click to copy">
+            <hd-icon icon="nrk:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:lock-active')" title="Click to copy">
+            <hd-icon icon="nrk:lock-active"></hd-icon>
+            <span class="name">lock-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:logout')" title="Click to copy">
+            <hd-icon icon="nrk:logout"></hd-icon>
+            <span class="name">logout</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:longread')" title="Click to copy">
+            <hd-icon icon="nrk:longread"></hd-icon>
+            <span class="name">longread</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:longread-active')" title="Click to copy">
+            <hd-icon icon="nrk:longread-active"></hd-icon>
+            <span class="name">longread-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:lyn')" title="Click to copy">
+            <hd-icon icon="nrk:lyn"></hd-icon>
+            <span class="name">lyn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:mat')" title="Click to copy">
+            <hd-icon icon="nrk:mat"></hd-icon>
+            <span class="name">mat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-404-notfound')" title="Click to copy">
+            <hd-icon icon="nrk:media-404-notfound"></hd-icon>
+            <span class="name">media-404-notfound</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-agelimit-12')" title="Click to copy">
+            <hd-icon icon="nrk:media-agelimit-12"></hd-icon>
+            <span class="name">media-agelimit-12</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-agelimit-15')" title="Click to copy">
+            <hd-icon icon="nrk:media-agelimit-15"></hd-icon>
+            <span class="name">media-agelimit-15</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-agelimit-18')" title="Click to copy">
+            <hd-icon icon="nrk:media-agelimit-18"></hd-icon>
+            <span class="name">media-agelimit-18</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-agelimit-6')" title="Click to copy">
+            <hd-icon icon="nrk:media-agelimit-6"></hd-icon>
+            <span class="name">media-agelimit-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-agelimit-9')" title="Click to copy">
+            <hd-icon icon="nrk:media-agelimit-9"></hd-icon>
+            <span class="name">media-agelimit-9</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-agelimit-a')" title="Click to copy">
+            <hd-icon icon="nrk:media-agelimit-a"></hd-icon>
+            <span class="name">media-agelimit-a</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-airplay')" title="Click to copy">
+            <hd-icon icon="nrk:media-airplay"></hd-icon>
+            <span class="name">media-airplay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-airplay-active')" title="Click to copy">
+            <hd-icon icon="nrk:media-airplay-active"></hd-icon>
+            <span class="name">media-airplay-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-beam-note')" title="Click to copy">
+            <hd-icon icon="nrk:media-beam-note"></hd-icon>
+            <span class="name">media-beam-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-bluetooth')" title="Click to copy">
+            <hd-icon icon="nrk:media-bluetooth"></hd-icon>
+            <span class="name">media-bluetooth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-chromecast')" title="Click to copy">
+            <hd-icon icon="nrk:media-chromecast"></hd-icon>
+            <span class="name">media-chromecast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-chromecast-1')" title="Click to copy">
+            <hd-icon icon="nrk:media-chromecast-1"></hd-icon>
+            <span class="name">media-chromecast-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-chromecast-2')" title="Click to copy">
+            <hd-icon icon="nrk:media-chromecast-2"></hd-icon>
+            <span class="name">media-chromecast-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-chromecast-3')" title="Click to copy">
+            <hd-icon icon="nrk:media-chromecast-3"></hd-icon>
+            <span class="name">media-chromecast-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-chromecast-active')" title="Click to copy">
+            <hd-icon icon="nrk:media-chromecast-active"></hd-icon>
+            <span class="name">media-chromecast-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-completed')" title="Click to copy">
+            <hd-icon icon="nrk:media-completed"></hd-icon>
+            <span class="name">media-completed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-direkte-golive')" title="Click to copy">
+            <hd-icon icon="nrk:media-direkte-golive"></hd-icon>
+            <span class="name">media-direkte-golive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-direkte-notlive')" title="Click to copy">
+            <hd-icon icon="nrk:media-direkte-notlive"></hd-icon>
+            <span class="name">media-direkte-notlive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-direktetv')" title="Click to copy">
+            <hd-icon icon="nrk:media-direktetv"></hd-icon>
+            <span class="name">media-direktetv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-direktetv-active')" title="Click to copy">
+            <hd-icon icon="nrk:media-direktetv-active"></hd-icon>
+            <span class="name">media-direktetv-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-ffw')" title="Click to copy">
+            <hd-icon icon="nrk:media-ffw"></hd-icon>
+            <span class="name">media-ffw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-ffw-15sec')" title="Click to copy">
+            <hd-icon icon="nrk:media-ffw-15sec"></hd-icon>
+            <span class="name">media-ffw-15sec</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-ffw-30sec')" title="Click to copy">
+            <hd-icon icon="nrk:media-ffw-30sec"></hd-icon>
+            <span class="name">media-ffw-30sec</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-ffw-5sec')" title="Click to copy">
+            <hd-icon icon="nrk:media-ffw-5sec"></hd-icon>
+            <span class="name">media-ffw-5sec</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-index-quaver-tiny')" title="Click to copy">
+            <hd-icon icon="nrk:media-index-quaver-tiny"></hd-icon>
+            <span class="name">media-index-quaver-tiny</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-jumpto')" title="Click to copy">
+            <hd-icon icon="nrk:media-jumpto"></hd-icon>
+            <span class="name">media-jumpto</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-media-complete')" title="Click to copy">
+            <hd-icon icon="nrk:media-media-complete"></hd-icon>
+            <span class="name">media-media-complete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-media-incomplete')" title="Click to copy">
+            <hd-icon icon="nrk:media-media-incomplete"></hd-icon>
+            <span class="name">media-media-incomplete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-next')" title="Click to copy">
+            <hd-icon icon="nrk:media-next"></hd-icon>
+            <span class="name">media-next</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-ny')" title="Click to copy">
+            <hd-icon icon="nrk:media-ny"></hd-icon>
+            <span class="name">media-ny</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-pause')" title="Click to copy">
+            <hd-icon icon="nrk:media-pause"></hd-icon>
+            <span class="name">media-pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-picture-in-picture')" title="Click to copy">
+            <hd-icon icon="nrk:media-picture-in-picture"></hd-icon>
+            <span class="name">media-picture-in-picture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-picture-in-picture-active')" title="Click to copy">
+            <hd-icon icon="nrk:media-picture-in-picture-active"></hd-icon>
+            <span class="name">media-picture-in-picture-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-play')" title="Click to copy">
+            <hd-icon icon="nrk:media-play"></hd-icon>
+            <span class="name">media-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-play-fail')" title="Click to copy">
+            <hd-icon icon="nrk:media-play-fail"></hd-icon>
+            <span class="name">media-play-fail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-playlist')" title="Click to copy">
+            <hd-icon icon="nrk:media-playlist"></hd-icon>
+            <span class="name">media-playlist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-playlist-add')" title="Click to copy">
+            <hd-icon icon="nrk:media-playlist-add"></hd-icon>
+            <span class="name">media-playlist-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-playlist-add-later')" title="Click to copy">
+            <hd-icon icon="nrk:media-playlist-add-later"></hd-icon>
+            <span class="name">media-playlist-add-later</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-playlist-add-next')" title="Click to copy">
+            <hd-icon icon="nrk:media-playlist-add-next"></hd-icon>
+            <span class="name">media-playlist-add-next</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-playlist-added')" title="Click to copy">
+            <hd-icon icon="nrk:media-playlist-added"></hd-icon>
+            <span class="name">media-playlist-added</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-playlist-remove')" title="Click to copy">
+            <hd-icon icon="nrk:media-playlist-remove"></hd-icon>
+            <span class="name">media-playlist-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-previous')" title="Click to copy">
+            <hd-icon icon="nrk:media-previous"></hd-icon>
+            <span class="name">media-previous</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-programguide')" title="Click to copy">
+            <hd-icon icon="nrk:media-programguide"></hd-icon>
+            <span class="name">media-programguide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-programguide-active')" title="Click to copy">
+            <hd-icon icon="nrk:media-programguide-active"></hd-icon>
+            <span class="name">media-programguide-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-quaver')" title="Click to copy">
+            <hd-icon icon="nrk:media-quaver"></hd-icon>
+            <span class="name">media-quaver</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-quaver-active')" title="Click to copy">
+            <hd-icon icon="nrk:media-quaver-active"></hd-icon>
+            <span class="name">media-quaver-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-quaver-off')" title="Click to copy">
+            <hd-icon icon="nrk:media-quaver-off"></hd-icon>
+            <span class="name">media-quaver-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-rwd')" title="Click to copy">
+            <hd-icon icon="nrk:media-rwd"></hd-icon>
+            <span class="name">media-rwd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-rwd-15sec')" title="Click to copy">
+            <hd-icon icon="nrk:media-rwd-15sec"></hd-icon>
+            <span class="name">media-rwd-15sec</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-rwd-30sec')" title="Click to copy">
+            <hd-icon icon="nrk:media-rwd-30sec"></hd-icon>
+            <span class="name">media-rwd-30sec</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-rwd-5sec')" title="Click to copy">
+            <hd-icon icon="nrk:media-rwd-5sec"></hd-icon>
+            <span class="name">media-rwd-5sec</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-soundwave')" title="Click to copy">
+            <hd-icon icon="nrk:media-soundwave"></hd-icon>
+            <span class="name">media-soundwave</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-speed-0-8x')" title="Click to copy">
+            <hd-icon icon="nrk:media-speed-0-8x"></hd-icon>
+            <span class="name">media-speed-0-8x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-speed-1-25x')" title="Click to copy">
+            <hd-icon icon="nrk:media-speed-1-25x"></hd-icon>
+            <span class="name">media-speed-1-25x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-speed-1-5x')" title="Click to copy">
+            <hd-icon icon="nrk:media-speed-1-5x"></hd-icon>
+            <span class="name">media-speed-1-5x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-speed-1x')" title="Click to copy">
+            <hd-icon icon="nrk:media-speed-1x"></hd-icon>
+            <span class="name">media-speed-1x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-speed-2x')" title="Click to copy">
+            <hd-icon icon="nrk:media-speed-2x"></hd-icon>
+            <span class="name">media-speed-2x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-stop')" title="Click to copy">
+            <hd-icon icon="nrk:media-stop"></hd-icon>
+            <span class="name">media-stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-subtitles')" title="Click to copy">
+            <hd-icon icon="nrk:media-subtitles"></hd-icon>
+            <span class="name">media-subtitles</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-subtitles-active')" title="Click to copy">
+            <hd-icon icon="nrk:media-subtitles-active"></hd-icon>
+            <span class="name">media-subtitles-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-subtitles-unavailable')" title="Click to copy">
+            <hd-icon icon="nrk:media-subtitles-unavailable"></hd-icon>
+            <span class="name">media-subtitles-unavailable</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-theater')" title="Click to copy">
+            <hd-icon icon="nrk:media-theater"></hd-icon>
+            <span class="name">media-theater</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-theater-active')" title="Click to copy">
+            <hd-icon icon="nrk:media-theater-active"></hd-icon>
+            <span class="name">media-theater-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-tilgjengelighet-geoblocked')" title="Click to copy">
+            <hd-icon icon="nrk:media-tilgjengelighet-geoblocked"></hd-icon>
+            <span class="name">media-tilgjengelighet-geoblocked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-tilgjengelighet-ikkelengertilgjengelig')" title="Click to copy">
+            <hd-icon icon="nrk:media-tilgjengelighet-ikkelengertilgjengelig"></hd-icon>
+            <span class="name">media-tilgjengelighet-ikkelengertilgjengelig</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-tilgjengelighet-kommer')" title="Click to copy">
+            <hd-icon icon="nrk:media-tilgjengelighet-kommer"></hd-icon>
+            <span class="name">media-tilgjengelighet-kommer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-tilgjengelighet-snartutilgjengelig')" title="Click to copy">
+            <hd-icon icon="nrk:media-tilgjengelighet-snartutilgjengelig"></hd-icon>
+            <span class="name">media-tilgjengelighet-snartutilgjengelig</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-video')" title="Click to copy">
+            <hd-icon icon="nrk:media-video"></hd-icon>
+            <span class="name">media-video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-volume-1')" title="Click to copy">
+            <hd-icon icon="nrk:media-volume-1"></hd-icon>
+            <span class="name">media-volume-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-volume-2')" title="Click to copy">
+            <hd-icon icon="nrk:media-volume-2"></hd-icon>
+            <span class="name">media-volume-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-volume-3')" title="Click to copy">
+            <hd-icon icon="nrk:media-volume-3"></hd-icon>
+            <span class="name">media-volume-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:media-volume-muted')" title="Click to copy">
+            <hd-icon icon="nrk:media-volume-muted"></hd-icon>
+            <span class="name">media-volume-muted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:mening')" title="Click to copy">
+            <hd-icon icon="nrk:mening"></hd-icon>
+            <span class="name">mening</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:minus')" title="Click to copy">
+            <hd-icon icon="nrk:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:more')" title="Click to copy">
+            <hd-icon icon="nrk:more"></hd-icon>
+            <span class="name">more</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:more-active')" title="Click to copy">
+            <hd-icon icon="nrk:more-active"></hd-icon>
+            <span class="name">more-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:new-chat')" title="Click to copy">
+            <hd-icon icon="nrk:new-chat"></hd-icon>
+            <span class="name">new-chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:note-1')" title="Click to copy">
+            <hd-icon icon="nrk:note-1"></hd-icon>
+            <span class="name">note-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:note-1-off')" title="Click to copy">
+            <hd-icon icon="nrk:note-1-off"></hd-icon>
+            <span class="name">note-1-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:note-2')" title="Click to copy">
+            <hd-icon icon="nrk:note-2"></hd-icon>
+            <span class="name">note-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:offline')" title="Click to copy">
+            <hd-icon icon="nrk:offline"></hd-icon>
+            <span class="name">offline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:online')" title="Click to copy">
+            <hd-icon icon="nrk:online"></hd-icon>
+            <span class="name">online</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:open-in-new')" title="Click to copy">
+            <hd-icon icon="nrk:open-in-new"></hd-icon>
+            <span class="name">open-in-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:person')" title="Click to copy">
+            <hd-icon icon="nrk:person"></hd-icon>
+            <span class="name">person</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:plus')" title="Click to copy">
+            <hd-icon icon="nrk:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:poll')" title="Click to copy">
+            <hd-icon icon="nrk:poll"></hd-icon>
+            <span class="name">poll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:progress')" title="Click to copy">
+            <hd-icon icon="nrk:progress"></hd-icon>
+            <span class="name">progress</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:quiz')" title="Click to copy">
+            <hd-icon icon="nrk:quiz"></hd-icon>
+            <span class="name">quiz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:radio-active')" title="Click to copy">
+            <hd-icon icon="nrk:radio-active"></hd-icon>
+            <span class="name">radio-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:refresh')" title="Click to copy">
+            <hd-icon icon="nrk:refresh"></hd-icon>
+            <span class="name">refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:reload')" title="Click to copy">
+            <hd-icon icon="nrk:reload"></hd-icon>
+            <span class="name">reload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:reorder')" title="Click to copy">
+            <hd-icon icon="nrk:reorder"></hd-icon>
+            <span class="name">reorder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:rotate')" title="Click to copy">
+            <hd-icon icon="nrk:rotate"></hd-icon>
+            <span class="name">rotate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:search')" title="Click to copy">
+            <hd-icon icon="nrk:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:search-active')" title="Click to copy">
+            <hd-icon icon="nrk:search-active"></hd-icon>
+            <span class="name">search-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:settings')" title="Click to copy">
+            <hd-icon icon="nrk:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:settings-active')" title="Click to copy">
+            <hd-icon icon="nrk:settings-active"></hd-icon>
+            <span class="name">settings-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:show')" title="Click to copy">
+            <hd-icon icon="nrk:show"></hd-icon>
+            <span class="name">show</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:sleep')" title="Click to copy">
+            <hd-icon icon="nrk:sleep"></hd-icon>
+            <span class="name">sleep</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-email')" title="Click to copy">
+            <hd-icon icon="nrk:some-email"></hd-icon>
+            <span class="name">some-email</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-embed')" title="Click to copy">
+            <hd-icon icon="nrk:some-embed"></hd-icon>
+            <span class="name">some-embed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-facebook')" title="Click to copy">
+            <hd-icon icon="nrk:some-facebook"></hd-icon>
+            <span class="name">some-facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-google')" title="Click to copy">
+            <hd-icon icon="nrk:some-google"></hd-icon>
+            <span class="name">some-google</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-instagram')" title="Click to copy">
+            <hd-icon icon="nrk:some-instagram"></hd-icon>
+            <span class="name">some-instagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-pinterest')" title="Click to copy">
+            <hd-icon icon="nrk:some-pinterest"></hd-icon>
+            <span class="name">some-pinterest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-share')" title="Click to copy">
+            <hd-icon icon="nrk:some-share"></hd-icon>
+            <span class="name">some-share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-share-ios')" title="Click to copy">
+            <hd-icon icon="nrk:some-share-ios"></hd-icon>
+            <span class="name">some-share-ios</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-snapchat')" title="Click to copy">
+            <hd-icon icon="nrk:some-snapchat"></hd-icon>
+            <span class="name">some-snapchat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-tommelned')" title="Click to copy">
+            <hd-icon icon="nrk:some-tommelned"></hd-icon>
+            <span class="name">some-tommelned</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-tommelned-active')" title="Click to copy">
+            <hd-icon icon="nrk:some-tommelned-active"></hd-icon>
+            <span class="name">some-tommelned-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-tommelopp')" title="Click to copy">
+            <hd-icon icon="nrk:some-tommelopp"></hd-icon>
+            <span class="name">some-tommelopp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-tommelopp-active')" title="Click to copy">
+            <hd-icon icon="nrk:some-tommelopp-active"></hd-icon>
+            <span class="name">some-tommelopp-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-twitter')" title="Click to copy">
+            <hd-icon icon="nrk:some-twitter"></hd-icon>
+            <span class="name">some-twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:some-youtube')" title="Click to copy">
+            <hd-icon icon="nrk:some-youtube"></hd-icon>
+            <span class="name">some-youtube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:spinner')" title="Click to copy">
+            <hd-icon icon="nrk:spinner"></hd-icon>
+            <span class="name">spinner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:star')" title="Click to copy">
+            <hd-icon icon="nrk:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:star-active')" title="Click to copy">
+            <hd-icon icon="nrk:star-active"></hd-icon>
+            <span class="name">star-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:super-emoji-poop-angry')" title="Click to copy">
+            <hd-icon icon="nrk:super-emoji-poop-angry"></hd-icon>
+            <span class="name">super-emoji-poop-angry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:tilgjengelighet')" title="Click to copy">
+            <hd-icon icon="nrk:tilgjengelighet"></hd-icon>
+            <span class="name">tilgjengelighet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:tilgjengelighet-horbarhet')" title="Click to copy">
+            <hd-icon icon="nrk:tilgjengelighet-horbarhet"></hd-icon>
+            <span class="name">tilgjengelighet-horbarhet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:tilgjengelighet-lydtekst')" title="Click to copy">
+            <hd-icon icon="nrk:tilgjengelighet-lydtekst"></hd-icon>
+            <span class="name">tilgjengelighet-lydtekst</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:tilgjengelighet-synstolking')" title="Click to copy">
+            <hd-icon icon="nrk:tilgjengelighet-synstolking"></hd-icon>
+            <span class="name">tilgjengelighet-synstolking</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:tilgjengelighet-tegnspraak')" title="Click to copy">
+            <hd-icon icon="nrk:tilgjengelighet-tegnspraak"></hd-icon>
+            <span class="name">tilgjengelighet-tegnspraak</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:trash')" title="Click to copy">
+            <hd-icon icon="nrk:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:trash-active')" title="Click to copy">
+            <hd-icon icon="nrk:trash-active"></hd-icon>
+            <span class="name">trash-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:unlock')" title="Click to copy">
+            <hd-icon icon="nrk:unlock"></hd-icon>
+            <span class="name">unlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:unlock-active')" title="Click to copy">
+            <hd-icon icon="nrk:unlock-active"></hd-icon>
+            <span class="name">unlock-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:upload')" title="Click to copy">
+            <hd-icon icon="nrk:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:user-avatar')" title="Click to copy">
+            <hd-icon icon="nrk:user-avatar"></hd-icon>
+            <span class="name">user-avatar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:user-loggedin')" title="Click to copy">
+            <hd-icon icon="nrk:user-loggedin"></hd-icon>
+            <span class="name">user-loggedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:user-loggedin-active')" title="Click to copy">
+            <hd-icon icon="nrk:user-loggedin-active"></hd-icon>
+            <span class="name">user-loggedin-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:user-notloggedin')" title="Click to copy">
+            <hd-icon icon="nrk:user-notloggedin"></hd-icon>
+            <span class="name">user-notloggedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:user-notloggedin-active')" title="Click to copy">
+            <hd-icon icon="nrk:user-notloggedin-active"></hd-icon>
+            <span class="name">user-notloggedin-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nrk:warning')" title="Click to copy">
+            <hd-icon icon="nrk:warning"></hd-icon>
+            <span class="name">warning</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

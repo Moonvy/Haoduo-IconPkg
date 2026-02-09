@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eva - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>eva <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(490)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('eva:activity-fill')" title="Click to copy">
+            <hd-icon icon="eva:activity-fill"></hd-icon>
+            <span class="name">activity-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:activity-outline')" title="Click to copy">
+            <hd-icon icon="eva:activity-outline"></hd-icon>
+            <span class="name">activity-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:alert-circle-fill')" title="Click to copy">
+            <hd-icon icon="eva:alert-circle-fill"></hd-icon>
+            <span class="name">alert-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:alert-circle-outline')" title="Click to copy">
+            <hd-icon icon="eva:alert-circle-outline"></hd-icon>
+            <span class="name">alert-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:alert-triangle-fill')" title="Click to copy">
+            <hd-icon icon="eva:alert-triangle-fill"></hd-icon>
+            <span class="name">alert-triangle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:alert-triangle-outline')" title="Click to copy">
+            <hd-icon icon="eva:alert-triangle-outline"></hd-icon>
+            <span class="name">alert-triangle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:archive-fill')" title="Click to copy">
+            <hd-icon icon="eva:archive-fill"></hd-icon>
+            <span class="name">archive-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:archive-outline')" title="Click to copy">
+            <hd-icon icon="eva:archive-outline"></hd-icon>
+            <span class="name">archive-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-back-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-back-fill"></hd-icon>
+            <span class="name">arrow-back-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-back-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-back-outline"></hd-icon>
+            <span class="name">arrow-back-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-circle-down-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-circle-down-fill"></hd-icon>
+            <span class="name">arrow-circle-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-circle-down-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-circle-down-outline"></hd-icon>
+            <span class="name">arrow-circle-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-circle-left-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-circle-left-fill"></hd-icon>
+            <span class="name">arrow-circle-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-circle-left-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-circle-left-outline"></hd-icon>
+            <span class="name">arrow-circle-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-circle-right-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-circle-right-fill"></hd-icon>
+            <span class="name">arrow-circle-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-circle-right-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-circle-right-outline"></hd-icon>
+            <span class="name">arrow-circle-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-circle-up-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-circle-up-fill"></hd-icon>
+            <span class="name">arrow-circle-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-circle-up-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-circle-up-outline"></hd-icon>
+            <span class="name">arrow-circle-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-down-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-down-fill"></hd-icon>
+            <span class="name">arrow-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-down-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-down-outline"></hd-icon>
+            <span class="name">arrow-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-downward-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-downward-fill"></hd-icon>
+            <span class="name">arrow-downward-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-downward-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-downward-outline"></hd-icon>
+            <span class="name">arrow-downward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-forward-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-forward-fill"></hd-icon>
+            <span class="name">arrow-forward-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-forward-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-forward-outline"></hd-icon>
+            <span class="name">arrow-forward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-ios-back-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-ios-back-fill"></hd-icon>
+            <span class="name">arrow-ios-back-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-ios-back-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-ios-back-outline"></hd-icon>
+            <span class="name">arrow-ios-back-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-ios-downward-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-ios-downward-fill"></hd-icon>
+            <span class="name">arrow-ios-downward-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-ios-downward-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-ios-downward-outline"></hd-icon>
+            <span class="name">arrow-ios-downward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-ios-forward-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-ios-forward-fill"></hd-icon>
+            <span class="name">arrow-ios-forward-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-ios-forward-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-ios-forward-outline"></hd-icon>
+            <span class="name">arrow-ios-forward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-ios-upward-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-ios-upward-fill"></hd-icon>
+            <span class="name">arrow-ios-upward-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-ios-upward-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-ios-upward-outline"></hd-icon>
+            <span class="name">arrow-ios-upward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-left-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-left-fill"></hd-icon>
+            <span class="name">arrow-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-left-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-left-outline"></hd-icon>
+            <span class="name">arrow-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-right-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-right-fill"></hd-icon>
+            <span class="name">arrow-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-right-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-right-outline"></hd-icon>
+            <span class="name">arrow-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-up-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-up-fill"></hd-icon>
+            <span class="name">arrow-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-up-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-up-outline"></hd-icon>
+            <span class="name">arrow-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-upward-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrow-upward-fill"></hd-icon>
+            <span class="name">arrow-upward-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrow-upward-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrow-upward-outline"></hd-icon>
+            <span class="name">arrow-upward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrowhead-down-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrowhead-down-fill"></hd-icon>
+            <span class="name">arrowhead-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrowhead-down-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrowhead-down-outline"></hd-icon>
+            <span class="name">arrowhead-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrowhead-left-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrowhead-left-fill"></hd-icon>
+            <span class="name">arrowhead-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrowhead-left-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrowhead-left-outline"></hd-icon>
+            <span class="name">arrowhead-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrowhead-right-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrowhead-right-fill"></hd-icon>
+            <span class="name">arrowhead-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrowhead-right-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrowhead-right-outline"></hd-icon>
+            <span class="name">arrowhead-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrowhead-up-fill')" title="Click to copy">
+            <hd-icon icon="eva:arrowhead-up-fill"></hd-icon>
+            <span class="name">arrowhead-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:arrowhead-up-outline')" title="Click to copy">
+            <hd-icon icon="eva:arrowhead-up-outline"></hd-icon>
+            <span class="name">arrowhead-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:at-fill')" title="Click to copy">
+            <hd-icon icon="eva:at-fill"></hd-icon>
+            <span class="name">at-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:at-outline')" title="Click to copy">
+            <hd-icon icon="eva:at-outline"></hd-icon>
+            <span class="name">at-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:attach-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:attach-2-fill"></hd-icon>
+            <span class="name">attach-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:attach-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:attach-2-outline"></hd-icon>
+            <span class="name">attach-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:attach-fill')" title="Click to copy">
+            <hd-icon icon="eva:attach-fill"></hd-icon>
+            <span class="name">attach-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:attach-outline')" title="Click to copy">
+            <hd-icon icon="eva:attach-outline"></hd-icon>
+            <span class="name">attach-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:award-fill')" title="Click to copy">
+            <hd-icon icon="eva:award-fill"></hd-icon>
+            <span class="name">award-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:award-outline')" title="Click to copy">
+            <hd-icon icon="eva:award-outline"></hd-icon>
+            <span class="name">award-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:backspace-fill')" title="Click to copy">
+            <hd-icon icon="eva:backspace-fill"></hd-icon>
+            <span class="name">backspace-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:backspace-outline')" title="Click to copy">
+            <hd-icon icon="eva:backspace-outline"></hd-icon>
+            <span class="name">backspace-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bar-chart-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:bar-chart-2-fill"></hd-icon>
+            <span class="name">bar-chart-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bar-chart-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:bar-chart-2-outline"></hd-icon>
+            <span class="name">bar-chart-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bar-chart-fill')" title="Click to copy">
+            <hd-icon icon="eva:bar-chart-fill"></hd-icon>
+            <span class="name">bar-chart-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bar-chart-outline')" title="Click to copy">
+            <hd-icon icon="eva:bar-chart-outline"></hd-icon>
+            <span class="name">bar-chart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:battery-fill')" title="Click to copy">
+            <hd-icon icon="eva:battery-fill"></hd-icon>
+            <span class="name">battery-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:battery-outline')" title="Click to copy">
+            <hd-icon icon="eva:battery-outline"></hd-icon>
+            <span class="name">battery-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:behance-fill')" title="Click to copy">
+            <hd-icon icon="eva:behance-fill"></hd-icon>
+            <span class="name">behance-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:behance-outline')" title="Click to copy">
+            <hd-icon icon="eva:behance-outline"></hd-icon>
+            <span class="name">behance-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bell-fill')" title="Click to copy">
+            <hd-icon icon="eva:bell-fill"></hd-icon>
+            <span class="name">bell-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bell-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:bell-off-fill"></hd-icon>
+            <span class="name">bell-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bell-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:bell-off-outline"></hd-icon>
+            <span class="name">bell-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bell-outline')" title="Click to copy">
+            <hd-icon icon="eva:bell-outline"></hd-icon>
+            <span class="name">bell-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bluetooth-fill')" title="Click to copy">
+            <hd-icon icon="eva:bluetooth-fill"></hd-icon>
+            <span class="name">bluetooth-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bluetooth-outline')" title="Click to copy">
+            <hd-icon icon="eva:bluetooth-outline"></hd-icon>
+            <span class="name">bluetooth-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:book-fill')" title="Click to copy">
+            <hd-icon icon="eva:book-fill"></hd-icon>
+            <span class="name">book-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:book-open-fill')" title="Click to copy">
+            <hd-icon icon="eva:book-open-fill"></hd-icon>
+            <span class="name">book-open-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:book-open-outline')" title="Click to copy">
+            <hd-icon icon="eva:book-open-outline"></hd-icon>
+            <span class="name">book-open-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:book-outline')" title="Click to copy">
+            <hd-icon icon="eva:book-outline"></hd-icon>
+            <span class="name">book-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bookmark-fill')" title="Click to copy">
+            <hd-icon icon="eva:bookmark-fill"></hd-icon>
+            <span class="name">bookmark-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bookmark-outline')" title="Click to copy">
+            <hd-icon icon="eva:bookmark-outline"></hd-icon>
+            <span class="name">bookmark-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:briefcase-fill')" title="Click to copy">
+            <hd-icon icon="eva:briefcase-fill"></hd-icon>
+            <span class="name">briefcase-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:briefcase-outline')" title="Click to copy">
+            <hd-icon icon="eva:briefcase-outline"></hd-icon>
+            <span class="name">briefcase-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:browser-fill')" title="Click to copy">
+            <hd-icon icon="eva:browser-fill"></hd-icon>
+            <span class="name">browser-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:browser-outline')" title="Click to copy">
+            <hd-icon icon="eva:browser-outline"></hd-icon>
+            <span class="name">browser-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:brush-fill')" title="Click to copy">
+            <hd-icon icon="eva:brush-fill"></hd-icon>
+            <span class="name">brush-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:brush-outline')" title="Click to copy">
+            <hd-icon icon="eva:brush-outline"></hd-icon>
+            <span class="name">brush-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bulb-fill')" title="Click to copy">
+            <hd-icon icon="eva:bulb-fill"></hd-icon>
+            <span class="name">bulb-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:bulb-outline')" title="Click to copy">
+            <hd-icon icon="eva:bulb-outline"></hd-icon>
+            <span class="name">bulb-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:calendar-fill')" title="Click to copy">
+            <hd-icon icon="eva:calendar-fill"></hd-icon>
+            <span class="name">calendar-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:calendar-outline')" title="Click to copy">
+            <hd-icon icon="eva:calendar-outline"></hd-icon>
+            <span class="name">calendar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:camera-fill')" title="Click to copy">
+            <hd-icon icon="eva:camera-fill"></hd-icon>
+            <span class="name">camera-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:camera-outline')" title="Click to copy">
+            <hd-icon icon="eva:camera-outline"></hd-icon>
+            <span class="name">camera-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:car-fill')" title="Click to copy">
+            <hd-icon icon="eva:car-fill"></hd-icon>
+            <span class="name">car-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:car-outline')" title="Click to copy">
+            <hd-icon icon="eva:car-outline"></hd-icon>
+            <span class="name">car-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:cast-fill')" title="Click to copy">
+            <hd-icon icon="eva:cast-fill"></hd-icon>
+            <span class="name">cast-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:cast-outline')" title="Click to copy">
+            <hd-icon icon="eva:cast-outline"></hd-icon>
+            <span class="name">cast-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:charging-fill')" title="Click to copy">
+            <hd-icon icon="eva:charging-fill"></hd-icon>
+            <span class="name">charging-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:charging-outline')" title="Click to copy">
+            <hd-icon icon="eva:charging-outline"></hd-icon>
+            <span class="name">charging-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:checkmark-circle-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:checkmark-circle-2-fill"></hd-icon>
+            <span class="name">checkmark-circle-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:checkmark-circle-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:checkmark-circle-2-outline"></hd-icon>
+            <span class="name">checkmark-circle-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:checkmark-circle-fill')" title="Click to copy">
+            <hd-icon icon="eva:checkmark-circle-fill"></hd-icon>
+            <span class="name">checkmark-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:checkmark-circle-outline')" title="Click to copy">
+            <hd-icon icon="eva:checkmark-circle-outline"></hd-icon>
+            <span class="name">checkmark-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:checkmark-fill')" title="Click to copy">
+            <hd-icon icon="eva:checkmark-fill"></hd-icon>
+            <span class="name">checkmark-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:checkmark-outline')" title="Click to copy">
+            <hd-icon icon="eva:checkmark-outline"></hd-icon>
+            <span class="name">checkmark-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:checkmark-square-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:checkmark-square-2-fill"></hd-icon>
+            <span class="name">checkmark-square-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:checkmark-square-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:checkmark-square-2-outline"></hd-icon>
+            <span class="name">checkmark-square-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:checkmark-square-fill')" title="Click to copy">
+            <hd-icon icon="eva:checkmark-square-fill"></hd-icon>
+            <span class="name">checkmark-square-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:checkmark-square-outline')" title="Click to copy">
+            <hd-icon icon="eva:checkmark-square-outline"></hd-icon>
+            <span class="name">checkmark-square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:chevron-down-fill')" title="Click to copy">
+            <hd-icon icon="eva:chevron-down-fill"></hd-icon>
+            <span class="name">chevron-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:chevron-down-outline')" title="Click to copy">
+            <hd-icon icon="eva:chevron-down-outline"></hd-icon>
+            <span class="name">chevron-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:chevron-left-fill')" title="Click to copy">
+            <hd-icon icon="eva:chevron-left-fill"></hd-icon>
+            <span class="name">chevron-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:chevron-left-outline')" title="Click to copy">
+            <hd-icon icon="eva:chevron-left-outline"></hd-icon>
+            <span class="name">chevron-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:chevron-right-fill')" title="Click to copy">
+            <hd-icon icon="eva:chevron-right-fill"></hd-icon>
+            <span class="name">chevron-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:chevron-right-outline')" title="Click to copy">
+            <hd-icon icon="eva:chevron-right-outline"></hd-icon>
+            <span class="name">chevron-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:chevron-up-fill')" title="Click to copy">
+            <hd-icon icon="eva:chevron-up-fill"></hd-icon>
+            <span class="name">chevron-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:chevron-up-outline')" title="Click to copy">
+            <hd-icon icon="eva:chevron-up-outline"></hd-icon>
+            <span class="name">chevron-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:clipboard-fill')" title="Click to copy">
+            <hd-icon icon="eva:clipboard-fill"></hd-icon>
+            <span class="name">clipboard-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:clipboard-outline')" title="Click to copy">
+            <hd-icon icon="eva:clipboard-outline"></hd-icon>
+            <span class="name">clipboard-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:clock-fill')" title="Click to copy">
+            <hd-icon icon="eva:clock-fill"></hd-icon>
+            <span class="name">clock-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:clock-outline')" title="Click to copy">
+            <hd-icon icon="eva:clock-outline"></hd-icon>
+            <span class="name">clock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:close-circle-fill')" title="Click to copy">
+            <hd-icon icon="eva:close-circle-fill"></hd-icon>
+            <span class="name">close-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:close-circle-outline')" title="Click to copy">
+            <hd-icon icon="eva:close-circle-outline"></hd-icon>
+            <span class="name">close-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:close-fill')" title="Click to copy">
+            <hd-icon icon="eva:close-fill"></hd-icon>
+            <span class="name">close-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:close-outline')" title="Click to copy">
+            <hd-icon icon="eva:close-outline"></hd-icon>
+            <span class="name">close-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:close-square-fill')" title="Click to copy">
+            <hd-icon icon="eva:close-square-fill"></hd-icon>
+            <span class="name">close-square-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:close-square-outline')" title="Click to copy">
+            <hd-icon icon="eva:close-square-outline"></hd-icon>
+            <span class="name">close-square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:cloud-download-fill')" title="Click to copy">
+            <hd-icon icon="eva:cloud-download-fill"></hd-icon>
+            <span class="name">cloud-download-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:cloud-download-outline')" title="Click to copy">
+            <hd-icon icon="eva:cloud-download-outline"></hd-icon>
+            <span class="name">cloud-download-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:cloud-upload-fill')" title="Click to copy">
+            <hd-icon icon="eva:cloud-upload-fill"></hd-icon>
+            <span class="name">cloud-upload-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:cloud-upload-outline')" title="Click to copy">
+            <hd-icon icon="eva:cloud-upload-outline"></hd-icon>
+            <span class="name">cloud-upload-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:code-download-fill')" title="Click to copy">
+            <hd-icon icon="eva:code-download-fill"></hd-icon>
+            <span class="name">code-download-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:code-download-outline')" title="Click to copy">
+            <hd-icon icon="eva:code-download-outline"></hd-icon>
+            <span class="name">code-download-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:code-fill')" title="Click to copy">
+            <hd-icon icon="eva:code-fill"></hd-icon>
+            <span class="name">code-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:code-outline')" title="Click to copy">
+            <hd-icon icon="eva:code-outline"></hd-icon>
+            <span class="name">code-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:collapse-fill')" title="Click to copy">
+            <hd-icon icon="eva:collapse-fill"></hd-icon>
+            <span class="name">collapse-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:collapse-outline')" title="Click to copy">
+            <hd-icon icon="eva:collapse-outline"></hd-icon>
+            <span class="name">collapse-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:color-palette-fill')" title="Click to copy">
+            <hd-icon icon="eva:color-palette-fill"></hd-icon>
+            <span class="name">color-palette-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:color-palette-outline')" title="Click to copy">
+            <hd-icon icon="eva:color-palette-outline"></hd-icon>
+            <span class="name">color-palette-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:color-picker-fill')" title="Click to copy">
+            <hd-icon icon="eva:color-picker-fill"></hd-icon>
+            <span class="name">color-picker-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:color-picker-outline')" title="Click to copy">
+            <hd-icon icon="eva:color-picker-outline"></hd-icon>
+            <span class="name">color-picker-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:compass-fill')" title="Click to copy">
+            <hd-icon icon="eva:compass-fill"></hd-icon>
+            <span class="name">compass-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:compass-outline')" title="Click to copy">
+            <hd-icon icon="eva:compass-outline"></hd-icon>
+            <span class="name">compass-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:copy-fill')" title="Click to copy">
+            <hd-icon icon="eva:copy-fill"></hd-icon>
+            <span class="name">copy-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:copy-outline')" title="Click to copy">
+            <hd-icon icon="eva:copy-outline"></hd-icon>
+            <span class="name">copy-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-down-left-fill')" title="Click to copy">
+            <hd-icon icon="eva:corner-down-left-fill"></hd-icon>
+            <span class="name">corner-down-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-down-left-outline')" title="Click to copy">
+            <hd-icon icon="eva:corner-down-left-outline"></hd-icon>
+            <span class="name">corner-down-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-down-right-fill')" title="Click to copy">
+            <hd-icon icon="eva:corner-down-right-fill"></hd-icon>
+            <span class="name">corner-down-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-down-right-outline')" title="Click to copy">
+            <hd-icon icon="eva:corner-down-right-outline"></hd-icon>
+            <span class="name">corner-down-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-left-down-fill')" title="Click to copy">
+            <hd-icon icon="eva:corner-left-down-fill"></hd-icon>
+            <span class="name">corner-left-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-left-down-outline')" title="Click to copy">
+            <hd-icon icon="eva:corner-left-down-outline"></hd-icon>
+            <span class="name">corner-left-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-left-up-fill')" title="Click to copy">
+            <hd-icon icon="eva:corner-left-up-fill"></hd-icon>
+            <span class="name">corner-left-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-left-up-outline')" title="Click to copy">
+            <hd-icon icon="eva:corner-left-up-outline"></hd-icon>
+            <span class="name">corner-left-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-right-down-fill')" title="Click to copy">
+            <hd-icon icon="eva:corner-right-down-fill"></hd-icon>
+            <span class="name">corner-right-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-right-down-outline')" title="Click to copy">
+            <hd-icon icon="eva:corner-right-down-outline"></hd-icon>
+            <span class="name">corner-right-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-right-up-fill')" title="Click to copy">
+            <hd-icon icon="eva:corner-right-up-fill"></hd-icon>
+            <span class="name">corner-right-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-right-up-outline')" title="Click to copy">
+            <hd-icon icon="eva:corner-right-up-outline"></hd-icon>
+            <span class="name">corner-right-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-up-left-fill')" title="Click to copy">
+            <hd-icon icon="eva:corner-up-left-fill"></hd-icon>
+            <span class="name">corner-up-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-up-left-outline')" title="Click to copy">
+            <hd-icon icon="eva:corner-up-left-outline"></hd-icon>
+            <span class="name">corner-up-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-up-right-fill')" title="Click to copy">
+            <hd-icon icon="eva:corner-up-right-fill"></hd-icon>
+            <span class="name">corner-up-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:corner-up-right-outline')" title="Click to copy">
+            <hd-icon icon="eva:corner-up-right-outline"></hd-icon>
+            <span class="name">corner-up-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:credit-card-fill')" title="Click to copy">
+            <hd-icon icon="eva:credit-card-fill"></hd-icon>
+            <span class="name">credit-card-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:credit-card-outline')" title="Click to copy">
+            <hd-icon icon="eva:credit-card-outline"></hd-icon>
+            <span class="name">credit-card-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:crop-fill')" title="Click to copy">
+            <hd-icon icon="eva:crop-fill"></hd-icon>
+            <span class="name">crop-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:crop-outline')" title="Click to copy">
+            <hd-icon icon="eva:crop-outline"></hd-icon>
+            <span class="name">crop-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:cube-fill')" title="Click to copy">
+            <hd-icon icon="eva:cube-fill"></hd-icon>
+            <span class="name">cube-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:cube-outline')" title="Click to copy">
+            <hd-icon icon="eva:cube-outline"></hd-icon>
+            <span class="name">cube-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:diagonal-arrow-left-down-fill')" title="Click to copy">
+            <hd-icon icon="eva:diagonal-arrow-left-down-fill"></hd-icon>
+            <span class="name">diagonal-arrow-left-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:diagonal-arrow-left-down-outline')" title="Click to copy">
+            <hd-icon icon="eva:diagonal-arrow-left-down-outline"></hd-icon>
+            <span class="name">diagonal-arrow-left-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:diagonal-arrow-left-up-fill')" title="Click to copy">
+            <hd-icon icon="eva:diagonal-arrow-left-up-fill"></hd-icon>
+            <span class="name">diagonal-arrow-left-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:diagonal-arrow-left-up-outline')" title="Click to copy">
+            <hd-icon icon="eva:diagonal-arrow-left-up-outline"></hd-icon>
+            <span class="name">diagonal-arrow-left-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:diagonal-arrow-right-down-fill')" title="Click to copy">
+            <hd-icon icon="eva:diagonal-arrow-right-down-fill"></hd-icon>
+            <span class="name">diagonal-arrow-right-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:diagonal-arrow-right-down-outline')" title="Click to copy">
+            <hd-icon icon="eva:diagonal-arrow-right-down-outline"></hd-icon>
+            <span class="name">diagonal-arrow-right-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:diagonal-arrow-right-up-fill')" title="Click to copy">
+            <hd-icon icon="eva:diagonal-arrow-right-up-fill"></hd-icon>
+            <span class="name">diagonal-arrow-right-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:diagonal-arrow-right-up-outline')" title="Click to copy">
+            <hd-icon icon="eva:diagonal-arrow-right-up-outline"></hd-icon>
+            <span class="name">diagonal-arrow-right-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:done-all-fill')" title="Click to copy">
+            <hd-icon icon="eva:done-all-fill"></hd-icon>
+            <span class="name">done-all-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:done-all-outline')" title="Click to copy">
+            <hd-icon icon="eva:done-all-outline"></hd-icon>
+            <span class="name">done-all-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:download-fill')" title="Click to copy">
+            <hd-icon icon="eva:download-fill"></hd-icon>
+            <span class="name">download-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:download-outline')" title="Click to copy">
+            <hd-icon icon="eva:download-outline"></hd-icon>
+            <span class="name">download-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:droplet-fill')" title="Click to copy">
+            <hd-icon icon="eva:droplet-fill"></hd-icon>
+            <span class="name">droplet-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:droplet-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:droplet-off-fill"></hd-icon>
+            <span class="name">droplet-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:droplet-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:droplet-off-outline"></hd-icon>
+            <span class="name">droplet-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:droplet-outline')" title="Click to copy">
+            <hd-icon icon="eva:droplet-outline"></hd-icon>
+            <span class="name">droplet-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:edit-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:edit-2-fill"></hd-icon>
+            <span class="name">edit-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:edit-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:edit-2-outline"></hd-icon>
+            <span class="name">edit-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:edit-fill')" title="Click to copy">
+            <hd-icon icon="eva:edit-fill"></hd-icon>
+            <span class="name">edit-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:edit-outline')" title="Click to copy">
+            <hd-icon icon="eva:edit-outline"></hd-icon>
+            <span class="name">edit-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:email-fill')" title="Click to copy">
+            <hd-icon icon="eva:email-fill"></hd-icon>
+            <span class="name">email-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:email-outline')" title="Click to copy">
+            <hd-icon icon="eva:email-outline"></hd-icon>
+            <span class="name">email-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:expand-fill')" title="Click to copy">
+            <hd-icon icon="eva:expand-fill"></hd-icon>
+            <span class="name">expand-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:expand-outline')" title="Click to copy">
+            <hd-icon icon="eva:expand-outline"></hd-icon>
+            <span class="name">expand-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:external-link-fill')" title="Click to copy">
+            <hd-icon icon="eva:external-link-fill"></hd-icon>
+            <span class="name">external-link-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:external-link-outline')" title="Click to copy">
+            <hd-icon icon="eva:external-link-outline"></hd-icon>
+            <span class="name">external-link-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:eye-fill')" title="Click to copy">
+            <hd-icon icon="eva:eye-fill"></hd-icon>
+            <span class="name">eye-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:eye-off-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:eye-off-2-fill"></hd-icon>
+            <span class="name">eye-off-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:eye-off-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:eye-off-2-outline"></hd-icon>
+            <span class="name">eye-off-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:eye-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:eye-off-fill"></hd-icon>
+            <span class="name">eye-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:eye-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:eye-off-outline"></hd-icon>
+            <span class="name">eye-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:eye-outline')" title="Click to copy">
+            <hd-icon icon="eva:eye-outline"></hd-icon>
+            <span class="name">eye-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:facebook-fill')" title="Click to copy">
+            <hd-icon icon="eva:facebook-fill"></hd-icon>
+            <span class="name">facebook-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:facebook-outline')" title="Click to copy">
+            <hd-icon icon="eva:facebook-outline"></hd-icon>
+            <span class="name">facebook-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:file-add-fill')" title="Click to copy">
+            <hd-icon icon="eva:file-add-fill"></hd-icon>
+            <span class="name">file-add-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:file-add-outline')" title="Click to copy">
+            <hd-icon icon="eva:file-add-outline"></hd-icon>
+            <span class="name">file-add-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:file-fill')" title="Click to copy">
+            <hd-icon icon="eva:file-fill"></hd-icon>
+            <span class="name">file-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:file-outline')" title="Click to copy">
+            <hd-icon icon="eva:file-outline"></hd-icon>
+            <span class="name">file-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:file-remove-fill')" title="Click to copy">
+            <hd-icon icon="eva:file-remove-fill"></hd-icon>
+            <span class="name">file-remove-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:file-remove-outline')" title="Click to copy">
+            <hd-icon icon="eva:file-remove-outline"></hd-icon>
+            <span class="name">file-remove-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:file-text-fill')" title="Click to copy">
+            <hd-icon icon="eva:file-text-fill"></hd-icon>
+            <span class="name">file-text-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:file-text-outline')" title="Click to copy">
+            <hd-icon icon="eva:file-text-outline"></hd-icon>
+            <span class="name">file-text-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:film-fill')" title="Click to copy">
+            <hd-icon icon="eva:film-fill"></hd-icon>
+            <span class="name">film-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:film-outline')" title="Click to copy">
+            <hd-icon icon="eva:film-outline"></hd-icon>
+            <span class="name">film-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:flag-fill')" title="Click to copy">
+            <hd-icon icon="eva:flag-fill"></hd-icon>
+            <span class="name">flag-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:flag-outline')" title="Click to copy">
+            <hd-icon icon="eva:flag-outline"></hd-icon>
+            <span class="name">flag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:flash-fill')" title="Click to copy">
+            <hd-icon icon="eva:flash-fill"></hd-icon>
+            <span class="name">flash-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:flash-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:flash-off-fill"></hd-icon>
+            <span class="name">flash-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:flash-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:flash-off-outline"></hd-icon>
+            <span class="name">flash-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:flash-outline')" title="Click to copy">
+            <hd-icon icon="eva:flash-outline"></hd-icon>
+            <span class="name">flash-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:flip-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:flip-2-fill"></hd-icon>
+            <span class="name">flip-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:flip-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:flip-2-outline"></hd-icon>
+            <span class="name">flip-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:flip-fill')" title="Click to copy">
+            <hd-icon icon="eva:flip-fill"></hd-icon>
+            <span class="name">flip-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:flip-outline')" title="Click to copy">
+            <hd-icon icon="eva:flip-outline"></hd-icon>
+            <span class="name">flip-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:folder-add-fill')" title="Click to copy">
+            <hd-icon icon="eva:folder-add-fill"></hd-icon>
+            <span class="name">folder-add-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:folder-add-outline')" title="Click to copy">
+            <hd-icon icon="eva:folder-add-outline"></hd-icon>
+            <span class="name">folder-add-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:folder-fill')" title="Click to copy">
+            <hd-icon icon="eva:folder-fill"></hd-icon>
+            <span class="name">folder-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:folder-outline')" title="Click to copy">
+            <hd-icon icon="eva:folder-outline"></hd-icon>
+            <span class="name">folder-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:folder-remove-fill')" title="Click to copy">
+            <hd-icon icon="eva:folder-remove-fill"></hd-icon>
+            <span class="name">folder-remove-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:folder-remove-outline')" title="Click to copy">
+            <hd-icon icon="eva:folder-remove-outline"></hd-icon>
+            <span class="name">folder-remove-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:funnel-fill')" title="Click to copy">
+            <hd-icon icon="eva:funnel-fill"></hd-icon>
+            <span class="name">funnel-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:funnel-outline')" title="Click to copy">
+            <hd-icon icon="eva:funnel-outline"></hd-icon>
+            <span class="name">funnel-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:gift-fill')" title="Click to copy">
+            <hd-icon icon="eva:gift-fill"></hd-icon>
+            <span class="name">gift-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:gift-outline')" title="Click to copy">
+            <hd-icon icon="eva:gift-outline"></hd-icon>
+            <span class="name">gift-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:github-fill')" title="Click to copy">
+            <hd-icon icon="eva:github-fill"></hd-icon>
+            <span class="name">github-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:github-outline')" title="Click to copy">
+            <hd-icon icon="eva:github-outline"></hd-icon>
+            <span class="name">github-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:globe-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:globe-2-fill"></hd-icon>
+            <span class="name">globe-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:globe-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:globe-2-outline"></hd-icon>
+            <span class="name">globe-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:globe-3-fill')" title="Click to copy">
+            <hd-icon icon="eva:globe-3-fill"></hd-icon>
+            <span class="name">globe-3-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:globe-fill')" title="Click to copy">
+            <hd-icon icon="eva:globe-fill"></hd-icon>
+            <span class="name">globe-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:globe-outline')" title="Click to copy">
+            <hd-icon icon="eva:globe-outline"></hd-icon>
+            <span class="name">globe-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:google-fill')" title="Click to copy">
+            <hd-icon icon="eva:google-fill"></hd-icon>
+            <span class="name">google-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:google-outline')" title="Click to copy">
+            <hd-icon icon="eva:google-outline"></hd-icon>
+            <span class="name">google-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:grid-fill')" title="Click to copy">
+            <hd-icon icon="eva:grid-fill"></hd-icon>
+            <span class="name">grid-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:grid-outline')" title="Click to copy">
+            <hd-icon icon="eva:grid-outline"></hd-icon>
+            <span class="name">grid-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:hard-drive-fill')" title="Click to copy">
+            <hd-icon icon="eva:hard-drive-fill"></hd-icon>
+            <span class="name">hard-drive-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:hard-drive-outline')" title="Click to copy">
+            <hd-icon icon="eva:hard-drive-outline"></hd-icon>
+            <span class="name">hard-drive-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:hash-fill')" title="Click to copy">
+            <hd-icon icon="eva:hash-fill"></hd-icon>
+            <span class="name">hash-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:hash-outline')" title="Click to copy">
+            <hd-icon icon="eva:hash-outline"></hd-icon>
+            <span class="name">hash-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:headphones-fill')" title="Click to copy">
+            <hd-icon icon="eva:headphones-fill"></hd-icon>
+            <span class="name">headphones-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:headphones-outline')" title="Click to copy">
+            <hd-icon icon="eva:headphones-outline"></hd-icon>
+            <span class="name">headphones-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:heart-fill')" title="Click to copy">
+            <hd-icon icon="eva:heart-fill"></hd-icon>
+            <span class="name">heart-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:heart-outline')" title="Click to copy">
+            <hd-icon icon="eva:heart-outline"></hd-icon>
+            <span class="name">heart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:home-fill')" title="Click to copy">
+            <hd-icon icon="eva:home-fill"></hd-icon>
+            <span class="name">home-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:home-outline')" title="Click to copy">
+            <hd-icon icon="eva:home-outline"></hd-icon>
+            <span class="name">home-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:image-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:image-2-fill"></hd-icon>
+            <span class="name">image-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:image-fill')" title="Click to copy">
+            <hd-icon icon="eva:image-fill"></hd-icon>
+            <span class="name">image-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:image-outline')" title="Click to copy">
+            <hd-icon icon="eva:image-outline"></hd-icon>
+            <span class="name">image-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:inbox-fill')" title="Click to copy">
+            <hd-icon icon="eva:inbox-fill"></hd-icon>
+            <span class="name">inbox-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:inbox-outline')" title="Click to copy">
+            <hd-icon icon="eva:inbox-outline"></hd-icon>
+            <span class="name">inbox-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:info-fill')" title="Click to copy">
+            <hd-icon icon="eva:info-fill"></hd-icon>
+            <span class="name">info-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:info-outline')" title="Click to copy">
+            <hd-icon icon="eva:info-outline"></hd-icon>
+            <span class="name">info-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:keypad-fill')" title="Click to copy">
+            <hd-icon icon="eva:keypad-fill"></hd-icon>
+            <span class="name">keypad-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:keypad-outline')" title="Click to copy">
+            <hd-icon icon="eva:keypad-outline"></hd-icon>
+            <span class="name">keypad-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:layers-fill')" title="Click to copy">
+            <hd-icon icon="eva:layers-fill"></hd-icon>
+            <span class="name">layers-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:layers-outline')" title="Click to copy">
+            <hd-icon icon="eva:layers-outline"></hd-icon>
+            <span class="name">layers-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:layout-fill')" title="Click to copy">
+            <hd-icon icon="eva:layout-fill"></hd-icon>
+            <span class="name">layout-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:layout-outline')" title="Click to copy">
+            <hd-icon icon="eva:layout-outline"></hd-icon>
+            <span class="name">layout-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:link-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:link-2-fill"></hd-icon>
+            <span class="name">link-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:link-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:link-2-outline"></hd-icon>
+            <span class="name">link-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:link-fill')" title="Click to copy">
+            <hd-icon icon="eva:link-fill"></hd-icon>
+            <span class="name">link-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:link-outline')" title="Click to copy">
+            <hd-icon icon="eva:link-outline"></hd-icon>
+            <span class="name">link-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:linkedin-fill')" title="Click to copy">
+            <hd-icon icon="eva:linkedin-fill"></hd-icon>
+            <span class="name">linkedin-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:linkedin-outline')" title="Click to copy">
+            <hd-icon icon="eva:linkedin-outline"></hd-icon>
+            <span class="name">linkedin-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:list-fill')" title="Click to copy">
+            <hd-icon icon="eva:list-fill"></hd-icon>
+            <span class="name">list-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:list-outline')" title="Click to copy">
+            <hd-icon icon="eva:list-outline"></hd-icon>
+            <span class="name">list-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:loader-outline')" title="Click to copy">
+            <hd-icon icon="eva:loader-outline"></hd-icon>
+            <span class="name">loader-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:lock-fill')" title="Click to copy">
+            <hd-icon icon="eva:lock-fill"></hd-icon>
+            <span class="name">lock-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:lock-outline')" title="Click to copy">
+            <hd-icon icon="eva:lock-outline"></hd-icon>
+            <span class="name">lock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:log-in-fill')" title="Click to copy">
+            <hd-icon icon="eva:log-in-fill"></hd-icon>
+            <span class="name">log-in-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:log-in-outline')" title="Click to copy">
+            <hd-icon icon="eva:log-in-outline"></hd-icon>
+            <span class="name">log-in-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:log-out-fill')" title="Click to copy">
+            <hd-icon icon="eva:log-out-fill"></hd-icon>
+            <span class="name">log-out-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:log-out-outline')" title="Click to copy">
+            <hd-icon icon="eva:log-out-outline"></hd-icon>
+            <span class="name">log-out-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:map-fill')" title="Click to copy">
+            <hd-icon icon="eva:map-fill"></hd-icon>
+            <span class="name">map-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:map-outline')" title="Click to copy">
+            <hd-icon icon="eva:map-outline"></hd-icon>
+            <span class="name">map-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:maximize-fill')" title="Click to copy">
+            <hd-icon icon="eva:maximize-fill"></hd-icon>
+            <span class="name">maximize-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:maximize-outline')" title="Click to copy">
+            <hd-icon icon="eva:maximize-outline"></hd-icon>
+            <span class="name">maximize-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:menu-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:menu-2-fill"></hd-icon>
+            <span class="name">menu-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:menu-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:menu-2-outline"></hd-icon>
+            <span class="name">menu-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:menu-arrow-fill')" title="Click to copy">
+            <hd-icon icon="eva:menu-arrow-fill"></hd-icon>
+            <span class="name">menu-arrow-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:menu-arrow-outline')" title="Click to copy">
+            <hd-icon icon="eva:menu-arrow-outline"></hd-icon>
+            <span class="name">menu-arrow-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:menu-fill')" title="Click to copy">
+            <hd-icon icon="eva:menu-fill"></hd-icon>
+            <span class="name">menu-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:menu-outline')" title="Click to copy">
+            <hd-icon icon="eva:menu-outline"></hd-icon>
+            <span class="name">menu-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:message-circle-fill')" title="Click to copy">
+            <hd-icon icon="eva:message-circle-fill"></hd-icon>
+            <span class="name">message-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:message-circle-outline')" title="Click to copy">
+            <hd-icon icon="eva:message-circle-outline"></hd-icon>
+            <span class="name">message-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:message-square-fill')" title="Click to copy">
+            <hd-icon icon="eva:message-square-fill"></hd-icon>
+            <span class="name">message-square-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:message-square-outline')" title="Click to copy">
+            <hd-icon icon="eva:message-square-outline"></hd-icon>
+            <span class="name">message-square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:mic-fill')" title="Click to copy">
+            <hd-icon icon="eva:mic-fill"></hd-icon>
+            <span class="name">mic-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:mic-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:mic-off-fill"></hd-icon>
+            <span class="name">mic-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:mic-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:mic-off-outline"></hd-icon>
+            <span class="name">mic-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:mic-outline')" title="Click to copy">
+            <hd-icon icon="eva:mic-outline"></hd-icon>
+            <span class="name">mic-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:minimize-fill')" title="Click to copy">
+            <hd-icon icon="eva:minimize-fill"></hd-icon>
+            <span class="name">minimize-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:minimize-outline')" title="Click to copy">
+            <hd-icon icon="eva:minimize-outline"></hd-icon>
+            <span class="name">minimize-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:minus-circle-fill')" title="Click to copy">
+            <hd-icon icon="eva:minus-circle-fill"></hd-icon>
+            <span class="name">minus-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:minus-circle-outline')" title="Click to copy">
+            <hd-icon icon="eva:minus-circle-outline"></hd-icon>
+            <span class="name">minus-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:minus-fill')" title="Click to copy">
+            <hd-icon icon="eva:minus-fill"></hd-icon>
+            <span class="name">minus-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:minus-outline')" title="Click to copy">
+            <hd-icon icon="eva:minus-outline"></hd-icon>
+            <span class="name">minus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:minus-square-fill')" title="Click to copy">
+            <hd-icon icon="eva:minus-square-fill"></hd-icon>
+            <span class="name">minus-square-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:minus-square-outline')" title="Click to copy">
+            <hd-icon icon="eva:minus-square-outline"></hd-icon>
+            <span class="name">minus-square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:monitor-fill')" title="Click to copy">
+            <hd-icon icon="eva:monitor-fill"></hd-icon>
+            <span class="name">monitor-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:monitor-outline')" title="Click to copy">
+            <hd-icon icon="eva:monitor-outline"></hd-icon>
+            <span class="name">monitor-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:moon-fill')" title="Click to copy">
+            <hd-icon icon="eva:moon-fill"></hd-icon>
+            <span class="name">moon-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:moon-outline')" title="Click to copy">
+            <hd-icon icon="eva:moon-outline"></hd-icon>
+            <span class="name">moon-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:more-horizontal-fill')" title="Click to copy">
+            <hd-icon icon="eva:more-horizontal-fill"></hd-icon>
+            <span class="name">more-horizontal-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:more-horizontal-outline')" title="Click to copy">
+            <hd-icon icon="eva:more-horizontal-outline"></hd-icon>
+            <span class="name">more-horizontal-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:more-vertical-fill')" title="Click to copy">
+            <hd-icon icon="eva:more-vertical-fill"></hd-icon>
+            <span class="name">more-vertical-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:more-vertical-outline')" title="Click to copy">
+            <hd-icon icon="eva:more-vertical-outline"></hd-icon>
+            <span class="name">more-vertical-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:move-fill')" title="Click to copy">
+            <hd-icon icon="eva:move-fill"></hd-icon>
+            <span class="name">move-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:move-outline')" title="Click to copy">
+            <hd-icon icon="eva:move-outline"></hd-icon>
+            <span class="name">move-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:music-fill')" title="Click to copy">
+            <hd-icon icon="eva:music-fill"></hd-icon>
+            <span class="name">music-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:music-outline')" title="Click to copy">
+            <hd-icon icon="eva:music-outline"></hd-icon>
+            <span class="name">music-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:navigation-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:navigation-2-fill"></hd-icon>
+            <span class="name">navigation-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:navigation-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:navigation-2-outline"></hd-icon>
+            <span class="name">navigation-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:navigation-fill')" title="Click to copy">
+            <hd-icon icon="eva:navigation-fill"></hd-icon>
+            <span class="name">navigation-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:navigation-outline')" title="Click to copy">
+            <hd-icon icon="eva:navigation-outline"></hd-icon>
+            <span class="name">navigation-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:npm-fill')" title="Click to copy">
+            <hd-icon icon="eva:npm-fill"></hd-icon>
+            <span class="name">npm-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:npm-outline')" title="Click to copy">
+            <hd-icon icon="eva:npm-outline"></hd-icon>
+            <span class="name">npm-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:options-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:options-2-fill"></hd-icon>
+            <span class="name">options-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:options-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:options-2-outline"></hd-icon>
+            <span class="name">options-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:options-fill')" title="Click to copy">
+            <hd-icon icon="eva:options-fill"></hd-icon>
+            <span class="name">options-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:options-outline')" title="Click to copy">
+            <hd-icon icon="eva:options-outline"></hd-icon>
+            <span class="name">options-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pantone-fill')" title="Click to copy">
+            <hd-icon icon="eva:pantone-fill"></hd-icon>
+            <span class="name">pantone-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pantone-outline')" title="Click to copy">
+            <hd-icon icon="eva:pantone-outline"></hd-icon>
+            <span class="name">pantone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:paper-plane-fill')" title="Click to copy">
+            <hd-icon icon="eva:paper-plane-fill"></hd-icon>
+            <span class="name">paper-plane-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:paper-plane-outline')" title="Click to copy">
+            <hd-icon icon="eva:paper-plane-outline"></hd-icon>
+            <span class="name">paper-plane-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pause-circle-fill')" title="Click to copy">
+            <hd-icon icon="eva:pause-circle-fill"></hd-icon>
+            <span class="name">pause-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pause-circle-outline')" title="Click to copy">
+            <hd-icon icon="eva:pause-circle-outline"></hd-icon>
+            <span class="name">pause-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:people-fill')" title="Click to copy">
+            <hd-icon icon="eva:people-fill"></hd-icon>
+            <span class="name">people-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:people-outline')" title="Click to copy">
+            <hd-icon icon="eva:people-outline"></hd-icon>
+            <span class="name">people-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:percent-fill')" title="Click to copy">
+            <hd-icon icon="eva:percent-fill"></hd-icon>
+            <span class="name">percent-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:percent-outline')" title="Click to copy">
+            <hd-icon icon="eva:percent-outline"></hd-icon>
+            <span class="name">percent-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:person-add-fill')" title="Click to copy">
+            <hd-icon icon="eva:person-add-fill"></hd-icon>
+            <span class="name">person-add-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:person-add-outline')" title="Click to copy">
+            <hd-icon icon="eva:person-add-outline"></hd-icon>
+            <span class="name">person-add-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:person-delete-fill')" title="Click to copy">
+            <hd-icon icon="eva:person-delete-fill"></hd-icon>
+            <span class="name">person-delete-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:person-delete-outline')" title="Click to copy">
+            <hd-icon icon="eva:person-delete-outline"></hd-icon>
+            <span class="name">person-delete-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:person-done-fill')" title="Click to copy">
+            <hd-icon icon="eva:person-done-fill"></hd-icon>
+            <span class="name">person-done-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:person-done-outline')" title="Click to copy">
+            <hd-icon icon="eva:person-done-outline"></hd-icon>
+            <span class="name">person-done-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:person-fill')" title="Click to copy">
+            <hd-icon icon="eva:person-fill"></hd-icon>
+            <span class="name">person-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:person-outline')" title="Click to copy">
+            <hd-icon icon="eva:person-outline"></hd-icon>
+            <span class="name">person-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:person-remove-fill')" title="Click to copy">
+            <hd-icon icon="eva:person-remove-fill"></hd-icon>
+            <span class="name">person-remove-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:person-remove-outline')" title="Click to copy">
+            <hd-icon icon="eva:person-remove-outline"></hd-icon>
+            <span class="name">person-remove-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:phone-call-fill')" title="Click to copy">
+            <hd-icon icon="eva:phone-call-fill"></hd-icon>
+            <span class="name">phone-call-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:phone-call-outline')" title="Click to copy">
+            <hd-icon icon="eva:phone-call-outline"></hd-icon>
+            <span class="name">phone-call-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:phone-fill')" title="Click to copy">
+            <hd-icon icon="eva:phone-fill"></hd-icon>
+            <span class="name">phone-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:phone-missed-fill')" title="Click to copy">
+            <hd-icon icon="eva:phone-missed-fill"></hd-icon>
+            <span class="name">phone-missed-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:phone-missed-outline')" title="Click to copy">
+            <hd-icon icon="eva:phone-missed-outline"></hd-icon>
+            <span class="name">phone-missed-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:phone-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:phone-off-fill"></hd-icon>
+            <span class="name">phone-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:phone-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:phone-off-outline"></hd-icon>
+            <span class="name">phone-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:phone-outline')" title="Click to copy">
+            <hd-icon icon="eva:phone-outline"></hd-icon>
+            <span class="name">phone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pie-chart-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:pie-chart-2-fill"></hd-icon>
+            <span class="name">pie-chart-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pie-chart-fill')" title="Click to copy">
+            <hd-icon icon="eva:pie-chart-fill"></hd-icon>
+            <span class="name">pie-chart-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pie-chart-outline')" title="Click to copy">
+            <hd-icon icon="eva:pie-chart-outline"></hd-icon>
+            <span class="name">pie-chart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pin-fill')" title="Click to copy">
+            <hd-icon icon="eva:pin-fill"></hd-icon>
+            <span class="name">pin-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pin-outline')" title="Click to copy">
+            <hd-icon icon="eva:pin-outline"></hd-icon>
+            <span class="name">pin-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:play-circle-fill')" title="Click to copy">
+            <hd-icon icon="eva:play-circle-fill"></hd-icon>
+            <span class="name">play-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:play-circle-outline')" title="Click to copy">
+            <hd-icon icon="eva:play-circle-outline"></hd-icon>
+            <span class="name">play-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:plus-circle-fill')" title="Click to copy">
+            <hd-icon icon="eva:plus-circle-fill"></hd-icon>
+            <span class="name">plus-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:plus-circle-outline')" title="Click to copy">
+            <hd-icon icon="eva:plus-circle-outline"></hd-icon>
+            <span class="name">plus-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:plus-fill')" title="Click to copy">
+            <hd-icon icon="eva:plus-fill"></hd-icon>
+            <span class="name">plus-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:plus-outline')" title="Click to copy">
+            <hd-icon icon="eva:plus-outline"></hd-icon>
+            <span class="name">plus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:plus-square-fill')" title="Click to copy">
+            <hd-icon icon="eva:plus-square-fill"></hd-icon>
+            <span class="name">plus-square-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:plus-square-outline')" title="Click to copy">
+            <hd-icon icon="eva:plus-square-outline"></hd-icon>
+            <span class="name">plus-square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:power-fill')" title="Click to copy">
+            <hd-icon icon="eva:power-fill"></hd-icon>
+            <span class="name">power-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:power-outline')" title="Click to copy">
+            <hd-icon icon="eva:power-outline"></hd-icon>
+            <span class="name">power-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pricetags-fill')" title="Click to copy">
+            <hd-icon icon="eva:pricetags-fill"></hd-icon>
+            <span class="name">pricetags-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:pricetags-outline')" title="Click to copy">
+            <hd-icon icon="eva:pricetags-outline"></hd-icon>
+            <span class="name">pricetags-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:printer-fill')" title="Click to copy">
+            <hd-icon icon="eva:printer-fill"></hd-icon>
+            <span class="name">printer-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:printer-outline')" title="Click to copy">
+            <hd-icon icon="eva:printer-outline"></hd-icon>
+            <span class="name">printer-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:question-mark-circle-fill')" title="Click to copy">
+            <hd-icon icon="eva:question-mark-circle-fill"></hd-icon>
+            <span class="name">question-mark-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:question-mark-circle-outline')" title="Click to copy">
+            <hd-icon icon="eva:question-mark-circle-outline"></hd-icon>
+            <span class="name">question-mark-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:question-mark-fill')" title="Click to copy">
+            <hd-icon icon="eva:question-mark-fill"></hd-icon>
+            <span class="name">question-mark-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:question-mark-outline')" title="Click to copy">
+            <hd-icon icon="eva:question-mark-outline"></hd-icon>
+            <span class="name">question-mark-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:radio-button-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:radio-button-off-fill"></hd-icon>
+            <span class="name">radio-button-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:radio-button-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:radio-button-off-outline"></hd-icon>
+            <span class="name">radio-button-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:radio-button-on-fill')" title="Click to copy">
+            <hd-icon icon="eva:radio-button-on-fill"></hd-icon>
+            <span class="name">radio-button-on-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:radio-button-on-outline')" title="Click to copy">
+            <hd-icon icon="eva:radio-button-on-outline"></hd-icon>
+            <span class="name">radio-button-on-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:radio-fill')" title="Click to copy">
+            <hd-icon icon="eva:radio-fill"></hd-icon>
+            <span class="name">radio-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:radio-outline')" title="Click to copy">
+            <hd-icon icon="eva:radio-outline"></hd-icon>
+            <span class="name">radio-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:recording-fill')" title="Click to copy">
+            <hd-icon icon="eva:recording-fill"></hd-icon>
+            <span class="name">recording-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:recording-outline')" title="Click to copy">
+            <hd-icon icon="eva:recording-outline"></hd-icon>
+            <span class="name">recording-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:refresh-fill')" title="Click to copy">
+            <hd-icon icon="eva:refresh-fill"></hd-icon>
+            <span class="name">refresh-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:refresh-outline')" title="Click to copy">
+            <hd-icon icon="eva:refresh-outline"></hd-icon>
+            <span class="name">refresh-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:repeat-fill')" title="Click to copy">
+            <hd-icon icon="eva:repeat-fill"></hd-icon>
+            <span class="name">repeat-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:repeat-outline')" title="Click to copy">
+            <hd-icon icon="eva:repeat-outline"></hd-icon>
+            <span class="name">repeat-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:rewind-left-fill')" title="Click to copy">
+            <hd-icon icon="eva:rewind-left-fill"></hd-icon>
+            <span class="name">rewind-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:rewind-left-outline')" title="Click to copy">
+            <hd-icon icon="eva:rewind-left-outline"></hd-icon>
+            <span class="name">rewind-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:rewind-right-fill')" title="Click to copy">
+            <hd-icon icon="eva:rewind-right-fill"></hd-icon>
+            <span class="name">rewind-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:rewind-right-outline')" title="Click to copy">
+            <hd-icon icon="eva:rewind-right-outline"></hd-icon>
+            <span class="name">rewind-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:save-fill')" title="Click to copy">
+            <hd-icon icon="eva:save-fill"></hd-icon>
+            <span class="name">save-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:save-outline')" title="Click to copy">
+            <hd-icon icon="eva:save-outline"></hd-icon>
+            <span class="name">save-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:scissors-fill')" title="Click to copy">
+            <hd-icon icon="eva:scissors-fill"></hd-icon>
+            <span class="name">scissors-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:scissors-outline')" title="Click to copy">
+            <hd-icon icon="eva:scissors-outline"></hd-icon>
+            <span class="name">scissors-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:search-fill')" title="Click to copy">
+            <hd-icon icon="eva:search-fill"></hd-icon>
+            <span class="name">search-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:search-outline')" title="Click to copy">
+            <hd-icon icon="eva:search-outline"></hd-icon>
+            <span class="name">search-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:settings-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:settings-2-fill"></hd-icon>
+            <span class="name">settings-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:settings-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:settings-2-outline"></hd-icon>
+            <span class="name">settings-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:settings-fill')" title="Click to copy">
+            <hd-icon icon="eva:settings-fill"></hd-icon>
+            <span class="name">settings-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:settings-outline')" title="Click to copy">
+            <hd-icon icon="eva:settings-outline"></hd-icon>
+            <span class="name">settings-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shake-fill')" title="Click to copy">
+            <hd-icon icon="eva:shake-fill"></hd-icon>
+            <span class="name">shake-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shake-outline')" title="Click to copy">
+            <hd-icon icon="eva:shake-outline"></hd-icon>
+            <span class="name">shake-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:share-fill')" title="Click to copy">
+            <hd-icon icon="eva:share-fill"></hd-icon>
+            <span class="name">share-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:share-outline')" title="Click to copy">
+            <hd-icon icon="eva:share-outline"></hd-icon>
+            <span class="name">share-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shield-fill')" title="Click to copy">
+            <hd-icon icon="eva:shield-fill"></hd-icon>
+            <span class="name">shield-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shield-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:shield-off-fill"></hd-icon>
+            <span class="name">shield-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shield-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:shield-off-outline"></hd-icon>
+            <span class="name">shield-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shield-outline')" title="Click to copy">
+            <hd-icon icon="eva:shield-outline"></hd-icon>
+            <span class="name">shield-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shopping-bag-fill')" title="Click to copy">
+            <hd-icon icon="eva:shopping-bag-fill"></hd-icon>
+            <span class="name">shopping-bag-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shopping-bag-outline')" title="Click to copy">
+            <hd-icon icon="eva:shopping-bag-outline"></hd-icon>
+            <span class="name">shopping-bag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shopping-cart-fill')" title="Click to copy">
+            <hd-icon icon="eva:shopping-cart-fill"></hd-icon>
+            <span class="name">shopping-cart-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shopping-cart-outline')" title="Click to copy">
+            <hd-icon icon="eva:shopping-cart-outline"></hd-icon>
+            <span class="name">shopping-cart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shuffle-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:shuffle-2-fill"></hd-icon>
+            <span class="name">shuffle-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shuffle-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:shuffle-2-outline"></hd-icon>
+            <span class="name">shuffle-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shuffle-fill')" title="Click to copy">
+            <hd-icon icon="eva:shuffle-fill"></hd-icon>
+            <span class="name">shuffle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:shuffle-outline')" title="Click to copy">
+            <hd-icon icon="eva:shuffle-outline"></hd-icon>
+            <span class="name">shuffle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:skip-back-fill')" title="Click to copy">
+            <hd-icon icon="eva:skip-back-fill"></hd-icon>
+            <span class="name">skip-back-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:skip-back-outline')" title="Click to copy">
+            <hd-icon icon="eva:skip-back-outline"></hd-icon>
+            <span class="name">skip-back-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:skip-forward-fill')" title="Click to copy">
+            <hd-icon icon="eva:skip-forward-fill"></hd-icon>
+            <span class="name">skip-forward-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:skip-forward-outline')" title="Click to copy">
+            <hd-icon icon="eva:skip-forward-outline"></hd-icon>
+            <span class="name">skip-forward-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:slash-fill')" title="Click to copy">
+            <hd-icon icon="eva:slash-fill"></hd-icon>
+            <span class="name">slash-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:slash-outline')" title="Click to copy">
+            <hd-icon icon="eva:slash-outline"></hd-icon>
+            <span class="name">slash-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:smartphone-fill')" title="Click to copy">
+            <hd-icon icon="eva:smartphone-fill"></hd-icon>
+            <span class="name">smartphone-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:smartphone-outline')" title="Click to copy">
+            <hd-icon icon="eva:smartphone-outline"></hd-icon>
+            <span class="name">smartphone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:smiling-face-fill')" title="Click to copy">
+            <hd-icon icon="eva:smiling-face-fill"></hd-icon>
+            <span class="name">smiling-face-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:smiling-face-outline')" title="Click to copy">
+            <hd-icon icon="eva:smiling-face-outline"></hd-icon>
+            <span class="name">smiling-face-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:speaker-fill')" title="Click to copy">
+            <hd-icon icon="eva:speaker-fill"></hd-icon>
+            <span class="name">speaker-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:speaker-outline')" title="Click to copy">
+            <hd-icon icon="eva:speaker-outline"></hd-icon>
+            <span class="name">speaker-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:square-fill')" title="Click to copy">
+            <hd-icon icon="eva:square-fill"></hd-icon>
+            <span class="name">square-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:square-outline')" title="Click to copy">
+            <hd-icon icon="eva:square-outline"></hd-icon>
+            <span class="name">square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:star-fill')" title="Click to copy">
+            <hd-icon icon="eva:star-fill"></hd-icon>
+            <span class="name">star-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:star-outline')" title="Click to copy">
+            <hd-icon icon="eva:star-outline"></hd-icon>
+            <span class="name">star-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:stop-circle-fill')" title="Click to copy">
+            <hd-icon icon="eva:stop-circle-fill"></hd-icon>
+            <span class="name">stop-circle-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:stop-circle-outline')" title="Click to copy">
+            <hd-icon icon="eva:stop-circle-outline"></hd-icon>
+            <span class="name">stop-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:sun-fill')" title="Click to copy">
+            <hd-icon icon="eva:sun-fill"></hd-icon>
+            <span class="name">sun-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:sun-outline')" title="Click to copy">
+            <hd-icon icon="eva:sun-outline"></hd-icon>
+            <span class="name">sun-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:swap-fill')" title="Click to copy">
+            <hd-icon icon="eva:swap-fill"></hd-icon>
+            <span class="name">swap-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:swap-outline')" title="Click to copy">
+            <hd-icon icon="eva:swap-outline"></hd-icon>
+            <span class="name">swap-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:sync-fill')" title="Click to copy">
+            <hd-icon icon="eva:sync-fill"></hd-icon>
+            <span class="name">sync-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:sync-outline')" title="Click to copy">
+            <hd-icon icon="eva:sync-outline"></hd-icon>
+            <span class="name">sync-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:text-fill')" title="Click to copy">
+            <hd-icon icon="eva:text-fill"></hd-icon>
+            <span class="name">text-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:text-outline')" title="Click to copy">
+            <hd-icon icon="eva:text-outline"></hd-icon>
+            <span class="name">text-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:thermometer-fill')" title="Click to copy">
+            <hd-icon icon="eva:thermometer-fill"></hd-icon>
+            <span class="name">thermometer-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:thermometer-minus-fill')" title="Click to copy">
+            <hd-icon icon="eva:thermometer-minus-fill"></hd-icon>
+            <span class="name">thermometer-minus-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:thermometer-minus-outline')" title="Click to copy">
+            <hd-icon icon="eva:thermometer-minus-outline"></hd-icon>
+            <span class="name">thermometer-minus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:thermometer-outline')" title="Click to copy">
+            <hd-icon icon="eva:thermometer-outline"></hd-icon>
+            <span class="name">thermometer-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:thermometer-plus-fill')" title="Click to copy">
+            <hd-icon icon="eva:thermometer-plus-fill"></hd-icon>
+            <span class="name">thermometer-plus-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:thermometer-plus-outline')" title="Click to copy">
+            <hd-icon icon="eva:thermometer-plus-outline"></hd-icon>
+            <span class="name">thermometer-plus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:toggle-left-fill')" title="Click to copy">
+            <hd-icon icon="eva:toggle-left-fill"></hd-icon>
+            <span class="name">toggle-left-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:toggle-left-outline')" title="Click to copy">
+            <hd-icon icon="eva:toggle-left-outline"></hd-icon>
+            <span class="name">toggle-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:toggle-right-fill')" title="Click to copy">
+            <hd-icon icon="eva:toggle-right-fill"></hd-icon>
+            <span class="name">toggle-right-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:toggle-right-outline')" title="Click to copy">
+            <hd-icon icon="eva:toggle-right-outline"></hd-icon>
+            <span class="name">toggle-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:trash-2-fill')" title="Click to copy">
+            <hd-icon icon="eva:trash-2-fill"></hd-icon>
+            <span class="name">trash-2-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:trash-2-outline')" title="Click to copy">
+            <hd-icon icon="eva:trash-2-outline"></hd-icon>
+            <span class="name">trash-2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:trash-fill')" title="Click to copy">
+            <hd-icon icon="eva:trash-fill"></hd-icon>
+            <span class="name">trash-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:trash-outline')" title="Click to copy">
+            <hd-icon icon="eva:trash-outline"></hd-icon>
+            <span class="name">trash-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:trending-down-fill')" title="Click to copy">
+            <hd-icon icon="eva:trending-down-fill"></hd-icon>
+            <span class="name">trending-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:trending-down-outline')" title="Click to copy">
+            <hd-icon icon="eva:trending-down-outline"></hd-icon>
+            <span class="name">trending-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:trending-up-fill')" title="Click to copy">
+            <hd-icon icon="eva:trending-up-fill"></hd-icon>
+            <span class="name">trending-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:trending-up-outline')" title="Click to copy">
+            <hd-icon icon="eva:trending-up-outline"></hd-icon>
+            <span class="name">trending-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:tv-fill')" title="Click to copy">
+            <hd-icon icon="eva:tv-fill"></hd-icon>
+            <span class="name">tv-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:tv-outline')" title="Click to copy">
+            <hd-icon icon="eva:tv-outline"></hd-icon>
+            <span class="name">tv-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:twitter-fill')" title="Click to copy">
+            <hd-icon icon="eva:twitter-fill"></hd-icon>
+            <span class="name">twitter-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:twitter-outline')" title="Click to copy">
+            <hd-icon icon="eva:twitter-outline"></hd-icon>
+            <span class="name">twitter-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:umbrella-fill')" title="Click to copy">
+            <hd-icon icon="eva:umbrella-fill"></hd-icon>
+            <span class="name">umbrella-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:umbrella-outline')" title="Click to copy">
+            <hd-icon icon="eva:umbrella-outline"></hd-icon>
+            <span class="name">umbrella-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:undo-fill')" title="Click to copy">
+            <hd-icon icon="eva:undo-fill"></hd-icon>
+            <span class="name">undo-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:undo-outline')" title="Click to copy">
+            <hd-icon icon="eva:undo-outline"></hd-icon>
+            <span class="name">undo-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:unlock-fill')" title="Click to copy">
+            <hd-icon icon="eva:unlock-fill"></hd-icon>
+            <span class="name">unlock-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:unlock-outline')" title="Click to copy">
+            <hd-icon icon="eva:unlock-outline"></hd-icon>
+            <span class="name">unlock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:upload-fill')" title="Click to copy">
+            <hd-icon icon="eva:upload-fill"></hd-icon>
+            <span class="name">upload-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:upload-outline')" title="Click to copy">
+            <hd-icon icon="eva:upload-outline"></hd-icon>
+            <span class="name">upload-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:video-fill')" title="Click to copy">
+            <hd-icon icon="eva:video-fill"></hd-icon>
+            <span class="name">video-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:video-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:video-off-fill"></hd-icon>
+            <span class="name">video-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:video-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:video-off-outline"></hd-icon>
+            <span class="name">video-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:video-outline')" title="Click to copy">
+            <hd-icon icon="eva:video-outline"></hd-icon>
+            <span class="name">video-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:volume-down-fill')" title="Click to copy">
+            <hd-icon icon="eva:volume-down-fill"></hd-icon>
+            <span class="name">volume-down-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:volume-down-outline')" title="Click to copy">
+            <hd-icon icon="eva:volume-down-outline"></hd-icon>
+            <span class="name">volume-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:volume-mute-fill')" title="Click to copy">
+            <hd-icon icon="eva:volume-mute-fill"></hd-icon>
+            <span class="name">volume-mute-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:volume-mute-outline')" title="Click to copy">
+            <hd-icon icon="eva:volume-mute-outline"></hd-icon>
+            <span class="name">volume-mute-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:volume-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:volume-off-fill"></hd-icon>
+            <span class="name">volume-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:volume-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:volume-off-outline"></hd-icon>
+            <span class="name">volume-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:volume-up-fill')" title="Click to copy">
+            <hd-icon icon="eva:volume-up-fill"></hd-icon>
+            <span class="name">volume-up-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:volume-up-outline')" title="Click to copy">
+            <hd-icon icon="eva:volume-up-outline"></hd-icon>
+            <span class="name">volume-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:wifi-fill')" title="Click to copy">
+            <hd-icon icon="eva:wifi-fill"></hd-icon>
+            <span class="name">wifi-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:wifi-off-fill')" title="Click to copy">
+            <hd-icon icon="eva:wifi-off-fill"></hd-icon>
+            <span class="name">wifi-off-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:wifi-off-outline')" title="Click to copy">
+            <hd-icon icon="eva:wifi-off-outline"></hd-icon>
+            <span class="name">wifi-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('eva:wifi-outline')" title="Click to copy">
+            <hd-icon icon="eva:wifi-outline"></hd-icon>
+            <span class="name">wifi-outline</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAAD0IkZAswYkBoM6o4AWEhmVURmMFMSShdDdjZoVGRFNjV1RGRFMEV4ZDc1NbN0VJYmdjJCYjSHY1dnUVMlOHcWeFgoKghHhVtGc2eFYnZzY4aCR0dUMmBYlVsLEggBD4MBJAYJBvkKF+oBBgdkIgmVA08SA5sCCAsICQIBKaMDNQY6NAIJN8cBBASzAWcCGAEgBO4bJAQUE/oCOwHVAfoDAQEFlQEoAc0C5QQCI0sHHSwXAShkSQ1+OkRyLgIl1gIGDZ8FpQIHIfYCkAM0VQ7MAUMUN9MBASsSogGVAhSWAUwjAjCRAhLcAxkMBAIMAlkCzFFz2w8dGDjWIc/ruh79u3rQZcZZ9QwyZIZK8+VF6csLzNSoObABwU80VpKNjzMTvdmunbok34r+dpkXQeXHq09un2goNo0xarvHVYCsX+MFdErNSNnYjZdtNtkQWZX2gfxsFz5gl+z8HdujSDCWpeQz7udCet/hLIItSvSuDyjqcqQIfBCpm15Jnyedrh8AI+91InCdS9xMeUi4ptBcdk/YJFGi6ZB+nzWYSsNspDpva4iElyHKmxaMA2+g16BpkZ+e9IkxVetfyuL0B7gP9KCIszNMJDTIzAOQvj8QR6bOrdwMpvyhn4cT6iuiH34Nu9wemLG8KPSSlpl8PzgteLDu9+oWt3QPAA+cyRXoKTxlad/fi8CrBxdg0pgmdCgw2AJw3S0+4bOPUw3Xoe9Iu9IrI+OJ650jjZA/+wCX8OxfNlZ7in50O337fjFvjQ33iq1+WQpBslQO29GR/d0jTyn4DpViNIwgMsqhdKX3hUI44MgCezlWpqiqysFQw7z57eByTfwRczslFbzgEs1EHYYU5voGSj5o5MfhXUWHyBQvqBi5wwMn+yTMyCTG1CJBdIh1ty4F9GZVi4pPFApiCoeiql9CMZYSH8BnnwS3HXtsoiZF31RiftK+H0ENeX2PDKeAMsFEdaqa0n00mAFGNgGU8ZlYMXS90etiMqMOgmRxEqzUW9lmjqQN6aVB8LsgpJil0eYY25BnVLBwOCdt98hsg3UDshO0IWcBpgpDzjFrKcpR+8X0LGD86CydHypOXlx/+OdNi9DqwSOV94uMh9wJbfWBu+hqBrc7kDftoF7zv0290BriFuXHXZzyP0KJX4tC40xY2akMrtiWmzmOaGzEbGEGoNKzGWtLA0qvtDo+qa1rY+Tlotz/tMM2xdSsfcp52YY42cPdYyp+FoHnmr14saI3nfN7l6X7ltBoD+lZMvCnadrfOVCneJtoUgAxChAAkQASgAFACAIKEEAAYAAAAAAEAAAADWxzaWNvbi0wMS5zdmcAAAANbHNpY29uLTAyLnN2ZwAAAA1sc2ljb24tMDMuc3ZnAAAADWxzaWNvbi0wNC5zdmf/////AAAAAwAAAQ0IomjBICgRggBKBAiCEi1agiQKIAlSNmXQFAmYtCURIgBJFgAYAGgTIClLBEjAogXJFkCTEAlaIAkThEkQAi2StiHRJAUAhATTIkjLpgQCNCWbggkLsABJMCFBBiUTIiEBpEgRMi1YEg1YkECblASaAk3QNElCkgXCkEGDkgBDokXDJEDTAkUCoGCApGlJgkhBMkFQhkGbImkbBAiQMA1SEEARIiFLlE2JAg1AICSQEClKBCFYgCWCBgXLgCXIIEURpEUJBm2ZoCQJEEhQBCwSBESblESZMAQDpEAJpiQRAiWRkATQEGEBgCRKImmIFCjLkAGChAQJlGAINAzCAGUBgCUAlizTEglAoghSAgAAAAA=";
+
+const chunks = {
+  "lsicon-01.svg": new URL("./lsicon-01.svg", import.meta.url).href,
+  "lsicon-02.svg": new URL("./lsicon-02.svg", import.meta.url).href,
+  "lsicon-03.svg": new URL("./lsicon-03.svg", import.meta.url).href,
+  "lsicon-04.svg": new URL("./lsicon-04.svg", import.meta.url).href
+};
+
+register('lsicon', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

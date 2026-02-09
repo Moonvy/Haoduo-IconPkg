@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formkit - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>formkit <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(144)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('formkit:add')" title="Click to copy">
+            <hd-icon icon="formkit:add"></hd-icon>
+            <span class="name">add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:amex')" title="Click to copy">
+            <hd-icon icon="formkit:amex"></hd-icon>
+            <span class="name">amex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:android')" title="Click to copy">
+            <hd-icon icon="formkit:android"></hd-icon>
+            <span class="name">android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:apple')" title="Click to copy">
+            <hd-icon icon="formkit:apple"></hd-icon>
+            <span class="name">apple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:arrowdown')" title="Click to copy">
+            <hd-icon icon="formkit:arrowdown"></hd-icon>
+            <span class="name">arrowdown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:arrowleft')" title="Click to copy">
+            <hd-icon icon="formkit:arrowleft"></hd-icon>
+            <span class="name">arrowleft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:arrowright')" title="Click to copy">
+            <hd-icon icon="formkit:arrowright"></hd-icon>
+            <span class="name">arrowright</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:arrowup')" title="Click to copy">
+            <hd-icon icon="formkit:arrowup"></hd-icon>
+            <span class="name">arrowup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:avatarman')" title="Click to copy">
+            <hd-icon icon="formkit:avatarman"></hd-icon>
+            <span class="name">avatarman</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:avatarwoman')" title="Click to copy">
+            <hd-icon icon="formkit:avatarwoman"></hd-icon>
+            <span class="name">avatarwoman</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:bitcoin')" title="Click to copy">
+            <hd-icon icon="formkit:bitcoin"></hd-icon>
+            <span class="name">bitcoin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:bnb')" title="Click to copy">
+            <hd-icon icon="formkit:bnb"></hd-icon>
+            <span class="name">bnb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:bookmark')" title="Click to copy">
+            <hd-icon icon="formkit:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:button')" title="Click to copy">
+            <hd-icon icon="formkit:button"></hd-icon>
+            <span class="name">button</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:cardano')" title="Click to copy">
+            <hd-icon icon="formkit:cardano"></hd-icon>
+            <span class="name">cardano</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:caretdown')" title="Click to copy">
+            <hd-icon icon="formkit:caretdown"></hd-icon>
+            <span class="name">caretdown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:caretleft')" title="Click to copy">
+            <hd-icon icon="formkit:caretleft"></hd-icon>
+            <span class="name">caretleft</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:caretright')" title="Click to copy">
+            <hd-icon icon="formkit:caretright"></hd-icon>
+            <span class="name">caretright</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:caretup')" title="Click to copy">
+            <hd-icon icon="formkit:caretup"></hd-icon>
+            <span class="name">caretup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:check')" title="Click to copy">
+            <hd-icon icon="formkit:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:checkbox')" title="Click to copy">
+            <hd-icon icon="formkit:checkbox"></hd-icon>
+            <span class="name">checkbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:circle')" title="Click to copy">
+            <hd-icon icon="formkit:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:close')" title="Click to copy">
+            <hd-icon icon="formkit:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:color')" title="Click to copy">
+            <hd-icon icon="formkit:color"></hd-icon>
+            <span class="name">color</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:compress')" title="Click to copy">
+            <hd-icon icon="formkit:compress"></hd-icon>
+            <span class="name">compress</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:currency')" title="Click to copy">
+            <hd-icon icon="formkit:currency"></hd-icon>
+            <span class="name">currency</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:date')" title="Click to copy">
+            <hd-icon icon="formkit:date"></hd-icon>
+            <span class="name">date</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:datetime')" title="Click to copy">
+            <hd-icon icon="formkit:datetime"></hd-icon>
+            <span class="name">datetime</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:discover')" title="Click to copy">
+            <hd-icon icon="formkit:discover"></hd-icon>
+            <span class="name">discover</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:dogecoin')" title="Click to copy">
+            <hd-icon icon="formkit:dogecoin"></hd-icon>
+            <span class="name">dogecoin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:dollar')" title="Click to copy">
+            <hd-icon icon="formkit:dollar"></hd-icon>
+            <span class="name">dollar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:down')" title="Click to copy">
+            <hd-icon icon="formkit:down"></hd-icon>
+            <span class="name">down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:download')" title="Click to copy">
+            <hd-icon icon="formkit:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:downloadcloud')" title="Click to copy">
+            <hd-icon icon="formkit:downloadcloud"></hd-icon>
+            <span class="name">downloadcloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:draghandle')" title="Click to copy">
+            <hd-icon icon="formkit:draghandle"></hd-icon>
+            <span class="name">draghandle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:email')" title="Click to copy">
+            <hd-icon icon="formkit:email"></hd-icon>
+            <span class="name">email</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:ethereum')" title="Click to copy">
+            <hd-icon icon="formkit:ethereum"></hd-icon>
+            <span class="name">ethereum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:euro')" title="Click to copy">
+            <hd-icon icon="formkit:euro"></hd-icon>
+            <span class="name">euro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:expand')" title="Click to copy">
+            <hd-icon icon="formkit:expand"></hd-icon>
+            <span class="name">expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:export')" title="Click to copy">
+            <hd-icon icon="formkit:export"></hd-icon>
+            <span class="name">export</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:eye')" title="Click to copy">
+            <hd-icon icon="formkit:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:eyeclosed')" title="Click to copy">
+            <hd-icon icon="formkit:eyeclosed"></hd-icon>
+            <span class="name">eyeclosed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:facebook')" title="Click to copy">
+            <hd-icon icon="formkit:facebook"></hd-icon>
+            <span class="name">facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:fastforward')" title="Click to copy">
+            <hd-icon icon="formkit:fastforward"></hd-icon>
+            <span class="name">fastforward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:file')" title="Click to copy">
+            <hd-icon icon="formkit:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:fileaudio')" title="Click to copy">
+            <hd-icon icon="formkit:fileaudio"></hd-icon>
+            <span class="name">fileaudio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:filedoc')" title="Click to copy">
+            <hd-icon icon="formkit:filedoc"></hd-icon>
+            <span class="name">filedoc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:fileimage')" title="Click to copy">
+            <hd-icon icon="formkit:fileimage"></hd-icon>
+            <span class="name">fileimage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:filepdf')" title="Click to copy">
+            <hd-icon icon="formkit:filepdf"></hd-icon>
+            <span class="name">filepdf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:filevideo')" title="Click to copy">
+            <hd-icon icon="formkit:filevideo"></hd-icon>
+            <span class="name">filevideo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:flag')" title="Click to copy">
+            <hd-icon icon="formkit:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:folder')" title="Click to copy">
+            <hd-icon icon="formkit:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:franc')" title="Click to copy">
+            <hd-icon icon="formkit:franc"></hd-icon>
+            <span class="name">franc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:github')" title="Click to copy">
+            <hd-icon icon="formkit:github"></hd-icon>
+            <span class="name">github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:google')" title="Click to copy">
+            <hd-icon icon="formkit:google"></hd-icon>
+            <span class="name">google</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:group')" title="Click to copy">
+            <hd-icon icon="formkit:group"></hd-icon>
+            <span class="name">group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:happy')" title="Click to copy">
+            <hd-icon icon="formkit:happy"></hd-icon>
+            <span class="name">happy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:heart')" title="Click to copy">
+            <hd-icon icon="formkit:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:help')" title="Click to copy">
+            <hd-icon icon="formkit:help"></hd-icon>
+            <span class="name">help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:hidden')" title="Click to copy">
+            <hd-icon icon="formkit:hidden"></hd-icon>
+            <span class="name">hidden</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:info')" title="Click to copy">
+            <hd-icon icon="formkit:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:instagram')" title="Click to copy">
+            <hd-icon icon="formkit:instagram"></hd-icon>
+            <span class="name">instagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:krona')" title="Click to copy">
+            <hd-icon icon="formkit:krona"></hd-icon>
+            <span class="name">krona</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:left')" title="Click to copy">
+            <hd-icon icon="formkit:left"></hd-icon>
+            <span class="name">left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:link')" title="Click to copy">
+            <hd-icon icon="formkit:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:linkedin')" title="Click to copy">
+            <hd-icon icon="formkit:linkedin"></hd-icon>
+            <span class="name">linkedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:linkexternal')" title="Click to copy">
+            <hd-icon icon="formkit:linkexternal"></hd-icon>
+            <span class="name">linkexternal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:lira')" title="Click to copy">
+            <hd-icon icon="formkit:lira"></hd-icon>
+            <span class="name">lira</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:list')" title="Click to copy">
+            <hd-icon icon="formkit:list"></hd-icon>
+            <span class="name">list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:mastercard')" title="Click to copy">
+            <hd-icon icon="formkit:mastercard"></hd-icon>
+            <span class="name">mastercard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:medium')" title="Click to copy">
+            <hd-icon icon="formkit:medium"></hd-icon>
+            <span class="name">medium</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:megaphone')" title="Click to copy">
+            <hd-icon icon="formkit:megaphone"></hd-icon>
+            <span class="name">megaphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:minimize')" title="Click to copy">
+            <hd-icon icon="formkit:minimize"></hd-icon>
+            <span class="name">minimize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:month')" title="Click to copy">
+            <hd-icon icon="formkit:month"></hd-icon>
+            <span class="name">month</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:multicurrency')" title="Click to copy">
+            <hd-icon icon="formkit:multicurrency"></hd-icon>
+            <span class="name">multicurrency</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:number')" title="Click to copy">
+            <hd-icon icon="formkit:number"></hd-icon>
+            <span class="name">number</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:open')" title="Click to copy">
+            <hd-icon icon="formkit:open"></hd-icon>
+            <span class="name">open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:password')" title="Click to copy">
+            <hd-icon icon="formkit:password"></hd-icon>
+            <span class="name">password</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:pause')" title="Click to copy">
+            <hd-icon icon="formkit:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:paypal')" title="Click to copy">
+            <hd-icon icon="formkit:paypal"></hd-icon>
+            <span class="name">paypal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:people')" title="Click to copy">
+            <hd-icon icon="formkit:people"></hd-icon>
+            <span class="name">people</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:peso')" title="Click to copy">
+            <hd-icon icon="formkit:peso"></hd-icon>
+            <span class="name">peso</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:pinterest')" title="Click to copy">
+            <hd-icon icon="formkit:pinterest"></hd-icon>
+            <span class="name">pinterest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:play')" title="Click to copy">
+            <hd-icon icon="formkit:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:playcircle')" title="Click to copy">
+            <hd-icon icon="formkit:playcircle"></hd-icon>
+            <span class="name">playcircle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:pound')" title="Click to copy">
+            <hd-icon icon="formkit:pound"></hd-icon>
+            <span class="name">pound</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:radio')" title="Click to copy">
+            <hd-icon icon="formkit:radio"></hd-icon>
+            <span class="name">radio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:range')" title="Click to copy">
+            <hd-icon icon="formkit:range"></hd-icon>
+            <span class="name">range</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:reddit')" title="Click to copy">
+            <hd-icon icon="formkit:reddit"></hd-icon>
+            <span class="name">reddit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:refresh')" title="Click to copy">
+            <hd-icon icon="formkit:refresh"></hd-icon>
+            <span class="name">refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:reorder')" title="Click to copy">
+            <hd-icon icon="formkit:reorder"></hd-icon>
+            <span class="name">reorder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:repeater')" title="Click to copy">
+            <hd-icon icon="formkit:repeater"></hd-icon>
+            <span class="name">repeater</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:reply')" title="Click to copy">
+            <hd-icon icon="formkit:reply"></hd-icon>
+            <span class="name">reply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:rewind')" title="Click to copy">
+            <hd-icon icon="formkit:rewind"></hd-icon>
+            <span class="name">rewind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:right')" title="Click to copy">
+            <hd-icon icon="formkit:right"></hd-icon>
+            <span class="name">right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:ruble')" title="Click to copy">
+            <hd-icon icon="formkit:ruble"></hd-icon>
+            <span class="name">ruble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:rupee')" title="Click to copy">
+            <hd-icon icon="formkit:rupee"></hd-icon>
+            <span class="name">rupee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:sad')" title="Click to copy">
+            <hd-icon icon="formkit:sad"></hd-icon>
+            <span class="name">sad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:search')" title="Click to copy">
+            <hd-icon icon="formkit:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:select')" title="Click to copy">
+            <hd-icon icon="formkit:select"></hd-icon>
+            <span class="name">select</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:settings')" title="Click to copy">
+            <hd-icon icon="formkit:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:share')" title="Click to copy">
+            <hd-icon icon="formkit:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:shekel')" title="Click to copy">
+            <hd-icon icon="formkit:shekel"></hd-icon>
+            <span class="name">shekel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:skype')" title="Click to copy">
+            <hd-icon icon="formkit:skype"></hd-icon>
+            <span class="name">skype</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:snapchat')" title="Click to copy">
+            <hd-icon icon="formkit:snapchat"></hd-icon>
+            <span class="name">snapchat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:solana')" title="Click to copy">
+            <hd-icon icon="formkit:solana"></hd-icon>
+            <span class="name">solana</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:spinner')" title="Click to copy">
+            <hd-icon icon="formkit:spinner"></hd-icon>
+            <span class="name">spinner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:star')" title="Click to copy">
+            <hd-icon icon="formkit:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:start')" title="Click to copy">
+            <hd-icon icon="formkit:start"></hd-icon>
+            <span class="name">start</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:stepback')" title="Click to copy">
+            <hd-icon icon="formkit:stepback"></hd-icon>
+            <span class="name">stepback</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:stepforward')" title="Click to copy">
+            <hd-icon icon="formkit:stepforward"></hd-icon>
+            <span class="name">stepforward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:stop')" title="Click to copy">
+            <hd-icon icon="formkit:stop"></hd-icon>
+            <span class="name">stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:stripe')" title="Click to copy">
+            <hd-icon icon="formkit:stripe"></hd-icon>
+            <span class="name">stripe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:submit')" title="Click to copy">
+            <hd-icon icon="formkit:submit"></hd-icon>
+            <span class="name">submit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:table')" title="Click to copy">
+            <hd-icon icon="formkit:table"></hd-icon>
+            <span class="name">table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:tag')" title="Click to copy">
+            <hd-icon icon="formkit:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:telephone')" title="Click to copy">
+            <hd-icon icon="formkit:telephone"></hd-icon>
+            <span class="name">telephone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:tether')" title="Click to copy">
+            <hd-icon icon="formkit:tether"></hd-icon>
+            <span class="name">tether</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:text')" title="Click to copy">
+            <hd-icon icon="formkit:text"></hd-icon>
+            <span class="name">text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:textarea')" title="Click to copy">
+            <hd-icon icon="formkit:textarea"></hd-icon>
+            <span class="name">textarea</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:tiktok')" title="Click to copy">
+            <hd-icon icon="formkit:tiktok"></hd-icon>
+            <span class="name">tiktok</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:time')" title="Click to copy">
+            <hd-icon icon="formkit:time"></hd-icon>
+            <span class="name">time</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:tools')" title="Click to copy">
+            <hd-icon icon="formkit:tools"></hd-icon>
+            <span class="name">tools</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:trash')" title="Click to copy">
+            <hd-icon icon="formkit:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:twitter')" title="Click to copy">
+            <hd-icon icon="formkit:twitter"></hd-icon>
+            <span class="name">twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:unit')" title="Click to copy">
+            <hd-icon icon="formkit:unit"></hd-icon>
+            <span class="name">unit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:up')" title="Click to copy">
+            <hd-icon icon="formkit:up"></hd-icon>
+            <span class="name">up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:upload')" title="Click to copy">
+            <hd-icon icon="formkit:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:uploadcloud')" title="Click to copy">
+            <hd-icon icon="formkit:uploadcloud"></hd-icon>
+            <span class="name">uploadcloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:url')" title="Click to copy">
+            <hd-icon icon="formkit:url"></hd-icon>
+            <span class="name">url</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:usdc')" title="Click to copy">
+            <hd-icon icon="formkit:usdc"></hd-icon>
+            <span class="name">usdc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:vimeo')" title="Click to copy">
+            <hd-icon icon="formkit:vimeo"></hd-icon>
+            <span class="name">vimeo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:visa')" title="Click to copy">
+            <hd-icon icon="formkit:visa"></hd-icon>
+            <span class="name">visa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:volumedown')" title="Click to copy">
+            <hd-icon icon="formkit:volumedown"></hd-icon>
+            <span class="name">volumedown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:volumeup')" title="Click to copy">
+            <hd-icon icon="formkit:volumeup"></hd-icon>
+            <span class="name">volumeup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:warning')" title="Click to copy">
+            <hd-icon icon="formkit:warning"></hd-icon>
+            <span class="name">warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:week')" title="Click to copy">
+            <hd-icon icon="formkit:week"></hd-icon>
+            <span class="name">week</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:whatsapp')" title="Click to copy">
+            <hd-icon icon="formkit:whatsapp"></hd-icon>
+            <span class="name">whatsapp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:won')" title="Click to copy">
+            <hd-icon icon="formkit:won"></hd-icon>
+            <span class="name">won</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:wordpress')" title="Click to copy">
+            <hd-icon icon="formkit:wordpress"></hd-icon>
+            <span class="name">wordpress</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:yen')" title="Click to copy">
+            <hd-icon icon="formkit:yen"></hd-icon>
+            <span class="name">yen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:youtube')" title="Click to copy">
+            <hd-icon icon="formkit:youtube"></hd-icon>
+            <span class="name">youtube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:yuan')" title="Click to copy">
+            <hd-icon icon="formkit:yuan"></hd-icon>
+            <span class="name">yuan</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('formkit:zip')" title="Click to copy">
+            <hd-icon icon="formkit:zip"></hd-icon>
+            <span class="name">zip</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

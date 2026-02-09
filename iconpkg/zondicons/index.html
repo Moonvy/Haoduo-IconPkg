@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zondicons - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>zondicons <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(297)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('zondicons:add-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:add-outline"></hd-icon>
+            <span class="name">add-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:add-solid')" title="Click to copy">
+            <hd-icon icon="zondicons:add-solid"></hd-icon>
+            <span class="name">add-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:adjust')" title="Click to copy">
+            <hd-icon icon="zondicons:adjust"></hd-icon>
+            <span class="name">adjust</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:airplane')" title="Click to copy">
+            <hd-icon icon="zondicons:airplane"></hd-icon>
+            <span class="name">airplane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:album')" title="Click to copy">
+            <hd-icon icon="zondicons:album"></hd-icon>
+            <span class="name">album</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:align-center')" title="Click to copy">
+            <hd-icon icon="zondicons:align-center"></hd-icon>
+            <span class="name">align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:align-justified')" title="Click to copy">
+            <hd-icon icon="zondicons:align-justified"></hd-icon>
+            <span class="name">align-justified</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:align-left')" title="Click to copy">
+            <hd-icon icon="zondicons:align-left"></hd-icon>
+            <span class="name">align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:align-right')" title="Click to copy">
+            <hd-icon icon="zondicons:align-right"></hd-icon>
+            <span class="name">align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:anchor')" title="Click to copy">
+            <hd-icon icon="zondicons:anchor"></hd-icon>
+            <span class="name">anchor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:announcement')" title="Click to copy">
+            <hd-icon icon="zondicons:announcement"></hd-icon>
+            <span class="name">announcement</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:apparel')" title="Click to copy">
+            <hd-icon icon="zondicons:apparel"></hd-icon>
+            <span class="name">apparel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-down')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-left')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-outline-down')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-outline-down"></hd-icon>
+            <span class="name">arrow-outline-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-outline-left')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-outline-left"></hd-icon>
+            <span class="name">arrow-outline-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-outline-right')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-outline-right"></hd-icon>
+            <span class="name">arrow-outline-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-outline-up')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-outline-up"></hd-icon>
+            <span class="name">arrow-outline-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-right')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-thick-down')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-thick-down"></hd-icon>
+            <span class="name">arrow-thick-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-thick-left')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-thick-left"></hd-icon>
+            <span class="name">arrow-thick-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-thick-right')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-thick-right"></hd-icon>
+            <span class="name">arrow-thick-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-thick-up')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-thick-up"></hd-icon>
+            <span class="name">arrow-thick-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-thin-down')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-thin-down"></hd-icon>
+            <span class="name">arrow-thin-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-thin-left')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-thin-left"></hd-icon>
+            <span class="name">arrow-thin-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-thin-right')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-thin-right"></hd-icon>
+            <span class="name">arrow-thin-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-thin-up')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-thin-up"></hd-icon>
+            <span class="name">arrow-thin-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:arrow-up')" title="Click to copy">
+            <hd-icon icon="zondicons:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:artist')" title="Click to copy">
+            <hd-icon icon="zondicons:artist"></hd-icon>
+            <span class="name">artist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:at-symbol')" title="Click to copy">
+            <hd-icon icon="zondicons:at-symbol"></hd-icon>
+            <span class="name">at-symbol</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:attachment')" title="Click to copy">
+            <hd-icon icon="zondicons:attachment"></hd-icon>
+            <span class="name">attachment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:backspace')" title="Click to copy">
+            <hd-icon icon="zondicons:backspace"></hd-icon>
+            <span class="name">backspace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:backward')" title="Click to copy">
+            <hd-icon icon="zondicons:backward"></hd-icon>
+            <span class="name">backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:backward-step')" title="Click to copy">
+            <hd-icon icon="zondicons:backward-step"></hd-icon>
+            <span class="name">backward-step</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:badge')" title="Click to copy">
+            <hd-icon icon="zondicons:badge"></hd-icon>
+            <span class="name">badge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:battery-full')" title="Click to copy">
+            <hd-icon icon="zondicons:battery-full"></hd-icon>
+            <span class="name">battery-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:battery-half')" title="Click to copy">
+            <hd-icon icon="zondicons:battery-half"></hd-icon>
+            <span class="name">battery-half</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:battery-low')" title="Click to copy">
+            <hd-icon icon="zondicons:battery-low"></hd-icon>
+            <span class="name">battery-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:beverage')" title="Click to copy">
+            <hd-icon icon="zondicons:beverage"></hd-icon>
+            <span class="name">beverage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:block')" title="Click to copy">
+            <hd-icon icon="zondicons:block"></hd-icon>
+            <span class="name">block</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:bluetooth')" title="Click to copy">
+            <hd-icon icon="zondicons:bluetooth"></hd-icon>
+            <span class="name">bluetooth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:bolt')" title="Click to copy">
+            <hd-icon icon="zondicons:bolt"></hd-icon>
+            <span class="name">bolt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:book-reference')" title="Click to copy">
+            <hd-icon icon="zondicons:book-reference"></hd-icon>
+            <span class="name">book-reference</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:bookmark')" title="Click to copy">
+            <hd-icon icon="zondicons:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:bookmark-copy-2')" title="Click to copy">
+            <hd-icon icon="zondicons:bookmark-copy-2"></hd-icon>
+            <span class="name">bookmark-copy-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:bookmark-copy-3')" title="Click to copy">
+            <hd-icon icon="zondicons:bookmark-copy-3"></hd-icon>
+            <span class="name">bookmark-copy-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:bookmark-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:bookmark-outline"></hd-icon>
+            <span class="name">bookmark-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:bookmark-outline-add')" title="Click to copy">
+            <hd-icon icon="zondicons:bookmark-outline-add"></hd-icon>
+            <span class="name">bookmark-outline-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:border-all')" title="Click to copy">
+            <hd-icon icon="zondicons:border-all"></hd-icon>
+            <span class="name">border-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:border-bottom')" title="Click to copy">
+            <hd-icon icon="zondicons:border-bottom"></hd-icon>
+            <span class="name">border-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:border-horizontal')" title="Click to copy">
+            <hd-icon icon="zondicons:border-horizontal"></hd-icon>
+            <span class="name">border-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:border-inner')" title="Click to copy">
+            <hd-icon icon="zondicons:border-inner"></hd-icon>
+            <span class="name">border-inner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:border-left')" title="Click to copy">
+            <hd-icon icon="zondicons:border-left"></hd-icon>
+            <span class="name">border-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:border-none')" title="Click to copy">
+            <hd-icon icon="zondicons:border-none"></hd-icon>
+            <span class="name">border-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:border-outer')" title="Click to copy">
+            <hd-icon icon="zondicons:border-outer"></hd-icon>
+            <span class="name">border-outer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:border-right')" title="Click to copy">
+            <hd-icon icon="zondicons:border-right"></hd-icon>
+            <span class="name">border-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:border-top')" title="Click to copy">
+            <hd-icon icon="zondicons:border-top"></hd-icon>
+            <span class="name">border-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:border-vertical')" title="Click to copy">
+            <hd-icon icon="zondicons:border-vertical"></hd-icon>
+            <span class="name">border-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:box')" title="Click to copy">
+            <hd-icon icon="zondicons:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:brightness-down')" title="Click to copy">
+            <hd-icon icon="zondicons:brightness-down"></hd-icon>
+            <span class="name">brightness-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:brightness-up')" title="Click to copy">
+            <hd-icon icon="zondicons:brightness-up"></hd-icon>
+            <span class="name">brightness-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:browser-window')" title="Click to copy">
+            <hd-icon icon="zondicons:browser-window"></hd-icon>
+            <span class="name">browser-window</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:browser-window-new')" title="Click to copy">
+            <hd-icon icon="zondicons:browser-window-new"></hd-icon>
+            <span class="name">browser-window-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:browser-window-open')" title="Click to copy">
+            <hd-icon icon="zondicons:browser-window-open"></hd-icon>
+            <span class="name">browser-window-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:bug')" title="Click to copy">
+            <hd-icon icon="zondicons:bug"></hd-icon>
+            <span class="name">bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:buoy')" title="Click to copy">
+            <hd-icon icon="zondicons:buoy"></hd-icon>
+            <span class="name">buoy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:calculator')" title="Click to copy">
+            <hd-icon icon="zondicons:calculator"></hd-icon>
+            <span class="name">calculator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:calendar')" title="Click to copy">
+            <hd-icon icon="zondicons:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:camera')" title="Click to copy">
+            <hd-icon icon="zondicons:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:chart')" title="Click to copy">
+            <hd-icon icon="zondicons:chart"></hd-icon>
+            <span class="name">chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:chart-bar')" title="Click to copy">
+            <hd-icon icon="zondicons:chart-bar"></hd-icon>
+            <span class="name">chart-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:chart-pie')" title="Click to copy">
+            <hd-icon icon="zondicons:chart-pie"></hd-icon>
+            <span class="name">chart-pie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:chat-bubble-dots')" title="Click to copy">
+            <hd-icon icon="zondicons:chat-bubble-dots"></hd-icon>
+            <span class="name">chat-bubble-dots</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:checkmark')" title="Click to copy">
+            <hd-icon icon="zondicons:checkmark"></hd-icon>
+            <span class="name">checkmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:checkmark-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:checkmark-outline"></hd-icon>
+            <span class="name">checkmark-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cheveron-down')" title="Click to copy">
+            <hd-icon icon="zondicons:cheveron-down"></hd-icon>
+            <span class="name">cheveron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cheveron-left')" title="Click to copy">
+            <hd-icon icon="zondicons:cheveron-left"></hd-icon>
+            <span class="name">cheveron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cheveron-outline-down')" title="Click to copy">
+            <hd-icon icon="zondicons:cheveron-outline-down"></hd-icon>
+            <span class="name">cheveron-outline-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cheveron-outline-left')" title="Click to copy">
+            <hd-icon icon="zondicons:cheveron-outline-left"></hd-icon>
+            <span class="name">cheveron-outline-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cheveron-outline-right')" title="Click to copy">
+            <hd-icon icon="zondicons:cheveron-outline-right"></hd-icon>
+            <span class="name">cheveron-outline-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cheveron-outline-up')" title="Click to copy">
+            <hd-icon icon="zondicons:cheveron-outline-up"></hd-icon>
+            <span class="name">cheveron-outline-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cheveron-right')" title="Click to copy">
+            <hd-icon icon="zondicons:cheveron-right"></hd-icon>
+            <span class="name">cheveron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cheveron-up')" title="Click to copy">
+            <hd-icon icon="zondicons:cheveron-up"></hd-icon>
+            <span class="name">cheveron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:clipboard')" title="Click to copy">
+            <hd-icon icon="zondicons:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:close')" title="Click to copy">
+            <hd-icon icon="zondicons:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:close-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:close-outline"></hd-icon>
+            <span class="name">close-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:close-solid')" title="Click to copy">
+            <hd-icon icon="zondicons:close-solid"></hd-icon>
+            <span class="name">close-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cloud')" title="Click to copy">
+            <hd-icon icon="zondicons:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cloud-upload')" title="Click to copy">
+            <hd-icon icon="zondicons:cloud-upload"></hd-icon>
+            <span class="name">cloud-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:code')" title="Click to copy">
+            <hd-icon icon="zondicons:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:coffee')" title="Click to copy">
+            <hd-icon icon="zondicons:coffee"></hd-icon>
+            <span class="name">coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:cog')" title="Click to copy">
+            <hd-icon icon="zondicons:cog"></hd-icon>
+            <span class="name">cog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:color-palette')" title="Click to copy">
+            <hd-icon icon="zondicons:color-palette"></hd-icon>
+            <span class="name">color-palette</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:compose')" title="Click to copy">
+            <hd-icon icon="zondicons:compose"></hd-icon>
+            <span class="name">compose</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:computer-desktop')" title="Click to copy">
+            <hd-icon icon="zondicons:computer-desktop"></hd-icon>
+            <span class="name">computer-desktop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:computer-laptop')" title="Click to copy">
+            <hd-icon icon="zondicons:computer-laptop"></hd-icon>
+            <span class="name">computer-laptop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:conversation')" title="Click to copy">
+            <hd-icon icon="zondicons:conversation"></hd-icon>
+            <span class="name">conversation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:copy')" title="Click to copy">
+            <hd-icon icon="zondicons:copy"></hd-icon>
+            <span class="name">copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:credit-card')" title="Click to copy">
+            <hd-icon icon="zondicons:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:currency-dollar')" title="Click to copy">
+            <hd-icon icon="zondicons:currency-dollar"></hd-icon>
+            <span class="name">currency-dollar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:dashboard')" title="Click to copy">
+            <hd-icon icon="zondicons:dashboard"></hd-icon>
+            <span class="name">dashboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:date-add')" title="Click to copy">
+            <hd-icon icon="zondicons:date-add"></hd-icon>
+            <span class="name">date-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:dial-pad')" title="Click to copy">
+            <hd-icon icon="zondicons:dial-pad"></hd-icon>
+            <span class="name">dial-pad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:directions')" title="Click to copy">
+            <hd-icon icon="zondicons:directions"></hd-icon>
+            <span class="name">directions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:document')" title="Click to copy">
+            <hd-icon icon="zondicons:document"></hd-icon>
+            <span class="name">document</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:document-add')" title="Click to copy">
+            <hd-icon icon="zondicons:document-add"></hd-icon>
+            <span class="name">document-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:dots-horizontal-double')" title="Click to copy">
+            <hd-icon icon="zondicons:dots-horizontal-double"></hd-icon>
+            <span class="name">dots-horizontal-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:dots-horizontal-triple')" title="Click to copy">
+            <hd-icon icon="zondicons:dots-horizontal-triple"></hd-icon>
+            <span class="name">dots-horizontal-triple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:download')" title="Click to copy">
+            <hd-icon icon="zondicons:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:duplicate')" title="Click to copy">
+            <hd-icon icon="zondicons:duplicate"></hd-icon>
+            <span class="name">duplicate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:edit-copy')" title="Click to copy">
+            <hd-icon icon="zondicons:edit-copy"></hd-icon>
+            <span class="name">edit-copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:edit-crop')" title="Click to copy">
+            <hd-icon icon="zondicons:edit-crop"></hd-icon>
+            <span class="name">edit-crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:edit-cut')" title="Click to copy">
+            <hd-icon icon="zondicons:edit-cut"></hd-icon>
+            <span class="name">edit-cut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:edit-pencil')" title="Click to copy">
+            <hd-icon icon="zondicons:edit-pencil"></hd-icon>
+            <span class="name">edit-pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:education')" title="Click to copy">
+            <hd-icon icon="zondicons:education"></hd-icon>
+            <span class="name">education</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:envelope')" title="Click to copy">
+            <hd-icon icon="zondicons:envelope"></hd-icon>
+            <span class="name">envelope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:exclamation-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:exclamation-outline"></hd-icon>
+            <span class="name">exclamation-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:exclamation-solid')" title="Click to copy">
+            <hd-icon icon="zondicons:exclamation-solid"></hd-icon>
+            <span class="name">exclamation-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:explore')" title="Click to copy">
+            <hd-icon icon="zondicons:explore"></hd-icon>
+            <span class="name">explore</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:factory')" title="Click to copy">
+            <hd-icon icon="zondicons:factory"></hd-icon>
+            <span class="name">factory</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:fast-forward')" title="Click to copy">
+            <hd-icon icon="zondicons:fast-forward"></hd-icon>
+            <span class="name">fast-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:fast-rewind')" title="Click to copy">
+            <hd-icon icon="zondicons:fast-rewind"></hd-icon>
+            <span class="name">fast-rewind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:film')" title="Click to copy">
+            <hd-icon icon="zondicons:film"></hd-icon>
+            <span class="name">film</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:filter')" title="Click to copy">
+            <hd-icon icon="zondicons:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:flag')" title="Click to copy">
+            <hd-icon icon="zondicons:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:flashlight')" title="Click to copy">
+            <hd-icon icon="zondicons:flashlight"></hd-icon>
+            <span class="name">flashlight</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:folder')" title="Click to copy">
+            <hd-icon icon="zondicons:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:folder-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:folder-outline"></hd-icon>
+            <span class="name">folder-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:folder-outline-add')" title="Click to copy">
+            <hd-icon icon="zondicons:folder-outline-add"></hd-icon>
+            <span class="name">folder-outline-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:format-bold')" title="Click to copy">
+            <hd-icon icon="zondicons:format-bold"></hd-icon>
+            <span class="name">format-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:format-font-size')" title="Click to copy">
+            <hd-icon icon="zondicons:format-font-size"></hd-icon>
+            <span class="name">format-font-size</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:format-italic')" title="Click to copy">
+            <hd-icon icon="zondicons:format-italic"></hd-icon>
+            <span class="name">format-italic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:format-text-size')" title="Click to copy">
+            <hd-icon icon="zondicons:format-text-size"></hd-icon>
+            <span class="name">format-text-size</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:format-underline')" title="Click to copy">
+            <hd-icon icon="zondicons:format-underline"></hd-icon>
+            <span class="name">format-underline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:forward')" title="Click to copy">
+            <hd-icon icon="zondicons:forward"></hd-icon>
+            <span class="name">forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:forward-step')" title="Click to copy">
+            <hd-icon icon="zondicons:forward-step"></hd-icon>
+            <span class="name">forward-step</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:gift')" title="Click to copy">
+            <hd-icon icon="zondicons:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:globe')" title="Click to copy">
+            <hd-icon icon="zondicons:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:hand-stop')" title="Click to copy">
+            <hd-icon icon="zondicons:hand-stop"></hd-icon>
+            <span class="name">hand-stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:hard-drive')" title="Click to copy">
+            <hd-icon icon="zondicons:hard-drive"></hd-icon>
+            <span class="name">hard-drive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:headphones')" title="Click to copy">
+            <hd-icon icon="zondicons:headphones"></hd-icon>
+            <span class="name">headphones</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:heart')" title="Click to copy">
+            <hd-icon icon="zondicons:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:home')" title="Click to copy">
+            <hd-icon icon="zondicons:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:hot')" title="Click to copy">
+            <hd-icon icon="zondicons:hot"></hd-icon>
+            <span class="name">hot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:hour-glass')" title="Click to copy">
+            <hd-icon icon="zondicons:hour-glass"></hd-icon>
+            <span class="name">hour-glass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:inbox')" title="Click to copy">
+            <hd-icon icon="zondicons:inbox"></hd-icon>
+            <span class="name">inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:inbox-check')" title="Click to copy">
+            <hd-icon icon="zondicons:inbox-check"></hd-icon>
+            <span class="name">inbox-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:inbox-download')" title="Click to copy">
+            <hd-icon icon="zondicons:inbox-download"></hd-icon>
+            <span class="name">inbox-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:inbox-full')" title="Click to copy">
+            <hd-icon icon="zondicons:inbox-full"></hd-icon>
+            <span class="name">inbox-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:indent-decrease')" title="Click to copy">
+            <hd-icon icon="zondicons:indent-decrease"></hd-icon>
+            <span class="name">indent-decrease</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:indent-increase')" title="Click to copy">
+            <hd-icon icon="zondicons:indent-increase"></hd-icon>
+            <span class="name">indent-increase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:information-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:information-outline"></hd-icon>
+            <span class="name">information-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:information-solid')" title="Click to copy">
+            <hd-icon icon="zondicons:information-solid"></hd-icon>
+            <span class="name">information-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:key')" title="Click to copy">
+            <hd-icon icon="zondicons:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:keyboard')" title="Click to copy">
+            <hd-icon icon="zondicons:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:layers')" title="Click to copy">
+            <hd-icon icon="zondicons:layers"></hd-icon>
+            <span class="name">layers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:library')" title="Click to copy">
+            <hd-icon icon="zondicons:library"></hd-icon>
+            <span class="name">library</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:light-bulb')" title="Click to copy">
+            <hd-icon icon="zondicons:light-bulb"></hd-icon>
+            <span class="name">light-bulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:link')" title="Click to copy">
+            <hd-icon icon="zondicons:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:list')" title="Click to copy">
+            <hd-icon icon="zondicons:list"></hd-icon>
+            <span class="name">list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:list-add')" title="Click to copy">
+            <hd-icon icon="zondicons:list-add"></hd-icon>
+            <span class="name">list-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:list-bullet')" title="Click to copy">
+            <hd-icon icon="zondicons:list-bullet"></hd-icon>
+            <span class="name">list-bullet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:load-balancer')" title="Click to copy">
+            <hd-icon icon="zondicons:load-balancer"></hd-icon>
+            <span class="name">load-balancer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:location')" title="Click to copy">
+            <hd-icon icon="zondicons:location"></hd-icon>
+            <span class="name">location</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:location-current')" title="Click to copy">
+            <hd-icon icon="zondicons:location-current"></hd-icon>
+            <span class="name">location-current</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:location-food')" title="Click to copy">
+            <hd-icon icon="zondicons:location-food"></hd-icon>
+            <span class="name">location-food</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:location-gas-station')" title="Click to copy">
+            <hd-icon icon="zondicons:location-gas-station"></hd-icon>
+            <span class="name">location-gas-station</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:location-hotel')" title="Click to copy">
+            <hd-icon icon="zondicons:location-hotel"></hd-icon>
+            <span class="name">location-hotel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:location-marina')" title="Click to copy">
+            <hd-icon icon="zondicons:location-marina"></hd-icon>
+            <span class="name">location-marina</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:location-park')" title="Click to copy">
+            <hd-icon icon="zondicons:location-park"></hd-icon>
+            <span class="name">location-park</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:location-restroom')" title="Click to copy">
+            <hd-icon icon="zondicons:location-restroom"></hd-icon>
+            <span class="name">location-restroom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:location-shopping')" title="Click to copy">
+            <hd-icon icon="zondicons:location-shopping"></hd-icon>
+            <span class="name">location-shopping</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:lock-closed')" title="Click to copy">
+            <hd-icon icon="zondicons:lock-closed"></hd-icon>
+            <span class="name">lock-closed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:lock-open')" title="Click to copy">
+            <hd-icon icon="zondicons:lock-open"></hd-icon>
+            <span class="name">lock-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:map')" title="Click to copy">
+            <hd-icon icon="zondicons:map"></hd-icon>
+            <span class="name">map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:menu')" title="Click to copy">
+            <hd-icon icon="zondicons:menu"></hd-icon>
+            <span class="name">menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:mic')" title="Click to copy">
+            <hd-icon icon="zondicons:mic"></hd-icon>
+            <span class="name">mic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:minus-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:minus-outline"></hd-icon>
+            <span class="name">minus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:minus-solid')" title="Click to copy">
+            <hd-icon icon="zondicons:minus-solid"></hd-icon>
+            <span class="name">minus-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:mobile-devices')" title="Click to copy">
+            <hd-icon icon="zondicons:mobile-devices"></hd-icon>
+            <span class="name">mobile-devices</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:mood-happy-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:mood-happy-outline"></hd-icon>
+            <span class="name">mood-happy-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:mood-happy-solid')" title="Click to copy">
+            <hd-icon icon="zondicons:mood-happy-solid"></hd-icon>
+            <span class="name">mood-happy-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:mood-neutral-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:mood-neutral-outline"></hd-icon>
+            <span class="name">mood-neutral-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:mood-neutral-solid')" title="Click to copy">
+            <hd-icon icon="zondicons:mood-neutral-solid"></hd-icon>
+            <span class="name">mood-neutral-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:mood-sad-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:mood-sad-outline"></hd-icon>
+            <span class="name">mood-sad-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:mood-sad-solid')" title="Click to copy">
+            <hd-icon icon="zondicons:mood-sad-solid"></hd-icon>
+            <span class="name">mood-sad-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:mouse')" title="Click to copy">
+            <hd-icon icon="zondicons:mouse"></hd-icon>
+            <span class="name">mouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:music-album')" title="Click to copy">
+            <hd-icon icon="zondicons:music-album"></hd-icon>
+            <span class="name">music-album</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:music-artist')" title="Click to copy">
+            <hd-icon icon="zondicons:music-artist"></hd-icon>
+            <span class="name">music-artist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:music-notes')" title="Click to copy">
+            <hd-icon icon="zondicons:music-notes"></hd-icon>
+            <span class="name">music-notes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:music-playlist')" title="Click to copy">
+            <hd-icon icon="zondicons:music-playlist"></hd-icon>
+            <span class="name">music-playlist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:navigation-more')" title="Click to copy">
+            <hd-icon icon="zondicons:navigation-more"></hd-icon>
+            <span class="name">navigation-more</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:network')" title="Click to copy">
+            <hd-icon icon="zondicons:network"></hd-icon>
+            <span class="name">network</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:news-paper')" title="Click to copy">
+            <hd-icon icon="zondicons:news-paper"></hd-icon>
+            <span class="name">news-paper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:notification')" title="Click to copy">
+            <hd-icon icon="zondicons:notification"></hd-icon>
+            <span class="name">notification</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:notifications')" title="Click to copy">
+            <hd-icon icon="zondicons:notifications"></hd-icon>
+            <span class="name">notifications</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:notifications-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:notifications-outline"></hd-icon>
+            <span class="name">notifications-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:paste')" title="Click to copy">
+            <hd-icon icon="zondicons:paste"></hd-icon>
+            <span class="name">paste</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:pause')" title="Click to copy">
+            <hd-icon icon="zondicons:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:pause-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:pause-outline"></hd-icon>
+            <span class="name">pause-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:pause-solid')" title="Click to copy">
+            <hd-icon icon="zondicons:pause-solid"></hd-icon>
+            <span class="name">pause-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:pen-tool')" title="Click to copy">
+            <hd-icon icon="zondicons:pen-tool"></hd-icon>
+            <span class="name">pen-tool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:phone')" title="Click to copy">
+            <hd-icon icon="zondicons:phone"></hd-icon>
+            <span class="name">phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:photo')" title="Click to copy">
+            <hd-icon icon="zondicons:photo"></hd-icon>
+            <span class="name">photo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:php-elephant')" title="Click to copy">
+            <hd-icon icon="zondicons:php-elephant"></hd-icon>
+            <span class="name">php-elephant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:pin')" title="Click to copy">
+            <hd-icon icon="zondicons:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:play')" title="Click to copy">
+            <hd-icon icon="zondicons:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:play-outline')" title="Click to copy">
+            <hd-icon icon="zondicons:play-outline"></hd-icon>
+            <span class="name">play-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:playlist')" title="Click to copy">
+            <hd-icon icon="zondicons:playlist"></hd-icon>
+            <span class="name">playlist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:plugin')" title="Click to copy">
+            <hd-icon icon="zondicons:plugin"></hd-icon>
+            <span class="name">plugin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:portfolio')" title="Click to copy">
+            <hd-icon icon="zondicons:portfolio"></hd-icon>
+            <span class="name">portfolio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:printer')" title="Click to copy">
+            <hd-icon icon="zondicons:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:pylon')" title="Click to copy">
+            <hd-icon icon="zondicons:pylon"></hd-icon>
+            <span class="name">pylon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:question')" title="Click to copy">
+            <hd-icon icon="zondicons:question"></hd-icon>
+            <span class="name">question</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:queue')" title="Click to copy">
+            <hd-icon icon="zondicons:queue"></hd-icon>
+            <span class="name">queue</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:radar')" title="Click to copy">
+            <hd-icon icon="zondicons:radar"></hd-icon>
+            <span class="name">radar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:radar-copy-2')" title="Click to copy">
+            <hd-icon icon="zondicons:radar-copy-2"></hd-icon>
+            <span class="name">radar-copy-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:radio')" title="Click to copy">
+            <hd-icon icon="zondicons:radio"></hd-icon>
+            <span class="name">radio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:refresh')" title="Click to copy">
+            <hd-icon icon="zondicons:refresh"></hd-icon>
+            <span class="name">refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:reload')" title="Click to copy">
+            <hd-icon icon="zondicons:reload"></hd-icon>
+            <span class="name">reload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:reply')" title="Click to copy">
+            <hd-icon icon="zondicons:reply"></hd-icon>
+            <span class="name">reply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:reply-all')" title="Click to copy">
+            <hd-icon icon="zondicons:reply-all"></hd-icon>
+            <span class="name">reply-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:repost')" title="Click to copy">
+            <hd-icon icon="zondicons:repost"></hd-icon>
+            <span class="name">repost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:save-disk')" title="Click to copy">
+            <hd-icon icon="zondicons:save-disk"></hd-icon>
+            <span class="name">save-disk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:screen-full')" title="Click to copy">
+            <hd-icon icon="zondicons:screen-full"></hd-icon>
+            <span class="name">screen-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:search')" title="Click to copy">
+            <hd-icon icon="zondicons:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:send')" title="Click to copy">
+            <hd-icon icon="zondicons:send"></hd-icon>
+            <span class="name">send</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:servers')" title="Click to copy">
+            <hd-icon icon="zondicons:servers"></hd-icon>
+            <span class="name">servers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:share')" title="Click to copy">
+            <hd-icon icon="zondicons:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:share-01')" title="Click to copy">
+            <hd-icon icon="zondicons:share-01"></hd-icon>
+            <span class="name">share-01</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:share-alt')" title="Click to copy">
+            <hd-icon icon="zondicons:share-alt"></hd-icon>
+            <span class="name">share-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:shield')" title="Click to copy">
+            <hd-icon icon="zondicons:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:shopping-cart')" title="Click to copy">
+            <hd-icon icon="zondicons:shopping-cart"></hd-icon>
+            <span class="name">shopping-cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:show-sidebar')" title="Click to copy">
+            <hd-icon icon="zondicons:show-sidebar"></hd-icon>
+            <span class="name">show-sidebar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:shuffle')" title="Click to copy">
+            <hd-icon icon="zondicons:shuffle"></hd-icon>
+            <span class="name">shuffle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:stand-by')" title="Click to copy">
+            <hd-icon icon="zondicons:stand-by"></hd-icon>
+            <span class="name">stand-by</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:star-full')" title="Click to copy">
+            <hd-icon icon="zondicons:star-full"></hd-icon>
+            <span class="name">star-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:station')" title="Click to copy">
+            <hd-icon icon="zondicons:station"></hd-icon>
+            <span class="name">station</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:step-backward')" title="Click to copy">
+            <hd-icon icon="zondicons:step-backward"></hd-icon>
+            <span class="name">step-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:step-forward')" title="Click to copy">
+            <hd-icon icon="zondicons:step-forward"></hd-icon>
+            <span class="name">step-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:stethoscope')" title="Click to copy">
+            <hd-icon icon="zondicons:stethoscope"></hd-icon>
+            <span class="name">stethoscope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:store-front')" title="Click to copy">
+            <hd-icon icon="zondicons:store-front"></hd-icon>
+            <span class="name">store-front</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:stroke-width')" title="Click to copy">
+            <hd-icon icon="zondicons:stroke-width"></hd-icon>
+            <span class="name">stroke-width</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:subdirectory-left')" title="Click to copy">
+            <hd-icon icon="zondicons:subdirectory-left"></hd-icon>
+            <span class="name">subdirectory-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:subdirectory-right')" title="Click to copy">
+            <hd-icon icon="zondicons:subdirectory-right"></hd-icon>
+            <span class="name">subdirectory-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:swap')" title="Click to copy">
+            <hd-icon icon="zondicons:swap"></hd-icon>
+            <span class="name">swap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:tablet')" title="Click to copy">
+            <hd-icon icon="zondicons:tablet"></hd-icon>
+            <span class="name">tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:tag')" title="Click to copy">
+            <hd-icon icon="zondicons:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:target')" title="Click to copy">
+            <hd-icon icon="zondicons:target"></hd-icon>
+            <span class="name">target</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:text-box')" title="Click to copy">
+            <hd-icon icon="zondicons:text-box"></hd-icon>
+            <span class="name">text-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:text-decoration')" title="Click to copy">
+            <hd-icon icon="zondicons:text-decoration"></hd-icon>
+            <span class="name">text-decoration</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:thermometer')" title="Click to copy">
+            <hd-icon icon="zondicons:thermometer"></hd-icon>
+            <span class="name">thermometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:thumbs-down')" title="Click to copy">
+            <hd-icon icon="zondicons:thumbs-down"></hd-icon>
+            <span class="name">thumbs-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:thumbs-up')" title="Click to copy">
+            <hd-icon icon="zondicons:thumbs-up"></hd-icon>
+            <span class="name">thumbs-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:ticket')" title="Click to copy">
+            <hd-icon icon="zondicons:ticket"></hd-icon>
+            <span class="name">ticket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:time')" title="Click to copy">
+            <hd-icon icon="zondicons:time"></hd-icon>
+            <span class="name">time</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:timer')" title="Click to copy">
+            <hd-icon icon="zondicons:timer"></hd-icon>
+            <span class="name">timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:tools-copy')" title="Click to copy">
+            <hd-icon icon="zondicons:tools-copy"></hd-icon>
+            <span class="name">tools-copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:translate')" title="Click to copy">
+            <hd-icon icon="zondicons:translate"></hd-icon>
+            <span class="name">translate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:trash')" title="Click to copy">
+            <hd-icon icon="zondicons:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:travel')" title="Click to copy">
+            <hd-icon icon="zondicons:travel"></hd-icon>
+            <span class="name">travel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:travel-bus')" title="Click to copy">
+            <hd-icon icon="zondicons:travel-bus"></hd-icon>
+            <span class="name">travel-bus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:travel-car')" title="Click to copy">
+            <hd-icon icon="zondicons:travel-car"></hd-icon>
+            <span class="name">travel-car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:travel-case')" title="Click to copy">
+            <hd-icon icon="zondicons:travel-case"></hd-icon>
+            <span class="name">travel-case</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:travel-taxi-cab')" title="Click to copy">
+            <hd-icon icon="zondicons:travel-taxi-cab"></hd-icon>
+            <span class="name">travel-taxi-cab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:travel-train')" title="Click to copy">
+            <hd-icon icon="zondicons:travel-train"></hd-icon>
+            <span class="name">travel-train</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:travel-walk')" title="Click to copy">
+            <hd-icon icon="zondicons:travel-walk"></hd-icon>
+            <span class="name">travel-walk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:trophy')" title="Click to copy">
+            <hd-icon icon="zondicons:trophy"></hd-icon>
+            <span class="name">trophy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:tuning')" title="Click to copy">
+            <hd-icon icon="zondicons:tuning"></hd-icon>
+            <span class="name">tuning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:upload')" title="Click to copy">
+            <hd-icon icon="zondicons:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:usb')" title="Click to copy">
+            <hd-icon icon="zondicons:usb"></hd-icon>
+            <span class="name">usb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:user')" title="Click to copy">
+            <hd-icon icon="zondicons:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:user-add')" title="Click to copy">
+            <hd-icon icon="zondicons:user-add"></hd-icon>
+            <span class="name">user-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:user-group')" title="Click to copy">
+            <hd-icon icon="zondicons:user-group"></hd-icon>
+            <span class="name">user-group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:user-solid-circle')" title="Click to copy">
+            <hd-icon icon="zondicons:user-solid-circle"></hd-icon>
+            <span class="name">user-solid-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:user-solid-square')" title="Click to copy">
+            <hd-icon icon="zondicons:user-solid-square"></hd-icon>
+            <span class="name">user-solid-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:vector')" title="Click to copy">
+            <hd-icon icon="zondicons:vector"></hd-icon>
+            <span class="name">vector</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:video-camera')" title="Click to copy">
+            <hd-icon icon="zondicons:video-camera"></hd-icon>
+            <span class="name">video-camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:view-carousel')" title="Click to copy">
+            <hd-icon icon="zondicons:view-carousel"></hd-icon>
+            <span class="name">view-carousel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:view-column')" title="Click to copy">
+            <hd-icon icon="zondicons:view-column"></hd-icon>
+            <span class="name">view-column</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:view-hide')" title="Click to copy">
+            <hd-icon icon="zondicons:view-hide"></hd-icon>
+            <span class="name">view-hide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:view-list')" title="Click to copy">
+            <hd-icon icon="zondicons:view-list"></hd-icon>
+            <span class="name">view-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:view-show')" title="Click to copy">
+            <hd-icon icon="zondicons:view-show"></hd-icon>
+            <span class="name">view-show</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:view-tile')" title="Click to copy">
+            <hd-icon icon="zondicons:view-tile"></hd-icon>
+            <span class="name">view-tile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:volume-down')" title="Click to copy">
+            <hd-icon icon="zondicons:volume-down"></hd-icon>
+            <span class="name">volume-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:volume-mute')" title="Click to copy">
+            <hd-icon icon="zondicons:volume-mute"></hd-icon>
+            <span class="name">volume-mute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:volume-off')" title="Click to copy">
+            <hd-icon icon="zondicons:volume-off"></hd-icon>
+            <span class="name">volume-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:volume-up')" title="Click to copy">
+            <hd-icon icon="zondicons:volume-up"></hd-icon>
+            <span class="name">volume-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:wallet')" title="Click to copy">
+            <hd-icon icon="zondicons:wallet"></hd-icon>
+            <span class="name">wallet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:watch')" title="Click to copy">
+            <hd-icon icon="zondicons:watch"></hd-icon>
+            <span class="name">watch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:window')" title="Click to copy">
+            <hd-icon icon="zondicons:window"></hd-icon>
+            <span class="name">window</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:window-new')" title="Click to copy">
+            <hd-icon icon="zondicons:window-new"></hd-icon>
+            <span class="name">window-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:window-open')" title="Click to copy">
+            <hd-icon icon="zondicons:window-open"></hd-icon>
+            <span class="name">window-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:wrench')" title="Click to copy">
+            <hd-icon icon="zondicons:wrench"></hd-icon>
+            <span class="name">wrench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:yin-yang')" title="Click to copy">
+            <hd-icon icon="zondicons:yin-yang"></hd-icon>
+            <span class="name">yin-yang</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:zoom-in')" title="Click to copy">
+            <hd-icon icon="zondicons:zoom-in"></hd-icon>
+            <span class="name">zoom-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zondicons:zoom-out')" title="Click to copy">
+            <hd-icon icon="zondicons:zoom-out"></hd-icon>
+            <span class="name">zoom-out</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

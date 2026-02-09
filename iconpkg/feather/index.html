@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>feather - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>feather <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(286)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('feather:activity')" title="Click to copy">
+            <hd-icon icon="feather:activity"></hd-icon>
+            <span class="name">activity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:airplay')" title="Click to copy">
+            <hd-icon icon="feather:airplay"></hd-icon>
+            <span class="name">airplay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:alert-circle')" title="Click to copy">
+            <hd-icon icon="feather:alert-circle"></hd-icon>
+            <span class="name">alert-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:alert-octagon')" title="Click to copy">
+            <hd-icon icon="feather:alert-octagon"></hd-icon>
+            <span class="name">alert-octagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:alert-triangle')" title="Click to copy">
+            <hd-icon icon="feather:alert-triangle"></hd-icon>
+            <span class="name">alert-triangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:align-center')" title="Click to copy">
+            <hd-icon icon="feather:align-center"></hd-icon>
+            <span class="name">align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:align-justify')" title="Click to copy">
+            <hd-icon icon="feather:align-justify"></hd-icon>
+            <span class="name">align-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:align-left')" title="Click to copy">
+            <hd-icon icon="feather:align-left"></hd-icon>
+            <span class="name">align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:align-right')" title="Click to copy">
+            <hd-icon icon="feather:align-right"></hd-icon>
+            <span class="name">align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:anchor')" title="Click to copy">
+            <hd-icon icon="feather:anchor"></hd-icon>
+            <span class="name">anchor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:aperture')" title="Click to copy">
+            <hd-icon icon="feather:aperture"></hd-icon>
+            <span class="name">aperture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:archive')" title="Click to copy">
+            <hd-icon icon="feather:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-down')" title="Click to copy">
+            <hd-icon icon="feather:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-down-circle')" title="Click to copy">
+            <hd-icon icon="feather:arrow-down-circle"></hd-icon>
+            <span class="name">arrow-down-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-down-left')" title="Click to copy">
+            <hd-icon icon="feather:arrow-down-left"></hd-icon>
+            <span class="name">arrow-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-down-right')" title="Click to copy">
+            <hd-icon icon="feather:arrow-down-right"></hd-icon>
+            <span class="name">arrow-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-left')" title="Click to copy">
+            <hd-icon icon="feather:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-left-circle')" title="Click to copy">
+            <hd-icon icon="feather:arrow-left-circle"></hd-icon>
+            <span class="name">arrow-left-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-right')" title="Click to copy">
+            <hd-icon icon="feather:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-right-circle')" title="Click to copy">
+            <hd-icon icon="feather:arrow-right-circle"></hd-icon>
+            <span class="name">arrow-right-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-up')" title="Click to copy">
+            <hd-icon icon="feather:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-up-circle')" title="Click to copy">
+            <hd-icon icon="feather:arrow-up-circle"></hd-icon>
+            <span class="name">arrow-up-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-up-left')" title="Click to copy">
+            <hd-icon icon="feather:arrow-up-left"></hd-icon>
+            <span class="name">arrow-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:arrow-up-right')" title="Click to copy">
+            <hd-icon icon="feather:arrow-up-right"></hd-icon>
+            <span class="name">arrow-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:at-sign')" title="Click to copy">
+            <hd-icon icon="feather:at-sign"></hd-icon>
+            <span class="name">at-sign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:award')" title="Click to copy">
+            <hd-icon icon="feather:award"></hd-icon>
+            <span class="name">award</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:bar-chart')" title="Click to copy">
+            <hd-icon icon="feather:bar-chart"></hd-icon>
+            <span class="name">bar-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:bar-chart-2')" title="Click to copy">
+            <hd-icon icon="feather:bar-chart-2"></hd-icon>
+            <span class="name">bar-chart-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:battery')" title="Click to copy">
+            <hd-icon icon="feather:battery"></hd-icon>
+            <span class="name">battery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:battery-charging')" title="Click to copy">
+            <hd-icon icon="feather:battery-charging"></hd-icon>
+            <span class="name">battery-charging</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:bell')" title="Click to copy">
+            <hd-icon icon="feather:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:bell-off')" title="Click to copy">
+            <hd-icon icon="feather:bell-off"></hd-icon>
+            <span class="name">bell-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:bluetooth')" title="Click to copy">
+            <hd-icon icon="feather:bluetooth"></hd-icon>
+            <span class="name">bluetooth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:bold')" title="Click to copy">
+            <hd-icon icon="feather:bold"></hd-icon>
+            <span class="name">bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:book')" title="Click to copy">
+            <hd-icon icon="feather:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:book-open')" title="Click to copy">
+            <hd-icon icon="feather:book-open"></hd-icon>
+            <span class="name">book-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:bookmark')" title="Click to copy">
+            <hd-icon icon="feather:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:box')" title="Click to copy">
+            <hd-icon icon="feather:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:briefcase')" title="Click to copy">
+            <hd-icon icon="feather:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:calendar')" title="Click to copy">
+            <hd-icon icon="feather:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:camera')" title="Click to copy">
+            <hd-icon icon="feather:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:camera-off')" title="Click to copy">
+            <hd-icon icon="feather:camera-off"></hd-icon>
+            <span class="name">camera-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:cast')" title="Click to copy">
+            <hd-icon icon="feather:cast"></hd-icon>
+            <span class="name">cast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:check')" title="Click to copy">
+            <hd-icon icon="feather:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:check-circle')" title="Click to copy">
+            <hd-icon icon="feather:check-circle"></hd-icon>
+            <span class="name">check-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:check-square')" title="Click to copy">
+            <hd-icon icon="feather:check-square"></hd-icon>
+            <span class="name">check-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:chevron-down')" title="Click to copy">
+            <hd-icon icon="feather:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:chevron-left')" title="Click to copy">
+            <hd-icon icon="feather:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:chevron-right')" title="Click to copy">
+            <hd-icon icon="feather:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:chevron-up')" title="Click to copy">
+            <hd-icon icon="feather:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:chevrons-down')" title="Click to copy">
+            <hd-icon icon="feather:chevrons-down"></hd-icon>
+            <span class="name">chevrons-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:chevrons-left')" title="Click to copy">
+            <hd-icon icon="feather:chevrons-left"></hd-icon>
+            <span class="name">chevrons-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:chevrons-right')" title="Click to copy">
+            <hd-icon icon="feather:chevrons-right"></hd-icon>
+            <span class="name">chevrons-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:chevrons-up')" title="Click to copy">
+            <hd-icon icon="feather:chevrons-up"></hd-icon>
+            <span class="name">chevrons-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:chrome')" title="Click to copy">
+            <hd-icon icon="feather:chrome"></hd-icon>
+            <span class="name">chrome</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:circle')" title="Click to copy">
+            <hd-icon icon="feather:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:clipboard')" title="Click to copy">
+            <hd-icon icon="feather:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:clock')" title="Click to copy">
+            <hd-icon icon="feather:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:cloud')" title="Click to copy">
+            <hd-icon icon="feather:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:cloud-drizzle')" title="Click to copy">
+            <hd-icon icon="feather:cloud-drizzle"></hd-icon>
+            <span class="name">cloud-drizzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:cloud-lightning')" title="Click to copy">
+            <hd-icon icon="feather:cloud-lightning"></hd-icon>
+            <span class="name">cloud-lightning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:cloud-off')" title="Click to copy">
+            <hd-icon icon="feather:cloud-off"></hd-icon>
+            <span class="name">cloud-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:cloud-rain')" title="Click to copy">
+            <hd-icon icon="feather:cloud-rain"></hd-icon>
+            <span class="name">cloud-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:cloud-snow')" title="Click to copy">
+            <hd-icon icon="feather:cloud-snow"></hd-icon>
+            <span class="name">cloud-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:code')" title="Click to copy">
+            <hd-icon icon="feather:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:codepen')" title="Click to copy">
+            <hd-icon icon="feather:codepen"></hd-icon>
+            <span class="name">codepen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:codesandbox')" title="Click to copy">
+            <hd-icon icon="feather:codesandbox"></hd-icon>
+            <span class="name">codesandbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:coffee')" title="Click to copy">
+            <hd-icon icon="feather:coffee"></hd-icon>
+            <span class="name">coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:columns')" title="Click to copy">
+            <hd-icon icon="feather:columns"></hd-icon>
+            <span class="name">columns</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:command')" title="Click to copy">
+            <hd-icon icon="feather:command"></hd-icon>
+            <span class="name">command</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:compass')" title="Click to copy">
+            <hd-icon icon="feather:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:copy')" title="Click to copy">
+            <hd-icon icon="feather:copy"></hd-icon>
+            <span class="name">copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:corner-down-left')" title="Click to copy">
+            <hd-icon icon="feather:corner-down-left"></hd-icon>
+            <span class="name">corner-down-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:corner-down-right')" title="Click to copy">
+            <hd-icon icon="feather:corner-down-right"></hd-icon>
+            <span class="name">corner-down-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:corner-left-down')" title="Click to copy">
+            <hd-icon icon="feather:corner-left-down"></hd-icon>
+            <span class="name">corner-left-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:corner-left-up')" title="Click to copy">
+            <hd-icon icon="feather:corner-left-up"></hd-icon>
+            <span class="name">corner-left-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:corner-right-down')" title="Click to copy">
+            <hd-icon icon="feather:corner-right-down"></hd-icon>
+            <span class="name">corner-right-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:corner-right-up')" title="Click to copy">
+            <hd-icon icon="feather:corner-right-up"></hd-icon>
+            <span class="name">corner-right-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:corner-up-left')" title="Click to copy">
+            <hd-icon icon="feather:corner-up-left"></hd-icon>
+            <span class="name">corner-up-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:corner-up-right')" title="Click to copy">
+            <hd-icon icon="feather:corner-up-right"></hd-icon>
+            <span class="name">corner-up-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:cpu')" title="Click to copy">
+            <hd-icon icon="feather:cpu"></hd-icon>
+            <span class="name">cpu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:credit-card')" title="Click to copy">
+            <hd-icon icon="feather:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:crop')" title="Click to copy">
+            <hd-icon icon="feather:crop"></hd-icon>
+            <span class="name">crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:crosshair')" title="Click to copy">
+            <hd-icon icon="feather:crosshair"></hd-icon>
+            <span class="name">crosshair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:database')" title="Click to copy">
+            <hd-icon icon="feather:database"></hd-icon>
+            <span class="name">database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:delete')" title="Click to copy">
+            <hd-icon icon="feather:delete"></hd-icon>
+            <span class="name">delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:disc')" title="Click to copy">
+            <hd-icon icon="feather:disc"></hd-icon>
+            <span class="name">disc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:divide')" title="Click to copy">
+            <hd-icon icon="feather:divide"></hd-icon>
+            <span class="name">divide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:divide-circle')" title="Click to copy">
+            <hd-icon icon="feather:divide-circle"></hd-icon>
+            <span class="name">divide-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:divide-square')" title="Click to copy">
+            <hd-icon icon="feather:divide-square"></hd-icon>
+            <span class="name">divide-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:dollar-sign')" title="Click to copy">
+            <hd-icon icon="feather:dollar-sign"></hd-icon>
+            <span class="name">dollar-sign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:download')" title="Click to copy">
+            <hd-icon icon="feather:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:download-cloud')" title="Click to copy">
+            <hd-icon icon="feather:download-cloud"></hd-icon>
+            <span class="name">download-cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:dribbble')" title="Click to copy">
+            <hd-icon icon="feather:dribbble"></hd-icon>
+            <span class="name">dribbble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:droplet')" title="Click to copy">
+            <hd-icon icon="feather:droplet"></hd-icon>
+            <span class="name">droplet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:edit')" title="Click to copy">
+            <hd-icon icon="feather:edit"></hd-icon>
+            <span class="name">edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:edit-2')" title="Click to copy">
+            <hd-icon icon="feather:edit-2"></hd-icon>
+            <span class="name">edit-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:edit-3')" title="Click to copy">
+            <hd-icon icon="feather:edit-3"></hd-icon>
+            <span class="name">edit-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:external-link')" title="Click to copy">
+            <hd-icon icon="feather:external-link"></hd-icon>
+            <span class="name">external-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:eye')" title="Click to copy">
+            <hd-icon icon="feather:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:eye-off')" title="Click to copy">
+            <hd-icon icon="feather:eye-off"></hd-icon>
+            <span class="name">eye-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:facebook')" title="Click to copy">
+            <hd-icon icon="feather:facebook"></hd-icon>
+            <span class="name">facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:fast-forward')" title="Click to copy">
+            <hd-icon icon="feather:fast-forward"></hd-icon>
+            <span class="name">fast-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:feather')" title="Click to copy">
+            <hd-icon icon="feather:feather"></hd-icon>
+            <span class="name">feather</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:figma')" title="Click to copy">
+            <hd-icon icon="feather:figma"></hd-icon>
+            <span class="name">figma</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:file')" title="Click to copy">
+            <hd-icon icon="feather:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:file-minus')" title="Click to copy">
+            <hd-icon icon="feather:file-minus"></hd-icon>
+            <span class="name">file-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:file-plus')" title="Click to copy">
+            <hd-icon icon="feather:file-plus"></hd-icon>
+            <span class="name">file-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:file-text')" title="Click to copy">
+            <hd-icon icon="feather:file-text"></hd-icon>
+            <span class="name">file-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:film')" title="Click to copy">
+            <hd-icon icon="feather:film"></hd-icon>
+            <span class="name">film</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:filter')" title="Click to copy">
+            <hd-icon icon="feather:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:flag')" title="Click to copy">
+            <hd-icon icon="feather:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:folder')" title="Click to copy">
+            <hd-icon icon="feather:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:folder-minus')" title="Click to copy">
+            <hd-icon icon="feather:folder-minus"></hd-icon>
+            <span class="name">folder-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:folder-plus')" title="Click to copy">
+            <hd-icon icon="feather:folder-plus"></hd-icon>
+            <span class="name">folder-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:framer')" title="Click to copy">
+            <hd-icon icon="feather:framer"></hd-icon>
+            <span class="name">framer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:frown')" title="Click to copy">
+            <hd-icon icon="feather:frown"></hd-icon>
+            <span class="name">frown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:gift')" title="Click to copy">
+            <hd-icon icon="feather:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:git-branch')" title="Click to copy">
+            <hd-icon icon="feather:git-branch"></hd-icon>
+            <span class="name">git-branch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:git-commit')" title="Click to copy">
+            <hd-icon icon="feather:git-commit"></hd-icon>
+            <span class="name">git-commit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:git-merge')" title="Click to copy">
+            <hd-icon icon="feather:git-merge"></hd-icon>
+            <span class="name">git-merge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:git-pull-request')" title="Click to copy">
+            <hd-icon icon="feather:git-pull-request"></hd-icon>
+            <span class="name">git-pull-request</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:github')" title="Click to copy">
+            <hd-icon icon="feather:github"></hd-icon>
+            <span class="name">github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:gitlab')" title="Click to copy">
+            <hd-icon icon="feather:gitlab"></hd-icon>
+            <span class="name">gitlab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:globe')" title="Click to copy">
+            <hd-icon icon="feather:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:grid')" title="Click to copy">
+            <hd-icon icon="feather:grid"></hd-icon>
+            <span class="name">grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:hard-drive')" title="Click to copy">
+            <hd-icon icon="feather:hard-drive"></hd-icon>
+            <span class="name">hard-drive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:hash')" title="Click to copy">
+            <hd-icon icon="feather:hash"></hd-icon>
+            <span class="name">hash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:headphones')" title="Click to copy">
+            <hd-icon icon="feather:headphones"></hd-icon>
+            <span class="name">headphones</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:heart')" title="Click to copy">
+            <hd-icon icon="feather:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:help-circle')" title="Click to copy">
+            <hd-icon icon="feather:help-circle"></hd-icon>
+            <span class="name">help-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:hexagon')" title="Click to copy">
+            <hd-icon icon="feather:hexagon"></hd-icon>
+            <span class="name">hexagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:home')" title="Click to copy">
+            <hd-icon icon="feather:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:image')" title="Click to copy">
+            <hd-icon icon="feather:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:inbox')" title="Click to copy">
+            <hd-icon icon="feather:inbox"></hd-icon>
+            <span class="name">inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:info')" title="Click to copy">
+            <hd-icon icon="feather:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:instagram')" title="Click to copy">
+            <hd-icon icon="feather:instagram"></hd-icon>
+            <span class="name">instagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:italic')" title="Click to copy">
+            <hd-icon icon="feather:italic"></hd-icon>
+            <span class="name">italic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:key')" title="Click to copy">
+            <hd-icon icon="feather:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:layers')" title="Click to copy">
+            <hd-icon icon="feather:layers"></hd-icon>
+            <span class="name">layers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:layout')" title="Click to copy">
+            <hd-icon icon="feather:layout"></hd-icon>
+            <span class="name">layout</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:life-buoy')" title="Click to copy">
+            <hd-icon icon="feather:life-buoy"></hd-icon>
+            <span class="name">life-buoy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:link')" title="Click to copy">
+            <hd-icon icon="feather:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:link-2')" title="Click to copy">
+            <hd-icon icon="feather:link-2"></hd-icon>
+            <span class="name">link-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:linkedin')" title="Click to copy">
+            <hd-icon icon="feather:linkedin"></hd-icon>
+            <span class="name">linkedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:list')" title="Click to copy">
+            <hd-icon icon="feather:list"></hd-icon>
+            <span class="name">list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:loader')" title="Click to copy">
+            <hd-icon icon="feather:loader"></hd-icon>
+            <span class="name">loader</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:lock')" title="Click to copy">
+            <hd-icon icon="feather:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:log-in')" title="Click to copy">
+            <hd-icon icon="feather:log-in"></hd-icon>
+            <span class="name">log-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:log-out')" title="Click to copy">
+            <hd-icon icon="feather:log-out"></hd-icon>
+            <span class="name">log-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:mail')" title="Click to copy">
+            <hd-icon icon="feather:mail"></hd-icon>
+            <span class="name">mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:map')" title="Click to copy">
+            <hd-icon icon="feather:map"></hd-icon>
+            <span class="name">map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:map-pin')" title="Click to copy">
+            <hd-icon icon="feather:map-pin"></hd-icon>
+            <span class="name">map-pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:maximize')" title="Click to copy">
+            <hd-icon icon="feather:maximize"></hd-icon>
+            <span class="name">maximize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:maximize-2')" title="Click to copy">
+            <hd-icon icon="feather:maximize-2"></hd-icon>
+            <span class="name">maximize-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:meh')" title="Click to copy">
+            <hd-icon icon="feather:meh"></hd-icon>
+            <span class="name">meh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:menu')" title="Click to copy">
+            <hd-icon icon="feather:menu"></hd-icon>
+            <span class="name">menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:message-circle')" title="Click to copy">
+            <hd-icon icon="feather:message-circle"></hd-icon>
+            <span class="name">message-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:message-square')" title="Click to copy">
+            <hd-icon icon="feather:message-square"></hd-icon>
+            <span class="name">message-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:mic')" title="Click to copy">
+            <hd-icon icon="feather:mic"></hd-icon>
+            <span class="name">mic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:mic-off')" title="Click to copy">
+            <hd-icon icon="feather:mic-off"></hd-icon>
+            <span class="name">mic-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:minimize')" title="Click to copy">
+            <hd-icon icon="feather:minimize"></hd-icon>
+            <span class="name">minimize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:minimize-2')" title="Click to copy">
+            <hd-icon icon="feather:minimize-2"></hd-icon>
+            <span class="name">minimize-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:minus')" title="Click to copy">
+            <hd-icon icon="feather:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:minus-circle')" title="Click to copy">
+            <hd-icon icon="feather:minus-circle"></hd-icon>
+            <span class="name">minus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:minus-square')" title="Click to copy">
+            <hd-icon icon="feather:minus-square"></hd-icon>
+            <span class="name">minus-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:monitor')" title="Click to copy">
+            <hd-icon icon="feather:monitor"></hd-icon>
+            <span class="name">monitor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:moon')" title="Click to copy">
+            <hd-icon icon="feather:moon"></hd-icon>
+            <span class="name">moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:more-horizontal')" title="Click to copy">
+            <hd-icon icon="feather:more-horizontal"></hd-icon>
+            <span class="name">more-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:more-vertical')" title="Click to copy">
+            <hd-icon icon="feather:more-vertical"></hd-icon>
+            <span class="name">more-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:mouse-pointer')" title="Click to copy">
+            <hd-icon icon="feather:mouse-pointer"></hd-icon>
+            <span class="name">mouse-pointer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:move')" title="Click to copy">
+            <hd-icon icon="feather:move"></hd-icon>
+            <span class="name">move</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:music')" title="Click to copy">
+            <hd-icon icon="feather:music"></hd-icon>
+            <span class="name">music</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:navigation')" title="Click to copy">
+            <hd-icon icon="feather:navigation"></hd-icon>
+            <span class="name">navigation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:navigation-2')" title="Click to copy">
+            <hd-icon icon="feather:navigation-2"></hd-icon>
+            <span class="name">navigation-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:octagon')" title="Click to copy">
+            <hd-icon icon="feather:octagon"></hd-icon>
+            <span class="name">octagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:package')" title="Click to copy">
+            <hd-icon icon="feather:package"></hd-icon>
+            <span class="name">package</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:paperclip')" title="Click to copy">
+            <hd-icon icon="feather:paperclip"></hd-icon>
+            <span class="name">paperclip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:pause')" title="Click to copy">
+            <hd-icon icon="feather:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:pause-circle')" title="Click to copy">
+            <hd-icon icon="feather:pause-circle"></hd-icon>
+            <span class="name">pause-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:pen-tool')" title="Click to copy">
+            <hd-icon icon="feather:pen-tool"></hd-icon>
+            <span class="name">pen-tool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:percent')" title="Click to copy">
+            <hd-icon icon="feather:percent"></hd-icon>
+            <span class="name">percent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:phone')" title="Click to copy">
+            <hd-icon icon="feather:phone"></hd-icon>
+            <span class="name">phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:phone-call')" title="Click to copy">
+            <hd-icon icon="feather:phone-call"></hd-icon>
+            <span class="name">phone-call</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:phone-forwarded')" title="Click to copy">
+            <hd-icon icon="feather:phone-forwarded"></hd-icon>
+            <span class="name">phone-forwarded</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:phone-incoming')" title="Click to copy">
+            <hd-icon icon="feather:phone-incoming"></hd-icon>
+            <span class="name">phone-incoming</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:phone-missed')" title="Click to copy">
+            <hd-icon icon="feather:phone-missed"></hd-icon>
+            <span class="name">phone-missed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:phone-off')" title="Click to copy">
+            <hd-icon icon="feather:phone-off"></hd-icon>
+            <span class="name">phone-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:phone-outgoing')" title="Click to copy">
+            <hd-icon icon="feather:phone-outgoing"></hd-icon>
+            <span class="name">phone-outgoing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:pie-chart')" title="Click to copy">
+            <hd-icon icon="feather:pie-chart"></hd-icon>
+            <span class="name">pie-chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:play')" title="Click to copy">
+            <hd-icon icon="feather:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:play-circle')" title="Click to copy">
+            <hd-icon icon="feather:play-circle"></hd-icon>
+            <span class="name">play-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:plus')" title="Click to copy">
+            <hd-icon icon="feather:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:plus-circle')" title="Click to copy">
+            <hd-icon icon="feather:plus-circle"></hd-icon>
+            <span class="name">plus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:plus-square')" title="Click to copy">
+            <hd-icon icon="feather:plus-square"></hd-icon>
+            <span class="name">plus-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:pocket')" title="Click to copy">
+            <hd-icon icon="feather:pocket"></hd-icon>
+            <span class="name">pocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:power')" title="Click to copy">
+            <hd-icon icon="feather:power"></hd-icon>
+            <span class="name">power</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:printer')" title="Click to copy">
+            <hd-icon icon="feather:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:radio')" title="Click to copy">
+            <hd-icon icon="feather:radio"></hd-icon>
+            <span class="name">radio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:refresh-ccw')" title="Click to copy">
+            <hd-icon icon="feather:refresh-ccw"></hd-icon>
+            <span class="name">refresh-ccw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:refresh-cw')" title="Click to copy">
+            <hd-icon icon="feather:refresh-cw"></hd-icon>
+            <span class="name">refresh-cw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:repeat')" title="Click to copy">
+            <hd-icon icon="feather:repeat"></hd-icon>
+            <span class="name">repeat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:rewind')" title="Click to copy">
+            <hd-icon icon="feather:rewind"></hd-icon>
+            <span class="name">rewind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:rotate-ccw')" title="Click to copy">
+            <hd-icon icon="feather:rotate-ccw"></hd-icon>
+            <span class="name">rotate-ccw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:rotate-cw')" title="Click to copy">
+            <hd-icon icon="feather:rotate-cw"></hd-icon>
+            <span class="name">rotate-cw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:rss')" title="Click to copy">
+            <hd-icon icon="feather:rss"></hd-icon>
+            <span class="name">rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:save')" title="Click to copy">
+            <hd-icon icon="feather:save"></hd-icon>
+            <span class="name">save</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:scissors')" title="Click to copy">
+            <hd-icon icon="feather:scissors"></hd-icon>
+            <span class="name">scissors</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:search')" title="Click to copy">
+            <hd-icon icon="feather:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:send')" title="Click to copy">
+            <hd-icon icon="feather:send"></hd-icon>
+            <span class="name">send</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:server')" title="Click to copy">
+            <hd-icon icon="feather:server"></hd-icon>
+            <span class="name">server</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:settings')" title="Click to copy">
+            <hd-icon icon="feather:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:share')" title="Click to copy">
+            <hd-icon icon="feather:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:share-2')" title="Click to copy">
+            <hd-icon icon="feather:share-2"></hd-icon>
+            <span class="name">share-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:shield')" title="Click to copy">
+            <hd-icon icon="feather:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:shield-off')" title="Click to copy">
+            <hd-icon icon="feather:shield-off"></hd-icon>
+            <span class="name">shield-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:shopping-bag')" title="Click to copy">
+            <hd-icon icon="feather:shopping-bag"></hd-icon>
+            <span class="name">shopping-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:shopping-cart')" title="Click to copy">
+            <hd-icon icon="feather:shopping-cart"></hd-icon>
+            <span class="name">shopping-cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:shuffle')" title="Click to copy">
+            <hd-icon icon="feather:shuffle"></hd-icon>
+            <span class="name">shuffle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:sidebar')" title="Click to copy">
+            <hd-icon icon="feather:sidebar"></hd-icon>
+            <span class="name">sidebar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:skip-back')" title="Click to copy">
+            <hd-icon icon="feather:skip-back"></hd-icon>
+            <span class="name">skip-back</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:skip-forward')" title="Click to copy">
+            <hd-icon icon="feather:skip-forward"></hd-icon>
+            <span class="name">skip-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:slack')" title="Click to copy">
+            <hd-icon icon="feather:slack"></hd-icon>
+            <span class="name">slack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:slash')" title="Click to copy">
+            <hd-icon icon="feather:slash"></hd-icon>
+            <span class="name">slash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:sliders')" title="Click to copy">
+            <hd-icon icon="feather:sliders"></hd-icon>
+            <span class="name">sliders</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:smartphone')" title="Click to copy">
+            <hd-icon icon="feather:smartphone"></hd-icon>
+            <span class="name">smartphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:smile')" title="Click to copy">
+            <hd-icon icon="feather:smile"></hd-icon>
+            <span class="name">smile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:speaker')" title="Click to copy">
+            <hd-icon icon="feather:speaker"></hd-icon>
+            <span class="name">speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:square')" title="Click to copy">
+            <hd-icon icon="feather:square"></hd-icon>
+            <span class="name">square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:star')" title="Click to copy">
+            <hd-icon icon="feather:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:stop-circle')" title="Click to copy">
+            <hd-icon icon="feather:stop-circle"></hd-icon>
+            <span class="name">stop-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:sun')" title="Click to copy">
+            <hd-icon icon="feather:sun"></hd-icon>
+            <span class="name">sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:sunrise')" title="Click to copy">
+            <hd-icon icon="feather:sunrise"></hd-icon>
+            <span class="name">sunrise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:sunset')" title="Click to copy">
+            <hd-icon icon="feather:sunset"></hd-icon>
+            <span class="name">sunset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:tablet')" title="Click to copy">
+            <hd-icon icon="feather:tablet"></hd-icon>
+            <span class="name">tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:tag')" title="Click to copy">
+            <hd-icon icon="feather:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:target')" title="Click to copy">
+            <hd-icon icon="feather:target"></hd-icon>
+            <span class="name">target</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:terminal')" title="Click to copy">
+            <hd-icon icon="feather:terminal"></hd-icon>
+            <span class="name">terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:thermometer')" title="Click to copy">
+            <hd-icon icon="feather:thermometer"></hd-icon>
+            <span class="name">thermometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:thumbs-down')" title="Click to copy">
+            <hd-icon icon="feather:thumbs-down"></hd-icon>
+            <span class="name">thumbs-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:thumbs-up')" title="Click to copy">
+            <hd-icon icon="feather:thumbs-up"></hd-icon>
+            <span class="name">thumbs-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:toggle-left')" title="Click to copy">
+            <hd-icon icon="feather:toggle-left"></hd-icon>
+            <span class="name">toggle-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:toggle-right')" title="Click to copy">
+            <hd-icon icon="feather:toggle-right"></hd-icon>
+            <span class="name">toggle-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:tool')" title="Click to copy">
+            <hd-icon icon="feather:tool"></hd-icon>
+            <span class="name">tool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:trash')" title="Click to copy">
+            <hd-icon icon="feather:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:trash-2')" title="Click to copy">
+            <hd-icon icon="feather:trash-2"></hd-icon>
+            <span class="name">trash-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:trello')" title="Click to copy">
+            <hd-icon icon="feather:trello"></hd-icon>
+            <span class="name">trello</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:trending-down')" title="Click to copy">
+            <hd-icon icon="feather:trending-down"></hd-icon>
+            <span class="name">trending-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:trending-up')" title="Click to copy">
+            <hd-icon icon="feather:trending-up"></hd-icon>
+            <span class="name">trending-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:triangle')" title="Click to copy">
+            <hd-icon icon="feather:triangle"></hd-icon>
+            <span class="name">triangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:truck')" title="Click to copy">
+            <hd-icon icon="feather:truck"></hd-icon>
+            <span class="name">truck</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:tv')" title="Click to copy">
+            <hd-icon icon="feather:tv"></hd-icon>
+            <span class="name">tv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:twitch')" title="Click to copy">
+            <hd-icon icon="feather:twitch"></hd-icon>
+            <span class="name">twitch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:twitter')" title="Click to copy">
+            <hd-icon icon="feather:twitter"></hd-icon>
+            <span class="name">twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:type')" title="Click to copy">
+            <hd-icon icon="feather:type"></hd-icon>
+            <span class="name">type</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:umbrella')" title="Click to copy">
+            <hd-icon icon="feather:umbrella"></hd-icon>
+            <span class="name">umbrella</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:underline')" title="Click to copy">
+            <hd-icon icon="feather:underline"></hd-icon>
+            <span class="name">underline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:unlock')" title="Click to copy">
+            <hd-icon icon="feather:unlock"></hd-icon>
+            <span class="name">unlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:upload')" title="Click to copy">
+            <hd-icon icon="feather:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:upload-cloud')" title="Click to copy">
+            <hd-icon icon="feather:upload-cloud"></hd-icon>
+            <span class="name">upload-cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:user')" title="Click to copy">
+            <hd-icon icon="feather:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:user-check')" title="Click to copy">
+            <hd-icon icon="feather:user-check"></hd-icon>
+            <span class="name">user-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:user-minus')" title="Click to copy">
+            <hd-icon icon="feather:user-minus"></hd-icon>
+            <span class="name">user-minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:user-plus')" title="Click to copy">
+            <hd-icon icon="feather:user-plus"></hd-icon>
+            <span class="name">user-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:user-x')" title="Click to copy">
+            <hd-icon icon="feather:user-x"></hd-icon>
+            <span class="name">user-x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:users')" title="Click to copy">
+            <hd-icon icon="feather:users"></hd-icon>
+            <span class="name">users</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:video')" title="Click to copy">
+            <hd-icon icon="feather:video"></hd-icon>
+            <span class="name">video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:video-off')" title="Click to copy">
+            <hd-icon icon="feather:video-off"></hd-icon>
+            <span class="name">video-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:voicemail')" title="Click to copy">
+            <hd-icon icon="feather:voicemail"></hd-icon>
+            <span class="name">voicemail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:volume')" title="Click to copy">
+            <hd-icon icon="feather:volume"></hd-icon>
+            <span class="name">volume</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:volume-1')" title="Click to copy">
+            <hd-icon icon="feather:volume-1"></hd-icon>
+            <span class="name">volume-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:volume-2')" title="Click to copy">
+            <hd-icon icon="feather:volume-2"></hd-icon>
+            <span class="name">volume-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:volume-x')" title="Click to copy">
+            <hd-icon icon="feather:volume-x"></hd-icon>
+            <span class="name">volume-x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:watch')" title="Click to copy">
+            <hd-icon icon="feather:watch"></hd-icon>
+            <span class="name">watch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:wifi')" title="Click to copy">
+            <hd-icon icon="feather:wifi"></hd-icon>
+            <span class="name">wifi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:wifi-off')" title="Click to copy">
+            <hd-icon icon="feather:wifi-off"></hd-icon>
+            <span class="name">wifi-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:wind')" title="Click to copy">
+            <hd-icon icon="feather:wind"></hd-icon>
+            <span class="name">wind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:x')" title="Click to copy">
+            <hd-icon icon="feather:x"></hd-icon>
+            <span class="name">x</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:x-circle')" title="Click to copy">
+            <hd-icon icon="feather:x-circle"></hd-icon>
+            <span class="name">x-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:x-octagon')" title="Click to copy">
+            <hd-icon icon="feather:x-octagon"></hd-icon>
+            <span class="name">x-octagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:x-square')" title="Click to copy">
+            <hd-icon icon="feather:x-square"></hd-icon>
+            <span class="name">x-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:youtube')" title="Click to copy">
+            <hd-icon icon="feather:youtube"></hd-icon>
+            <span class="name">youtube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:zap')" title="Click to copy">
+            <hd-icon icon="feather:zap"></hd-icon>
+            <span class="name">zap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:zap-off')" title="Click to copy">
+            <hd-icon icon="feather:zap-off"></hd-icon>
+            <span class="name">zap-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:zoom-in')" title="Click to copy">
+            <hd-icon icon="feather:zoom-in"></hd-icon>
+            <span class="name">zoom-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('feather:zoom-out')" title="Click to copy">
+            <hd-icon icon="feather:zoom-out"></hd-icon>
+            <span class="name">zoom-out</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

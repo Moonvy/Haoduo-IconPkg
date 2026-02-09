@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iwwa - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>iwwa <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(105)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('iwwa:add')" title="Click to copy">
+            <hd-icon icon="iwwa:add"></hd-icon>
+            <span class="name">add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:add-15m')" title="Click to copy">
+            <hd-icon icon="iwwa:add-15m"></hd-icon>
+            <span class="name">add-15m</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:add-1d')" title="Click to copy">
+            <hd-icon icon="iwwa:add-1d"></hd-icon>
+            <span class="name">add-1d</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:add-1m')" title="Click to copy">
+            <hd-icon icon="iwwa:add-1m"></hd-icon>
+            <span class="name">add-1m</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:add-1w')" title="Click to copy">
+            <hd-icon icon="iwwa:add-1w"></hd-icon>
+            <span class="name">add-1w</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:add-1y')" title="Click to copy">
+            <hd-icon icon="iwwa:add-1y"></hd-icon>
+            <span class="name">add-1y</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:alarm')" title="Click to copy">
+            <hd-icon icon="iwwa:alarm"></hd-icon>
+            <span class="name">alarm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:alarm-o')" title="Click to copy">
+            <hd-icon icon="iwwa:alarm-o"></hd-icon>
+            <span class="name">alarm-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:alert')" title="Click to copy">
+            <hd-icon icon="iwwa:alert"></hd-icon>
+            <span class="name">alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:angle-left')" title="Click to copy">
+            <hd-icon icon="iwwa:angle-left"></hd-icon>
+            <span class="name">angle-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:arrow-down')" title="Click to copy">
+            <hd-icon icon="iwwa:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:arrow-left')" title="Click to copy">
+            <hd-icon icon="iwwa:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:arrow-right')" title="Click to copy">
+            <hd-icon icon="iwwa:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:arrow-up')" title="Click to copy">
+            <hd-icon icon="iwwa:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:assign')" title="Click to copy">
+            <hd-icon icon="iwwa:assign"></hd-icon>
+            <span class="name">assign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:bad')" title="Click to copy">
+            <hd-icon icon="iwwa:bad"></hd-icon>
+            <span class="name">bad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:bad-o')" title="Click to copy">
+            <hd-icon icon="iwwa:bad-o"></hd-icon>
+            <span class="name">bad-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:box')" title="Click to copy">
+            <hd-icon icon="iwwa:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:calendar')" title="Click to copy">
+            <hd-icon icon="iwwa:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:chart')" title="Click to copy">
+            <hd-icon icon="iwwa:chart"></hd-icon>
+            <span class="name">chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:chart-style1')" title="Click to copy">
+            <hd-icon icon="iwwa:chart-style1"></hd-icon>
+            <span class="name">chart-style1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:chart-style2')" title="Click to copy">
+            <hd-icon icon="iwwa:chart-style2"></hd-icon>
+            <span class="name">chart-style2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:chart-style3')" title="Click to copy">
+            <hd-icon icon="iwwa:chart-style3"></hd-icon>
+            <span class="name">chart-style3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:chart-style4')" title="Click to copy">
+            <hd-icon icon="iwwa:chart-style4"></hd-icon>
+            <span class="name">chart-style4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:circumflex')" title="Click to copy">
+            <hd-icon icon="iwwa:circumflex"></hd-icon>
+            <span class="name">circumflex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:clone')" title="Click to copy">
+            <hd-icon icon="iwwa:clone"></hd-icon>
+            <span class="name">clone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:close')" title="Click to copy">
+            <hd-icon icon="iwwa:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:close-braket')" title="Click to copy">
+            <hd-icon icon="iwwa:close-braket"></hd-icon>
+            <span class="name">close-braket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:co2')" title="Click to copy">
+            <hd-icon icon="iwwa:co2"></hd-icon>
+            <span class="name">co2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:confront')" title="Click to copy">
+            <hd-icon icon="iwwa:confront"></hd-icon>
+            <span class="name">confront</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:connection-o')" title="Click to copy">
+            <hd-icon icon="iwwa:connection-o"></hd-icon>
+            <span class="name">connection-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:consumption-o')" title="Click to copy">
+            <hd-icon icon="iwwa:consumption-o"></hd-icon>
+            <span class="name">consumption-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:csv')" title="Click to copy">
+            <hd-icon icon="iwwa:csv"></hd-icon>
+            <span class="name">csv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:danger')" title="Click to copy">
+            <hd-icon icon="iwwa:danger"></hd-icon>
+            <span class="name">danger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:dashboard')" title="Click to copy">
+            <hd-icon icon="iwwa:dashboard"></hd-icon>
+            <span class="name">dashboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:delete')" title="Click to copy">
+            <hd-icon icon="iwwa:delete"></hd-icon>
+            <span class="name">delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:delta')" title="Click to copy">
+            <hd-icon icon="iwwa:delta"></hd-icon>
+            <span class="name">delta</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:divide')" title="Click to copy">
+            <hd-icon icon="iwwa:divide"></hd-icon>
+            <span class="name">divide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:drag-drop')" title="Click to copy">
+            <hd-icon icon="iwwa:drag-drop"></hd-icon>
+            <span class="name">drag-drop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:duplicate')" title="Click to copy">
+            <hd-icon icon="iwwa:duplicate"></hd-icon>
+            <span class="name">duplicate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:edit')" title="Click to copy">
+            <hd-icon icon="iwwa:edit"></hd-icon>
+            <span class="name">edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:expand')" title="Click to copy">
+            <hd-icon icon="iwwa:expand"></hd-icon>
+            <span class="name">expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:export')" title="Click to copy">
+            <hd-icon icon="iwwa:export"></hd-icon>
+            <span class="name">export</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:file-csv')" title="Click to copy">
+            <hd-icon icon="iwwa:file-csv"></hd-icon>
+            <span class="name">file-csv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:file-pdf')" title="Click to copy">
+            <hd-icon icon="iwwa:file-pdf"></hd-icon>
+            <span class="name">file-pdf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:file-png')" title="Click to copy">
+            <hd-icon icon="iwwa:file-png"></hd-icon>
+            <span class="name">file-png</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:file-xsl')" title="Click to copy">
+            <hd-icon icon="iwwa:file-xsl"></hd-icon>
+            <span class="name">file-xsl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:filter')" title="Click to copy">
+            <hd-icon icon="iwwa:filter"></hd-icon>
+            <span class="name">filter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:flag')" title="Click to copy">
+            <hd-icon icon="iwwa:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:gauge')" title="Click to copy">
+            <hd-icon icon="iwwa:gauge"></hd-icon>
+            <span class="name">gauge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:good')" title="Click to copy">
+            <hd-icon icon="iwwa:good"></hd-icon>
+            <span class="name">good</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:good-o')" title="Click to copy">
+            <hd-icon icon="iwwa:good-o"></hd-icon>
+            <span class="name">good-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:help')" title="Click to copy">
+            <hd-icon icon="iwwa:help"></hd-icon>
+            <span class="name">help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:history')" title="Click to copy">
+            <hd-icon icon="iwwa:history"></hd-icon>
+            <span class="name">history</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:humidity')" title="Click to copy">
+            <hd-icon icon="iwwa:humidity"></hd-icon>
+            <span class="name">humidity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:info')" title="Click to copy">
+            <hd-icon icon="iwwa:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:information')" title="Click to copy">
+            <hd-icon icon="iwwa:information"></hd-icon>
+            <span class="name">information</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:innowatio-logo')" title="Click to copy">
+            <hd-icon icon="iwwa:innowatio-logo"></hd-icon>
+            <span class="name">innowatio-logo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:lightbulb')" title="Click to copy">
+            <hd-icon icon="iwwa:lightbulb"></hd-icon>
+            <span class="name">lightbulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:list-favourite')" title="Click to copy">
+            <hd-icon icon="iwwa:list-favourite"></hd-icon>
+            <span class="name">list-favourite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:lock')" title="Click to copy">
+            <hd-icon icon="iwwa:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:logout')" title="Click to copy">
+            <hd-icon icon="iwwa:logout"></hd-icon>
+            <span class="name">logout</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:map')" title="Click to copy">
+            <hd-icon icon="iwwa:map"></hd-icon>
+            <span class="name">map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:menu')" title="Click to copy">
+            <hd-icon icon="iwwa:menu"></hd-icon>
+            <span class="name">menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:merge')" title="Click to copy">
+            <hd-icon icon="iwwa:merge"></hd-icon>
+            <span class="name">merge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:middle-o')" title="Click to copy">
+            <hd-icon icon="iwwa:middle-o"></hd-icon>
+            <span class="name">middle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:middling')" title="Click to copy">
+            <hd-icon icon="iwwa:middling"></hd-icon>
+            <span class="name">middling</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:minus')" title="Click to copy">
+            <hd-icon icon="iwwa:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:monitoring')" title="Click to copy">
+            <hd-icon icon="iwwa:monitoring"></hd-icon>
+            <span class="name">monitoring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:month')" title="Click to copy">
+            <hd-icon icon="iwwa:month"></hd-icon>
+            <span class="name">month</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:multiply')" title="Click to copy">
+            <hd-icon icon="iwwa:multiply"></hd-icon>
+            <span class="name">multiply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:number-asc')" title="Click to copy">
+            <hd-icon icon="iwwa:number-asc"></hd-icon>
+            <span class="name">number-asc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:number-desc')" title="Click to copy">
+            <hd-icon icon="iwwa:number-desc"></hd-icon>
+            <span class="name">number-desc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:open-braket')" title="Click to copy">
+            <hd-icon icon="iwwa:open-braket"></hd-icon>
+            <span class="name">open-braket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:option')" title="Click to copy">
+            <hd-icon icon="iwwa:option"></hd-icon>
+            <span class="name">option</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:option-horizontal')" title="Click to copy">
+            <hd-icon icon="iwwa:option-horizontal"></hd-icon>
+            <span class="name">option-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:pause')" title="Click to copy">
+            <hd-icon icon="iwwa:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:percentage')" title="Click to copy">
+            <hd-icon icon="iwwa:percentage"></hd-icon>
+            <span class="name">percentage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:pinch')" title="Click to copy">
+            <hd-icon icon="iwwa:pinch"></hd-icon>
+            <span class="name">pinch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:png')" title="Click to copy">
+            <hd-icon icon="iwwa:png"></hd-icon>
+            <span class="name">png</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:power')" title="Click to copy">
+            <hd-icon icon="iwwa:power"></hd-icon>
+            <span class="name">power</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:remote-control-o')" title="Click to copy">
+            <hd-icon icon="iwwa:remote-control-o"></hd-icon>
+            <span class="name">remote-control-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:remove-15m')" title="Click to copy">
+            <hd-icon icon="iwwa:remove-15m"></hd-icon>
+            <span class="name">remove-15m</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:remove-1d')" title="Click to copy">
+            <hd-icon icon="iwwa:remove-1d"></hd-icon>
+            <span class="name">remove-1d</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:remove-1m')" title="Click to copy">
+            <hd-icon icon="iwwa:remove-1m"></hd-icon>
+            <span class="name">remove-1m</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:remove-1w')" title="Click to copy">
+            <hd-icon icon="iwwa:remove-1w"></hd-icon>
+            <span class="name">remove-1w</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:remove-1y')" title="Click to copy">
+            <hd-icon icon="iwwa:remove-1y"></hd-icon>
+            <span class="name">remove-1y</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:reset')" title="Click to copy">
+            <hd-icon icon="iwwa:reset"></hd-icon>
+            <span class="name">reset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:search')" title="Click to copy">
+            <hd-icon icon="iwwa:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:settings')" title="Click to copy">
+            <hd-icon icon="iwwa:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:sort-by')" title="Click to copy">
+            <hd-icon icon="iwwa:sort-by"></hd-icon>
+            <span class="name">sort-by</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:square-root')" title="Click to copy">
+            <hd-icon icon="iwwa:square-root"></hd-icon>
+            <span class="name">square-root</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:star')" title="Click to copy">
+            <hd-icon icon="iwwa:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:star-o')" title="Click to copy">
+            <hd-icon icon="iwwa:star-o"></hd-icon>
+            <span class="name">star-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:swipe')" title="Click to copy">
+            <hd-icon icon="iwwa:swipe"></hd-icon>
+            <span class="name">swipe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:tag')" title="Click to copy">
+            <hd-icon icon="iwwa:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:text-asc')" title="Click to copy">
+            <hd-icon icon="iwwa:text-asc"></hd-icon>
+            <span class="name">text-asc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:text-desc')" title="Click to copy">
+            <hd-icon icon="iwwa:text-desc"></hd-icon>
+            <span class="name">text-desc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:thermometer')" title="Click to copy">
+            <hd-icon icon="iwwa:thermometer"></hd-icon>
+            <span class="name">thermometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:trash')" title="Click to copy">
+            <hd-icon icon="iwwa:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:upload')" title="Click to copy">
+            <hd-icon icon="iwwa:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:user')" title="Click to copy">
+            <hd-icon icon="iwwa:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:user-functions')" title="Click to copy">
+            <hd-icon icon="iwwa:user-functions"></hd-icon>
+            <span class="name">user-functions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:week')" title="Click to copy">
+            <hd-icon icon="iwwa:week"></hd-icon>
+            <span class="name">week</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('iwwa:year')" title="Click to copy">
+            <hd-icon icon="iwwa:year"></hd-icon>
+            <span class="name">year</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

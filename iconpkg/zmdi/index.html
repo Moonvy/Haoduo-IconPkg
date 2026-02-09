@@ -1,0 +1,3280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zmdi - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>zmdi <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(777)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('zmdi:3d-rotation')" title="Click to copy">
+            <hd-icon icon="zmdi:3d-rotation"></hd-icon>
+            <span class="name">3d-rotation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:500px')" title="Click to copy">
+            <hd-icon icon="zmdi:500px"></hd-icon>
+            <span class="name">500px</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:8tracks')" title="Click to copy">
+            <hd-icon icon="zmdi:8tracks"></hd-icon>
+            <span class="name">8tracks</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:account')" title="Click to copy">
+            <hd-icon icon="zmdi:account"></hd-icon>
+            <span class="name">account</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:account-add')" title="Click to copy">
+            <hd-icon icon="zmdi:account-add"></hd-icon>
+            <span class="name">account-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:account-box')" title="Click to copy">
+            <hd-icon icon="zmdi:account-box"></hd-icon>
+            <span class="name">account-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:account-box-mail')" title="Click to copy">
+            <hd-icon icon="zmdi:account-box-mail"></hd-icon>
+            <span class="name">account-box-mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:account-box-o')" title="Click to copy">
+            <hd-icon icon="zmdi:account-box-o"></hd-icon>
+            <span class="name">account-box-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:account-box-phone')" title="Click to copy">
+            <hd-icon icon="zmdi:account-box-phone"></hd-icon>
+            <span class="name">account-box-phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:account-calendar')" title="Click to copy">
+            <hd-icon icon="zmdi:account-calendar"></hd-icon>
+            <span class="name">account-calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:account-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:account-circle"></hd-icon>
+            <span class="name">account-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:account-o')" title="Click to copy">
+            <hd-icon icon="zmdi:account-o"></hd-icon>
+            <span class="name">account-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:accounts')" title="Click to copy">
+            <hd-icon icon="zmdi:accounts"></hd-icon>
+            <span class="name">accounts</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:accounts-add')" title="Click to copy">
+            <hd-icon icon="zmdi:accounts-add"></hd-icon>
+            <span class="name">accounts-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:accounts-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:accounts-alt"></hd-icon>
+            <span class="name">accounts-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:accounts-list')" title="Click to copy">
+            <hd-icon icon="zmdi:accounts-list"></hd-icon>
+            <span class="name">accounts-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:accounts-list-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:accounts-list-alt"></hd-icon>
+            <span class="name">accounts-list-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:accounts-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:accounts-outline"></hd-icon>
+            <span class="name">accounts-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airline-seat-flat')" title="Click to copy">
+            <hd-icon icon="zmdi:airline-seat-flat"></hd-icon>
+            <span class="name">airline-seat-flat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airline-seat-flat-angled')" title="Click to copy">
+            <hd-icon icon="zmdi:airline-seat-flat-angled"></hd-icon>
+            <span class="name">airline-seat-flat-angled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airline-seat-individual-suite')" title="Click to copy">
+            <hd-icon icon="zmdi:airline-seat-individual-suite"></hd-icon>
+            <span class="name">airline-seat-individual-suite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airline-seat-legroom-extra')" title="Click to copy">
+            <hd-icon icon="zmdi:airline-seat-legroom-extra"></hd-icon>
+            <span class="name">airline-seat-legroom-extra</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airline-seat-legroom-normal')" title="Click to copy">
+            <hd-icon icon="zmdi:airline-seat-legroom-normal"></hd-icon>
+            <span class="name">airline-seat-legroom-normal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airline-seat-legroom-reduced')" title="Click to copy">
+            <hd-icon icon="zmdi:airline-seat-legroom-reduced"></hd-icon>
+            <span class="name">airline-seat-legroom-reduced</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airline-seat-recline-extra')" title="Click to copy">
+            <hd-icon icon="zmdi:airline-seat-recline-extra"></hd-icon>
+            <span class="name">airline-seat-recline-extra</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airline-seat-recline-normal')" title="Click to copy">
+            <hd-icon icon="zmdi:airline-seat-recline-normal"></hd-icon>
+            <span class="name">airline-seat-recline-normal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airplane')" title="Click to copy">
+            <hd-icon icon="zmdi:airplane"></hd-icon>
+            <span class="name">airplane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airplane-off')" title="Click to copy">
+            <hd-icon icon="zmdi:airplane-off"></hd-icon>
+            <span class="name">airplane-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:airplay')" title="Click to copy">
+            <hd-icon icon="zmdi:airplay"></hd-icon>
+            <span class="name">airplay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:alarm')" title="Click to copy">
+            <hd-icon icon="zmdi:alarm"></hd-icon>
+            <span class="name">alarm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:alarm-check')" title="Click to copy">
+            <hd-icon icon="zmdi:alarm-check"></hd-icon>
+            <span class="name">alarm-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:alarm-off')" title="Click to copy">
+            <hd-icon icon="zmdi:alarm-off"></hd-icon>
+            <span class="name">alarm-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:alarm-plus')" title="Click to copy">
+            <hd-icon icon="zmdi:alarm-plus"></hd-icon>
+            <span class="name">alarm-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:alarm-snooze')" title="Click to copy">
+            <hd-icon icon="zmdi:alarm-snooze"></hd-icon>
+            <span class="name">alarm-snooze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:album')" title="Click to copy">
+            <hd-icon icon="zmdi:album"></hd-icon>
+            <span class="name">album</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:alert-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:alert-circle"></hd-icon>
+            <span class="name">alert-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:alert-circle-o')" title="Click to copy">
+            <hd-icon icon="zmdi:alert-circle-o"></hd-icon>
+            <span class="name">alert-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:alert-octagon')" title="Click to copy">
+            <hd-icon icon="zmdi:alert-octagon"></hd-icon>
+            <span class="name">alert-octagon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:alert-polygon')" title="Click to copy">
+            <hd-icon icon="zmdi:alert-polygon"></hd-icon>
+            <span class="name">alert-polygon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:alert-triangle')" title="Click to copy">
+            <hd-icon icon="zmdi:alert-triangle"></hd-icon>
+            <span class="name">alert-triangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:amazon')" title="Click to copy">
+            <hd-icon icon="zmdi:amazon"></hd-icon>
+            <span class="name">amazon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:android')" title="Click to copy">
+            <hd-icon icon="zmdi:android"></hd-icon>
+            <span class="name">android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:android-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:android-alt"></hd-icon>
+            <span class="name">android-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:apple')" title="Click to copy">
+            <hd-icon icon="zmdi:apple"></hd-icon>
+            <span class="name">apple</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:apps')" title="Click to copy">
+            <hd-icon icon="zmdi:apps"></hd-icon>
+            <span class="name">apps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:archive')" title="Click to copy">
+            <hd-icon icon="zmdi:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:arrow-left')" title="Click to copy">
+            <hd-icon icon="zmdi:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:arrow-left-bottom')" title="Click to copy">
+            <hd-icon icon="zmdi:arrow-left-bottom"></hd-icon>
+            <span class="name">arrow-left-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:arrow-merge')" title="Click to copy">
+            <hd-icon icon="zmdi:arrow-merge"></hd-icon>
+            <span class="name">arrow-merge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:arrow-missed')" title="Click to copy">
+            <hd-icon icon="zmdi:arrow-missed"></hd-icon>
+            <span class="name">arrow-missed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:arrow-right')" title="Click to copy">
+            <hd-icon icon="zmdi:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:arrow-right-top')" title="Click to copy">
+            <hd-icon icon="zmdi:arrow-right-top"></hd-icon>
+            <span class="name">arrow-right-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:arrow-split')" title="Click to copy">
+            <hd-icon icon="zmdi:arrow-split"></hd-icon>
+            <span class="name">arrow-split</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:arrows')" title="Click to copy">
+            <hd-icon icon="zmdi:arrows"></hd-icon>
+            <span class="name">arrows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:aspect-ratio')" title="Click to copy">
+            <hd-icon icon="zmdi:aspect-ratio"></hd-icon>
+            <span class="name">aspect-ratio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:aspect-ratio-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:aspect-ratio-alt"></hd-icon>
+            <span class="name">aspect-ratio-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:assignment')" title="Click to copy">
+            <hd-icon icon="zmdi:assignment"></hd-icon>
+            <span class="name">assignment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:assignment-account')" title="Click to copy">
+            <hd-icon icon="zmdi:assignment-account"></hd-icon>
+            <span class="name">assignment-account</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:assignment-alert')" title="Click to copy">
+            <hd-icon icon="zmdi:assignment-alert"></hd-icon>
+            <span class="name">assignment-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:assignment-check')" title="Click to copy">
+            <hd-icon icon="zmdi:assignment-check"></hd-icon>
+            <span class="name">assignment-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:assignment-o')" title="Click to copy">
+            <hd-icon icon="zmdi:assignment-o"></hd-icon>
+            <span class="name">assignment-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:assignment-return')" title="Click to copy">
+            <hd-icon icon="zmdi:assignment-return"></hd-icon>
+            <span class="name">assignment-return</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:assignment-returned')" title="Click to copy">
+            <hd-icon icon="zmdi:assignment-returned"></hd-icon>
+            <span class="name">assignment-returned</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:attachment')" title="Click to copy">
+            <hd-icon icon="zmdi:attachment"></hd-icon>
+            <span class="name">attachment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:attachment-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:attachment-alt"></hd-icon>
+            <span class="name">attachment-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:audio')" title="Click to copy">
+            <hd-icon icon="zmdi:audio"></hd-icon>
+            <span class="name">audio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:badge-check')" title="Click to copy">
+            <hd-icon icon="zmdi:badge-check"></hd-icon>
+            <span class="name">badge-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:balance')" title="Click to copy">
+            <hd-icon icon="zmdi:balance"></hd-icon>
+            <span class="name">balance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:balance-wallet')" title="Click to copy">
+            <hd-icon icon="zmdi:balance-wallet"></hd-icon>
+            <span class="name">balance-wallet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:battery')" title="Click to copy">
+            <hd-icon icon="zmdi:battery"></hd-icon>
+            <span class="name">battery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:battery-alert')" title="Click to copy">
+            <hd-icon icon="zmdi:battery-alert"></hd-icon>
+            <span class="name">battery-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:battery-flash')" title="Click to copy">
+            <hd-icon icon="zmdi:battery-flash"></hd-icon>
+            <span class="name">battery-flash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:battery-unknown')" title="Click to copy">
+            <hd-icon icon="zmdi:battery-unknown"></hd-icon>
+            <span class="name">battery-unknown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:behance')" title="Click to copy">
+            <hd-icon icon="zmdi:behance"></hd-icon>
+            <span class="name">behance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:bike')" title="Click to copy">
+            <hd-icon icon="zmdi:bike"></hd-icon>
+            <span class="name">bike</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:block')" title="Click to copy">
+            <hd-icon icon="zmdi:block"></hd-icon>
+            <span class="name">block</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:block-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:block-alt"></hd-icon>
+            <span class="name">block-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:blogger')" title="Click to copy">
+            <hd-icon icon="zmdi:blogger"></hd-icon>
+            <span class="name">blogger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:bluetooth')" title="Click to copy">
+            <hd-icon icon="zmdi:bluetooth"></hd-icon>
+            <span class="name">bluetooth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:bluetooth-connected')" title="Click to copy">
+            <hd-icon icon="zmdi:bluetooth-connected"></hd-icon>
+            <span class="name">bluetooth-connected</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:bluetooth-off')" title="Click to copy">
+            <hd-icon icon="zmdi:bluetooth-off"></hd-icon>
+            <span class="name">bluetooth-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:bluetooth-search')" title="Click to copy">
+            <hd-icon icon="zmdi:bluetooth-search"></hd-icon>
+            <span class="name">bluetooth-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:bluetooth-setting')" title="Click to copy">
+            <hd-icon icon="zmdi:bluetooth-setting"></hd-icon>
+            <span class="name">bluetooth-setting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:blur')" title="Click to copy">
+            <hd-icon icon="zmdi:blur"></hd-icon>
+            <span class="name">blur</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:blur-circular')" title="Click to copy">
+            <hd-icon icon="zmdi:blur-circular"></hd-icon>
+            <span class="name">blur-circular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:blur-linear')" title="Click to copy">
+            <hd-icon icon="zmdi:blur-linear"></hd-icon>
+            <span class="name">blur-linear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:blur-off')" title="Click to copy">
+            <hd-icon icon="zmdi:blur-off"></hd-icon>
+            <span class="name">blur-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:boat')" title="Click to copy">
+            <hd-icon icon="zmdi:boat"></hd-icon>
+            <span class="name">boat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:book')" title="Click to copy">
+            <hd-icon icon="zmdi:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:book-image')" title="Click to copy">
+            <hd-icon icon="zmdi:book-image"></hd-icon>
+            <span class="name">book-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:bookmark')" title="Click to copy">
+            <hd-icon icon="zmdi:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:bookmark-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:bookmark-outline"></hd-icon>
+            <span class="name">bookmark-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-all')" title="Click to copy">
+            <hd-icon icon="zmdi:border-all"></hd-icon>
+            <span class="name">border-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-bottom')" title="Click to copy">
+            <hd-icon icon="zmdi:border-bottom"></hd-icon>
+            <span class="name">border-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-clear')" title="Click to copy">
+            <hd-icon icon="zmdi:border-clear"></hd-icon>
+            <span class="name">border-clear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-color')" title="Click to copy">
+            <hd-icon icon="zmdi:border-color"></hd-icon>
+            <span class="name">border-color</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-horizontal')" title="Click to copy">
+            <hd-icon icon="zmdi:border-horizontal"></hd-icon>
+            <span class="name">border-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-inner')" title="Click to copy">
+            <hd-icon icon="zmdi:border-inner"></hd-icon>
+            <span class="name">border-inner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-left')" title="Click to copy">
+            <hd-icon icon="zmdi:border-left"></hd-icon>
+            <span class="name">border-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-outer')" title="Click to copy">
+            <hd-icon icon="zmdi:border-outer"></hd-icon>
+            <span class="name">border-outer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-right')" title="Click to copy">
+            <hd-icon icon="zmdi:border-right"></hd-icon>
+            <span class="name">border-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-style')" title="Click to copy">
+            <hd-icon icon="zmdi:border-style"></hd-icon>
+            <span class="name">border-style</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-top')" title="Click to copy">
+            <hd-icon icon="zmdi:border-top"></hd-icon>
+            <span class="name">border-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:border-vertical')" title="Click to copy">
+            <hd-icon icon="zmdi:border-vertical"></hd-icon>
+            <span class="name">border-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:brightness-2')" title="Click to copy">
+            <hd-icon icon="zmdi:brightness-2"></hd-icon>
+            <span class="name">brightness-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:brightness-3')" title="Click to copy">
+            <hd-icon icon="zmdi:brightness-3"></hd-icon>
+            <span class="name">brightness-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:brightness-4')" title="Click to copy">
+            <hd-icon icon="zmdi:brightness-4"></hd-icon>
+            <span class="name">brightness-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:brightness-5')" title="Click to copy">
+            <hd-icon icon="zmdi:brightness-5"></hd-icon>
+            <span class="name">brightness-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:brightness-6')" title="Click to copy">
+            <hd-icon icon="zmdi:brightness-6"></hd-icon>
+            <span class="name">brightness-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:brightness-7')" title="Click to copy">
+            <hd-icon icon="zmdi:brightness-7"></hd-icon>
+            <span class="name">brightness-7</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:brightness-auto')" title="Click to copy">
+            <hd-icon icon="zmdi:brightness-auto"></hd-icon>
+            <span class="name">brightness-auto</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:brightness-setting')" title="Click to copy">
+            <hd-icon icon="zmdi:brightness-setting"></hd-icon>
+            <span class="name">brightness-setting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:broken-image')" title="Click to copy">
+            <hd-icon icon="zmdi:broken-image"></hd-icon>
+            <span class="name">broken-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:brush')" title="Click to copy">
+            <hd-icon icon="zmdi:brush"></hd-icon>
+            <span class="name">brush</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:bug')" title="Click to copy">
+            <hd-icon icon="zmdi:bug"></hd-icon>
+            <span class="name">bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:bus')" title="Click to copy">
+            <hd-icon icon="zmdi:bus"></hd-icon>
+            <span class="name">bus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cake')" title="Click to copy">
+            <hd-icon icon="zmdi:cake"></hd-icon>
+            <span class="name">cake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:calendar')" title="Click to copy">
+            <hd-icon icon="zmdi:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:calendar-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:calendar-alt"></hd-icon>
+            <span class="name">calendar-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:calendar-check')" title="Click to copy">
+            <hd-icon icon="zmdi:calendar-check"></hd-icon>
+            <span class="name">calendar-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:calendar-close')" title="Click to copy">
+            <hd-icon icon="zmdi:calendar-close"></hd-icon>
+            <span class="name">calendar-close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:calendar-note')" title="Click to copy">
+            <hd-icon icon="zmdi:calendar-note"></hd-icon>
+            <span class="name">calendar-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:camera')" title="Click to copy">
+            <hd-icon icon="zmdi:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:camera-add')" title="Click to copy">
+            <hd-icon icon="zmdi:camera-add"></hd-icon>
+            <span class="name">camera-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:camera-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:camera-alt"></hd-icon>
+            <span class="name">camera-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:camera-bw')" title="Click to copy">
+            <hd-icon icon="zmdi:camera-bw"></hd-icon>
+            <span class="name">camera-bw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:camera-front')" title="Click to copy">
+            <hd-icon icon="zmdi:camera-front"></hd-icon>
+            <span class="name">camera-front</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:camera-mic')" title="Click to copy">
+            <hd-icon icon="zmdi:camera-mic"></hd-icon>
+            <span class="name">camera-mic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:camera-party-mode')" title="Click to copy">
+            <hd-icon icon="zmdi:camera-party-mode"></hd-icon>
+            <span class="name">camera-party-mode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:camera-rear')" title="Click to copy">
+            <hd-icon icon="zmdi:camera-rear"></hd-icon>
+            <span class="name">camera-rear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:camera-roll')" title="Click to copy">
+            <hd-icon icon="zmdi:camera-roll"></hd-icon>
+            <span class="name">camera-roll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:camera-switch')" title="Click to copy">
+            <hd-icon icon="zmdi:camera-switch"></hd-icon>
+            <span class="name">camera-switch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:car')" title="Click to copy">
+            <hd-icon icon="zmdi:car"></hd-icon>
+            <span class="name">car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:car-taxi')" title="Click to copy">
+            <hd-icon icon="zmdi:car-taxi"></hd-icon>
+            <span class="name">car-taxi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:car-wash')" title="Click to copy">
+            <hd-icon icon="zmdi:car-wash"></hd-icon>
+            <span class="name">car-wash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:card')" title="Click to copy">
+            <hd-icon icon="zmdi:card"></hd-icon>
+            <span class="name">card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:card-alert')" title="Click to copy">
+            <hd-icon icon="zmdi:card-alert"></hd-icon>
+            <span class="name">card-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:card-giftcard')" title="Click to copy">
+            <hd-icon icon="zmdi:card-giftcard"></hd-icon>
+            <span class="name">card-giftcard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:card-membership')" title="Click to copy">
+            <hd-icon icon="zmdi:card-membership"></hd-icon>
+            <span class="name">card-membership</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:card-off')" title="Click to copy">
+            <hd-icon icon="zmdi:card-off"></hd-icon>
+            <span class="name">card-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:card-sd')" title="Click to copy">
+            <hd-icon icon="zmdi:card-sd"></hd-icon>
+            <span class="name">card-sd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:card-sim')" title="Click to copy">
+            <hd-icon icon="zmdi:card-sim"></hd-icon>
+            <span class="name">card-sim</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:card-travel')" title="Click to copy">
+            <hd-icon icon="zmdi:card-travel"></hd-icon>
+            <span class="name">card-travel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:caret-down')" title="Click to copy">
+            <hd-icon icon="zmdi:caret-down"></hd-icon>
+            <span class="name">caret-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:caret-down-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:caret-down-circle"></hd-icon>
+            <span class="name">caret-down-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:caret-left')" title="Click to copy">
+            <hd-icon icon="zmdi:caret-left"></hd-icon>
+            <span class="name">caret-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:caret-left-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:caret-left-circle"></hd-icon>
+            <span class="name">caret-left-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:caret-right')" title="Click to copy">
+            <hd-icon icon="zmdi:caret-right"></hd-icon>
+            <span class="name">caret-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:caret-right-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:caret-right-circle"></hd-icon>
+            <span class="name">caret-right-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:caret-up')" title="Click to copy">
+            <hd-icon icon="zmdi:caret-up"></hd-icon>
+            <span class="name">caret-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:caret-up-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:caret-up-circle"></hd-icon>
+            <span class="name">caret-up-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:case')" title="Click to copy">
+            <hd-icon icon="zmdi:case"></hd-icon>
+            <span class="name">case</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:case-check')" title="Click to copy">
+            <hd-icon icon="zmdi:case-check"></hd-icon>
+            <span class="name">case-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:case-download')" title="Click to copy">
+            <hd-icon icon="zmdi:case-download"></hd-icon>
+            <span class="name">case-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:case-play')" title="Click to copy">
+            <hd-icon icon="zmdi:case-play"></hd-icon>
+            <span class="name">case-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cast')" title="Click to copy">
+            <hd-icon icon="zmdi:cast"></hd-icon>
+            <span class="name">cast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cast-connected')" title="Click to copy">
+            <hd-icon icon="zmdi:cast-connected"></hd-icon>
+            <span class="name">cast-connected</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:center-focus-strong')" title="Click to copy">
+            <hd-icon icon="zmdi:center-focus-strong"></hd-icon>
+            <span class="name">center-focus-strong</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:center-focus-weak')" title="Click to copy">
+            <hd-icon icon="zmdi:center-focus-weak"></hd-icon>
+            <span class="name">center-focus-weak</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:chart')" title="Click to copy">
+            <hd-icon icon="zmdi:chart"></hd-icon>
+            <span class="name">chart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:chart-donut')" title="Click to copy">
+            <hd-icon icon="zmdi:chart-donut"></hd-icon>
+            <span class="name">chart-donut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:check')" title="Click to copy">
+            <hd-icon icon="zmdi:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:check-all')" title="Click to copy">
+            <hd-icon icon="zmdi:check-all"></hd-icon>
+            <span class="name">check-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:check-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:check-circle"></hd-icon>
+            <span class="name">check-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:check-circle-u')" title="Click to copy">
+            <hd-icon icon="zmdi:check-circle-u"></hd-icon>
+            <span class="name">check-circle-u</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:check-square')" title="Click to copy">
+            <hd-icon icon="zmdi:check-square"></hd-icon>
+            <span class="name">check-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:chevron-down')" title="Click to copy">
+            <hd-icon icon="zmdi:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:chevron-left')" title="Click to copy">
+            <hd-icon icon="zmdi:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:chevron-right')" title="Click to copy">
+            <hd-icon icon="zmdi:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:chevron-up')" title="Click to copy">
+            <hd-icon icon="zmdi:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:circle')" title="Click to copy">
+            <hd-icon icon="zmdi:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:circle-o')" title="Click to copy">
+            <hd-icon icon="zmdi:circle-o"></hd-icon>
+            <span class="name">circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:city')" title="Click to copy">
+            <hd-icon icon="zmdi:city"></hd-icon>
+            <span class="name">city</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:city-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:city-alt"></hd-icon>
+            <span class="name">city-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:close')" title="Click to copy">
+            <hd-icon icon="zmdi:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:close-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:close-circle"></hd-icon>
+            <span class="name">close-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:close-circle-o')" title="Click to copy">
+            <hd-icon icon="zmdi:close-circle-o"></hd-icon>
+            <span class="name">close-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:closed-caption')" title="Click to copy">
+            <hd-icon icon="zmdi:closed-caption"></hd-icon>
+            <span class="name">closed-caption</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cloud')" title="Click to copy">
+            <hd-icon icon="zmdi:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cloud-box')" title="Click to copy">
+            <hd-icon icon="zmdi:cloud-box"></hd-icon>
+            <span class="name">cloud-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cloud-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:cloud-circle"></hd-icon>
+            <span class="name">cloud-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cloud-done')" title="Click to copy">
+            <hd-icon icon="zmdi:cloud-done"></hd-icon>
+            <span class="name">cloud-done</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cloud-download')" title="Click to copy">
+            <hd-icon icon="zmdi:cloud-download"></hd-icon>
+            <span class="name">cloud-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cloud-off')" title="Click to copy">
+            <hd-icon icon="zmdi:cloud-off"></hd-icon>
+            <span class="name">cloud-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cloud-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:cloud-outline"></hd-icon>
+            <span class="name">cloud-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cloud-outline-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:cloud-outline-alt"></hd-icon>
+            <span class="name">cloud-outline-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cloud-upload')" title="Click to copy">
+            <hd-icon icon="zmdi:cloud-upload"></hd-icon>
+            <span class="name">cloud-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cocktail')" title="Click to copy">
+            <hd-icon icon="zmdi:cocktail"></hd-icon>
+            <span class="name">cocktail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:code')" title="Click to copy">
+            <hd-icon icon="zmdi:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:code-setting')" title="Click to copy">
+            <hd-icon icon="zmdi:code-setting"></hd-icon>
+            <span class="name">code-setting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:code-smartphone')" title="Click to copy">
+            <hd-icon icon="zmdi:code-smartphone"></hd-icon>
+            <span class="name">code-smartphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:codepen')" title="Click to copy">
+            <hd-icon icon="zmdi:codepen"></hd-icon>
+            <span class="name">codepen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:coffee')" title="Click to copy">
+            <hd-icon icon="zmdi:coffee"></hd-icon>
+            <span class="name">coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-bookmark')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-bookmark"></hd-icon>
+            <span class="name">collection-bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-case-play')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-case-play"></hd-icon>
+            <span class="name">collection-case-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-folder-image')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-folder-image"></hd-icon>
+            <span class="name">collection-folder-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-image')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-image"></hd-icon>
+            <span class="name">collection-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-image-o')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-image-o"></hd-icon>
+            <span class="name">collection-image-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item"></hd-icon>
+            <span class="name">collection-item</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item-1')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item-1"></hd-icon>
+            <span class="name">collection-item-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item-2')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item-2"></hd-icon>
+            <span class="name">collection-item-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item-3')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item-3"></hd-icon>
+            <span class="name">collection-item-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item-4')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item-4"></hd-icon>
+            <span class="name">collection-item-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item-5')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item-5"></hd-icon>
+            <span class="name">collection-item-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item-6')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item-6"></hd-icon>
+            <span class="name">collection-item-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item-7')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item-7"></hd-icon>
+            <span class="name">collection-item-7</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item-8')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item-8"></hd-icon>
+            <span class="name">collection-item-8</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item-9')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item-9"></hd-icon>
+            <span class="name">collection-item-9</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-item-9-plus')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-item-9-plus"></hd-icon>
+            <span class="name">collection-item-9-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-music')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-music"></hd-icon>
+            <span class="name">collection-music</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-pdf')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-pdf"></hd-icon>
+            <span class="name">collection-pdf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-plus')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-plus"></hd-icon>
+            <span class="name">collection-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-speaker')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-speaker"></hd-icon>
+            <span class="name">collection-speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-text')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-text"></hd-icon>
+            <span class="name">collection-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:collection-video')" title="Click to copy">
+            <hd-icon icon="zmdi:collection-video"></hd-icon>
+            <span class="name">collection-video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment')" title="Click to copy">
+            <hd-icon icon="zmdi:comment"></hd-icon>
+            <span class="name">comment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-alert')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-alert"></hd-icon>
+            <span class="name">comment-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-alt"></hd-icon>
+            <span class="name">comment-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-alt-text')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-alt-text"></hd-icon>
+            <span class="name">comment-alt-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-edit')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-edit"></hd-icon>
+            <span class="name">comment-edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-image')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-image"></hd-icon>
+            <span class="name">comment-image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-list')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-list"></hd-icon>
+            <span class="name">comment-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-more')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-more"></hd-icon>
+            <span class="name">comment-more</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-outline"></hd-icon>
+            <span class="name">comment-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-text')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-text"></hd-icon>
+            <span class="name">comment-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-text-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-text-alt"></hd-icon>
+            <span class="name">comment-text-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comment-video')" title="Click to copy">
+            <hd-icon icon="zmdi:comment-video"></hd-icon>
+            <span class="name">comment-video</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:comments')" title="Click to copy">
+            <hd-icon icon="zmdi:comments"></hd-icon>
+            <span class="name">comments</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:compare')" title="Click to copy">
+            <hd-icon icon="zmdi:compare"></hd-icon>
+            <span class="name">compare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:compass')" title="Click to copy">
+            <hd-icon icon="zmdi:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:confirmation-number')" title="Click to copy">
+            <hd-icon icon="zmdi:confirmation-number"></hd-icon>
+            <span class="name">confirmation-number</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:copy')" title="Click to copy">
+            <hd-icon icon="zmdi:copy"></hd-icon>
+            <span class="name">copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:crop')" title="Click to copy">
+            <hd-icon icon="zmdi:crop"></hd-icon>
+            <span class="name">crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:crop-16-9')" title="Click to copy">
+            <hd-icon icon="zmdi:crop-16-9"></hd-icon>
+            <span class="name">crop-16-9</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:crop-3-2')" title="Click to copy">
+            <hd-icon icon="zmdi:crop-3-2"></hd-icon>
+            <span class="name">crop-3-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:crop-5-4')" title="Click to copy">
+            <hd-icon icon="zmdi:crop-5-4"></hd-icon>
+            <span class="name">crop-5-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:crop-7-5')" title="Click to copy">
+            <hd-icon icon="zmdi:crop-7-5"></hd-icon>
+            <span class="name">crop-7-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:crop-din')" title="Click to copy">
+            <hd-icon icon="zmdi:crop-din"></hd-icon>
+            <span class="name">crop-din</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:crop-free')" title="Click to copy">
+            <hd-icon icon="zmdi:crop-free"></hd-icon>
+            <span class="name">crop-free</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:crop-landscape')" title="Click to copy">
+            <hd-icon icon="zmdi:crop-landscape"></hd-icon>
+            <span class="name">crop-landscape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:crop-portrait')" title="Click to copy">
+            <hd-icon icon="zmdi:crop-portrait"></hd-icon>
+            <span class="name">crop-portrait</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:crop-square')" title="Click to copy">
+            <hd-icon icon="zmdi:crop-square"></hd-icon>
+            <span class="name">crop-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:cutlery')" title="Click to copy">
+            <hd-icon icon="zmdi:cutlery"></hd-icon>
+            <span class="name">cutlery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:delete')" title="Click to copy">
+            <hd-icon icon="zmdi:delete"></hd-icon>
+            <span class="name">delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:delicious')" title="Click to copy">
+            <hd-icon icon="zmdi:delicious"></hd-icon>
+            <span class="name">delicious</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:desktop-mac')" title="Click to copy">
+            <hd-icon icon="zmdi:desktop-mac"></hd-icon>
+            <span class="name">desktop-mac</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:desktop-windows')" title="Click to copy">
+            <hd-icon icon="zmdi:desktop-windows"></hd-icon>
+            <span class="name">desktop-windows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:developer-board')" title="Click to copy">
+            <hd-icon icon="zmdi:developer-board"></hd-icon>
+            <span class="name">developer-board</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:device-hub')" title="Click to copy">
+            <hd-icon icon="zmdi:device-hub"></hd-icon>
+            <span class="name">device-hub</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:devices')" title="Click to copy">
+            <hd-icon icon="zmdi:devices"></hd-icon>
+            <span class="name">devices</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:devices-off')" title="Click to copy">
+            <hd-icon icon="zmdi:devices-off"></hd-icon>
+            <span class="name">devices-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:dialpad')" title="Click to copy">
+            <hd-icon icon="zmdi:dialpad"></hd-icon>
+            <span class="name">dialpad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:disc-full')" title="Click to copy">
+            <hd-icon icon="zmdi:disc-full"></hd-icon>
+            <span class="name">disc-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:disqus')" title="Click to copy">
+            <hd-icon icon="zmdi:disqus"></hd-icon>
+            <span class="name">disqus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:dns')" title="Click to copy">
+            <hd-icon icon="zmdi:dns"></hd-icon>
+            <span class="name">dns</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:dock')" title="Click to copy">
+            <hd-icon icon="zmdi:dock"></hd-icon>
+            <span class="name">dock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:dot-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:dot-circle"></hd-icon>
+            <span class="name">dot-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:dot-circle-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:dot-circle-alt"></hd-icon>
+            <span class="name">dot-circle-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:download')" title="Click to copy">
+            <hd-icon icon="zmdi:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:dribbble')" title="Click to copy">
+            <hd-icon icon="zmdi:dribbble"></hd-icon>
+            <span class="name">dribbble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:drink')" title="Click to copy">
+            <hd-icon icon="zmdi:drink"></hd-icon>
+            <span class="name">drink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:dropbox')" title="Click to copy">
+            <hd-icon icon="zmdi:dropbox"></hd-icon>
+            <span class="name">dropbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:edit')" title="Click to copy">
+            <hd-icon icon="zmdi:edit"></hd-icon>
+            <span class="name">edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:eject')" title="Click to copy">
+            <hd-icon icon="zmdi:eject"></hd-icon>
+            <span class="name">eject</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:eject-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:eject-alt"></hd-icon>
+            <span class="name">eject-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:email')" title="Click to copy">
+            <hd-icon icon="zmdi:email"></hd-icon>
+            <span class="name">email</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:email-open')" title="Click to copy">
+            <hd-icon icon="zmdi:email-open"></hd-icon>
+            <span class="name">email-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:equalizer')" title="Click to copy">
+            <hd-icon icon="zmdi:equalizer"></hd-icon>
+            <span class="name">equalizer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:evernote')" title="Click to copy">
+            <hd-icon icon="zmdi:evernote"></hd-icon>
+            <span class="name">evernote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:explicit')" title="Click to copy">
+            <hd-icon icon="zmdi:explicit"></hd-icon>
+            <span class="name">explicit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:exposure')" title="Click to copy">
+            <hd-icon icon="zmdi:exposure"></hd-icon>
+            <span class="name">exposure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:exposure-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:exposure-alt"></hd-icon>
+            <span class="name">exposure-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:eye')" title="Click to copy">
+            <hd-icon icon="zmdi:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:eye-off')" title="Click to copy">
+            <hd-icon icon="zmdi:eye-off"></hd-icon>
+            <span class="name">eye-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:eyedropper')" title="Click to copy">
+            <hd-icon icon="zmdi:eyedropper"></hd-icon>
+            <span class="name">eyedropper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:face')" title="Click to copy">
+            <hd-icon icon="zmdi:face"></hd-icon>
+            <span class="name">face</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:facebook')" title="Click to copy">
+            <hd-icon icon="zmdi:facebook"></hd-icon>
+            <span class="name">facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:facebook-box')" title="Click to copy">
+            <hd-icon icon="zmdi:facebook-box"></hd-icon>
+            <span class="name">facebook-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:fast-forward')" title="Click to copy">
+            <hd-icon icon="zmdi:fast-forward"></hd-icon>
+            <span class="name">fast-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:fast-rewind')" title="Click to copy">
+            <hd-icon icon="zmdi:fast-rewind"></hd-icon>
+            <span class="name">fast-rewind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:favorite')" title="Click to copy">
+            <hd-icon icon="zmdi:favorite"></hd-icon>
+            <span class="name">favorite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:favorite-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:favorite-outline"></hd-icon>
+            <span class="name">favorite-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:female')" title="Click to copy">
+            <hd-icon icon="zmdi:female"></hd-icon>
+            <span class="name">female</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:file')" title="Click to copy">
+            <hd-icon icon="zmdi:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:file-plus')" title="Click to copy">
+            <hd-icon icon="zmdi:file-plus"></hd-icon>
+            <span class="name">file-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:file-text')" title="Click to copy">
+            <hd-icon icon="zmdi:file-text"></hd-icon>
+            <span class="name">file-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:filter-b-and-w')" title="Click to copy">
+            <hd-icon icon="zmdi:filter-b-and-w"></hd-icon>
+            <span class="name">filter-b-and-w</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:filter-center-focus')" title="Click to copy">
+            <hd-icon icon="zmdi:filter-center-focus"></hd-icon>
+            <span class="name">filter-center-focus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:filter-frames')" title="Click to copy">
+            <hd-icon icon="zmdi:filter-frames"></hd-icon>
+            <span class="name">filter-frames</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:filter-list')" title="Click to copy">
+            <hd-icon icon="zmdi:filter-list"></hd-icon>
+            <span class="name">filter-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:filter-tilt-shift')" title="Click to copy">
+            <hd-icon icon="zmdi:filter-tilt-shift"></hd-icon>
+            <span class="name">filter-tilt-shift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:fire')" title="Click to copy">
+            <hd-icon icon="zmdi:fire"></hd-icon>
+            <span class="name">fire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flag')" title="Click to copy">
+            <hd-icon icon="zmdi:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flare')" title="Click to copy">
+            <hd-icon icon="zmdi:flare"></hd-icon>
+            <span class="name">flare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flash')" title="Click to copy">
+            <hd-icon icon="zmdi:flash"></hd-icon>
+            <span class="name">flash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flash-auto')" title="Click to copy">
+            <hd-icon icon="zmdi:flash-auto"></hd-icon>
+            <span class="name">flash-auto</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flash-off')" title="Click to copy">
+            <hd-icon icon="zmdi:flash-off"></hd-icon>
+            <span class="name">flash-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flattr')" title="Click to copy">
+            <hd-icon icon="zmdi:flattr"></hd-icon>
+            <span class="name">flattr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flickr')" title="Click to copy">
+            <hd-icon icon="zmdi:flickr"></hd-icon>
+            <span class="name">flickr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flight-land')" title="Click to copy">
+            <hd-icon icon="zmdi:flight-land"></hd-icon>
+            <span class="name">flight-land</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flight-takeoff')" title="Click to copy">
+            <hd-icon icon="zmdi:flight-takeoff"></hd-icon>
+            <span class="name">flight-takeoff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flip')" title="Click to copy">
+            <hd-icon icon="zmdi:flip"></hd-icon>
+            <span class="name">flip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flip-to-back')" title="Click to copy">
+            <hd-icon icon="zmdi:flip-to-back"></hd-icon>
+            <span class="name">flip-to-back</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flip-to-front')" title="Click to copy">
+            <hd-icon icon="zmdi:flip-to-front"></hd-icon>
+            <span class="name">flip-to-front</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:floppy')" title="Click to copy">
+            <hd-icon icon="zmdi:floppy"></hd-icon>
+            <span class="name">floppy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flower')" title="Click to copy">
+            <hd-icon icon="zmdi:flower"></hd-icon>
+            <span class="name">flower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:flower-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:flower-alt"></hd-icon>
+            <span class="name">flower-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:folder')" title="Click to copy">
+            <hd-icon icon="zmdi:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:folder-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:folder-outline"></hd-icon>
+            <span class="name">folder-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:folder-person')" title="Click to copy">
+            <hd-icon icon="zmdi:folder-person"></hd-icon>
+            <span class="name">folder-person</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:folder-star')" title="Click to copy">
+            <hd-icon icon="zmdi:folder-star"></hd-icon>
+            <span class="name">folder-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:folder-star-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:folder-star-alt"></hd-icon>
+            <span class="name">folder-star-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:font')" title="Click to copy">
+            <hd-icon icon="zmdi:font"></hd-icon>
+            <span class="name">font</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-align-center')" title="Click to copy">
+            <hd-icon icon="zmdi:format-align-center"></hd-icon>
+            <span class="name">format-align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-align-justify')" title="Click to copy">
+            <hd-icon icon="zmdi:format-align-justify"></hd-icon>
+            <span class="name">format-align-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-align-left')" title="Click to copy">
+            <hd-icon icon="zmdi:format-align-left"></hd-icon>
+            <span class="name">format-align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-align-right')" title="Click to copy">
+            <hd-icon icon="zmdi:format-align-right"></hd-icon>
+            <span class="name">format-align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-bold')" title="Click to copy">
+            <hd-icon icon="zmdi:format-bold"></hd-icon>
+            <span class="name">format-bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-clear')" title="Click to copy">
+            <hd-icon icon="zmdi:format-clear"></hd-icon>
+            <span class="name">format-clear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-clear-all')" title="Click to copy">
+            <hd-icon icon="zmdi:format-clear-all"></hd-icon>
+            <span class="name">format-clear-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-color-fill')" title="Click to copy">
+            <hd-icon icon="zmdi:format-color-fill"></hd-icon>
+            <span class="name">format-color-fill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-color-reset')" title="Click to copy">
+            <hd-icon icon="zmdi:format-color-reset"></hd-icon>
+            <span class="name">format-color-reset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-color-text')" title="Click to copy">
+            <hd-icon icon="zmdi:format-color-text"></hd-icon>
+            <span class="name">format-color-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-indent-decrease')" title="Click to copy">
+            <hd-icon icon="zmdi:format-indent-decrease"></hd-icon>
+            <span class="name">format-indent-decrease</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-indent-increase')" title="Click to copy">
+            <hd-icon icon="zmdi:format-indent-increase"></hd-icon>
+            <span class="name">format-indent-increase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-italic')" title="Click to copy">
+            <hd-icon icon="zmdi:format-italic"></hd-icon>
+            <span class="name">format-italic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-line-spacing')" title="Click to copy">
+            <hd-icon icon="zmdi:format-line-spacing"></hd-icon>
+            <span class="name">format-line-spacing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-list-bulleted')" title="Click to copy">
+            <hd-icon icon="zmdi:format-list-bulleted"></hd-icon>
+            <span class="name">format-list-bulleted</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-list-numbered')" title="Click to copy">
+            <hd-icon icon="zmdi:format-list-numbered"></hd-icon>
+            <span class="name">format-list-numbered</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-ltr')" title="Click to copy">
+            <hd-icon icon="zmdi:format-ltr"></hd-icon>
+            <span class="name">format-ltr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-rtl')" title="Click to copy">
+            <hd-icon icon="zmdi:format-rtl"></hd-icon>
+            <span class="name">format-rtl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-size')" title="Click to copy">
+            <hd-icon icon="zmdi:format-size"></hd-icon>
+            <span class="name">format-size</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-strikethrough')" title="Click to copy">
+            <hd-icon icon="zmdi:format-strikethrough"></hd-icon>
+            <span class="name">format-strikethrough</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-strikethrough-s')" title="Click to copy">
+            <hd-icon icon="zmdi:format-strikethrough-s"></hd-icon>
+            <span class="name">format-strikethrough-s</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-subject')" title="Click to copy">
+            <hd-icon icon="zmdi:format-subject"></hd-icon>
+            <span class="name">format-subject</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-underlined')" title="Click to copy">
+            <hd-icon icon="zmdi:format-underlined"></hd-icon>
+            <span class="name">format-underlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-valign-bottom')" title="Click to copy">
+            <hd-icon icon="zmdi:format-valign-bottom"></hd-icon>
+            <span class="name">format-valign-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-valign-center')" title="Click to copy">
+            <hd-icon icon="zmdi:format-valign-center"></hd-icon>
+            <span class="name">format-valign-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:format-valign-top')" title="Click to copy">
+            <hd-icon icon="zmdi:format-valign-top"></hd-icon>
+            <span class="name">format-valign-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:forward')" title="Click to copy">
+            <hd-icon icon="zmdi:forward"></hd-icon>
+            <span class="name">forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:forward-10')" title="Click to copy">
+            <hd-icon icon="zmdi:forward-10"></hd-icon>
+            <span class="name">forward-10</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:forward-30')" title="Click to copy">
+            <hd-icon icon="zmdi:forward-30"></hd-icon>
+            <span class="name">forward-30</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:forward-5')" title="Click to copy">
+            <hd-icon icon="zmdi:forward-5"></hd-icon>
+            <span class="name">forward-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:fullscreen')" title="Click to copy">
+            <hd-icon icon="zmdi:fullscreen"></hd-icon>
+            <span class="name">fullscreen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:fullscreen-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:fullscreen-alt"></hd-icon>
+            <span class="name">fullscreen-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:fullscreen-exit')" title="Click to copy">
+            <hd-icon icon="zmdi:fullscreen-exit"></hd-icon>
+            <span class="name">fullscreen-exit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:functions')" title="Click to copy">
+            <hd-icon icon="zmdi:functions"></hd-icon>
+            <span class="name">functions</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:gamepad')" title="Click to copy">
+            <hd-icon icon="zmdi:gamepad"></hd-icon>
+            <span class="name">gamepad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:gas-station')" title="Click to copy">
+            <hd-icon icon="zmdi:gas-station"></hd-icon>
+            <span class="name">gas-station</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:gesture')" title="Click to copy">
+            <hd-icon icon="zmdi:gesture"></hd-icon>
+            <span class="name">gesture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:gif')" title="Click to copy">
+            <hd-icon icon="zmdi:gif"></hd-icon>
+            <span class="name">gif</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:github')" title="Click to copy">
+            <hd-icon icon="zmdi:github"></hd-icon>
+            <span class="name">github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:github-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:github-alt"></hd-icon>
+            <span class="name">github-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:github-box')" title="Click to copy">
+            <hd-icon icon="zmdi:github-box"></hd-icon>
+            <span class="name">github-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:globe')" title="Click to copy">
+            <hd-icon icon="zmdi:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:globe-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:globe-alt"></hd-icon>
+            <span class="name">globe-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:globe-lock')" title="Click to copy">
+            <hd-icon icon="zmdi:globe-lock"></hd-icon>
+            <span class="name">globe-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:google')" title="Click to copy">
+            <hd-icon icon="zmdi:google"></hd-icon>
+            <span class="name">google</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:google-drive')" title="Click to copy">
+            <hd-icon icon="zmdi:google-drive"></hd-icon>
+            <span class="name">google-drive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:google-earth')" title="Click to copy">
+            <hd-icon icon="zmdi:google-earth"></hd-icon>
+            <span class="name">google-earth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:google-glass')" title="Click to copy">
+            <hd-icon icon="zmdi:google-glass"></hd-icon>
+            <span class="name">google-glass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:google-maps')" title="Click to copy">
+            <hd-icon icon="zmdi:google-maps"></hd-icon>
+            <span class="name">google-maps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:google-old')" title="Click to copy">
+            <hd-icon icon="zmdi:google-old"></hd-icon>
+            <span class="name">google-old</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:google-pages')" title="Click to copy">
+            <hd-icon icon="zmdi:google-pages"></hd-icon>
+            <span class="name">google-pages</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:google-play')" title="Click to copy">
+            <hd-icon icon="zmdi:google-play"></hd-icon>
+            <span class="name">google-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:google-plus')" title="Click to copy">
+            <hd-icon icon="zmdi:google-plus"></hd-icon>
+            <span class="name">google-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:google-plus-box')" title="Click to copy">
+            <hd-icon icon="zmdi:google-plus-box"></hd-icon>
+            <span class="name">google-plus-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:gps')" title="Click to copy">
+            <hd-icon icon="zmdi:gps"></hd-icon>
+            <span class="name">gps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:gps-dot')" title="Click to copy">
+            <hd-icon icon="zmdi:gps-dot"></hd-icon>
+            <span class="name">gps-dot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:gps-off')" title="Click to copy">
+            <hd-icon icon="zmdi:gps-off"></hd-icon>
+            <span class="name">gps-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:gradient')" title="Click to copy">
+            <hd-icon icon="zmdi:gradient"></hd-icon>
+            <span class="name">gradient</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:graduation-cap')" title="Click to copy">
+            <hd-icon icon="zmdi:graduation-cap"></hd-icon>
+            <span class="name">graduation-cap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:grain')" title="Click to copy">
+            <hd-icon icon="zmdi:grain"></hd-icon>
+            <span class="name">grain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:graphic-eq')" title="Click to copy">
+            <hd-icon icon="zmdi:graphic-eq"></hd-icon>
+            <span class="name">graphic-eq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:grid')" title="Click to copy">
+            <hd-icon icon="zmdi:grid"></hd-icon>
+            <span class="name">grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:grid-off')" title="Click to copy">
+            <hd-icon icon="zmdi:grid-off"></hd-icon>
+            <span class="name">grid-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:group')" title="Click to copy">
+            <hd-icon icon="zmdi:group"></hd-icon>
+            <span class="name">group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:group-work')" title="Click to copy">
+            <hd-icon icon="zmdi:group-work"></hd-icon>
+            <span class="name">group-work</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hd')" title="Click to copy">
+            <hd-icon icon="zmdi:hd"></hd-icon>
+            <span class="name">hd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hdr')" title="Click to copy">
+            <hd-icon icon="zmdi:hdr"></hd-icon>
+            <span class="name">hdr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hdr-off')" title="Click to copy">
+            <hd-icon icon="zmdi:hdr-off"></hd-icon>
+            <span class="name">hdr-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hdr-strong')" title="Click to copy">
+            <hd-icon icon="zmdi:hdr-strong"></hd-icon>
+            <span class="name">hdr-strong</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hdr-weak')" title="Click to copy">
+            <hd-icon icon="zmdi:hdr-weak"></hd-icon>
+            <span class="name">hdr-weak</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:headset')" title="Click to copy">
+            <hd-icon icon="zmdi:headset"></hd-icon>
+            <span class="name">headset</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:headset-mic')" title="Click to copy">
+            <hd-icon icon="zmdi:headset-mic"></hd-icon>
+            <span class="name">headset-mic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hearing')" title="Click to copy">
+            <hd-icon icon="zmdi:hearing"></hd-icon>
+            <span class="name">hearing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:help')" title="Click to copy">
+            <hd-icon icon="zmdi:help"></hd-icon>
+            <span class="name">help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:help-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:help-outline"></hd-icon>
+            <span class="name">help-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:home')" title="Click to copy">
+            <hd-icon icon="zmdi:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hospital')" title="Click to copy">
+            <hd-icon icon="zmdi:hospital"></hd-icon>
+            <span class="name">hospital</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hospital-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:hospital-alt"></hd-icon>
+            <span class="name">hospital-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hotel')" title="Click to copy">
+            <hd-icon icon="zmdi:hotel"></hd-icon>
+            <span class="name">hotel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hourglass')" title="Click to copy">
+            <hd-icon icon="zmdi:hourglass"></hd-icon>
+            <span class="name">hourglass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hourglass-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:hourglass-alt"></hd-icon>
+            <span class="name">hourglass-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hourglass-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:hourglass-outline"></hd-icon>
+            <span class="name">hourglass-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:hq')" title="Click to copy">
+            <hd-icon icon="zmdi:hq"></hd-icon>
+            <span class="name">hq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:http')" title="Click to copy">
+            <hd-icon icon="zmdi:http"></hd-icon>
+            <span class="name">http</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:image')" title="Click to copy">
+            <hd-icon icon="zmdi:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:image-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:image-alt"></hd-icon>
+            <span class="name">image-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:image-o')" title="Click to copy">
+            <hd-icon icon="zmdi:image-o"></hd-icon>
+            <span class="name">image-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:inbox')" title="Click to copy">
+            <hd-icon icon="zmdi:inbox"></hd-icon>
+            <span class="name">inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:info')" title="Click to copy">
+            <hd-icon icon="zmdi:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:info-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:info-outline"></hd-icon>
+            <span class="name">info-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:input-antenna')" title="Click to copy">
+            <hd-icon icon="zmdi:input-antenna"></hd-icon>
+            <span class="name">input-antenna</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:input-composite')" title="Click to copy">
+            <hd-icon icon="zmdi:input-composite"></hd-icon>
+            <span class="name">input-composite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:input-hdmi')" title="Click to copy">
+            <hd-icon icon="zmdi:input-hdmi"></hd-icon>
+            <span class="name">input-hdmi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:input-power')" title="Click to copy">
+            <hd-icon icon="zmdi:input-power"></hd-icon>
+            <span class="name">input-power</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:input-svideo')" title="Click to copy">
+            <hd-icon icon="zmdi:input-svideo"></hd-icon>
+            <span class="name">input-svideo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:instagram')" title="Click to copy">
+            <hd-icon icon="zmdi:instagram"></hd-icon>
+            <span class="name">instagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:invert-colors')" title="Click to copy">
+            <hd-icon icon="zmdi:invert-colors"></hd-icon>
+            <span class="name">invert-colors</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:invert-colors-off')" title="Click to copy">
+            <hd-icon icon="zmdi:invert-colors-off"></hd-icon>
+            <span class="name">invert-colors-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:iridescent')" title="Click to copy">
+            <hd-icon icon="zmdi:iridescent"></hd-icon>
+            <span class="name">iridescent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:key')" title="Click to copy">
+            <hd-icon icon="zmdi:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:keyboard')" title="Click to copy">
+            <hd-icon icon="zmdi:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:keyboard-hide')" title="Click to copy">
+            <hd-icon icon="zmdi:keyboard-hide"></hd-icon>
+            <span class="name">keyboard-hide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:label')" title="Click to copy">
+            <hd-icon icon="zmdi:label"></hd-icon>
+            <span class="name">label</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:label-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:label-alt"></hd-icon>
+            <span class="name">label-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:label-alt-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:label-alt-outline"></hd-icon>
+            <span class="name">label-alt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:label-heart')" title="Click to copy">
+            <hd-icon icon="zmdi:label-heart"></hd-icon>
+            <span class="name">label-heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:labels')" title="Click to copy">
+            <hd-icon icon="zmdi:labels"></hd-icon>
+            <span class="name">labels</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:lamp')" title="Click to copy">
+            <hd-icon icon="zmdi:lamp"></hd-icon>
+            <span class="name">lamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:landscape')" title="Click to copy">
+            <hd-icon icon="zmdi:landscape"></hd-icon>
+            <span class="name">landscape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:language-css3')" title="Click to copy">
+            <hd-icon icon="zmdi:language-css3"></hd-icon>
+            <span class="name">language-css3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:language-html5')" title="Click to copy">
+            <hd-icon icon="zmdi:language-html5"></hd-icon>
+            <span class="name">language-html5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:language-javascript')" title="Click to copy">
+            <hd-icon icon="zmdi:language-javascript"></hd-icon>
+            <span class="name">language-javascript</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:language-python')" title="Click to copy">
+            <hd-icon icon="zmdi:language-python"></hd-icon>
+            <span class="name">language-python</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:language-python-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:language-python-alt"></hd-icon>
+            <span class="name">language-python-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:laptop')" title="Click to copy">
+            <hd-icon icon="zmdi:laptop"></hd-icon>
+            <span class="name">laptop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:laptop-chromebook')" title="Click to copy">
+            <hd-icon icon="zmdi:laptop-chromebook"></hd-icon>
+            <span class="name">laptop-chromebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:laptop-mac')" title="Click to copy">
+            <hd-icon icon="zmdi:laptop-mac"></hd-icon>
+            <span class="name">laptop-mac</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:lastfm')" title="Click to copy">
+            <hd-icon icon="zmdi:lastfm"></hd-icon>
+            <span class="name">lastfm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:layers')" title="Click to copy">
+            <hd-icon icon="zmdi:layers"></hd-icon>
+            <span class="name">layers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:layers-off')" title="Click to copy">
+            <hd-icon icon="zmdi:layers-off"></hd-icon>
+            <span class="name">layers-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:leak')" title="Click to copy">
+            <hd-icon icon="zmdi:leak"></hd-icon>
+            <span class="name">leak</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:leak-off')" title="Click to copy">
+            <hd-icon icon="zmdi:leak-off"></hd-icon>
+            <span class="name">leak-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:library')" title="Click to copy">
+            <hd-icon icon="zmdi:library"></hd-icon>
+            <span class="name">library</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:link')" title="Click to copy">
+            <hd-icon icon="zmdi:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:linkedin')" title="Click to copy">
+            <hd-icon icon="zmdi:linkedin"></hd-icon>
+            <span class="name">linkedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:linkedin-box')" title="Click to copy">
+            <hd-icon icon="zmdi:linkedin-box"></hd-icon>
+            <span class="name">linkedin-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:lock')" title="Click to copy">
+            <hd-icon icon="zmdi:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:lock-open')" title="Click to copy">
+            <hd-icon icon="zmdi:lock-open"></hd-icon>
+            <span class="name">lock-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:lock-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:lock-outline"></hd-icon>
+            <span class="name">lock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:long-arrow-down')" title="Click to copy">
+            <hd-icon icon="zmdi:long-arrow-down"></hd-icon>
+            <span class="name">long-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:long-arrow-left')" title="Click to copy">
+            <hd-icon icon="zmdi:long-arrow-left"></hd-icon>
+            <span class="name">long-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:long-arrow-return')" title="Click to copy">
+            <hd-icon icon="zmdi:long-arrow-return"></hd-icon>
+            <span class="name">long-arrow-return</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:long-arrow-right')" title="Click to copy">
+            <hd-icon icon="zmdi:long-arrow-right"></hd-icon>
+            <span class="name">long-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:long-arrow-tab')" title="Click to copy">
+            <hd-icon icon="zmdi:long-arrow-tab"></hd-icon>
+            <span class="name">long-arrow-tab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:long-arrow-up')" title="Click to copy">
+            <hd-icon icon="zmdi:long-arrow-up"></hd-icon>
+            <span class="name">long-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:looks')" title="Click to copy">
+            <hd-icon icon="zmdi:looks"></hd-icon>
+            <span class="name">looks</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:loupe')" title="Click to copy">
+            <hd-icon icon="zmdi:loupe"></hd-icon>
+            <span class="name">loupe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mail-reply')" title="Click to copy">
+            <hd-icon icon="zmdi:mail-reply"></hd-icon>
+            <span class="name">mail-reply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mail-reply-all')" title="Click to copy">
+            <hd-icon icon="zmdi:mail-reply-all"></hd-icon>
+            <span class="name">mail-reply-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mail-send')" title="Click to copy">
+            <hd-icon icon="zmdi:mail-send"></hd-icon>
+            <span class="name">mail-send</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:male')" title="Click to copy">
+            <hd-icon icon="zmdi:male"></hd-icon>
+            <span class="name">male</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:male-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:male-alt"></hd-icon>
+            <span class="name">male-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:male-female')" title="Click to copy">
+            <hd-icon icon="zmdi:male-female"></hd-icon>
+            <span class="name">male-female</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mall')" title="Click to copy">
+            <hd-icon icon="zmdi:mall"></hd-icon>
+            <span class="name">mall</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:map')" title="Click to copy">
+            <hd-icon icon="zmdi:map"></hd-icon>
+            <span class="name">map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:markunread-mailbox')" title="Click to copy">
+            <hd-icon icon="zmdi:markunread-mailbox"></hd-icon>
+            <span class="name">markunread-mailbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:memory')" title="Click to copy">
+            <hd-icon icon="zmdi:memory"></hd-icon>
+            <span class="name">memory</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:menu')" title="Click to copy">
+            <hd-icon icon="zmdi:menu"></hd-icon>
+            <span class="name">menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mic')" title="Click to copy">
+            <hd-icon icon="zmdi:mic"></hd-icon>
+            <span class="name">mic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mic-off')" title="Click to copy">
+            <hd-icon icon="zmdi:mic-off"></hd-icon>
+            <span class="name">mic-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mic-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:mic-outline"></hd-icon>
+            <span class="name">mic-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mic-setting')" title="Click to copy">
+            <hd-icon icon="zmdi:mic-setting"></hd-icon>
+            <span class="name">mic-setting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:minus')" title="Click to copy">
+            <hd-icon icon="zmdi:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:minus-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:minus-circle"></hd-icon>
+            <span class="name">minus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:minus-circle-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:minus-circle-outline"></hd-icon>
+            <span class="name">minus-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:minus-square')" title="Click to copy">
+            <hd-icon icon="zmdi:minus-square"></hd-icon>
+            <span class="name">minus-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:money')" title="Click to copy">
+            <hd-icon icon="zmdi:money"></hd-icon>
+            <span class="name">money</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:money-box')" title="Click to copy">
+            <hd-icon icon="zmdi:money-box"></hd-icon>
+            <span class="name">money-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:money-off')" title="Click to copy">
+            <hd-icon icon="zmdi:money-off"></hd-icon>
+            <span class="name">money-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mood')" title="Click to copy">
+            <hd-icon icon="zmdi:mood"></hd-icon>
+            <span class="name">mood</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mood-bad')" title="Click to copy">
+            <hd-icon icon="zmdi:mood-bad"></hd-icon>
+            <span class="name">mood-bad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:more')" title="Click to copy">
+            <hd-icon icon="zmdi:more"></hd-icon>
+            <span class="name">more</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:more-vert')" title="Click to copy">
+            <hd-icon icon="zmdi:more-vert"></hd-icon>
+            <span class="name">more-vert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:mouse')" title="Click to copy">
+            <hd-icon icon="zmdi:mouse"></hd-icon>
+            <span class="name">mouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:movie')" title="Click to copy">
+            <hd-icon icon="zmdi:movie"></hd-icon>
+            <span class="name">movie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:movie-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:movie-alt"></hd-icon>
+            <span class="name">movie-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:n-1-square')" title="Click to copy">
+            <hd-icon icon="zmdi:n-1-square"></hd-icon>
+            <span class="name">n-1-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:n-2-square')" title="Click to copy">
+            <hd-icon icon="zmdi:n-2-square"></hd-icon>
+            <span class="name">n-2-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:n-3-square')" title="Click to copy">
+            <hd-icon icon="zmdi:n-3-square"></hd-icon>
+            <span class="name">n-3-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:n-4-square')" title="Click to copy">
+            <hd-icon icon="zmdi:n-4-square"></hd-icon>
+            <span class="name">n-4-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:n-5-square')" title="Click to copy">
+            <hd-icon icon="zmdi:n-5-square"></hd-icon>
+            <span class="name">n-5-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:n-6-square')" title="Click to copy">
+            <hd-icon icon="zmdi:n-6-square"></hd-icon>
+            <span class="name">n-6-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:nature')" title="Click to copy">
+            <hd-icon icon="zmdi:nature"></hd-icon>
+            <span class="name">nature</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:nature-people')" title="Click to copy">
+            <hd-icon icon="zmdi:nature-people"></hd-icon>
+            <span class="name">nature-people</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:navigation')" title="Click to copy">
+            <hd-icon icon="zmdi:navigation"></hd-icon>
+            <span class="name">navigation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:neg-1')" title="Click to copy">
+            <hd-icon icon="zmdi:neg-1"></hd-icon>
+            <span class="name">neg-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:neg-2')" title="Click to copy">
+            <hd-icon icon="zmdi:neg-2"></hd-icon>
+            <span class="name">neg-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:network')" title="Click to copy">
+            <hd-icon icon="zmdi:network"></hd-icon>
+            <span class="name">network</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:network-alert')" title="Click to copy">
+            <hd-icon icon="zmdi:network-alert"></hd-icon>
+            <span class="name">network-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:network-locked')" title="Click to copy">
+            <hd-icon icon="zmdi:network-locked"></hd-icon>
+            <span class="name">network-locked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:network-off')" title="Click to copy">
+            <hd-icon icon="zmdi:network-off"></hd-icon>
+            <span class="name">network-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:network-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:network-outline"></hd-icon>
+            <span class="name">network-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:network-setting')" title="Click to copy">
+            <hd-icon icon="zmdi:network-setting"></hd-icon>
+            <span class="name">network-setting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:nfc')" title="Click to copy">
+            <hd-icon icon="zmdi:nfc"></hd-icon>
+            <span class="name">nfc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:notifications')" title="Click to copy">
+            <hd-icon icon="zmdi:notifications"></hd-icon>
+            <span class="name">notifications</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:notifications-active')" title="Click to copy">
+            <hd-icon icon="zmdi:notifications-active"></hd-icon>
+            <span class="name">notifications-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:notifications-add')" title="Click to copy">
+            <hd-icon icon="zmdi:notifications-add"></hd-icon>
+            <span class="name">notifications-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:notifications-none')" title="Click to copy">
+            <hd-icon icon="zmdi:notifications-none"></hd-icon>
+            <span class="name">notifications-none</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:notifications-off')" title="Click to copy">
+            <hd-icon icon="zmdi:notifications-off"></hd-icon>
+            <span class="name">notifications-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:notifications-paused')" title="Click to copy">
+            <hd-icon icon="zmdi:notifications-paused"></hd-icon>
+            <span class="name">notifications-paused</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:odnoklassniki')" title="Click to copy">
+            <hd-icon icon="zmdi:odnoklassniki"></hd-icon>
+            <span class="name">odnoklassniki</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:open-in-browser')" title="Click to copy">
+            <hd-icon icon="zmdi:open-in-browser"></hd-icon>
+            <span class="name">open-in-browser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:open-in-new')" title="Click to copy">
+            <hd-icon icon="zmdi:open-in-new"></hd-icon>
+            <span class="name">open-in-new</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:outlook')" title="Click to copy">
+            <hd-icon icon="zmdi:outlook"></hd-icon>
+            <span class="name">outlook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:palette')" title="Click to copy">
+            <hd-icon icon="zmdi:palette"></hd-icon>
+            <span class="name">palette</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:panorama-horizontal')" title="Click to copy">
+            <hd-icon icon="zmdi:panorama-horizontal"></hd-icon>
+            <span class="name">panorama-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:panorama-vertical')" title="Click to copy">
+            <hd-icon icon="zmdi:panorama-vertical"></hd-icon>
+            <span class="name">panorama-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:panorama-wide-angle')" title="Click to copy">
+            <hd-icon icon="zmdi:panorama-wide-angle"></hd-icon>
+            <span class="name">panorama-wide-angle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:parking')" title="Click to copy">
+            <hd-icon icon="zmdi:parking"></hd-icon>
+            <span class="name">parking</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pause')" title="Click to copy">
+            <hd-icon icon="zmdi:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pause-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:pause-circle"></hd-icon>
+            <span class="name">pause-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pause-circle-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:pause-circle-outline"></hd-icon>
+            <span class="name">pause-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:paypal')" title="Click to copy">
+            <hd-icon icon="zmdi:paypal"></hd-icon>
+            <span class="name">paypal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:paypal-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:paypal-alt"></hd-icon>
+            <span class="name">paypal-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone')" title="Click to copy">
+            <hd-icon icon="zmdi:phone"></hd-icon>
+            <span class="name">phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-bluetooth')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-bluetooth"></hd-icon>
+            <span class="name">phone-bluetooth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-end')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-end"></hd-icon>
+            <span class="name">phone-end</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-forwarded')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-forwarded"></hd-icon>
+            <span class="name">phone-forwarded</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-in-talk')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-in-talk"></hd-icon>
+            <span class="name">phone-in-talk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-locked')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-locked"></hd-icon>
+            <span class="name">phone-locked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-missed')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-missed"></hd-icon>
+            <span class="name">phone-missed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-msg')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-msg"></hd-icon>
+            <span class="name">phone-msg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-paused')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-paused"></hd-icon>
+            <span class="name">phone-paused</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-ring')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-ring"></hd-icon>
+            <span class="name">phone-ring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-setting')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-setting"></hd-icon>
+            <span class="name">phone-setting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:phone-sip')" title="Click to copy">
+            <hd-icon icon="zmdi:phone-sip"></hd-icon>
+            <span class="name">phone-sip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:photo-size-select-large')" title="Click to copy">
+            <hd-icon icon="zmdi:photo-size-select-large"></hd-icon>
+            <span class="name">photo-size-select-large</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:photo-size-select-small')" title="Click to copy">
+            <hd-icon icon="zmdi:photo-size-select-small"></hd-icon>
+            <span class="name">photo-size-select-small</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:picture-in-picture')" title="Click to copy">
+            <hd-icon icon="zmdi:picture-in-picture"></hd-icon>
+            <span class="name">picture-in-picture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pin')" title="Click to copy">
+            <hd-icon icon="zmdi:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pin-account')" title="Click to copy">
+            <hd-icon icon="zmdi:pin-account"></hd-icon>
+            <span class="name">pin-account</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pin-assistant')" title="Click to copy">
+            <hd-icon icon="zmdi:pin-assistant"></hd-icon>
+            <span class="name">pin-assistant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pin-drop')" title="Click to copy">
+            <hd-icon icon="zmdi:pin-drop"></hd-icon>
+            <span class="name">pin-drop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pin-help')" title="Click to copy">
+            <hd-icon icon="zmdi:pin-help"></hd-icon>
+            <span class="name">pin-help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pin-off')" title="Click to copy">
+            <hd-icon icon="zmdi:pin-off"></hd-icon>
+            <span class="name">pin-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pinterest')" title="Click to copy">
+            <hd-icon icon="zmdi:pinterest"></hd-icon>
+            <span class="name">pinterest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pinterest-box')" title="Click to copy">
+            <hd-icon icon="zmdi:pinterest-box"></hd-icon>
+            <span class="name">pinterest-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pizza')" title="Click to copy">
+            <hd-icon icon="zmdi:pizza"></hd-icon>
+            <span class="name">pizza</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:plaster')" title="Click to copy">
+            <hd-icon icon="zmdi:plaster"></hd-icon>
+            <span class="name">plaster</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:play')" title="Click to copy">
+            <hd-icon icon="zmdi:play"></hd-icon>
+            <span class="name">play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:play-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:play-circle"></hd-icon>
+            <span class="name">play-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:play-circle-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:play-circle-outline"></hd-icon>
+            <span class="name">play-circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:play-for-work')" title="Click to copy">
+            <hd-icon icon="zmdi:play-for-work"></hd-icon>
+            <span class="name">play-for-work</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:playlist-audio')" title="Click to copy">
+            <hd-icon icon="zmdi:playlist-audio"></hd-icon>
+            <span class="name">playlist-audio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:playlist-plus')" title="Click to copy">
+            <hd-icon icon="zmdi:playlist-plus"></hd-icon>
+            <span class="name">playlist-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:playstation')" title="Click to copy">
+            <hd-icon icon="zmdi:playstation"></hd-icon>
+            <span class="name">playstation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:plus')" title="Click to copy">
+            <hd-icon icon="zmdi:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:plus-1')" title="Click to copy">
+            <hd-icon icon="zmdi:plus-1"></hd-icon>
+            <span class="name">plus-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:plus-2')" title="Click to copy">
+            <hd-icon icon="zmdi:plus-2"></hd-icon>
+            <span class="name">plus-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:plus-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:plus-circle"></hd-icon>
+            <span class="name">plus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:plus-circle-o')" title="Click to copy">
+            <hd-icon icon="zmdi:plus-circle-o"></hd-icon>
+            <span class="name">plus-circle-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:plus-circle-o-duplicate')" title="Click to copy">
+            <hd-icon icon="zmdi:plus-circle-o-duplicate"></hd-icon>
+            <span class="name">plus-circle-o-duplicate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:plus-square')" title="Click to copy">
+            <hd-icon icon="zmdi:plus-square"></hd-icon>
+            <span class="name">plus-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:pocket')" title="Click to copy">
+            <hd-icon icon="zmdi:pocket"></hd-icon>
+            <span class="name">pocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:polymer')" title="Click to copy">
+            <hd-icon icon="zmdi:polymer"></hd-icon>
+            <span class="name">polymer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:portable-wifi')" title="Click to copy">
+            <hd-icon icon="zmdi:portable-wifi"></hd-icon>
+            <span class="name">portable-wifi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:portable-wifi-changes')" title="Click to copy">
+            <hd-icon icon="zmdi:portable-wifi-changes"></hd-icon>
+            <span class="name">portable-wifi-changes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:portable-wifi-off')" title="Click to copy">
+            <hd-icon icon="zmdi:portable-wifi-off"></hd-icon>
+            <span class="name">portable-wifi-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:power')" title="Click to copy">
+            <hd-icon icon="zmdi:power"></hd-icon>
+            <span class="name">power</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:power-input')" title="Click to copy">
+            <hd-icon icon="zmdi:power-input"></hd-icon>
+            <span class="name">power-input</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:power-setting')" title="Click to copy">
+            <hd-icon icon="zmdi:power-setting"></hd-icon>
+            <span class="name">power-setting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:present-to-all')" title="Click to copy">
+            <hd-icon icon="zmdi:present-to-all"></hd-icon>
+            <span class="name">present-to-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:print')" title="Click to copy">
+            <hd-icon icon="zmdi:print"></hd-icon>
+            <span class="name">print</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:puzzle-piece')" title="Click to copy">
+            <hd-icon icon="zmdi:puzzle-piece"></hd-icon>
+            <span class="name">puzzle-piece</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:quote')" title="Click to copy">
+            <hd-icon icon="zmdi:quote"></hd-icon>
+            <span class="name">quote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:radio')" title="Click to copy">
+            <hd-icon icon="zmdi:radio"></hd-icon>
+            <span class="name">radio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:railway')" title="Click to copy">
+            <hd-icon icon="zmdi:railway"></hd-icon>
+            <span class="name">railway</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:reader')" title="Click to copy">
+            <hd-icon icon="zmdi:reader"></hd-icon>
+            <span class="name">reader</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:receipt')" title="Click to copy">
+            <hd-icon icon="zmdi:receipt"></hd-icon>
+            <span class="name">receipt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:reddit')" title="Click to copy">
+            <hd-icon icon="zmdi:reddit"></hd-icon>
+            <span class="name">reddit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:redo')" title="Click to copy">
+            <hd-icon icon="zmdi:redo"></hd-icon>
+            <span class="name">redo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:refresh')" title="Click to copy">
+            <hd-icon icon="zmdi:refresh"></hd-icon>
+            <span class="name">refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:refresh-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:refresh-alt"></hd-icon>
+            <span class="name">refresh-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:refresh-sync')" title="Click to copy">
+            <hd-icon icon="zmdi:refresh-sync"></hd-icon>
+            <span class="name">refresh-sync</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:refresh-sync-alert')" title="Click to copy">
+            <hd-icon icon="zmdi:refresh-sync-alert"></hd-icon>
+            <span class="name">refresh-sync-alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:refresh-sync-off')" title="Click to copy">
+            <hd-icon icon="zmdi:refresh-sync-off"></hd-icon>
+            <span class="name">refresh-sync-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:remote-control')" title="Click to copy">
+            <hd-icon icon="zmdi:remote-control"></hd-icon>
+            <span class="name">remote-control</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:remote-control-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:remote-control-alt"></hd-icon>
+            <span class="name">remote-control-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:repeat')" title="Click to copy">
+            <hd-icon icon="zmdi:repeat"></hd-icon>
+            <span class="name">repeat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:repeat-one')" title="Click to copy">
+            <hd-icon icon="zmdi:repeat-one"></hd-icon>
+            <span class="name">repeat-one</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:replay')" title="Click to copy">
+            <hd-icon icon="zmdi:replay"></hd-icon>
+            <span class="name">replay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:replay-10')" title="Click to copy">
+            <hd-icon icon="zmdi:replay-10"></hd-icon>
+            <span class="name">replay-10</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:replay-30')" title="Click to copy">
+            <hd-icon icon="zmdi:replay-30"></hd-icon>
+            <span class="name">replay-30</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:replay-5')" title="Click to copy">
+            <hd-icon icon="zmdi:replay-5"></hd-icon>
+            <span class="name">replay-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:roller')" title="Click to copy">
+            <hd-icon icon="zmdi:roller"></hd-icon>
+            <span class="name">roller</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:rotate-ccw')" title="Click to copy">
+            <hd-icon icon="zmdi:rotate-ccw"></hd-icon>
+            <span class="name">rotate-ccw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:rotate-cw')" title="Click to copy">
+            <hd-icon icon="zmdi:rotate-cw"></hd-icon>
+            <span class="name">rotate-cw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:rotate-left')" title="Click to copy">
+            <hd-icon icon="zmdi:rotate-left"></hd-icon>
+            <span class="name">rotate-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:rotate-right')" title="Click to copy">
+            <hd-icon icon="zmdi:rotate-right"></hd-icon>
+            <span class="name">rotate-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:router')" title="Click to copy">
+            <hd-icon icon="zmdi:router"></hd-icon>
+            <span class="name">router</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:rss')" title="Click to copy">
+            <hd-icon icon="zmdi:rss"></hd-icon>
+            <span class="name">rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:ruler')" title="Click to copy">
+            <hd-icon icon="zmdi:ruler"></hd-icon>
+            <span class="name">ruler</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:run')" title="Click to copy">
+            <hd-icon icon="zmdi:run"></hd-icon>
+            <span class="name">run</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:satellite')" title="Click to copy">
+            <hd-icon icon="zmdi:satellite"></hd-icon>
+            <span class="name">satellite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:scanner')" title="Click to copy">
+            <hd-icon icon="zmdi:scanner"></hd-icon>
+            <span class="name">scanner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:scissors')" title="Click to copy">
+            <hd-icon icon="zmdi:scissors"></hd-icon>
+            <span class="name">scissors</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:screen-rotation')" title="Click to copy">
+            <hd-icon icon="zmdi:screen-rotation"></hd-icon>
+            <span class="name">screen-rotation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:screen-rotation-lock')" title="Click to copy">
+            <hd-icon icon="zmdi:screen-rotation-lock"></hd-icon>
+            <span class="name">screen-rotation-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:search')" title="Click to copy">
+            <hd-icon icon="zmdi:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:search-for')" title="Click to copy">
+            <hd-icon icon="zmdi:search-for"></hd-icon>
+            <span class="name">search-for</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:search-in-file')" title="Click to copy">
+            <hd-icon icon="zmdi:search-in-file"></hd-icon>
+            <span class="name">search-in-file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:search-in-page')" title="Click to copy">
+            <hd-icon icon="zmdi:search-in-page"></hd-icon>
+            <span class="name">search-in-page</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:search-replace')" title="Click to copy">
+            <hd-icon icon="zmdi:search-replace"></hd-icon>
+            <span class="name">search-replace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:seat')" title="Click to copy">
+            <hd-icon icon="zmdi:seat"></hd-icon>
+            <span class="name">seat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:sec-10')" title="Click to copy">
+            <hd-icon icon="zmdi:sec-10"></hd-icon>
+            <span class="name">sec-10</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:sec-3')" title="Click to copy">
+            <hd-icon icon="zmdi:sec-3"></hd-icon>
+            <span class="name">sec-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:select-all')" title="Click to copy">
+            <hd-icon icon="zmdi:select-all"></hd-icon>
+            <span class="name">select-all</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:settings')" title="Click to copy">
+            <hd-icon icon="zmdi:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:settings-square')" title="Click to copy">
+            <hd-icon icon="zmdi:settings-square"></hd-icon>
+            <span class="name">settings-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:shape')" title="Click to copy">
+            <hd-icon icon="zmdi:shape"></hd-icon>
+            <span class="name">shape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:share')" title="Click to copy">
+            <hd-icon icon="zmdi:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:shield-check')" title="Click to copy">
+            <hd-icon icon="zmdi:shield-check"></hd-icon>
+            <span class="name">shield-check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:shield-security')" title="Click to copy">
+            <hd-icon icon="zmdi:shield-security"></hd-icon>
+            <span class="name">shield-security</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:shopping-basket')" title="Click to copy">
+            <hd-icon icon="zmdi:shopping-basket"></hd-icon>
+            <span class="name">shopping-basket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:shopping-cart')" title="Click to copy">
+            <hd-icon icon="zmdi:shopping-cart"></hd-icon>
+            <span class="name">shopping-cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:shopping-cart-plus')" title="Click to copy">
+            <hd-icon icon="zmdi:shopping-cart-plus"></hd-icon>
+            <span class="name">shopping-cart-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:shuffle')" title="Click to copy">
+            <hd-icon icon="zmdi:shuffle"></hd-icon>
+            <span class="name">shuffle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:sign-in')" title="Click to copy">
+            <hd-icon icon="zmdi:sign-in"></hd-icon>
+            <span class="name">sign-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:skip-next')" title="Click to copy">
+            <hd-icon icon="zmdi:skip-next"></hd-icon>
+            <span class="name">skip-next</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:skip-previous')" title="Click to copy">
+            <hd-icon icon="zmdi:skip-previous"></hd-icon>
+            <span class="name">skip-previous</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:skype')" title="Click to copy">
+            <hd-icon icon="zmdi:skype"></hd-icon>
+            <span class="name">skype</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:slideshare')" title="Click to copy">
+            <hd-icon icon="zmdi:slideshare"></hd-icon>
+            <span class="name">slideshare</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:slideshow')" title="Click to copy">
+            <hd-icon icon="zmdi:slideshow"></hd-icon>
+            <span class="name">slideshow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone"></hd-icon>
+            <span class="name">smartphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-android')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-android"></hd-icon>
+            <span class="name">smartphone-android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-download')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-download"></hd-icon>
+            <span class="name">smartphone-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-erase')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-erase"></hd-icon>
+            <span class="name">smartphone-erase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-info')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-info"></hd-icon>
+            <span class="name">smartphone-info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-iphone')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-iphone"></hd-icon>
+            <span class="name">smartphone-iphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-landscape')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-landscape"></hd-icon>
+            <span class="name">smartphone-landscape</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-landscape-lock')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-landscape-lock"></hd-icon>
+            <span class="name">smartphone-landscape-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-lock')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-lock"></hd-icon>
+            <span class="name">smartphone-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-portrait-lock')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-portrait-lock"></hd-icon>
+            <span class="name">smartphone-portrait-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-ring')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-ring"></hd-icon>
+            <span class="name">smartphone-ring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-setting')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-setting"></hd-icon>
+            <span class="name">smartphone-setting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:smartphone-setup')" title="Click to copy">
+            <hd-icon icon="zmdi:smartphone-setup"></hd-icon>
+            <span class="name">smartphone-setup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:sort-amount-asc')" title="Click to copy">
+            <hd-icon icon="zmdi:sort-amount-asc"></hd-icon>
+            <span class="name">sort-amount-asc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:sort-amount-desc')" title="Click to copy">
+            <hd-icon icon="zmdi:sort-amount-desc"></hd-icon>
+            <span class="name">sort-amount-desc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:sort-asc')" title="Click to copy">
+            <hd-icon icon="zmdi:sort-asc"></hd-icon>
+            <span class="name">sort-asc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:sort-desc')" title="Click to copy">
+            <hd-icon icon="zmdi:sort-desc"></hd-icon>
+            <span class="name">sort-desc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:soundcloud')" title="Click to copy">
+            <hd-icon icon="zmdi:soundcloud"></hd-icon>
+            <span class="name">soundcloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:space-bar')" title="Click to copy">
+            <hd-icon icon="zmdi:space-bar"></hd-icon>
+            <span class="name">space-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:speaker')" title="Click to copy">
+            <hd-icon icon="zmdi:speaker"></hd-icon>
+            <span class="name">speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:spellcheck')" title="Click to copy">
+            <hd-icon icon="zmdi:spellcheck"></hd-icon>
+            <span class="name">spellcheck</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:spinner')" title="Click to copy">
+            <hd-icon icon="zmdi:spinner"></hd-icon>
+            <span class="name">spinner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:square-down')" title="Click to copy">
+            <hd-icon icon="zmdi:square-down"></hd-icon>
+            <span class="name">square-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:square-o')" title="Click to copy">
+            <hd-icon icon="zmdi:square-o"></hd-icon>
+            <span class="name">square-o</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:square-right')" title="Click to copy">
+            <hd-icon icon="zmdi:square-right"></hd-icon>
+            <span class="name">square-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:stackoverflow')" title="Click to copy">
+            <hd-icon icon="zmdi:stackoverflow"></hd-icon>
+            <span class="name">stackoverflow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:star')" title="Click to copy">
+            <hd-icon icon="zmdi:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:star-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:star-circle"></hd-icon>
+            <span class="name">star-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:star-half')" title="Click to copy">
+            <hd-icon icon="zmdi:star-half"></hd-icon>
+            <span class="name">star-half</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:star-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:star-outline"></hd-icon>
+            <span class="name">star-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:steam')" title="Click to copy">
+            <hd-icon icon="zmdi:steam"></hd-icon>
+            <span class="name">steam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:steam-square')" title="Click to copy">
+            <hd-icon icon="zmdi:steam-square"></hd-icon>
+            <span class="name">steam-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:stop')" title="Click to copy">
+            <hd-icon icon="zmdi:stop"></hd-icon>
+            <span class="name">stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:storage')" title="Click to copy">
+            <hd-icon icon="zmdi:storage"></hd-icon>
+            <span class="name">storage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:store')" title="Click to copy">
+            <hd-icon icon="zmdi:store"></hd-icon>
+            <span class="name">store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:store-24')" title="Click to copy">
+            <hd-icon icon="zmdi:store-24"></hd-icon>
+            <span class="name">store-24</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:subway')" title="Click to copy">
+            <hd-icon icon="zmdi:subway"></hd-icon>
+            <span class="name">subway</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:sun')" title="Click to copy">
+            <hd-icon icon="zmdi:sun"></hd-icon>
+            <span class="name">sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:surround-sound')" title="Click to copy">
+            <hd-icon icon="zmdi:surround-sound"></hd-icon>
+            <span class="name">surround-sound</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:swap')" title="Click to copy">
+            <hd-icon icon="zmdi:swap"></hd-icon>
+            <span class="name">swap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:swap-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:swap-alt"></hd-icon>
+            <span class="name">swap-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:swap-vertical')" title="Click to copy">
+            <hd-icon icon="zmdi:swap-vertical"></hd-icon>
+            <span class="name">swap-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:swap-vertical-circle')" title="Click to copy">
+            <hd-icon icon="zmdi:swap-vertical-circle"></hd-icon>
+            <span class="name">swap-vertical-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tab')" title="Click to copy">
+            <hd-icon icon="zmdi:tab"></hd-icon>
+            <span class="name">tab</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tab-unselected')" title="Click to copy">
+            <hd-icon icon="zmdi:tab-unselected"></hd-icon>
+            <span class="name">tab-unselected</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tablet')" title="Click to copy">
+            <hd-icon icon="zmdi:tablet"></hd-icon>
+            <span class="name">tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tablet-android')" title="Click to copy">
+            <hd-icon icon="zmdi:tablet-android"></hd-icon>
+            <span class="name">tablet-android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tablet-mac')" title="Click to copy">
+            <hd-icon icon="zmdi:tablet-mac"></hd-icon>
+            <span class="name">tablet-mac</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tag')" title="Click to copy">
+            <hd-icon icon="zmdi:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tag-close')" title="Click to copy">
+            <hd-icon icon="zmdi:tag-close"></hd-icon>
+            <span class="name">tag-close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tag-more')" title="Click to copy">
+            <hd-icon icon="zmdi:tag-more"></hd-icon>
+            <span class="name">tag-more</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tap-and-play')" title="Click to copy">
+            <hd-icon icon="zmdi:tap-and-play"></hd-icon>
+            <span class="name">tap-and-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:text-format')" title="Click to copy">
+            <hd-icon icon="zmdi:text-format"></hd-icon>
+            <span class="name">text-format</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:texture')" title="Click to copy">
+            <hd-icon icon="zmdi:texture"></hd-icon>
+            <span class="name">texture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:thumb-down')" title="Click to copy">
+            <hd-icon icon="zmdi:thumb-down"></hd-icon>
+            <span class="name">thumb-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:thumb-up')" title="Click to copy">
+            <hd-icon icon="zmdi:thumb-up"></hd-icon>
+            <span class="name">thumb-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:thumb-up-down')" title="Click to copy">
+            <hd-icon icon="zmdi:thumb-up-down"></hd-icon>
+            <span class="name">thumb-up-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:ticket-star')" title="Click to copy">
+            <hd-icon icon="zmdi:ticket-star"></hd-icon>
+            <span class="name">ticket-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:time')" title="Click to copy">
+            <hd-icon icon="zmdi:time"></hd-icon>
+            <span class="name">time</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:time-countdown')" title="Click to copy">
+            <hd-icon icon="zmdi:time-countdown"></hd-icon>
+            <span class="name">time-countdown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:time-interval')" title="Click to copy">
+            <hd-icon icon="zmdi:time-interval"></hd-icon>
+            <span class="name">time-interval</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:time-restore')" title="Click to copy">
+            <hd-icon icon="zmdi:time-restore"></hd-icon>
+            <span class="name">time-restore</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:time-restore-setting')" title="Click to copy">
+            <hd-icon icon="zmdi:time-restore-setting"></hd-icon>
+            <span class="name">time-restore-setting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:timer')" title="Click to copy">
+            <hd-icon icon="zmdi:timer"></hd-icon>
+            <span class="name">timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:timer-off')" title="Click to copy">
+            <hd-icon icon="zmdi:timer-off"></hd-icon>
+            <span class="name">timer-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:toll')" title="Click to copy">
+            <hd-icon icon="zmdi:toll"></hd-icon>
+            <span class="name">toll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tonality')" title="Click to copy">
+            <hd-icon icon="zmdi:tonality"></hd-icon>
+            <span class="name">tonality</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:toys')" title="Click to copy">
+            <hd-icon icon="zmdi:toys"></hd-icon>
+            <span class="name">toys</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:traffic')" title="Click to copy">
+            <hd-icon icon="zmdi:traffic"></hd-icon>
+            <span class="name">traffic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:transform')" title="Click to copy">
+            <hd-icon icon="zmdi:transform"></hd-icon>
+            <span class="name">transform</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:translate')" title="Click to copy">
+            <hd-icon icon="zmdi:translate"></hd-icon>
+            <span class="name">translate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:trending-down')" title="Click to copy">
+            <hd-icon icon="zmdi:trending-down"></hd-icon>
+            <span class="name">trending-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:trending-flat')" title="Click to copy">
+            <hd-icon icon="zmdi:trending-flat"></hd-icon>
+            <span class="name">trending-flat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:trending-up')" title="Click to copy">
+            <hd-icon icon="zmdi:trending-up"></hd-icon>
+            <span class="name">trending-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:triangle-down')" title="Click to copy">
+            <hd-icon icon="zmdi:triangle-down"></hd-icon>
+            <span class="name">triangle-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:triangle-up')" title="Click to copy">
+            <hd-icon icon="zmdi:triangle-up"></hd-icon>
+            <span class="name">triangle-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:truck')" title="Click to copy">
+            <hd-icon icon="zmdi:truck"></hd-icon>
+            <span class="name">truck</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tumblr')" title="Click to copy">
+            <hd-icon icon="zmdi:tumblr"></hd-icon>
+            <span class="name">tumblr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tune')" title="Click to copy">
+            <hd-icon icon="zmdi:tune"></hd-icon>
+            <span class="name">tune</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:turning-sign')" title="Click to copy">
+            <hd-icon icon="zmdi:turning-sign"></hd-icon>
+            <span class="name">turning-sign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tv')" title="Click to copy">
+            <hd-icon icon="zmdi:tv"></hd-icon>
+            <span class="name">tv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tv-alt-play')" title="Click to copy">
+            <hd-icon icon="zmdi:tv-alt-play"></hd-icon>
+            <span class="name">tv-alt-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tv-list')" title="Click to copy">
+            <hd-icon icon="zmdi:tv-list"></hd-icon>
+            <span class="name">tv-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:tv-play')" title="Click to copy">
+            <hd-icon icon="zmdi:tv-play"></hd-icon>
+            <span class="name">tv-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:twitch')" title="Click to copy">
+            <hd-icon icon="zmdi:twitch"></hd-icon>
+            <span class="name">twitch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:twitter')" title="Click to copy">
+            <hd-icon icon="zmdi:twitter"></hd-icon>
+            <span class="name">twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:twitter-box')" title="Click to copy">
+            <hd-icon icon="zmdi:twitter-box"></hd-icon>
+            <span class="name">twitter-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:undo')" title="Click to copy">
+            <hd-icon icon="zmdi:undo"></hd-icon>
+            <span class="name">undo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:unfold-less')" title="Click to copy">
+            <hd-icon icon="zmdi:unfold-less"></hd-icon>
+            <span class="name">unfold-less</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:unfold-more')" title="Click to copy">
+            <hd-icon icon="zmdi:unfold-more"></hd-icon>
+            <span class="name">unfold-more</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:ungroup')" title="Click to copy">
+            <hd-icon icon="zmdi:ungroup"></hd-icon>
+            <span class="name">ungroup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:upload')" title="Click to copy">
+            <hd-icon icon="zmdi:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:usb')" title="Click to copy">
+            <hd-icon icon="zmdi:usb"></hd-icon>
+            <span class="name">usb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:vibration')" title="Click to copy">
+            <hd-icon icon="zmdi:vibration"></hd-icon>
+            <span class="name">vibration</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:videocam')" title="Click to copy">
+            <hd-icon icon="zmdi:videocam"></hd-icon>
+            <span class="name">videocam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:videocam-off')" title="Click to copy">
+            <hd-icon icon="zmdi:videocam-off"></hd-icon>
+            <span class="name">videocam-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:videocam-switch')" title="Click to copy">
+            <hd-icon icon="zmdi:videocam-switch"></hd-icon>
+            <span class="name">videocam-switch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-agenda')" title="Click to copy">
+            <hd-icon icon="zmdi:view-agenda"></hd-icon>
+            <span class="name">view-agenda</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-array')" title="Click to copy">
+            <hd-icon icon="zmdi:view-array"></hd-icon>
+            <span class="name">view-array</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-carousel')" title="Click to copy">
+            <hd-icon icon="zmdi:view-carousel"></hd-icon>
+            <span class="name">view-carousel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-column')" title="Click to copy">
+            <hd-icon icon="zmdi:view-column"></hd-icon>
+            <span class="name">view-column</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-comfy')" title="Click to copy">
+            <hd-icon icon="zmdi:view-comfy"></hd-icon>
+            <span class="name">view-comfy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-compact')" title="Click to copy">
+            <hd-icon icon="zmdi:view-compact"></hd-icon>
+            <span class="name">view-compact</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-dashboard')" title="Click to copy">
+            <hd-icon icon="zmdi:view-dashboard"></hd-icon>
+            <span class="name">view-dashboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-day')" title="Click to copy">
+            <hd-icon icon="zmdi:view-day"></hd-icon>
+            <span class="name">view-day</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-headline')" title="Click to copy">
+            <hd-icon icon="zmdi:view-headline"></hd-icon>
+            <span class="name">view-headline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-list')" title="Click to copy">
+            <hd-icon icon="zmdi:view-list"></hd-icon>
+            <span class="name">view-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-list-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:view-list-alt"></hd-icon>
+            <span class="name">view-list-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-module')" title="Click to copy">
+            <hd-icon icon="zmdi:view-module"></hd-icon>
+            <span class="name">view-module</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-quilt')" title="Click to copy">
+            <hd-icon icon="zmdi:view-quilt"></hd-icon>
+            <span class="name">view-quilt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-stream')" title="Click to copy">
+            <hd-icon icon="zmdi:view-stream"></hd-icon>
+            <span class="name">view-stream</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-subtitles')" title="Click to copy">
+            <hd-icon icon="zmdi:view-subtitles"></hd-icon>
+            <span class="name">view-subtitles</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-toc')" title="Click to copy">
+            <hd-icon icon="zmdi:view-toc"></hd-icon>
+            <span class="name">view-toc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-web')" title="Click to copy">
+            <hd-icon icon="zmdi:view-web"></hd-icon>
+            <span class="name">view-web</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:view-week')" title="Click to copy">
+            <hd-icon icon="zmdi:view-week"></hd-icon>
+            <span class="name">view-week</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:vignette')" title="Click to copy">
+            <hd-icon icon="zmdi:vignette"></hd-icon>
+            <span class="name">vignette</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:vimeo')" title="Click to copy">
+            <hd-icon icon="zmdi:vimeo"></hd-icon>
+            <span class="name">vimeo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:vk')" title="Click to copy">
+            <hd-icon icon="zmdi:vk"></hd-icon>
+            <span class="name">vk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:voicemail')" title="Click to copy">
+            <hd-icon icon="zmdi:voicemail"></hd-icon>
+            <span class="name">voicemail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:volume-down')" title="Click to copy">
+            <hd-icon icon="zmdi:volume-down"></hd-icon>
+            <span class="name">volume-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:volume-mute')" title="Click to copy">
+            <hd-icon icon="zmdi:volume-mute"></hd-icon>
+            <span class="name">volume-mute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:volume-off')" title="Click to copy">
+            <hd-icon icon="zmdi:volume-off"></hd-icon>
+            <span class="name">volume-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:volume-up')" title="Click to copy">
+            <hd-icon icon="zmdi:volume-up"></hd-icon>
+            <span class="name">volume-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:walk')" title="Click to copy">
+            <hd-icon icon="zmdi:walk"></hd-icon>
+            <span class="name">walk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wallpaper')" title="Click to copy">
+            <hd-icon icon="zmdi:wallpaper"></hd-icon>
+            <span class="name">wallpaper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:washing-machine')" title="Click to copy">
+            <hd-icon icon="zmdi:washing-machine"></hd-icon>
+            <span class="name">washing-machine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:watch')" title="Click to copy">
+            <hd-icon icon="zmdi:watch"></hd-icon>
+            <span class="name">watch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wb-auto')" title="Click to copy">
+            <hd-icon icon="zmdi:wb-auto"></hd-icon>
+            <span class="name">wb-auto</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:whatsapp')" title="Click to copy">
+            <hd-icon icon="zmdi:whatsapp"></hd-icon>
+            <span class="name">whatsapp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:widgets')" title="Click to copy">
+            <hd-icon icon="zmdi:widgets"></hd-icon>
+            <span class="name">widgets</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wifi')" title="Click to copy">
+            <hd-icon icon="zmdi:wifi"></hd-icon>
+            <span class="name">wifi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wifi-alt')" title="Click to copy">
+            <hd-icon icon="zmdi:wifi-alt"></hd-icon>
+            <span class="name">wifi-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wifi-alt-2')" title="Click to copy">
+            <hd-icon icon="zmdi:wifi-alt-2"></hd-icon>
+            <span class="name">wifi-alt-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wifi-info')" title="Click to copy">
+            <hd-icon icon="zmdi:wifi-info"></hd-icon>
+            <span class="name">wifi-info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wifi-lock')" title="Click to copy">
+            <hd-icon icon="zmdi:wifi-lock"></hd-icon>
+            <span class="name">wifi-lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wifi-off')" title="Click to copy">
+            <hd-icon icon="zmdi:wifi-off"></hd-icon>
+            <span class="name">wifi-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wifi-outline')" title="Click to copy">
+            <hd-icon icon="zmdi:wifi-outline"></hd-icon>
+            <span class="name">wifi-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wikipedia')" title="Click to copy">
+            <hd-icon icon="zmdi:wikipedia"></hd-icon>
+            <span class="name">wikipedia</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:window-maximize')" title="Click to copy">
+            <hd-icon icon="zmdi:window-maximize"></hd-icon>
+            <span class="name">window-maximize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:window-minimize')" title="Click to copy">
+            <hd-icon icon="zmdi:window-minimize"></hd-icon>
+            <span class="name">window-minimize</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:window-restore')" title="Click to copy">
+            <hd-icon icon="zmdi:window-restore"></hd-icon>
+            <span class="name">window-restore</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:windows')" title="Click to copy">
+            <hd-icon icon="zmdi:windows"></hd-icon>
+            <span class="name">windows</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wrap-text')" title="Click to copy">
+            <hd-icon icon="zmdi:wrap-text"></hd-icon>
+            <span class="name">wrap-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:wrench')" title="Click to copy">
+            <hd-icon icon="zmdi:wrench"></hd-icon>
+            <span class="name">wrench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:xbox')" title="Click to copy">
+            <hd-icon icon="zmdi:xbox"></hd-icon>
+            <span class="name">xbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:yahoo')" title="Click to copy">
+            <hd-icon icon="zmdi:yahoo"></hd-icon>
+            <span class="name">yahoo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:youtube')" title="Click to copy">
+            <hd-icon icon="zmdi:youtube"></hd-icon>
+            <span class="name">youtube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:youtube-play')" title="Click to copy">
+            <hd-icon icon="zmdi:youtube-play"></hd-icon>
+            <span class="name">youtube-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:zero')" title="Click to copy">
+            <hd-icon icon="zmdi:zero"></hd-icon>
+            <span class="name">zero</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:zoom-in')" title="Click to copy">
+            <hd-icon icon="zmdi:zoom-in"></hd-icon>
+            <span class="name">zoom-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('zmdi:zoom-out')" title="Click to copy">
+            <hd-icon icon="zmdi:zoom-out"></hd-icon>
+            <span class="name">zoom-out</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

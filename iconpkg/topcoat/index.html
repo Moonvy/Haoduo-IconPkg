@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>topcoat - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>topcoat <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(89)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('topcoat:alert')" title="Click to copy">
+            <hd-icon icon="topcoat:alert"></hd-icon>
+            <span class="name">alert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:arrow-down')" title="Click to copy">
+            <hd-icon icon="topcoat:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:arrow-left')" title="Click to copy">
+            <hd-icon icon="topcoat:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:arrow-right')" title="Click to copy">
+            <hd-icon icon="topcoat:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:arrow-up')" title="Click to copy">
+            <hd-icon icon="topcoat:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:attachment')" title="Click to copy">
+            <hd-icon icon="topcoat:attachment"></hd-icon>
+            <span class="name">attachment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:audio')" title="Click to copy">
+            <hd-icon icon="topcoat:audio"></hd-icon>
+            <span class="name">audio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:audiooff')" title="Click to copy">
+            <hd-icon icon="topcoat:audiooff"></hd-icon>
+            <span class="name">audiooff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:back')" title="Click to copy">
+            <hd-icon icon="topcoat:back"></hd-icon>
+            <span class="name">back</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:back-light')" title="Click to copy">
+            <hd-icon icon="topcoat:back-light"></hd-icon>
+            <span class="name">back-light</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:behance')" title="Click to copy">
+            <hd-icon icon="topcoat:behance"></hd-icon>
+            <span class="name">behance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:bookmark')" title="Click to copy">
+            <hd-icon icon="topcoat:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:brush')" title="Click to copy">
+            <hd-icon icon="topcoat:brush"></hd-icon>
+            <span class="name">brush</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:build')" title="Click to copy">
+            <hd-icon icon="topcoat:build"></hd-icon>
+            <span class="name">build</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:calendar')" title="Click to copy">
+            <hd-icon icon="topcoat:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:call')" title="Click to copy">
+            <hd-icon icon="topcoat:call"></hd-icon>
+            <span class="name">call</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:camera')" title="Click to copy">
+            <hd-icon icon="topcoat:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:cancel')" title="Click to copy">
+            <hd-icon icon="topcoat:cancel"></hd-icon>
+            <span class="name">cancel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:cart')" title="Click to copy">
+            <hd-icon icon="topcoat:cart"></hd-icon>
+            <span class="name">cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:chat')" title="Click to copy">
+            <hd-icon icon="topcoat:chat"></hd-icon>
+            <span class="name">chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:checkmark')" title="Click to copy">
+            <hd-icon icon="topcoat:checkmark"></hd-icon>
+            <span class="name">checkmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:circle')" title="Click to copy">
+            <hd-icon icon="topcoat:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:circle-outline')" title="Click to copy">
+            <hd-icon icon="topcoat:circle-outline"></hd-icon>
+            <span class="name">circle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:cloud')" title="Click to copy">
+            <hd-icon icon="topcoat:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:collapse')" title="Click to copy">
+            <hd-icon icon="topcoat:collapse"></hd-icon>
+            <span class="name">collapse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:comment')" title="Click to copy">
+            <hd-icon icon="topcoat:comment"></hd-icon>
+            <span class="name">comment</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:computer')" title="Click to copy">
+            <hd-icon icon="topcoat:computer"></hd-icon>
+            <span class="name">computer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:delete')" title="Click to copy">
+            <hd-icon icon="topcoat:delete"></hd-icon>
+            <span class="name">delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:download')" title="Click to copy">
+            <hd-icon icon="topcoat:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:dribble')" title="Click to copy">
+            <hd-icon icon="topcoat:dribble"></hd-icon>
+            <span class="name">dribble</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:email')" title="Click to copy">
+            <hd-icon icon="topcoat:email"></hd-icon>
+            <span class="name">email</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:error')" title="Click to copy">
+            <hd-icon icon="topcoat:error"></hd-icon>
+            <span class="name">error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:expand')" title="Click to copy">
+            <hd-icon icon="topcoat:expand"></hd-icon>
+            <span class="name">expand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:facebook')" title="Click to copy">
+            <hd-icon icon="topcoat:facebook"></hd-icon>
+            <span class="name">facebook</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:favorite')" title="Click to copy">
+            <hd-icon icon="topcoat:favorite"></hd-icon>
+            <span class="name">favorite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:feedback')" title="Click to copy">
+            <hd-icon icon="topcoat:feedback"></hd-icon>
+            <span class="name">feedback</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:flickr')" title="Click to copy">
+            <hd-icon icon="topcoat:flickr"></hd-icon>
+            <span class="name">flickr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:folder')" title="Click to copy">
+            <hd-icon icon="topcoat:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:github')" title="Click to copy">
+            <hd-icon icon="topcoat:github"></hd-icon>
+            <span class="name">github</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:github-text')" title="Click to copy">
+            <hd-icon icon="topcoat:github-text"></hd-icon>
+            <span class="name">github-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:googleplus')" title="Click to copy">
+            <hd-icon icon="topcoat:googleplus"></hd-icon>
+            <span class="name">googleplus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:group')" title="Click to copy">
+            <hd-icon icon="topcoat:group"></hd-icon>
+            <span class="name">group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:home')" title="Click to copy">
+            <hd-icon icon="topcoat:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:image')" title="Click to copy">
+            <hd-icon icon="topcoat:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:image-outline')" title="Click to copy">
+            <hd-icon icon="topcoat:image-outline"></hd-icon>
+            <span class="name">image-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:instagram')" title="Click to copy">
+            <hd-icon icon="topcoat:instagram"></hd-icon>
+            <span class="name">instagram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:like')" title="Click to copy">
+            <hd-icon icon="topcoat:like"></hd-icon>
+            <span class="name">like</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:linkedin')" title="Click to copy">
+            <hd-icon icon="topcoat:linkedin"></hd-icon>
+            <span class="name">linkedin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:listview')" title="Click to copy">
+            <hd-icon icon="topcoat:listview"></hd-icon>
+            <span class="name">listview</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:location')" title="Click to copy">
+            <hd-icon icon="topcoat:location"></hd-icon>
+            <span class="name">location</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:lock')" title="Click to copy">
+            <hd-icon icon="topcoat:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:minus')" title="Click to copy">
+            <hd-icon icon="topcoat:minus"></hd-icon>
+            <span class="name">minus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:next')" title="Click to copy">
+            <hd-icon icon="topcoat:next"></hd-icon>
+            <span class="name">next</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:next-light')" title="Click to copy">
+            <hd-icon icon="topcoat:next-light"></hd-icon>
+            <span class="name">next-light</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:page')" title="Click to copy">
+            <hd-icon icon="topcoat:page"></hd-icon>
+            <span class="name">page</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:path')" title="Click to copy">
+            <hd-icon icon="topcoat:path"></hd-icon>
+            <span class="name">path</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:pencil')" title="Click to copy">
+            <hd-icon icon="topcoat:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:phone')" title="Click to copy">
+            <hd-icon icon="topcoat:phone"></hd-icon>
+            <span class="name">phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:picasa')" title="Click to copy">
+            <hd-icon icon="topcoat:picasa"></hd-icon>
+            <span class="name">picasa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:pinterest')" title="Click to copy">
+            <hd-icon icon="topcoat:pinterest"></hd-icon>
+            <span class="name">pinterest</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:plugin')" title="Click to copy">
+            <hd-icon icon="topcoat:plugin"></hd-icon>
+            <span class="name">plugin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:plus')" title="Click to copy">
+            <hd-icon icon="topcoat:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:preview')" title="Click to copy">
+            <hd-icon icon="topcoat:preview"></hd-icon>
+            <span class="name">preview</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:print')" title="Click to copy">
+            <hd-icon icon="topcoat:print"></hd-icon>
+            <span class="name">print</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:question')" title="Click to copy">
+            <hd-icon icon="topcoat:question"></hd-icon>
+            <span class="name">question</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:rectangle')" title="Click to copy">
+            <hd-icon icon="topcoat:rectangle"></hd-icon>
+            <span class="name">rectangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:rectangle-outline')" title="Click to copy">
+            <hd-icon icon="topcoat:rectangle-outline"></hd-icon>
+            <span class="name">rectangle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:refresh')" title="Click to copy">
+            <hd-icon icon="topcoat:refresh"></hd-icon>
+            <span class="name">refresh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:retweet')" title="Click to copy">
+            <hd-icon icon="topcoat:retweet"></hd-icon>
+            <span class="name">retweet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:roundedrectangle')" title="Click to copy">
+            <hd-icon icon="topcoat:roundedrectangle"></hd-icon>
+            <span class="name">roundedrectangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:roundedrectangle-outline')" title="Click to copy">
+            <hd-icon icon="topcoat:roundedrectangle-outline"></hd-icon>
+            <span class="name">roundedrectangle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:rss')" title="Click to copy">
+            <hd-icon icon="topcoat:rss"></hd-icon>
+            <span class="name">rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:save')" title="Click to copy">
+            <hd-icon icon="topcoat:save"></hd-icon>
+            <span class="name">save</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:search')" title="Click to copy">
+            <hd-icon icon="topcoat:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:settings')" title="Click to copy">
+            <hd-icon icon="topcoat:settings"></hd-icon>
+            <span class="name">settings</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:share')" title="Click to copy">
+            <hd-icon icon="topcoat:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:tablet')" title="Click to copy">
+            <hd-icon icon="topcoat:tablet"></hd-icon>
+            <span class="name">tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:text')" title="Click to copy">
+            <hd-icon icon="topcoat:text"></hd-icon>
+            <span class="name">text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:tileview')" title="Click to copy">
+            <hd-icon icon="topcoat:tileview"></hd-icon>
+            <span class="name">tileview</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:tumblr')" title="Click to copy">
+            <hd-icon icon="topcoat:tumblr"></hd-icon>
+            <span class="name">tumblr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:twitter')" title="Click to copy">
+            <hd-icon icon="topcoat:twitter"></hd-icon>
+            <span class="name">twitter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:unlock')" title="Click to copy">
+            <hd-icon icon="topcoat:unlock"></hd-icon>
+            <span class="name">unlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:user')" title="Click to copy">
+            <hd-icon icon="topcoat:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:videocamera')" title="Click to copy">
+            <hd-icon icon="topcoat:videocamera"></hd-icon>
+            <span class="name">videocamera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:view')" title="Click to copy">
+            <hd-icon icon="topcoat:view"></hd-icon>
+            <span class="name">view</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:vimeo')" title="Click to copy">
+            <hd-icon icon="topcoat:vimeo"></hd-icon>
+            <span class="name">vimeo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:w3c')" title="Click to copy">
+            <hd-icon icon="topcoat:w3c"></hd-icon>
+            <span class="name">w3c</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:wifi')" title="Click to copy">
+            <hd-icon icon="topcoat:wifi"></hd-icon>
+            <span class="name">wifi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('topcoat:wordpress')" title="Click to copy">
+            <hd-icon icon="topcoat:wordpress"></hd-icon>
+            <span class="name">wordpress</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

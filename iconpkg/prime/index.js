@@ -1,0 +1,15 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAABtokZATkYPxoJGT20WCBFdFMkRVIhOlRWlpREVmVnZlNnaGfENkFFNhhhVDNnBFhACQeXAQIZDjQQEfkYCgkwHghQ1gwBvwICIz0YmgElPA8gAiQJMwoY4wEeAfyuARwFDhEELguTARkCKwMDiAFHAgJZATlp5CxOIR8gzsXmA1WFIQPyhNwhsBJp6hKPz7CzvpW+GLfaBOCnBYAAvbrWjg0PjLbvQlPVRa/+a2wYVQuKOW1zJFbaYLl60BU4r6nmPnqpGPDkG87mre0ch2GCl/DSO7mAn3LRVYHePwr/ojSnaWYOxJhaZZ1wqFvTnDu7oBwHeYAx7BNB3qcTpme6mFGDAbapUIy7qegnJF0ChwiSUrHLNRMnad33Q6H08MTAJR7vNmw2z+/tMSa3QtUnUVWtc79gdq1fjm1YZCAMrH5HHTAP83xE4bnfFrYk9B7Eyb8k/lC7rEIeR50baQGM5GARrE2BLKvGoyn+5sUXAkaW7BRP8iyLvhVYcSYXe8Q793jzQSWeDPAYQoHfuMM2kHS9BqI1Ku36udx+X1t2W3O2GTfQleaG8vlLQwegSIQ0AAQAQGAAAAAAAAIAAAAMcHJpbWUtMDEuc3ZnAAAADHByaW1lLTAyLnN2Z/////8AAAACAAAATwAURVFBUVAAAEABUQQEBAAQQBRQAQBEVEQQBFBAFQBARAAFBEFFQQQEEEFEQFBEERBQUERQAFQAEFBAARAAEAEBBBAVUEBAEUEQFQAAUQAAAAAA";
+
+const chunks = {
+  "prime-01.svg": new URL("./prime-01.svg", import.meta.url).href,
+  "prime-02.svg": new URL("./prime-02.svg", import.meta.url).href
+};
+
+register('prime', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

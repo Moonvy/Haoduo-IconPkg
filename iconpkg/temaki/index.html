@@ -1,0 +1,2344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>temaki - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>temaki <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(543)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('temaki:abseiling')" title="Click to copy">
+            <hd-icon icon="temaki:abseiling"></hd-icon>
+            <span class="name">abseiling</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:accessible-space')" title="Click to copy">
+            <hd-icon icon="temaki:accessible-space"></hd-icon>
+            <span class="name">accessible-space</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:accounting')" title="Click to copy">
+            <hd-icon icon="temaki:accounting"></hd-icon>
+            <span class="name">accounting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:adit-profile')" title="Click to copy">
+            <hd-icon icon="temaki:adit-profile"></hd-icon>
+            <span class="name">adit-profile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:aerialway-pole')" title="Click to copy">
+            <hd-icon icon="temaki:aerialway-pole"></hd-icon>
+            <span class="name">aerialway-pole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:airport')" title="Click to copy">
+            <hd-icon icon="temaki:airport"></hd-icon>
+            <span class="name">airport</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:amusement-park')" title="Click to copy">
+            <hd-icon icon="temaki:amusement-park"></hd-icon>
+            <span class="name">amusement-park</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:anchor-medal')" title="Click to copy">
+            <hd-icon icon="temaki:anchor-medal"></hd-icon>
+            <span class="name">anchor-medal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:antenna')" title="Click to copy">
+            <hd-icon icon="temaki:antenna"></hd-icon>
+            <span class="name">antenna</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:anvil')" title="Click to copy">
+            <hd-icon icon="temaki:anvil"></hd-icon>
+            <span class="name">anvil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:anvil-and-hammer')" title="Click to copy">
+            <hd-icon icon="temaki:anvil-and-hammer"></hd-icon>
+            <span class="name">anvil-and-hammer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:app-terminal')" title="Click to copy">
+            <hd-icon icon="temaki:app-terminal"></hd-icon>
+            <span class="name">app-terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:archery')" title="Click to copy">
+            <hd-icon icon="temaki:archery"></hd-icon>
+            <span class="name">archery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:army-tent')" title="Click to copy">
+            <hd-icon icon="temaki:army-tent"></hd-icon>
+            <span class="name">army-tent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:asterisk')" title="Click to copy">
+            <hd-icon icon="temaki:asterisk"></hd-icon>
+            <span class="name">asterisk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:atm')" title="Click to copy">
+            <hd-icon icon="temaki:atm"></hd-icon>
+            <span class="name">atm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:atm2')" title="Click to copy">
+            <hd-icon icon="temaki:atm2"></hd-icon>
+            <span class="name">atm2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:balance-beam')" title="Click to copy">
+            <hd-icon icon="temaki:balance-beam"></hd-icon>
+            <span class="name">balance-beam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:balloon')" title="Click to copy">
+            <hd-icon icon="temaki:balloon"></hd-icon>
+            <span class="name">balloon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:barn')" title="Click to copy">
+            <hd-icon icon="temaki:barn"></hd-icon>
+            <span class="name">barn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:beach')" title="Click to copy">
+            <hd-icon icon="temaki:beach"></hd-icon>
+            <span class="name">beach</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:beauty-salon')" title="Click to copy">
+            <hd-icon icon="temaki:beauty-salon"></hd-icon>
+            <span class="name">beauty-salon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bench')" title="Click to copy">
+            <hd-icon icon="temaki:bench"></hd-icon>
+            <span class="name">bench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:benchmark-disk')" title="Click to copy">
+            <hd-icon icon="temaki:benchmark-disk"></hd-icon>
+            <span class="name">benchmark-disk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bicycle-box')" title="Click to copy">
+            <hd-icon icon="temaki:bicycle-box"></hd-icon>
+            <span class="name">bicycle-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bicycle-locker')" title="Click to copy">
+            <hd-icon icon="temaki:bicycle-locker"></hd-icon>
+            <span class="name">bicycle-locker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bicycle-parked')" title="Click to copy">
+            <hd-icon icon="temaki:bicycle-parked"></hd-icon>
+            <span class="name">bicycle-parked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bicycle-rental')" title="Click to copy">
+            <hd-icon icon="temaki:bicycle-rental"></hd-icon>
+            <span class="name">bicycle-rental</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bicycle-repair')" title="Click to copy">
+            <hd-icon icon="temaki:bicycle-repair"></hd-icon>
+            <span class="name">bicycle-repair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bicycle-shed')" title="Click to copy">
+            <hd-icon icon="temaki:bicycle-shed"></hd-icon>
+            <span class="name">bicycle-shed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bicycle-structure')" title="Click to copy">
+            <hd-icon icon="temaki:bicycle-structure"></hd-icon>
+            <span class="name">bicycle-structure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bicycle-wash')" title="Click to copy">
+            <hd-icon icon="temaki:bicycle-wash"></hd-icon>
+            <span class="name">bicycle-wash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bikini')" title="Click to copy">
+            <hd-icon icon="temaki:bikini"></hd-icon>
+            <span class="name">bikini</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:billboard')" title="Click to copy">
+            <hd-icon icon="temaki:billboard"></hd-icon>
+            <span class="name">billboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:binoculars')" title="Click to copy">
+            <hd-icon icon="temaki:binoculars"></hd-icon>
+            <span class="name">binoculars</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bleachers')" title="Click to copy">
+            <hd-icon icon="temaki:bleachers"></hd-icon>
+            <span class="name">bleachers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:blind')" title="Click to copy">
+            <hd-icon icon="temaki:blind"></hd-icon>
+            <span class="name">blind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-bus')" title="Click to copy">
+            <hd-icon icon="temaki:board-bus"></hd-icon>
+            <span class="name">board-bus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-ferry')" title="Click to copy">
+            <hd-icon icon="temaki:board-ferry"></hd-icon>
+            <span class="name">board-ferry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-gondola-lift')" title="Click to copy">
+            <hd-icon icon="temaki:board-gondola-lift"></hd-icon>
+            <span class="name">board-gondola-lift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-hanging-rail')" title="Click to copy">
+            <hd-icon icon="temaki:board-hanging-rail"></hd-icon>
+            <span class="name">board-hanging-rail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-heavy-rail')" title="Click to copy">
+            <hd-icon icon="temaki:board-heavy-rail"></hd-icon>
+            <span class="name">board-heavy-rail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-light-rail')" title="Click to copy">
+            <hd-icon icon="temaki:board-light-rail"></hd-icon>
+            <span class="name">board-light-rail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-monorail')" title="Click to copy">
+            <hd-icon icon="temaki:board-monorail"></hd-icon>
+            <span class="name">board-monorail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-school-bus')" title="Click to copy">
+            <hd-icon icon="temaki:board-school-bus"></hd-icon>
+            <span class="name">board-school-bus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-subway')" title="Click to copy">
+            <hd-icon icon="temaki:board-subway"></hd-icon>
+            <span class="name">board-subway</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-train')" title="Click to copy">
+            <hd-icon icon="temaki:board-train"></hd-icon>
+            <span class="name">board-train</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-train-bullet')" title="Click to copy">
+            <hd-icon icon="temaki:board-train-bullet"></hd-icon>
+            <span class="name">board-train-bullet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-train-diesel')" title="Click to copy">
+            <hd-icon icon="temaki:board-train-diesel"></hd-icon>
+            <span class="name">board-train-diesel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-train-kids')" title="Click to copy">
+            <hd-icon icon="temaki:board-train-kids"></hd-icon>
+            <span class="name">board-train-kids</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-train-steam')" title="Click to copy">
+            <hd-icon icon="temaki:board-train-steam"></hd-icon>
+            <span class="name">board-train-steam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-tram')" title="Click to copy">
+            <hd-icon icon="temaki:board-tram"></hd-icon>
+            <span class="name">board-tram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-transit')" title="Click to copy">
+            <hd-icon icon="temaki:board-transit"></hd-icon>
+            <span class="name">board-transit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:board-trolleybus')" title="Click to copy">
+            <hd-icon icon="temaki:board-trolleybus"></hd-icon>
+            <span class="name">board-trolleybus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boat')" title="Click to copy">
+            <hd-icon icon="temaki:boat"></hd-icon>
+            <span class="name">boat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boat-dry-dock')" title="Click to copy">
+            <hd-icon icon="temaki:boat-dry-dock"></hd-icon>
+            <span class="name">boat-dry-dock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boat-floating')" title="Click to copy">
+            <hd-icon icon="temaki:boat-floating"></hd-icon>
+            <span class="name">boat-floating</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boat-ramp')" title="Click to copy">
+            <hd-icon icon="temaki:boat-ramp"></hd-icon>
+            <span class="name">boat-ramp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boat-rental')" title="Click to copy">
+            <hd-icon icon="temaki:boat-rental"></hd-icon>
+            <span class="name">boat-rental</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boat-repair')" title="Click to copy">
+            <hd-icon icon="temaki:boat-repair"></hd-icon>
+            <span class="name">boat-repair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boat-tour')" title="Click to copy">
+            <hd-icon icon="temaki:boat-tour"></hd-icon>
+            <span class="name">boat-tour</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boating')" title="Click to copy">
+            <hd-icon icon="temaki:boating"></hd-icon>
+            <span class="name">boating</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bollard')" title="Click to copy">
+            <hd-icon icon="temaki:bollard"></hd-icon>
+            <span class="name">bollard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bollard-row')" title="Click to copy">
+            <hd-icon icon="temaki:bollard-row"></hd-icon>
+            <span class="name">bollard-row</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:book-store')" title="Click to copy">
+            <hd-icon icon="temaki:book-store"></hd-icon>
+            <span class="name">book-store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bottles')" title="Click to copy">
+            <hd-icon icon="temaki:bottles"></hd-icon>
+            <span class="name">bottles</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boulder1')" title="Click to copy">
+            <hd-icon icon="temaki:boulder1"></hd-icon>
+            <span class="name">boulder1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boulder2')" title="Click to copy">
+            <hd-icon icon="temaki:boulder2"></hd-icon>
+            <span class="name">boulder2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:boulder3')" title="Click to copy">
+            <hd-icon icon="temaki:boulder3"></hd-icon>
+            <span class="name">boulder3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bow-and-arrow')" title="Click to copy">
+            <hd-icon icon="temaki:bow-and-arrow"></hd-icon>
+            <span class="name">bow-and-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bowling')" title="Click to copy">
+            <hd-icon icon="temaki:bowling"></hd-icon>
+            <span class="name">bowling</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bowling-alt1')" title="Click to copy">
+            <hd-icon icon="temaki:bowling-alt1"></hd-icon>
+            <span class="name">bowling-alt1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bread')" title="Click to copy">
+            <hd-icon icon="temaki:bread"></hd-icon>
+            <span class="name">bread</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:brick-trowel')" title="Click to copy">
+            <hd-icon icon="temaki:brick-trowel"></hd-icon>
+            <span class="name">brick-trowel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bridge')" title="Click to copy">
+            <hd-icon icon="temaki:bridge"></hd-icon>
+            <span class="name">bridge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:briefcase')" title="Click to copy">
+            <hd-icon icon="temaki:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:briefcase-asterisk')" title="Click to copy">
+            <hd-icon icon="temaki:briefcase-asterisk"></hd-icon>
+            <span class="name">briefcase-asterisk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:briefcase-bolt')" title="Click to copy">
+            <hd-icon icon="temaki:briefcase-bolt"></hd-icon>
+            <span class="name">briefcase-bolt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:briefcase-cross')" title="Click to copy">
+            <hd-icon icon="temaki:briefcase-cross"></hd-icon>
+            <span class="name">briefcase-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:briefcase-info')" title="Click to copy">
+            <hd-icon icon="temaki:briefcase-info"></hd-icon>
+            <span class="name">briefcase-info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:briefcase-shield')" title="Click to copy">
+            <hd-icon icon="temaki:briefcase-shield"></hd-icon>
+            <span class="name">briefcase-shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bubble-tea')" title="Click to copy">
+            <hd-icon icon="temaki:bubble-tea"></hd-icon>
+            <span class="name">bubble-tea</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:buffer-stop')" title="Click to copy">
+            <hd-icon icon="temaki:buffer-stop"></hd-icon>
+            <span class="name">buffer-stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bulb')" title="Click to copy">
+            <hd-icon icon="temaki:bulb"></hd-icon>
+            <span class="name">bulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bulb2')" title="Click to copy">
+            <hd-icon icon="temaki:bulb2"></hd-icon>
+            <span class="name">bulb2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bulb3')" title="Click to copy">
+            <hd-icon icon="temaki:bulb3"></hd-icon>
+            <span class="name">bulb3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bulldozer')" title="Click to copy">
+            <hd-icon icon="temaki:bulldozer"></hd-icon>
+            <span class="name">bulldozer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bulletin-board')" title="Click to copy">
+            <hd-icon icon="temaki:bulletin-board"></hd-icon>
+            <span class="name">bulletin-board</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bunk-beds')" title="Click to copy">
+            <hd-icon icon="temaki:bunk-beds"></hd-icon>
+            <span class="name">bunk-beds</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bunker')" title="Click to copy">
+            <hd-icon icon="temaki:bunker"></hd-icon>
+            <span class="name">bunker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bunker-silo')" title="Click to copy">
+            <hd-icon icon="temaki:bunker-silo"></hd-icon>
+            <span class="name">bunker-silo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:buoy')" title="Click to copy">
+            <hd-icon icon="temaki:buoy"></hd-icon>
+            <span class="name">buoy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bus')" title="Click to copy">
+            <hd-icon icon="temaki:bus"></hd-icon>
+            <span class="name">bus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:bus-guided')" title="Click to copy">
+            <hd-icon icon="temaki:bus-guided"></hd-icon>
+            <span class="name">bus-guided</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cabin')" title="Click to copy">
+            <hd-icon icon="temaki:cabin"></hd-icon>
+            <span class="name">cabin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cable')" title="Click to copy">
+            <hd-icon icon="temaki:cable"></hd-icon>
+            <span class="name">cable</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cable-device')" title="Click to copy">
+            <hd-icon icon="temaki:cable-device"></hd-icon>
+            <span class="name">cable-device</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cable-manhole')" title="Click to copy">
+            <hd-icon icon="temaki:cable-manhole"></hd-icon>
+            <span class="name">cable-manhole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cable-meter')" title="Click to copy">
+            <hd-icon icon="temaki:cable-meter"></hd-icon>
+            <span class="name">cable-meter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cable-shutoff')" title="Click to copy">
+            <hd-icon icon="temaki:cable-shutoff"></hd-icon>
+            <span class="name">cable-shutoff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cairn')" title="Click to copy">
+            <hd-icon icon="temaki:cairn"></hd-icon>
+            <span class="name">cairn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:camper-trailer')" title="Click to copy">
+            <hd-icon icon="temaki:camper-trailer"></hd-icon>
+            <span class="name">camper-trailer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:camper-trailer-dump')" title="Click to copy">
+            <hd-icon icon="temaki:camper-trailer-dump"></hd-icon>
+            <span class="name">camper-trailer-dump</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:campfire')" title="Click to copy">
+            <hd-icon icon="temaki:campfire"></hd-icon>
+            <span class="name">campfire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:can')" title="Click to copy">
+            <hd-icon icon="temaki:can"></hd-icon>
+            <span class="name">can</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:canoe')" title="Click to copy">
+            <hd-icon icon="temaki:canoe"></hd-icon>
+            <span class="name">canoe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cape-landform')" title="Click to copy">
+            <hd-icon icon="temaki:cape-landform"></hd-icon>
+            <span class="name">cape-landform</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:capitol')" title="Click to copy">
+            <hd-icon icon="temaki:capitol"></hd-icon>
+            <span class="name">capitol</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:car-dealer')" title="Click to copy">
+            <hd-icon icon="temaki:car-dealer"></hd-icon>
+            <span class="name">car-dealer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:car-parked')" title="Click to copy">
+            <hd-icon icon="temaki:car-parked"></hd-icon>
+            <span class="name">car-parked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:car-pool')" title="Click to copy">
+            <hd-icon icon="temaki:car-pool"></hd-icon>
+            <span class="name">car-pool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:car-structure')" title="Click to copy">
+            <hd-icon icon="temaki:car-structure"></hd-icon>
+            <span class="name">car-structure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:car-wash')" title="Click to copy">
+            <hd-icon icon="temaki:car-wash"></hd-icon>
+            <span class="name">car-wash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:carport')" title="Click to copy">
+            <hd-icon icon="temaki:carport"></hd-icon>
+            <span class="name">carport</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:casino')" title="Click to copy">
+            <hd-icon icon="temaki:casino"></hd-icon>
+            <span class="name">casino</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:catering')" title="Click to copy">
+            <hd-icon icon="temaki:catering"></hd-icon>
+            <span class="name">catering</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cattle-grid')" title="Click to copy">
+            <hd-icon icon="temaki:cattle-grid"></hd-icon>
+            <span class="name">cattle-grid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:chairlift')" title="Click to copy">
+            <hd-icon icon="temaki:chairlift"></hd-icon>
+            <span class="name">chairlift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:checkpoint')" title="Click to copy">
+            <hd-icon icon="temaki:checkpoint"></hd-icon>
+            <span class="name">checkpoint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:chefs-knife')" title="Click to copy">
+            <hd-icon icon="temaki:chefs-knife"></hd-icon>
+            <span class="name">chefs-knife</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:chicane-arrow')" title="Click to copy">
+            <hd-icon icon="temaki:chicane-arrow"></hd-icon>
+            <span class="name">chicane-arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:chimney')" title="Click to copy">
+            <hd-icon icon="temaki:chimney"></hd-icon>
+            <span class="name">chimney</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:chocolate')" title="Click to copy">
+            <hd-icon icon="temaki:chocolate"></hd-icon>
+            <span class="name">chocolate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cleaver')" title="Click to copy">
+            <hd-icon icon="temaki:cleaver"></hd-icon>
+            <span class="name">cleaver</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cliff-falling-rocks')" title="Click to copy">
+            <hd-icon icon="temaki:cliff-falling-rocks"></hd-icon>
+            <span class="name">cliff-falling-rocks</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:climbing')" title="Click to copy">
+            <hd-icon icon="temaki:climbing"></hd-icon>
+            <span class="name">climbing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:clock')" title="Click to copy">
+            <hd-icon icon="temaki:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cloth')" title="Click to copy">
+            <hd-icon icon="temaki:cloth"></hd-icon>
+            <span class="name">cloth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:clothes-hanger')" title="Click to copy">
+            <hd-icon icon="temaki:clothes-hanger"></hd-icon>
+            <span class="name">clothes-hanger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:coffee')" title="Click to copy">
+            <hd-icon icon="temaki:coffee"></hd-icon>
+            <span class="name">coffee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:compass')" title="Click to copy">
+            <hd-icon icon="temaki:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:conveyor')" title="Click to copy">
+            <hd-icon icon="temaki:conveyor"></hd-icon>
+            <span class="name">conveyor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cooling-tower')" title="Click to copy">
+            <hd-icon icon="temaki:cooling-tower"></hd-icon>
+            <span class="name">cooling-tower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cooling-tower-radiation')" title="Click to copy">
+            <hd-icon icon="temaki:cooling-tower-radiation"></hd-icon>
+            <span class="name">cooling-tower-radiation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:coral-reef')" title="Click to copy">
+            <hd-icon icon="temaki:coral-reef"></hd-icon>
+            <span class="name">coral-reef</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:courthouse')" title="Click to copy">
+            <hd-icon icon="temaki:courthouse"></hd-icon>
+            <span class="name">courthouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crane')" title="Click to copy">
+            <hd-icon icon="temaki:crane"></hd-icon>
+            <span class="name">crane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cross-country-skiing')" title="Click to copy">
+            <hd-icon icon="temaki:cross-country-skiing"></hd-icon>
+            <span class="name">cross-country-skiing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-dashes')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-dashes"></hd-icon>
+            <span class="name">crossing-markings-dashes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-dots')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-dots"></hd-icon>
+            <span class="name">crossing-markings-dots</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-ladder')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-ladder"></hd-icon>
+            <span class="name">crossing-markings-ladder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-ladder-paired')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-ladder-paired"></hd-icon>
+            <span class="name">crossing-markings-ladder-paired</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-ladder-skewed')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-ladder-skewed"></hd-icon>
+            <span class="name">crossing-markings-ladder-skewed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-lines')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-lines"></hd-icon>
+            <span class="name">crossing-markings-lines</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-lines-paired')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-lines-paired"></hd-icon>
+            <span class="name">crossing-markings-lines-paired</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-surface')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-surface"></hd-icon>
+            <span class="name">crossing-markings-surface</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-zebra')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-zebra"></hd-icon>
+            <span class="name">crossing-markings-zebra</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-zebra-bicolour')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-zebra-bicolour"></hd-icon>
+            <span class="name">crossing-markings-zebra-bicolour</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-zebra-double')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-zebra-double"></hd-icon>
+            <span class="name">crossing-markings-zebra-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-markings-zebra-paired')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-markings-zebra-paired"></hd-icon>
+            <span class="name">crossing-markings-zebra-paired</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-rail-rail')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-rail-rail"></hd-icon>
+            <span class="name">crossing-rail-rail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-rail-road')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-rail-road"></hd-icon>
+            <span class="name">crossing-rail-road</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-rail-solid')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-rail-solid"></hd-icon>
+            <span class="name">crossing-rail-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-rail-striped')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-rail-striped"></hd-icon>
+            <span class="name">crossing-rail-striped</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-tram-road')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-tram-road"></hd-icon>
+            <span class="name">crossing-tram-road</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-tram-solid')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-tram-solid"></hd-icon>
+            <span class="name">crossing-tram-solid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:crossing-tram-striped')" title="Click to copy">
+            <hd-icon icon="temaki:crossing-tram-striped"></hd-icon>
+            <span class="name">crossing-tram-striped</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:curtains')" title="Click to copy">
+            <hd-icon icon="temaki:curtains"></hd-icon>
+            <span class="name">curtains</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cycle-barrier')" title="Click to copy">
+            <hd-icon icon="temaki:cycle-barrier"></hd-icon>
+            <span class="name">cycle-barrier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:cyclist-crosswalk')" title="Click to copy">
+            <hd-icon icon="temaki:cyclist-crosswalk"></hd-icon>
+            <span class="name">cyclist-crosswalk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:dagger')" title="Click to copy">
+            <hd-icon icon="temaki:dagger"></hd-icon>
+            <span class="name">dagger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:desk-lamp')" title="Click to copy">
+            <hd-icon icon="temaki:desk-lamp"></hd-icon>
+            <span class="name">desk-lamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:detergent-bottle')" title="Click to copy">
+            <hd-icon icon="temaki:detergent-bottle"></hd-icon>
+            <span class="name">detergent-bottle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:diamond')" title="Click to copy">
+            <hd-icon icon="temaki:diamond"></hd-icon>
+            <span class="name">diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:dice')" title="Click to copy">
+            <hd-icon icon="temaki:dice"></hd-icon>
+            <span class="name">dice</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:disc-golf-basket')" title="Click to copy">
+            <hd-icon icon="temaki:disc-golf-basket"></hd-icon>
+            <span class="name">disc-golf-basket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:diving')" title="Click to copy">
+            <hd-icon icon="temaki:diving"></hd-icon>
+            <span class="name">diving</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:dog-shelter')" title="Click to copy">
+            <hd-icon icon="temaki:dog-shelter"></hd-icon>
+            <span class="name">dog-shelter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:domed-tower')" title="Click to copy">
+            <hd-icon icon="temaki:domed-tower"></hd-icon>
+            <span class="name">domed-tower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:donut')" title="Click to copy">
+            <hd-icon icon="temaki:donut"></hd-icon>
+            <span class="name">donut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:drag-lift')" title="Click to copy">
+            <hd-icon icon="temaki:drag-lift"></hd-icon>
+            <span class="name">drag-lift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:dress')" title="Click to copy">
+            <hd-icon icon="temaki:dress"></hd-icon>
+            <span class="name">dress</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:drink-cup')" title="Click to copy">
+            <hd-icon icon="temaki:drink-cup"></hd-icon>
+            <span class="name">drink-cup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:ear')" title="Click to copy">
+            <hd-icon icon="temaki:ear"></hd-icon>
+            <span class="name">ear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:egg')" title="Click to copy">
+            <hd-icon icon="temaki:egg"></hd-icon>
+            <span class="name">egg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:electronic')" title="Click to copy">
+            <hd-icon icon="temaki:electronic"></hd-icon>
+            <span class="name">electronic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:elevator')" title="Click to copy">
+            <hd-icon icon="temaki:elevator"></hd-icon>
+            <span class="name">elevator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:embassy')" title="Click to copy">
+            <hd-icon icon="temaki:embassy"></hd-icon>
+            <span class="name">embassy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:fashion-accessories')" title="Click to copy">
+            <hd-icon icon="temaki:fashion-accessories"></hd-icon>
+            <span class="name">fashion-accessories</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:ferry')" title="Click to copy">
+            <hd-icon icon="temaki:ferry"></hd-icon>
+            <span class="name">ferry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:field-hockey')" title="Click to copy">
+            <hd-icon icon="temaki:field-hockey"></hd-icon>
+            <span class="name">field-hockey</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:fighter-jet')" title="Click to copy">
+            <hd-icon icon="temaki:fighter-jet"></hd-icon>
+            <span class="name">fighter-jet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:fire-hydrant')" title="Click to copy">
+            <hd-icon icon="temaki:fire-hydrant"></hd-icon>
+            <span class="name">fire-hydrant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:fire-hydrant-underground')" title="Click to copy">
+            <hd-icon icon="temaki:fire-hydrant-underground"></hd-icon>
+            <span class="name">fire-hydrant-underground</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:fireplace')" title="Click to copy">
+            <hd-icon icon="temaki:fireplace"></hd-icon>
+            <span class="name">fireplace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:fish-cleaning')" title="Click to copy">
+            <hd-icon icon="temaki:fish-cleaning"></hd-icon>
+            <span class="name">fish-cleaning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:fish-ladder')" title="Click to copy">
+            <hd-icon icon="temaki:fish-ladder"></hd-icon>
+            <span class="name">fish-ladder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:fishing-pier')" title="Click to copy">
+            <hd-icon icon="temaki:fishing-pier"></hd-icon>
+            <span class="name">fishing-pier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:florist')" title="Click to copy">
+            <hd-icon icon="temaki:florist"></hd-icon>
+            <span class="name">florist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:food')" title="Click to copy">
+            <hd-icon icon="temaki:food"></hd-icon>
+            <span class="name">food</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:footwear-decontamination')" title="Click to copy">
+            <hd-icon icon="temaki:footwear-decontamination"></hd-icon>
+            <span class="name">footwear-decontamination</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:fountain')" title="Click to copy">
+            <hd-icon icon="temaki:fountain"></hd-icon>
+            <span class="name">fountain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:freight-car')" title="Click to copy">
+            <hd-icon icon="temaki:freight-car"></hd-icon>
+            <span class="name">freight-car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:furniture')" title="Click to copy">
+            <hd-icon icon="temaki:furniture"></hd-icon>
+            <span class="name">furniture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:garden-bed')" title="Click to copy">
+            <hd-icon icon="temaki:garden-bed"></hd-icon>
+            <span class="name">garden-bed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:gas')" title="Click to copy">
+            <hd-icon icon="temaki:gas"></hd-icon>
+            <span class="name">gas</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:gas-device')" title="Click to copy">
+            <hd-icon icon="temaki:gas-device"></hd-icon>
+            <span class="name">gas-device</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:gas-manhole')" title="Click to copy">
+            <hd-icon icon="temaki:gas-manhole"></hd-icon>
+            <span class="name">gas-manhole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:gas-meter')" title="Click to copy">
+            <hd-icon icon="temaki:gas-meter"></hd-icon>
+            <span class="name">gas-meter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:gas-shutoff')" title="Click to copy">
+            <hd-icon icon="temaki:gas-shutoff"></hd-icon>
+            <span class="name">gas-shutoff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:gate')" title="Click to copy">
+            <hd-icon icon="temaki:gate"></hd-icon>
+            <span class="name">gate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:golf-cart')" title="Click to copy">
+            <hd-icon icon="temaki:golf-cart"></hd-icon>
+            <span class="name">golf-cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:golf-green')" title="Click to copy">
+            <hd-icon icon="temaki:golf-green"></hd-icon>
+            <span class="name">golf-green</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:gondola-lift')" title="Click to copy">
+            <hd-icon icon="temaki:gondola-lift"></hd-icon>
+            <span class="name">gondola-lift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:goods-lift')" title="Click to copy">
+            <hd-icon icon="temaki:goods-lift"></hd-icon>
+            <span class="name">goods-lift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:gown')" title="Click to copy">
+            <hd-icon icon="temaki:gown"></hd-icon>
+            <span class="name">gown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:grapes')" title="Click to copy">
+            <hd-icon icon="temaki:grapes"></hd-icon>
+            <span class="name">grapes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:grass')" title="Click to copy">
+            <hd-icon icon="temaki:grass"></hd-icon>
+            <span class="name">grass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:guard-rail')" title="Click to copy">
+            <hd-icon icon="temaki:guard-rail"></hd-icon>
+            <span class="name">guard-rail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:gym')" title="Click to copy">
+            <hd-icon icon="temaki:gym"></hd-icon>
+            <span class="name">gym</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hair-care')" title="Click to copy">
+            <hd-icon icon="temaki:hair-care"></hd-icon>
+            <span class="name">hair-care</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hammer-shoe')" title="Click to copy">
+            <hd-icon icon="temaki:hammer-shoe"></hd-icon>
+            <span class="name">hammer-shoe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hand')" title="Click to copy">
+            <hd-icon icon="temaki:hand"></hd-icon>
+            <span class="name">hand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:handbag')" title="Click to copy">
+            <hd-icon icon="temaki:handbag"></hd-icon>
+            <span class="name">handbag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hang-gliding')" title="Click to copy">
+            <hd-icon icon="temaki:hang-gliding"></hd-icon>
+            <span class="name">hang-gliding</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hangar')" title="Click to copy">
+            <hd-icon icon="temaki:hangar"></hd-icon>
+            <span class="name">hangar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hanging-rail')" title="Click to copy">
+            <hd-icon icon="temaki:hanging-rail"></hd-icon>
+            <span class="name">hanging-rail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hearing-aid')" title="Click to copy">
+            <hd-icon icon="temaki:hearing-aid"></hd-icon>
+            <span class="name">hearing-aid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:heart')" title="Click to copy">
+            <hd-icon icon="temaki:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:heavy-rail')" title="Click to copy">
+            <hd-icon icon="temaki:heavy-rail"></hd-icon>
+            <span class="name">heavy-rail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hedge')" title="Click to copy">
+            <hd-icon icon="temaki:hedge"></hd-icon>
+            <span class="name">hedge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:height-restrictor')" title="Click to copy">
+            <hd-icon icon="temaki:height-restrictor"></hd-icon>
+            <span class="name">height-restrictor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hinduism')" title="Click to copy">
+            <hd-icon icon="temaki:hinduism"></hd-icon>
+            <span class="name">hinduism</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:horizontal-bar')" title="Click to copy">
+            <hd-icon icon="temaki:horizontal-bar"></hd-icon>
+            <span class="name">horizontal-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:horn-cleat')" title="Click to copy">
+            <hd-icon icon="temaki:horn-cleat"></hd-icon>
+            <span class="name">horn-cleat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:horse-shelter')" title="Click to copy">
+            <hd-icon icon="temaki:horse-shelter"></hd-icon>
+            <span class="name">horse-shelter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:horseshoe')" title="Click to copy">
+            <hd-icon icon="temaki:horseshoe"></hd-icon>
+            <span class="name">horseshoe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:horseshoes')" title="Click to copy">
+            <hd-icon icon="temaki:horseshoes"></hd-icon>
+            <span class="name">horseshoes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hot-drink-cup')" title="Click to copy">
+            <hd-icon icon="temaki:hot-drink-cup"></hd-icon>
+            <span class="name">hot-drink-cup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hotpot')" title="Click to copy">
+            <hd-icon icon="temaki:hotpot"></hd-icon>
+            <span class="name">hotpot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:houseboat')" title="Click to copy">
+            <hd-icon icon="temaki:houseboat"></hd-icon>
+            <span class="name">houseboat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hunting-blind')" title="Click to copy">
+            <hd-icon icon="temaki:hunting-blind"></hd-icon>
+            <span class="name">hunting-blind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:hut')" title="Click to copy">
+            <hd-icon icon="temaki:hut"></hd-icon>
+            <span class="name">hut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:ice-fishing')" title="Click to copy">
+            <hd-icon icon="temaki:ice-fishing"></hd-icon>
+            <span class="name">ice-fishing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:ice-skating')" title="Click to copy">
+            <hd-icon icon="temaki:ice-skating"></hd-icon>
+            <span class="name">ice-skating</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:info-board')" title="Click to copy">
+            <hd-icon icon="temaki:info-board"></hd-icon>
+            <span class="name">info-board</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:inline-skating')" title="Click to copy">
+            <hd-icon icon="temaki:inline-skating"></hd-icon>
+            <span class="name">inline-skating</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:island-trees-building')" title="Click to copy">
+            <hd-icon icon="temaki:island-trees-building"></hd-icon>
+            <span class="name">island-trees-building</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:islet-tree')" title="Click to copy">
+            <hd-icon icon="temaki:islet-tree"></hd-icon>
+            <span class="name">islet-tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:j-bar-lift')" title="Click to copy">
+            <hd-icon icon="temaki:j-bar-lift"></hd-icon>
+            <span class="name">j-bar-lift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:jet-skiing')" title="Click to copy">
+            <hd-icon icon="temaki:jet-skiing"></hd-icon>
+            <span class="name">jet-skiing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:jetplane-front')" title="Click to copy">
+            <hd-icon icon="temaki:jetplane-front"></hd-icon>
+            <span class="name">jetplane-front</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:jewelry-store')" title="Click to copy">
+            <hd-icon icon="temaki:jewelry-store"></hd-icon>
+            <span class="name">jewelry-store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:junction')" title="Click to copy">
+            <hd-icon icon="temaki:junction"></hd-icon>
+            <span class="name">junction</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:junk-car')" title="Click to copy">
+            <hd-icon icon="temaki:junk-car"></hd-icon>
+            <span class="name">junk-car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:kayaking')" title="Click to copy">
+            <hd-icon icon="temaki:kayaking"></hd-icon>
+            <span class="name">kayaking</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:kerb-flush')" title="Click to copy">
+            <hd-icon icon="temaki:kerb-flush"></hd-icon>
+            <span class="name">kerb-flush</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:kerb-lowered')" title="Click to copy">
+            <hd-icon icon="temaki:kerb-lowered"></hd-icon>
+            <span class="name">kerb-lowered</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:kerb-raised')" title="Click to copy">
+            <hd-icon icon="temaki:kerb-raised"></hd-icon>
+            <span class="name">kerb-raised</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:kerb-rolled')" title="Click to copy">
+            <hd-icon icon="temaki:kerb-rolled"></hd-icon>
+            <span class="name">kerb-rolled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:kerb-unspecified')" title="Click to copy">
+            <hd-icon icon="temaki:kerb-unspecified"></hd-icon>
+            <span class="name">kerb-unspecified</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:kitchen-sink')" title="Click to copy">
+            <hd-icon icon="temaki:kitchen-sink"></hd-icon>
+            <span class="name">kitchen-sink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:latrine')" title="Click to copy">
+            <hd-icon icon="temaki:latrine"></hd-icon>
+            <span class="name">latrine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:laundry')" title="Click to copy">
+            <hd-icon icon="temaki:laundry"></hd-icon>
+            <span class="name">laundry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:lawn')" title="Click to copy">
+            <hd-icon icon="temaki:lawn"></hd-icon>
+            <span class="name">lawn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:lawyer')" title="Click to copy">
+            <hd-icon icon="temaki:lawyer"></hd-icon>
+            <span class="name">lawyer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:letter-box')" title="Click to copy">
+            <hd-icon icon="temaki:letter-box"></hd-icon>
+            <span class="name">letter-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:library')" title="Click to copy">
+            <hd-icon icon="temaki:library"></hd-icon>
+            <span class="name">library</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:lift-gate')" title="Click to copy">
+            <hd-icon icon="temaki:lift-gate"></hd-icon>
+            <span class="name">lift-gate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:light-rail')" title="Click to copy">
+            <hd-icon icon="temaki:light-rail"></hd-icon>
+            <span class="name">light-rail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:lipstick')" title="Click to copy">
+            <hd-icon icon="temaki:lipstick"></hd-icon>
+            <span class="name">lipstick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:lock')" title="Click to copy">
+            <hd-icon icon="temaki:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:lounger')" title="Click to copy">
+            <hd-icon icon="temaki:lounger"></hd-icon>
+            <span class="name">lounger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:lounging')" title="Click to copy">
+            <hd-icon icon="temaki:lounging"></hd-icon>
+            <span class="name">lounging</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:manhole')" title="Click to copy">
+            <hd-icon icon="temaki:manhole"></hd-icon>
+            <span class="name">manhole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:manufactured-home')" title="Click to copy">
+            <hd-icon icon="temaki:manufactured-home"></hd-icon>
+            <span class="name">manufactured-home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:mast')" title="Click to copy">
+            <hd-icon icon="temaki:mast"></hd-icon>
+            <span class="name">mast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:mast-communication')" title="Click to copy">
+            <hd-icon icon="temaki:mast-communication"></hd-icon>
+            <span class="name">mast-communication</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:mast-lighting')" title="Click to copy">
+            <hd-icon icon="temaki:mast-lighting"></hd-icon>
+            <span class="name">mast-lighting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:maze')" title="Click to copy">
+            <hd-icon icon="temaki:maze"></hd-icon>
+            <span class="name">maze</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:meat')" title="Click to copy">
+            <hd-icon icon="temaki:meat"></hd-icon>
+            <span class="name">meat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:milestone')" title="Click to copy">
+            <hd-icon icon="temaki:milestone"></hd-icon>
+            <span class="name">milestone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:military')" title="Click to copy">
+            <hd-icon icon="temaki:military"></hd-icon>
+            <span class="name">military</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:military-checkpoint')" title="Click to copy">
+            <hd-icon icon="temaki:military-checkpoint"></hd-icon>
+            <span class="name">military-checkpoint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:milk-jug')" title="Click to copy">
+            <hd-icon icon="temaki:milk-jug"></hd-icon>
+            <span class="name">milk-jug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:mineshaft-cage')" title="Click to copy">
+            <hd-icon icon="temaki:mineshaft-cage"></hd-icon>
+            <span class="name">mineshaft-cage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:mineshaft-profile')" title="Click to copy">
+            <hd-icon icon="temaki:mineshaft-profile"></hd-icon>
+            <span class="name">mineshaft-profile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:money-hand')" title="Click to copy">
+            <hd-icon icon="temaki:money-hand"></hd-icon>
+            <span class="name">money-hand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:monorail')" title="Click to copy">
+            <hd-icon icon="temaki:monorail"></hd-icon>
+            <span class="name">monorail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:motorcycle')" title="Click to copy">
+            <hd-icon icon="temaki:motorcycle"></hd-icon>
+            <span class="name">motorcycle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:motorcycle-rental')" title="Click to copy">
+            <hd-icon icon="temaki:motorcycle-rental"></hd-icon>
+            <span class="name">motorcycle-rental</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:motorcycle-repair')" title="Click to copy">
+            <hd-icon icon="temaki:motorcycle-repair"></hd-icon>
+            <span class="name">motorcycle-repair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:mountain-asterisk')" title="Click to copy">
+            <hd-icon icon="temaki:mountain-asterisk"></hd-icon>
+            <span class="name">mountain-asterisk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:mountain-cross')" title="Click to copy">
+            <hd-icon icon="temaki:mountain-cross"></hd-icon>
+            <span class="name">mountain-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:mountain-range')" title="Click to copy">
+            <hd-icon icon="temaki:mountain-range"></hd-icon>
+            <span class="name">mountain-range</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:movie-rental')" title="Click to copy">
+            <hd-icon icon="temaki:movie-rental"></hd-icon>
+            <span class="name">movie-rental</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:museum')" title="Click to copy">
+            <hd-icon icon="temaki:museum"></hd-icon>
+            <span class="name">museum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:natural-arch')" title="Click to copy">
+            <hd-icon icon="temaki:natural-arch"></hd-icon>
+            <span class="name">natural-arch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:needle-and-spool')" title="Click to copy">
+            <hd-icon icon="temaki:needle-and-spool"></hd-icon>
+            <span class="name">needle-and-spool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:obelisk')" title="Click to copy">
+            <hd-icon icon="temaki:obelisk"></hd-icon>
+            <span class="name">obelisk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:oil-well')" title="Click to copy">
+            <hd-icon icon="temaki:oil-well"></hd-icon>
+            <span class="name">oil-well</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:os-benchmark')" title="Click to copy">
+            <hd-icon icon="temaki:os-benchmark"></hd-icon>
+            <span class="name">os-benchmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:paifang')" title="Click to copy">
+            <hd-icon icon="temaki:paifang"></hd-icon>
+            <span class="name">paifang</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:parking-space')" title="Click to copy">
+            <hd-icon icon="temaki:parking-space"></hd-icon>
+            <span class="name">parking-space</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:passport-checkpoint')" title="Click to copy">
+            <hd-icon icon="temaki:passport-checkpoint"></hd-icon>
+            <span class="name">passport-checkpoint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:ped-cyclist-crosswalk')" title="Click to copy">
+            <hd-icon icon="temaki:ped-cyclist-crosswalk"></hd-icon>
+            <span class="name">ped-cyclist-crosswalk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pedestrian')" title="Click to copy">
+            <hd-icon icon="temaki:pedestrian"></hd-icon>
+            <span class="name">pedestrian</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pedestrian-and-cyclist')" title="Click to copy">
+            <hd-icon icon="temaki:pedestrian-and-cyclist"></hd-icon>
+            <span class="name">pedestrian-and-cyclist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pedestrian-crosswalk')" title="Click to copy">
+            <hd-icon icon="temaki:pedestrian-crosswalk"></hd-icon>
+            <span class="name">pedestrian-crosswalk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pedestrian-walled')" title="Click to copy">
+            <hd-icon icon="temaki:pedestrian-walled"></hd-icon>
+            <span class="name">pedestrian-walled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:perfume')" title="Click to copy">
+            <hd-icon icon="temaki:perfume"></hd-icon>
+            <span class="name">perfume</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pet-grooming')" title="Click to copy">
+            <hd-icon icon="temaki:pet-grooming"></hd-icon>
+            <span class="name">pet-grooming</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pet-store')" title="Click to copy">
+            <hd-icon icon="temaki:pet-store"></hd-icon>
+            <span class="name">pet-store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pharmacy')" title="Click to copy">
+            <hd-icon icon="temaki:pharmacy"></hd-icon>
+            <span class="name">pharmacy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:physiotherapist')" title="Click to copy">
+            <hd-icon icon="temaki:physiotherapist"></hd-icon>
+            <span class="name">physiotherapist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pick-hammer')" title="Click to copy">
+            <hd-icon icon="temaki:pick-hammer"></hd-icon>
+            <span class="name">pick-hammer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pickleball')" title="Click to copy">
+            <hd-icon icon="temaki:pickleball"></hd-icon>
+            <span class="name">pickleball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:picnic-shelter')" title="Click to copy">
+            <hd-icon icon="temaki:picnic-shelter"></hd-icon>
+            <span class="name">picnic-shelter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pier-fixed')" title="Click to copy">
+            <hd-icon icon="temaki:pier-fixed"></hd-icon>
+            <span class="name">pier-fixed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pier-floating')" title="Click to copy">
+            <hd-icon icon="temaki:pier-floating"></hd-icon>
+            <span class="name">pier-floating</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pin')" title="Click to copy">
+            <hd-icon icon="temaki:pin"></hd-icon>
+            <span class="name">pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:pipe')" title="Click to copy">
+            <hd-icon icon="temaki:pipe"></hd-icon>
+            <span class="name">pipe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:plane-taxiing')" title="Click to copy">
+            <hd-icon icon="temaki:plane-taxiing"></hd-icon>
+            <span class="name">plane-taxiing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:planes')" title="Click to copy">
+            <hd-icon icon="temaki:planes"></hd-icon>
+            <span class="name">planes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:planes-bidirectional')" title="Click to copy">
+            <hd-icon icon="temaki:planes-bidirectional"></hd-icon>
+            <span class="name">planes-bidirectional</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:plant')" title="Click to copy">
+            <hd-icon icon="temaki:plant"></hd-icon>
+            <span class="name">plant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:plaque')" title="Click to copy">
+            <hd-icon icon="temaki:plaque"></hd-icon>
+            <span class="name">plaque</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:platter-lift')" title="Click to copy">
+            <hd-icon icon="temaki:platter-lift"></hd-icon>
+            <span class="name">platter-lift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:play-structure')" title="Click to copy">
+            <hd-icon icon="temaki:play-structure"></hd-icon>
+            <span class="name">play-structure</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:plumber')" title="Click to copy">
+            <hd-icon icon="temaki:plumber"></hd-icon>
+            <span class="name">plumber</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:police-checkpoint')" title="Click to copy">
+            <hd-icon icon="temaki:police-checkpoint"></hd-icon>
+            <span class="name">police-checkpoint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:police-officer')" title="Click to copy">
+            <hd-icon icon="temaki:police-officer"></hd-icon>
+            <span class="name">police-officer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:polished-nail')" title="Click to copy">
+            <hd-icon icon="temaki:polished-nail"></hd-icon>
+            <span class="name">polished-nail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:portrait')" title="Click to copy">
+            <hd-icon icon="temaki:portrait"></hd-icon>
+            <span class="name">portrait</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:portrait-framed')" title="Click to copy">
+            <hd-icon icon="temaki:portrait-framed"></hd-icon>
+            <span class="name">portrait-framed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:post-box')" title="Click to copy">
+            <hd-icon icon="temaki:post-box"></hd-icon>
+            <span class="name">post-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:poster-box')" title="Click to copy">
+            <hd-icon icon="temaki:poster-box"></hd-icon>
+            <span class="name">poster-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power')" title="Click to copy">
+            <hd-icon icon="temaki:power"></hd-icon>
+            <span class="name">power</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-cb')" title="Click to copy">
+            <hd-icon icon="temaki:power-cb"></hd-icon>
+            <span class="name">power-cb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-cb2')" title="Click to copy">
+            <hd-icon icon="temaki:power-cb2"></hd-icon>
+            <span class="name">power-cb2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-circuit')" title="Click to copy">
+            <hd-icon icon="temaki:power-circuit"></hd-icon>
+            <span class="name">power-circuit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-ct')" title="Click to copy">
+            <hd-icon icon="temaki:power-ct"></hd-icon>
+            <span class="name">power-ct</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-device')" title="Click to copy">
+            <hd-icon icon="temaki:power-device"></hd-icon>
+            <span class="name">power-device</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-isolator')" title="Click to copy">
+            <hd-icon icon="temaki:power-isolator"></hd-icon>
+            <span class="name">power-isolator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-la')" title="Click to copy">
+            <hd-icon icon="temaki:power-la"></hd-icon>
+            <span class="name">power-la</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-manhole')" title="Click to copy">
+            <hd-icon icon="temaki:power-manhole"></hd-icon>
+            <span class="name">power-manhole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-meter')" title="Click to copy">
+            <hd-icon icon="temaki:power-meter"></hd-icon>
+            <span class="name">power-meter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-pole')" title="Click to copy">
+            <hd-icon icon="temaki:power-pole"></hd-icon>
+            <span class="name">power-pole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-shutoff')" title="Click to copy">
+            <hd-icon icon="temaki:power-shutoff"></hd-icon>
+            <span class="name">power-shutoff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-switch')" title="Click to copy">
+            <hd-icon icon="temaki:power-switch"></hd-icon>
+            <span class="name">power-switch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-tower')" title="Click to copy">
+            <hd-icon icon="temaki:power-tower"></hd-icon>
+            <span class="name">power-tower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:power-transformer')" title="Click to copy">
+            <hd-icon icon="temaki:power-transformer"></hd-icon>
+            <span class="name">power-transformer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:powered-pump')" title="Click to copy">
+            <hd-icon icon="temaki:powered-pump"></hd-icon>
+            <span class="name">powered-pump</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:propane-tank')" title="Click to copy">
+            <hd-icon icon="temaki:propane-tank"></hd-icon>
+            <span class="name">propane-tank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:psychic')" title="Click to copy">
+            <hd-icon icon="temaki:psychic"></hd-icon>
+            <span class="name">psychic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:quakerism')" title="Click to copy">
+            <hd-icon icon="temaki:quakerism"></hd-icon>
+            <span class="name">quakerism</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:quay')" title="Click to copy">
+            <hd-icon icon="temaki:quay"></hd-icon>
+            <span class="name">quay</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:racetrack-oval')" title="Click to copy">
+            <hd-icon icon="temaki:racetrack-oval"></hd-icon>
+            <span class="name">racetrack-oval</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:radiation')" title="Click to copy">
+            <hd-icon icon="temaki:radiation"></hd-icon>
+            <span class="name">radiation</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:radio')" title="Click to copy">
+            <hd-icon icon="temaki:radio"></hd-icon>
+            <span class="name">radio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:rafting')" title="Click to copy">
+            <hd-icon icon="temaki:rafting"></hd-icon>
+            <span class="name">rafting</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:rail-flag')" title="Click to copy">
+            <hd-icon icon="temaki:rail-flag"></hd-icon>
+            <span class="name">rail-flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:rail-profile')" title="Click to copy">
+            <hd-icon icon="temaki:rail-profile"></hd-icon>
+            <span class="name">rail-profile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:railing')" title="Click to copy">
+            <hd-icon icon="temaki:railing"></hd-icon>
+            <span class="name">railing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:railway-cable-track')" title="Click to copy">
+            <hd-icon icon="temaki:railway-cable-track"></hd-icon>
+            <span class="name">railway-cable-track</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:railway-signals')" title="Click to copy">
+            <hd-icon icon="temaki:railway-signals"></hd-icon>
+            <span class="name">railway-signals</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:railway-track')" title="Click to copy">
+            <hd-icon icon="temaki:railway-track"></hd-icon>
+            <span class="name">railway-track</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:railway-track-askew')" title="Click to copy">
+            <hd-icon icon="temaki:railway-track-askew"></hd-icon>
+            <span class="name">railway-track-askew</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:railway-track-mini')" title="Click to copy">
+            <hd-icon icon="temaki:railway-track-mini"></hd-icon>
+            <span class="name">railway-track-mini</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:railway-track-narrow')" title="Click to copy">
+            <hd-icon icon="temaki:railway-track-narrow"></hd-icon>
+            <span class="name">railway-track-narrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:railway-track-partial')" title="Click to copy">
+            <hd-icon icon="temaki:railway-track-partial"></hd-icon>
+            <span class="name">railway-track-partial</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:real-estate-agency')" title="Click to copy">
+            <hd-icon icon="temaki:real-estate-agency"></hd-icon>
+            <span class="name">real-estate-agency</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:rigging')" title="Click to copy">
+            <hd-icon icon="temaki:rigging"></hd-icon>
+            <span class="name">rigging</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:rocket-firework')" title="Click to copy">
+            <hd-icon icon="temaki:rocket-firework"></hd-icon>
+            <span class="name">rocket-firework</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:roller-coaster')" title="Click to copy">
+            <hd-icon icon="temaki:roller-coaster"></hd-icon>
+            <span class="name">roller-coaster</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:room')" title="Click to copy">
+            <hd-icon icon="temaki:room"></hd-icon>
+            <span class="name">room</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:rope-fence')" title="Click to copy">
+            <hd-icon icon="temaki:rope-fence"></hd-icon>
+            <span class="name">rope-fence</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:row-houses')" title="Click to copy">
+            <hd-icon icon="temaki:row-houses"></hd-icon>
+            <span class="name">row-houses</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:ruins')" title="Click to copy">
+            <hd-icon icon="temaki:ruins"></hd-icon>
+            <span class="name">ruins</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:rumble-strip')" title="Click to copy">
+            <hd-icon icon="temaki:rumble-strip"></hd-icon>
+            <span class="name">rumble-strip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:saddle')" title="Click to copy">
+            <hd-icon icon="temaki:saddle"></hd-icon>
+            <span class="name">saddle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sail')" title="Click to copy">
+            <hd-icon icon="temaki:sail"></hd-icon>
+            <span class="name">sail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sailboat')" title="Click to copy">
+            <hd-icon icon="temaki:sailboat"></hd-icon>
+            <span class="name">sailboat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sailing')" title="Click to copy">
+            <hd-icon icon="temaki:sailing"></hd-icon>
+            <span class="name">sailing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sandbox')" title="Click to copy">
+            <hd-icon icon="temaki:sandbox"></hd-icon>
+            <span class="name">sandbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sandwich')" title="Click to copy">
+            <hd-icon icon="temaki:sandwich"></hd-icon>
+            <span class="name">sandwich</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:scaffold')" title="Click to copy">
+            <hd-icon icon="temaki:scaffold"></hd-icon>
+            <span class="name">scaffold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:school')" title="Click to copy">
+            <hd-icon icon="temaki:school"></hd-icon>
+            <span class="name">school</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:school-bus')" title="Click to copy">
+            <hd-icon icon="temaki:school-bus"></hd-icon>
+            <span class="name">school-bus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:scuba-diving')" title="Click to copy">
+            <hd-icon icon="temaki:scuba-diving"></hd-icon>
+            <span class="name">scuba-diving</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sculpture')" title="Click to copy">
+            <hd-icon icon="temaki:sculpture"></hd-icon>
+            <span class="name">sculpture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:security-camera')" title="Click to copy">
+            <hd-icon icon="temaki:security-camera"></hd-icon>
+            <span class="name">security-camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:seesaw')" title="Click to copy">
+            <hd-icon icon="temaki:seesaw"></hd-icon>
+            <span class="name">seesaw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:shield')" title="Click to copy">
+            <hd-icon icon="temaki:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:shinto')" title="Click to copy">
+            <hd-icon icon="temaki:shinto"></hd-icon>
+            <span class="name">shinto</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:shopping-mall')" title="Click to copy">
+            <hd-icon icon="temaki:shopping-mall"></hd-icon>
+            <span class="name">shopping-mall</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:shower')" title="Click to copy">
+            <hd-icon icon="temaki:shower"></hd-icon>
+            <span class="name">shower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:shrub')" title="Click to copy">
+            <hd-icon icon="temaki:shrub"></hd-icon>
+            <span class="name">shrub</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:shrub-low')" title="Click to copy">
+            <hd-icon icon="temaki:shrub-low"></hd-icon>
+            <span class="name">shrub-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:shuffleboard')" title="Click to copy">
+            <hd-icon icon="temaki:shuffleboard"></hd-icon>
+            <span class="name">shuffleboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sign-and-bench')" title="Click to copy">
+            <hd-icon icon="temaki:sign-and-bench"></hd-icon>
+            <span class="name">sign-and-bench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sign-and-car')" title="Click to copy">
+            <hd-icon icon="temaki:sign-and-car"></hd-icon>
+            <span class="name">sign-and-car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sign-and-pedestrian')" title="Click to copy">
+            <hd-icon icon="temaki:sign-and-pedestrian"></hd-icon>
+            <span class="name">sign-and-pedestrian</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sikhism')" title="Click to copy">
+            <hd-icon icon="temaki:sikhism"></hd-icon>
+            <span class="name">sikhism</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:silo')" title="Click to copy">
+            <hd-icon icon="temaki:silo"></hd-icon>
+            <span class="name">silo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:skateboarding')" title="Click to copy">
+            <hd-icon icon="temaki:skateboarding"></hd-icon>
+            <span class="name">skateboarding</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:ski-jumping')" title="Click to copy">
+            <hd-icon icon="temaki:ski-jumping"></hd-icon>
+            <span class="name">ski-jumping</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:skiing')" title="Click to copy">
+            <hd-icon icon="temaki:skiing"></hd-icon>
+            <span class="name">skiing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sledding')" title="Click to copy">
+            <hd-icon icon="temaki:sledding"></hd-icon>
+            <span class="name">sledding</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:sleep-shelter')" title="Click to copy">
+            <hd-icon icon="temaki:sleep-shelter"></hd-icon>
+            <span class="name">sleep-shelter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:slide')" title="Click to copy">
+            <hd-icon icon="temaki:slide"></hd-icon>
+            <span class="name">slide</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:snow')" title="Click to copy">
+            <hd-icon icon="temaki:snow"></hd-icon>
+            <span class="name">snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:snow-shoeing')" title="Click to copy">
+            <hd-icon icon="temaki:snow-shoeing"></hd-icon>
+            <span class="name">snow-shoeing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:snowboarding')" title="Click to copy">
+            <hd-icon icon="temaki:snowboarding"></hd-icon>
+            <span class="name">snowboarding</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:snowmobile')" title="Click to copy">
+            <hd-icon icon="temaki:snowmobile"></hd-icon>
+            <span class="name">snowmobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:social-facility')" title="Click to copy">
+            <hd-icon icon="temaki:social-facility"></hd-icon>
+            <span class="name">social-facility</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:spa')" title="Click to copy">
+            <hd-icon icon="temaki:spa"></hd-icon>
+            <span class="name">spa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:speaker')" title="Click to copy">
+            <hd-icon icon="temaki:speaker"></hd-icon>
+            <span class="name">speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:speed-bump')" title="Click to copy">
+            <hd-icon icon="temaki:speed-bump"></hd-icon>
+            <span class="name">speed-bump</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:speed-dip')" title="Click to copy">
+            <hd-icon icon="temaki:speed-dip"></hd-icon>
+            <span class="name">speed-dip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:speed-dip-double')" title="Click to copy">
+            <hd-icon icon="temaki:speed-dip-double"></hd-icon>
+            <span class="name">speed-dip-double</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:speed-hump')" title="Click to copy">
+            <hd-icon icon="temaki:speed-hump"></hd-icon>
+            <span class="name">speed-hump</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:speed-table')" title="Click to copy">
+            <hd-icon icon="temaki:speed-table"></hd-icon>
+            <span class="name">speed-table</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:speedway-8')" title="Click to copy">
+            <hd-icon icon="temaki:speedway-8"></hd-icon>
+            <span class="name">speedway-8</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:speedway-oval')" title="Click to copy">
+            <hd-icon icon="temaki:speedway-oval"></hd-icon>
+            <span class="name">speedway-oval</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:spice-bottle')" title="Click to copy">
+            <hd-icon icon="temaki:spice-bottle"></hd-icon>
+            <span class="name">spice-bottle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:spike-strip')" title="Click to copy">
+            <hd-icon icon="temaki:spike-strip"></hd-icon>
+            <span class="name">spike-strip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:spotting-scope')" title="Click to copy">
+            <hd-icon icon="temaki:spotting-scope"></hd-icon>
+            <span class="name">spotting-scope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:spring-rider')" title="Click to copy">
+            <hd-icon icon="temaki:spring-rider"></hd-icon>
+            <span class="name">spring-rider</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:stamp')" title="Click to copy">
+            <hd-icon icon="temaki:stamp"></hd-icon>
+            <span class="name">stamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:statue')" title="Click to copy">
+            <hd-icon icon="temaki:statue"></hd-icon>
+            <span class="name">statue</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:stile-squeezer')" title="Click to copy">
+            <hd-icon icon="temaki:stile-squeezer"></hd-icon>
+            <span class="name">stile-squeezer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:stop')" title="Click to copy">
+            <hd-icon icon="temaki:stop"></hd-icon>
+            <span class="name">stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:storage')" title="Click to copy">
+            <hd-icon icon="temaki:storage"></hd-icon>
+            <span class="name">storage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:storage-drum')" title="Click to copy">
+            <hd-icon icon="temaki:storage-drum"></hd-icon>
+            <span class="name">storage-drum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:storage-fermenter')" title="Click to copy">
+            <hd-icon icon="temaki:storage-fermenter"></hd-icon>
+            <span class="name">storage-fermenter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:storage-rental')" title="Click to copy">
+            <hd-icon icon="temaki:storage-rental"></hd-icon>
+            <span class="name">storage-rental</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:storage-tank')" title="Click to copy">
+            <hd-icon icon="temaki:storage-tank"></hd-icon>
+            <span class="name">storage-tank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:street-lamp-arm')" title="Click to copy">
+            <hd-icon icon="temaki:street-lamp-arm"></hd-icon>
+            <span class="name">street-lamp-arm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:striped-way')" title="Click to copy">
+            <hd-icon icon="temaki:striped-way"></hd-icon>
+            <span class="name">striped-way</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:striped-zone')" title="Click to copy">
+            <hd-icon icon="temaki:striped-zone"></hd-icon>
+            <span class="name">striped-zone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:subway')" title="Click to copy">
+            <hd-icon icon="temaki:subway"></hd-icon>
+            <span class="name">subway</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:suitcase')" title="Click to copy">
+            <hd-icon icon="temaki:suitcase"></hd-icon>
+            <span class="name">suitcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:suitcase-key')" title="Click to copy">
+            <hd-icon icon="temaki:suitcase-key"></hd-icon>
+            <span class="name">suitcase-key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:suitcase-xray')" title="Click to copy">
+            <hd-icon icon="temaki:suitcase-xray"></hd-icon>
+            <span class="name">suitcase-xray</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:surfing')" title="Click to copy">
+            <hd-icon icon="temaki:surfing"></hd-icon>
+            <span class="name">surfing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:swamp')" title="Click to copy">
+            <hd-icon icon="temaki:swamp"></hd-icon>
+            <span class="name">swamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:t-bar-lift')" title="Click to copy">
+            <hd-icon icon="temaki:t-bar-lift"></hd-icon>
+            <span class="name">t-bar-lift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:table-soccer')" title="Click to copy">
+            <hd-icon icon="temaki:table-soccer"></hd-icon>
+            <span class="name">table-soccer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tall-gate')" title="Click to copy">
+            <hd-icon icon="temaki:tall-gate"></hd-icon>
+            <span class="name">tall-gate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tanning')" title="Click to copy">
+            <hd-icon icon="temaki:tanning"></hd-icon>
+            <span class="name">tanning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tanning2')" title="Click to copy">
+            <hd-icon icon="temaki:tanning2"></hd-icon>
+            <span class="name">tanning2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:taoism')" title="Click to copy">
+            <hd-icon icon="temaki:taoism"></hd-icon>
+            <span class="name">taoism</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tattoo-machine')" title="Click to copy">
+            <hd-icon icon="temaki:tattoo-machine"></hd-icon>
+            <span class="name">tattoo-machine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:taxi-stand')" title="Click to copy">
+            <hd-icon icon="temaki:taxi-stand"></hd-icon>
+            <span class="name">taxi-stand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:telephone')" title="Click to copy">
+            <hd-icon icon="temaki:telephone"></hd-icon>
+            <span class="name">telephone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:telescope')" title="Click to copy">
+            <hd-icon icon="temaki:telescope"></hd-icon>
+            <span class="name">telescope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:temaki')" title="Click to copy">
+            <hd-icon icon="temaki:temaki"></hd-icon>
+            <span class="name">temaki</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tennis')" title="Click to copy">
+            <hd-icon icon="temaki:tennis"></hd-icon>
+            <span class="name">tennis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tents')" title="Click to copy">
+            <hd-icon icon="temaki:tents"></hd-icon>
+            <span class="name">tents</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:ticket')" title="Click to copy">
+            <hd-icon icon="temaki:ticket"></hd-icon>
+            <span class="name">ticket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tiling')" title="Click to copy">
+            <hd-icon icon="temaki:tiling"></hd-icon>
+            <span class="name">tiling</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tire')" title="Click to copy">
+            <hd-icon icon="temaki:tire"></hd-icon>
+            <span class="name">tire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tire-course')" title="Click to copy">
+            <hd-icon icon="temaki:tire-course"></hd-icon>
+            <span class="name">tire-course</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:toll-gantry')" title="Click to copy">
+            <hd-icon icon="temaki:toll-gantry"></hd-icon>
+            <span class="name">toll-gantry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:toolbox')" title="Click to copy">
+            <hd-icon icon="temaki:toolbox"></hd-icon>
+            <span class="name">toolbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tools')" title="Click to copy">
+            <hd-icon icon="temaki:tools"></hd-icon>
+            <span class="name">tools</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tower')" title="Click to copy">
+            <hd-icon icon="temaki:tower"></hd-icon>
+            <span class="name">tower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tower-communication')" title="Click to copy">
+            <hd-icon icon="temaki:tower-communication"></hd-icon>
+            <span class="name">tower-communication</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:town-hall')" title="Click to copy">
+            <hd-icon icon="temaki:town-hall"></hd-icon>
+            <span class="name">town-hall</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:traffic-signals')" title="Click to copy">
+            <hd-icon icon="temaki:traffic-signals"></hd-icon>
+            <span class="name">traffic-signals</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:train')" title="Click to copy">
+            <hd-icon icon="temaki:train"></hd-icon>
+            <span class="name">train</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:train-bullet')" title="Click to copy">
+            <hd-icon icon="temaki:train-bullet"></hd-icon>
+            <span class="name">train-bullet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:train-diesel')" title="Click to copy">
+            <hd-icon icon="temaki:train-diesel"></hd-icon>
+            <span class="name">train-diesel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:train-kids')" title="Click to copy">
+            <hd-icon icon="temaki:train-kids"></hd-icon>
+            <span class="name">train-kids</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:train-steam')" title="Click to copy">
+            <hd-icon icon="temaki:train-steam"></hd-icon>
+            <span class="name">train-steam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:train-wash')" title="Click to copy">
+            <hd-icon icon="temaki:train-wash"></hd-icon>
+            <span class="name">train-wash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tram')" title="Click to copy">
+            <hd-icon icon="temaki:tram"></hd-icon>
+            <span class="name">tram</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tram-side')" title="Click to copy">
+            <hd-icon icon="temaki:tram-side"></hd-icon>
+            <span class="name">tram-side</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:transit')" title="Click to copy">
+            <hd-icon icon="temaki:transit"></hd-icon>
+            <span class="name">transit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:transit-shelter')" title="Click to copy">
+            <hd-icon icon="temaki:transit-shelter"></hd-icon>
+            <span class="name">transit-shelter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tree-and-bench')" title="Click to copy">
+            <hd-icon icon="temaki:tree-and-bench"></hd-icon>
+            <span class="name">tree-and-bench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tree-broadleaved')" title="Click to copy">
+            <hd-icon icon="temaki:tree-broadleaved"></hd-icon>
+            <span class="name">tree-broadleaved</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tree-cactus')" title="Click to copy">
+            <hd-icon icon="temaki:tree-cactus"></hd-icon>
+            <span class="name">tree-cactus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tree-leafless')" title="Click to copy">
+            <hd-icon icon="temaki:tree-leafless"></hd-icon>
+            <span class="name">tree-leafless</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tree-needleleaved')" title="Click to copy">
+            <hd-icon icon="temaki:tree-needleleaved"></hd-icon>
+            <span class="name">tree-needleleaved</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tree-palm')" title="Click to copy">
+            <hd-icon icon="temaki:tree-palm"></hd-icon>
+            <span class="name">tree-palm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tree-row')" title="Click to copy">
+            <hd-icon icon="temaki:tree-row"></hd-icon>
+            <span class="name">tree-row</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tree-stump')" title="Click to copy">
+            <hd-icon icon="temaki:tree-stump"></hd-icon>
+            <span class="name">tree-stump</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:trench')" title="Click to copy">
+            <hd-icon icon="temaki:trench"></hd-icon>
+            <span class="name">trench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:trolleybus')" title="Click to copy">
+            <hd-icon icon="temaki:trolleybus"></hd-icon>
+            <span class="name">trolleybus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:truck')" title="Click to copy">
+            <hd-icon icon="temaki:truck"></hd-icon>
+            <span class="name">truck</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:tunnel')" title="Click to copy">
+            <hd-icon icon="temaki:tunnel"></hd-icon>
+            <span class="name">tunnel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:turnstile')" title="Click to copy">
+            <hd-icon icon="temaki:turnstile"></hd-icon>
+            <span class="name">turnstile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:utility-pole')" title="Click to copy">
+            <hd-icon icon="temaki:utility-pole"></hd-icon>
+            <span class="name">utility-pole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vacuum')" title="Click to copy">
+            <hd-icon icon="temaki:vacuum"></hd-icon>
+            <span class="name">vacuum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vacuum-station')" title="Click to copy">
+            <hd-icon icon="temaki:vacuum-station"></hd-icon>
+            <span class="name">vacuum-station</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:valley')" title="Click to copy">
+            <hd-icon icon="temaki:valley"></hd-icon>
+            <span class="name">valley</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vase')" title="Click to copy">
+            <hd-icon icon="temaki:vase"></hd-icon>
+            <span class="name">vase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-bread')" title="Click to copy">
+            <hd-icon icon="temaki:vending-bread"></hd-icon>
+            <span class="name">vending-bread</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-cigarettes')" title="Click to copy">
+            <hd-icon icon="temaki:vending-cigarettes"></hd-icon>
+            <span class="name">vending-cigarettes</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-cold-drink')" title="Click to copy">
+            <hd-icon icon="temaki:vending-cold-drink"></hd-icon>
+            <span class="name">vending-cold-drink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-cold-drink2')" title="Click to copy">
+            <hd-icon icon="temaki:vending-cold-drink2"></hd-icon>
+            <span class="name">vending-cold-drink2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-eggs')" title="Click to copy">
+            <hd-icon icon="temaki:vending-eggs"></hd-icon>
+            <span class="name">vending-eggs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-flat-coin')" title="Click to copy">
+            <hd-icon icon="temaki:vending-flat-coin"></hd-icon>
+            <span class="name">vending-flat-coin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-hot-drink')" title="Click to copy">
+            <hd-icon icon="temaki:vending-hot-drink"></hd-icon>
+            <span class="name">vending-hot-drink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-hot-drink2')" title="Click to copy">
+            <hd-icon icon="temaki:vending-hot-drink2"></hd-icon>
+            <span class="name">vending-hot-drink2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-ice')" title="Click to copy">
+            <hd-icon icon="temaki:vending-ice"></hd-icon>
+            <span class="name">vending-ice</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-ice-cream')" title="Click to copy">
+            <hd-icon icon="temaki:vending-ice-cream"></hd-icon>
+            <span class="name">vending-ice-cream</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-ice-cream2')" title="Click to copy">
+            <hd-icon icon="temaki:vending-ice-cream2"></hd-icon>
+            <span class="name">vending-ice-cream2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-lockers')" title="Click to copy">
+            <hd-icon icon="temaki:vending-lockers"></hd-icon>
+            <span class="name">vending-lockers</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-love')" title="Click to copy">
+            <hd-icon icon="temaki:vending-love"></hd-icon>
+            <span class="name">vending-love</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-machine')" title="Click to copy">
+            <hd-icon icon="temaki:vending-machine"></hd-icon>
+            <span class="name">vending-machine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-medicine')" title="Click to copy">
+            <hd-icon icon="temaki:vending-medicine"></hd-icon>
+            <span class="name">vending-medicine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-newspaper')" title="Click to copy">
+            <hd-icon icon="temaki:vending-newspaper"></hd-icon>
+            <span class="name">vending-newspaper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-pet-waste')" title="Click to copy">
+            <hd-icon icon="temaki:vending-pet-waste"></hd-icon>
+            <span class="name">vending-pet-waste</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-stamps')" title="Click to copy">
+            <hd-icon icon="temaki:vending-stamps"></hd-icon>
+            <span class="name">vending-stamps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-tickets')" title="Click to copy">
+            <hd-icon icon="temaki:vending-tickets"></hd-icon>
+            <span class="name">vending-tickets</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vending-venus')" title="Click to copy">
+            <hd-icon icon="temaki:vending-venus"></hd-icon>
+            <span class="name">vending-venus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vertex')" title="Click to copy">
+            <hd-icon icon="temaki:vertex"></hd-icon>
+            <span class="name">vertex</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:vertical-rotisserie')" title="Click to copy">
+            <hd-icon icon="temaki:vertical-rotisserie"></hd-icon>
+            <span class="name">vertical-rotisserie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:veterinary-care')" title="Click to copy">
+            <hd-icon icon="temaki:veterinary-care"></hd-icon>
+            <span class="name">veterinary-care</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:wall')" title="Click to copy">
+            <hd-icon icon="temaki:wall"></hd-icon>
+            <span class="name">wall</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:waste')" title="Click to copy">
+            <hd-icon icon="temaki:waste"></hd-icon>
+            <span class="name">waste</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:waste-device')" title="Click to copy">
+            <hd-icon icon="temaki:waste-device"></hd-icon>
+            <span class="name">waste-device</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:waste-manhole')" title="Click to copy">
+            <hd-icon icon="temaki:waste-manhole"></hd-icon>
+            <span class="name">waste-manhole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:waste-meter')" title="Click to copy">
+            <hd-icon icon="temaki:waste-meter"></hd-icon>
+            <span class="name">waste-meter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:waste-shutoff')" title="Click to copy">
+            <hd-icon icon="temaki:waste-shutoff"></hd-icon>
+            <span class="name">waste-shutoff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:water')" title="Click to copy">
+            <hd-icon icon="temaki:water"></hd-icon>
+            <span class="name">water</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:water-bottle')" title="Click to copy">
+            <hd-icon icon="temaki:water-bottle"></hd-icon>
+            <span class="name">water-bottle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:water-device')" title="Click to copy">
+            <hd-icon icon="temaki:water-device"></hd-icon>
+            <span class="name">water-device</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:water-manhole')" title="Click to copy">
+            <hd-icon icon="temaki:water-manhole"></hd-icon>
+            <span class="name">water-manhole</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:water-meter')" title="Click to copy">
+            <hd-icon icon="temaki:water-meter"></hd-icon>
+            <span class="name">water-meter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:water-shutoff')" title="Click to copy">
+            <hd-icon icon="temaki:water-shutoff"></hd-icon>
+            <span class="name">water-shutoff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:water-tap')" title="Click to copy">
+            <hd-icon icon="temaki:water-tap"></hd-icon>
+            <span class="name">water-tap</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:water-tap-drinkable')" title="Click to copy">
+            <hd-icon icon="temaki:water-tap-drinkable"></hd-icon>
+            <span class="name">water-tap-drinkable</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:water-tower')" title="Click to copy">
+            <hd-icon icon="temaki:water-tower"></hd-icon>
+            <span class="name">water-tower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:waterskiing')" title="Click to copy">
+            <hd-icon icon="temaki:waterskiing"></hd-icon>
+            <span class="name">waterskiing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:well-pump-manual')" title="Click to copy">
+            <hd-icon icon="temaki:well-pump-manual"></hd-icon>
+            <span class="name">well-pump-manual</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:well-pump-powered')" title="Click to copy">
+            <hd-icon icon="temaki:well-pump-powered"></hd-icon>
+            <span class="name">well-pump-powered</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:whale-watching')" title="Click to copy">
+            <hd-icon icon="temaki:whale-watching"></hd-icon>
+            <span class="name">whale-watching</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:wheel')" title="Click to copy">
+            <hd-icon icon="temaki:wheel"></hd-icon>
+            <span class="name">wheel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:wheelchair')" title="Click to copy">
+            <hd-icon icon="temaki:wheelchair"></hd-icon>
+            <span class="name">wheelchair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:wheelchair-active')" title="Click to copy">
+            <hd-icon icon="temaki:wheelchair-active"></hd-icon>
+            <span class="name">wheelchair-active</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:wind-surfing')" title="Click to copy">
+            <hd-icon icon="temaki:wind-surfing"></hd-icon>
+            <span class="name">wind-surfing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:wind-turbine')" title="Click to copy">
+            <hd-icon icon="temaki:wind-turbine"></hd-icon>
+            <span class="name">wind-turbine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:windmill')" title="Click to copy">
+            <hd-icon icon="temaki:windmill"></hd-icon>
+            <span class="name">windmill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:window')" title="Click to copy">
+            <hd-icon icon="temaki:window"></hd-icon>
+            <span class="name">window</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:windpump')" title="Click to copy">
+            <hd-icon icon="temaki:windpump"></hd-icon>
+            <span class="name">windpump</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:windsock')" title="Click to copy">
+            <hd-icon icon="temaki:windsock"></hd-icon>
+            <span class="name">windsock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:x-oblique')" title="Click to copy">
+            <hd-icon icon="temaki:x-oblique"></hd-icon>
+            <span class="name">x-oblique</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:yield')" title="Click to copy">
+            <hd-icon icon="temaki:yield"></hd-icon>
+            <span class="name">yield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('temaki:zoo')" title="Click to copy">
+            <hd-icon icon="temaki:zoo"></hd-icon>
+            <span class="name">zoo</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

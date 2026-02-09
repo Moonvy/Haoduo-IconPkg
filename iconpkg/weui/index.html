@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weui - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>weui <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(162)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('weui:add-filled')" title="Click to copy">
+            <hd-icon icon="weui:add-filled"></hd-icon>
+            <span class="name">add-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:add-friends-filled')" title="Click to copy">
+            <hd-icon icon="weui:add-friends-filled"></hd-icon>
+            <span class="name">add-friends-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:add-friends-outlined')" title="Click to copy">
+            <hd-icon icon="weui:add-friends-outlined"></hd-icon>
+            <span class="name">add-friends-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:add-outlined')" title="Click to copy">
+            <hd-icon icon="weui:add-outlined"></hd-icon>
+            <span class="name">add-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:add2-filled')" title="Click to copy">
+            <hd-icon icon="weui:add2-filled"></hd-icon>
+            <span class="name">add2-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:add2-outlined')" title="Click to copy">
+            <hd-icon icon="weui:add2-outlined"></hd-icon>
+            <span class="name">add2-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:album-filled')" title="Click to copy">
+            <hd-icon icon="weui:album-filled"></hd-icon>
+            <span class="name">album-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:album-outlined')" title="Click to copy">
+            <hd-icon icon="weui:album-outlined"></hd-icon>
+            <span class="name">album-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:arrow-filled')" title="Click to copy">
+            <hd-icon icon="weui:arrow-filled"></hd-icon>
+            <span class="name">arrow-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:arrow-outlined')" title="Click to copy">
+            <hd-icon icon="weui:arrow-outlined"></hd-icon>
+            <span class="name">arrow-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:at-filled')" title="Click to copy">
+            <hd-icon icon="weui:at-filled"></hd-icon>
+            <span class="name">at-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:at-outlined')" title="Click to copy">
+            <hd-icon icon="weui:at-outlined"></hd-icon>
+            <span class="name">at-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:back-filled')" title="Click to copy">
+            <hd-icon icon="weui:back-filled"></hd-icon>
+            <span class="name">back-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:back-outlined')" title="Click to copy">
+            <hd-icon icon="weui:back-outlined"></hd-icon>
+            <span class="name">back-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:back2-filled')" title="Click to copy">
+            <hd-icon icon="weui:back2-filled"></hd-icon>
+            <span class="name">back2-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:back2-outlined')" title="Click to copy">
+            <hd-icon icon="weui:back2-outlined"></hd-icon>
+            <span class="name">back2-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:bellring-off-filled')" title="Click to copy">
+            <hd-icon icon="weui:bellring-off-filled"></hd-icon>
+            <span class="name">bellring-off-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:bellring-off-outlined')" title="Click to copy">
+            <hd-icon icon="weui:bellring-off-outlined"></hd-icon>
+            <span class="name">bellring-off-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:bellring-on-filled')" title="Click to copy">
+            <hd-icon icon="weui:bellring-on-filled"></hd-icon>
+            <span class="name">bellring-on-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:bellring-on-outlined')" title="Click to copy">
+            <hd-icon icon="weui:bellring-on-outlined"></hd-icon>
+            <span class="name">bellring-on-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:camera-filled')" title="Click to copy">
+            <hd-icon icon="weui:camera-filled"></hd-icon>
+            <span class="name">camera-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:camera-outlined')" title="Click to copy">
+            <hd-icon icon="weui:camera-outlined"></hd-icon>
+            <span class="name">camera-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:cellphone-filled')" title="Click to copy">
+            <hd-icon icon="weui:cellphone-filled"></hd-icon>
+            <span class="name">cellphone-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:cellphone-outlined')" title="Click to copy">
+            <hd-icon icon="weui:cellphone-outlined"></hd-icon>
+            <span class="name">cellphone-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:clip-filled')" title="Click to copy">
+            <hd-icon icon="weui:clip-filled"></hd-icon>
+            <span class="name">clip-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:clip-outlined')" title="Click to copy">
+            <hd-icon icon="weui:clip-outlined"></hd-icon>
+            <span class="name">clip-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:close-filled')" title="Click to copy">
+            <hd-icon icon="weui:close-filled"></hd-icon>
+            <span class="name">close-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:close-outlined')" title="Click to copy">
+            <hd-icon icon="weui:close-outlined"></hd-icon>
+            <span class="name">close-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:close2-filled')" title="Click to copy">
+            <hd-icon icon="weui:close2-filled"></hd-icon>
+            <span class="name">close2-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:close2-outlined')" title="Click to copy">
+            <hd-icon icon="weui:close2-outlined"></hd-icon>
+            <span class="name">close2-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:comment-filled')" title="Click to copy">
+            <hd-icon icon="weui:comment-filled"></hd-icon>
+            <span class="name">comment-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:comment-outlined')" title="Click to copy">
+            <hd-icon icon="weui:comment-outlined"></hd-icon>
+            <span class="name">comment-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:contacts-filled')" title="Click to copy">
+            <hd-icon icon="weui:contacts-filled"></hd-icon>
+            <span class="name">contacts-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:contacts-outlined')" title="Click to copy">
+            <hd-icon icon="weui:contacts-outlined"></hd-icon>
+            <span class="name">contacts-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:copy-filled')" title="Click to copy">
+            <hd-icon icon="weui:copy-filled"></hd-icon>
+            <span class="name">copy-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:copy-outlined')" title="Click to copy">
+            <hd-icon icon="weui:copy-outlined"></hd-icon>
+            <span class="name">copy-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:delete-filled')" title="Click to copy">
+            <hd-icon icon="weui:delete-filled"></hd-icon>
+            <span class="name">delete-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:delete-on-filled')" title="Click to copy">
+            <hd-icon icon="weui:delete-on-filled"></hd-icon>
+            <span class="name">delete-on-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:delete-on-outlined')" title="Click to copy">
+            <hd-icon icon="weui:delete-on-outlined"></hd-icon>
+            <span class="name">delete-on-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:delete-outlined')" title="Click to copy">
+            <hd-icon icon="weui:delete-outlined"></hd-icon>
+            <span class="name">delete-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:discover-filled')" title="Click to copy">
+            <hd-icon icon="weui:discover-filled"></hd-icon>
+            <span class="name">discover-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:discover-outlined')" title="Click to copy">
+            <hd-icon icon="weui:discover-outlined"></hd-icon>
+            <span class="name">discover-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:display-filled')" title="Click to copy">
+            <hd-icon icon="weui:display-filled"></hd-icon>
+            <span class="name">display-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:display-outlined')" title="Click to copy">
+            <hd-icon icon="weui:display-outlined"></hd-icon>
+            <span class="name">display-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:done-filled')" title="Click to copy">
+            <hd-icon icon="weui:done-filled"></hd-icon>
+            <span class="name">done-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:done-outlined')" title="Click to copy">
+            <hd-icon icon="weui:done-outlined"></hd-icon>
+            <span class="name">done-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:done2-filled')" title="Click to copy">
+            <hd-icon icon="weui:done2-filled"></hd-icon>
+            <span class="name">done2-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:done2-outlined')" title="Click to copy">
+            <hd-icon icon="weui:done2-outlined"></hd-icon>
+            <span class="name">done2-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:download-filled')" title="Click to copy">
+            <hd-icon icon="weui:download-filled"></hd-icon>
+            <span class="name">download-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:download-outlined')" title="Click to copy">
+            <hd-icon icon="weui:download-outlined"></hd-icon>
+            <span class="name">download-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:email-filled')" title="Click to copy">
+            <hd-icon icon="weui:email-filled"></hd-icon>
+            <span class="name">email-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:email-outlined')" title="Click to copy">
+            <hd-icon icon="weui:email-outlined"></hd-icon>
+            <span class="name">email-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:error-filled')" title="Click to copy">
+            <hd-icon icon="weui:error-filled"></hd-icon>
+            <span class="name">error-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:error-outlined')" title="Click to copy">
+            <hd-icon icon="weui:error-outlined"></hd-icon>
+            <span class="name">error-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:eyes-off-filled')" title="Click to copy">
+            <hd-icon icon="weui:eyes-off-filled"></hd-icon>
+            <span class="name">eyes-off-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:eyes-off-outlined')" title="Click to copy">
+            <hd-icon icon="weui:eyes-off-outlined"></hd-icon>
+            <span class="name">eyes-off-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:eyes-on-filled')" title="Click to copy">
+            <hd-icon icon="weui:eyes-on-filled"></hd-icon>
+            <span class="name">eyes-on-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:eyes-on-outlined')" title="Click to copy">
+            <hd-icon icon="weui:eyes-on-outlined"></hd-icon>
+            <span class="name">eyes-on-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:folder-filled')" title="Click to copy">
+            <hd-icon icon="weui:folder-filled"></hd-icon>
+            <span class="name">folder-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:folder-outlined')" title="Click to copy">
+            <hd-icon icon="weui:folder-outlined"></hd-icon>
+            <span class="name">folder-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:group-detail-filled')" title="Click to copy">
+            <hd-icon icon="weui:group-detail-filled"></hd-icon>
+            <span class="name">group-detail-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:group-detail-outlined')" title="Click to copy">
+            <hd-icon icon="weui:group-detail-outlined"></hd-icon>
+            <span class="name">group-detail-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:help-filled')" title="Click to copy">
+            <hd-icon icon="weui:help-filled"></hd-icon>
+            <span class="name">help-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:help-outlined')" title="Click to copy">
+            <hd-icon icon="weui:help-outlined"></hd-icon>
+            <span class="name">help-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:home-filled')" title="Click to copy">
+            <hd-icon icon="weui:home-filled"></hd-icon>
+            <span class="name">home-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:home-outlined')" title="Click to copy">
+            <hd-icon icon="weui:home-outlined"></hd-icon>
+            <span class="name">home-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:imac-filled')" title="Click to copy">
+            <hd-icon icon="weui:imac-filled"></hd-icon>
+            <span class="name">imac-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:imac-outlined')" title="Click to copy">
+            <hd-icon icon="weui:imac-outlined"></hd-icon>
+            <span class="name">imac-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:info-filled')" title="Click to copy">
+            <hd-icon icon="weui:info-filled"></hd-icon>
+            <span class="name">info-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:info-outlined')" title="Click to copy">
+            <hd-icon icon="weui:info-outlined"></hd-icon>
+            <span class="name">info-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:keyboard-filled')" title="Click to copy">
+            <hd-icon icon="weui:keyboard-filled"></hd-icon>
+            <span class="name">keyboard-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:keyboard-outlined')" title="Click to copy">
+            <hd-icon icon="weui:keyboard-outlined"></hd-icon>
+            <span class="name">keyboard-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:like-filled')" title="Click to copy">
+            <hd-icon icon="weui:like-filled"></hd-icon>
+            <span class="name">like-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:like-outlined')" title="Click to copy">
+            <hd-icon icon="weui:like-outlined"></hd-icon>
+            <span class="name">like-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:link-filled')" title="Click to copy">
+            <hd-icon icon="weui:link-filled"></hd-icon>
+            <span class="name">link-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:link-outlined')" title="Click to copy">
+            <hd-icon icon="weui:link-outlined"></hd-icon>
+            <span class="name">link-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:location-filled')" title="Click to copy">
+            <hd-icon icon="weui:location-filled"></hd-icon>
+            <span class="name">location-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:location-outlined')" title="Click to copy">
+            <hd-icon icon="weui:location-outlined"></hd-icon>
+            <span class="name">location-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:lock-filled')" title="Click to copy">
+            <hd-icon icon="weui:lock-filled"></hd-icon>
+            <span class="name">lock-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:lock-outlined')" title="Click to copy">
+            <hd-icon icon="weui:lock-outlined"></hd-icon>
+            <span class="name">lock-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:max-window-filled')" title="Click to copy">
+            <hd-icon icon="weui:max-window-filled"></hd-icon>
+            <span class="name">max-window-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:max-window-outlined')" title="Click to copy">
+            <hd-icon icon="weui:max-window-outlined"></hd-icon>
+            <span class="name">max-window-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:me-filled')" title="Click to copy">
+            <hd-icon icon="weui:me-filled"></hd-icon>
+            <span class="name">me-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:me-outlined')" title="Click to copy">
+            <hd-icon icon="weui:me-outlined"></hd-icon>
+            <span class="name">me-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:mike-filled')" title="Click to copy">
+            <hd-icon icon="weui:mike-filled"></hd-icon>
+            <span class="name">mike-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:mike-outlined')" title="Click to copy">
+            <hd-icon icon="weui:mike-outlined"></hd-icon>
+            <span class="name">mike-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:mike2-filled')" title="Click to copy">
+            <hd-icon icon="weui:mike2-filled"></hd-icon>
+            <span class="name">mike2-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:mike2-outlined')" title="Click to copy">
+            <hd-icon icon="weui:mike2-outlined"></hd-icon>
+            <span class="name">mike2-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:mobile-contacts-filled')" title="Click to copy">
+            <hd-icon icon="weui:mobile-contacts-filled"></hd-icon>
+            <span class="name">mobile-contacts-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:mobile-contacts-outlined')" title="Click to copy">
+            <hd-icon icon="weui:mobile-contacts-outlined"></hd-icon>
+            <span class="name">mobile-contacts-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:more-filled')" title="Click to copy">
+            <hd-icon icon="weui:more-filled"></hd-icon>
+            <span class="name">more-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:more-outlined')" title="Click to copy">
+            <hd-icon icon="weui:more-outlined"></hd-icon>
+            <span class="name">more-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:more2-filled')" title="Click to copy">
+            <hd-icon icon="weui:more2-filled"></hd-icon>
+            <span class="name">more2-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:more2-outlined')" title="Click to copy">
+            <hd-icon icon="weui:more2-outlined"></hd-icon>
+            <span class="name">more2-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:mosaic-filled')" title="Click to copy">
+            <hd-icon icon="weui:mosaic-filled"></hd-icon>
+            <span class="name">mosaic-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:mosaic-outlined')" title="Click to copy">
+            <hd-icon icon="weui:mosaic-outlined"></hd-icon>
+            <span class="name">mosaic-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:music-filled')" title="Click to copy">
+            <hd-icon icon="weui:music-filled"></hd-icon>
+            <span class="name">music-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:music-off-filled')" title="Click to copy">
+            <hd-icon icon="weui:music-off-filled"></hd-icon>
+            <span class="name">music-off-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:music-off-outlined')" title="Click to copy">
+            <hd-icon icon="weui:music-off-outlined"></hd-icon>
+            <span class="name">music-off-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:music-outlined')" title="Click to copy">
+            <hd-icon icon="weui:music-outlined"></hd-icon>
+            <span class="name">music-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:note-filled')" title="Click to copy">
+            <hd-icon icon="weui:note-filled"></hd-icon>
+            <span class="name">note-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:note-outlined')" title="Click to copy">
+            <hd-icon icon="weui:note-outlined"></hd-icon>
+            <span class="name">note-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:pad-filled')" title="Click to copy">
+            <hd-icon icon="weui:pad-filled"></hd-icon>
+            <span class="name">pad-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:pad-outlined')" title="Click to copy">
+            <hd-icon icon="weui:pad-outlined"></hd-icon>
+            <span class="name">pad-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:pause-filled')" title="Click to copy">
+            <hd-icon icon="weui:pause-filled"></hd-icon>
+            <span class="name">pause-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:pause-outlined')" title="Click to copy">
+            <hd-icon icon="weui:pause-outlined"></hd-icon>
+            <span class="name">pause-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:pencil-filled')" title="Click to copy">
+            <hd-icon icon="weui:pencil-filled"></hd-icon>
+            <span class="name">pencil-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:pencil-outlined')" title="Click to copy">
+            <hd-icon icon="weui:pencil-outlined"></hd-icon>
+            <span class="name">pencil-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:photo-wall-filled')" title="Click to copy">
+            <hd-icon icon="weui:photo-wall-filled"></hd-icon>
+            <span class="name">photo-wall-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:photo-wall-outlined')" title="Click to copy">
+            <hd-icon icon="weui:photo-wall-outlined"></hd-icon>
+            <span class="name">photo-wall-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:play-filled')" title="Click to copy">
+            <hd-icon icon="weui:play-filled"></hd-icon>
+            <span class="name">play-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:play-outlined')" title="Click to copy">
+            <hd-icon icon="weui:play-outlined"></hd-icon>
+            <span class="name">play-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:play2-filled')" title="Click to copy">
+            <hd-icon icon="weui:play2-filled"></hd-icon>
+            <span class="name">play2-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:play2-outlined')" title="Click to copy">
+            <hd-icon icon="weui:play2-outlined"></hd-icon>
+            <span class="name">play2-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:previous-filled')" title="Click to copy">
+            <hd-icon icon="weui:previous-filled"></hd-icon>
+            <span class="name">previous-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:previous-outlined')" title="Click to copy">
+            <hd-icon icon="weui:previous-outlined"></hd-icon>
+            <span class="name">previous-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:previous2-filled')" title="Click to copy">
+            <hd-icon icon="weui:previous2-filled"></hd-icon>
+            <span class="name">previous2-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:previous2-outlined')" title="Click to copy">
+            <hd-icon icon="weui:previous2-outlined"></hd-icon>
+            <span class="name">previous2-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:qr-code-filled')" title="Click to copy">
+            <hd-icon icon="weui:qr-code-filled"></hd-icon>
+            <span class="name">qr-code-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:qr-code-outlined')" title="Click to copy">
+            <hd-icon icon="weui:qr-code-outlined"></hd-icon>
+            <span class="name">qr-code-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:refresh-filled')" title="Click to copy">
+            <hd-icon icon="weui:refresh-filled"></hd-icon>
+            <span class="name">refresh-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:refresh-outlined')" title="Click to copy">
+            <hd-icon icon="weui:refresh-outlined"></hd-icon>
+            <span class="name">refresh-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:report-problem-filled')" title="Click to copy">
+            <hd-icon icon="weui:report-problem-filled"></hd-icon>
+            <span class="name">report-problem-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:report-problem-outlined')" title="Click to copy">
+            <hd-icon icon="weui:report-problem-outlined"></hd-icon>
+            <span class="name">report-problem-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:search-filled')" title="Click to copy">
+            <hd-icon icon="weui:search-filled"></hd-icon>
+            <span class="name">search-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:search-outlined')" title="Click to copy">
+            <hd-icon icon="weui:search-outlined"></hd-icon>
+            <span class="name">search-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:sending-filled')" title="Click to copy">
+            <hd-icon icon="weui:sending-filled"></hd-icon>
+            <span class="name">sending-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:sending-outlined')" title="Click to copy">
+            <hd-icon icon="weui:sending-outlined"></hd-icon>
+            <span class="name">sending-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:setting-filled')" title="Click to copy">
+            <hd-icon icon="weui:setting-filled"></hd-icon>
+            <span class="name">setting-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:setting-outlined')" title="Click to copy">
+            <hd-icon icon="weui:setting-outlined"></hd-icon>
+            <span class="name">setting-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:share-filled')" title="Click to copy">
+            <hd-icon icon="weui:share-filled"></hd-icon>
+            <span class="name">share-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:share-outlined')" title="Click to copy">
+            <hd-icon icon="weui:share-outlined"></hd-icon>
+            <span class="name">share-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:shop-filled')" title="Click to copy">
+            <hd-icon icon="weui:shop-filled"></hd-icon>
+            <span class="name">shop-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:shop-outlined')" title="Click to copy">
+            <hd-icon icon="weui:shop-outlined"></hd-icon>
+            <span class="name">shop-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:star-filled')" title="Click to copy">
+            <hd-icon icon="weui:star-filled"></hd-icon>
+            <span class="name">star-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:star-outlined')" title="Click to copy">
+            <hd-icon icon="weui:star-outlined"></hd-icon>
+            <span class="name">star-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:sticker-filled')" title="Click to copy">
+            <hd-icon icon="weui:sticker-filled"></hd-icon>
+            <span class="name">sticker-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:sticker-outlined')" title="Click to copy">
+            <hd-icon icon="weui:sticker-outlined"></hd-icon>
+            <span class="name">sticker-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:tag-filled')" title="Click to copy">
+            <hd-icon icon="weui:tag-filled"></hd-icon>
+            <span class="name">tag-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:tag-outlined')" title="Click to copy">
+            <hd-icon icon="weui:tag-outlined"></hd-icon>
+            <span class="name">tag-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:text-filled')" title="Click to copy">
+            <hd-icon icon="weui:text-filled"></hd-icon>
+            <span class="name">text-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:text-outlined')" title="Click to copy">
+            <hd-icon icon="weui:text-outlined"></hd-icon>
+            <span class="name">text-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:time-filled')" title="Click to copy">
+            <hd-icon icon="weui:time-filled"></hd-icon>
+            <span class="name">time-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:time-outlined')" title="Click to copy">
+            <hd-icon icon="weui:time-outlined"></hd-icon>
+            <span class="name">time-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:transfer-filled')" title="Click to copy">
+            <hd-icon icon="weui:transfer-filled"></hd-icon>
+            <span class="name">transfer-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:transfer-outlined')" title="Click to copy">
+            <hd-icon icon="weui:transfer-outlined"></hd-icon>
+            <span class="name">transfer-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:transfer-text-filled')" title="Click to copy">
+            <hd-icon icon="weui:transfer-text-filled"></hd-icon>
+            <span class="name">transfer-text-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:transfer-text-outlined')" title="Click to copy">
+            <hd-icon icon="weui:transfer-text-outlined"></hd-icon>
+            <span class="name">transfer-text-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:transfer2-filled')" title="Click to copy">
+            <hd-icon icon="weui:transfer2-filled"></hd-icon>
+            <span class="name">transfer2-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:transfer2-outlined')" title="Click to copy">
+            <hd-icon icon="weui:transfer2-outlined"></hd-icon>
+            <span class="name">transfer2-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:tv-filled')" title="Click to copy">
+            <hd-icon icon="weui:tv-filled"></hd-icon>
+            <span class="name">tv-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:tv-outlined')" title="Click to copy">
+            <hd-icon icon="weui:tv-outlined"></hd-icon>
+            <span class="name">tv-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:video-call-filled')" title="Click to copy">
+            <hd-icon icon="weui:video-call-filled"></hd-icon>
+            <span class="name">video-call-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:video-call-outlined')" title="Click to copy">
+            <hd-icon icon="weui:video-call-outlined"></hd-icon>
+            <span class="name">video-call-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:voice-filled')" title="Click to copy">
+            <hd-icon icon="weui:voice-filled"></hd-icon>
+            <span class="name">voice-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:voice-outlined')" title="Click to copy">
+            <hd-icon icon="weui:voice-outlined"></hd-icon>
+            <span class="name">voice-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:volume-down-filled')" title="Click to copy">
+            <hd-icon icon="weui:volume-down-filled"></hd-icon>
+            <span class="name">volume-down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:volume-down-outlined')" title="Click to copy">
+            <hd-icon icon="weui:volume-down-outlined"></hd-icon>
+            <span class="name">volume-down-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:volume-off-filled')" title="Click to copy">
+            <hd-icon icon="weui:volume-off-filled"></hd-icon>
+            <span class="name">volume-off-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:volume-off-outlined')" title="Click to copy">
+            <hd-icon icon="weui:volume-off-outlined"></hd-icon>
+            <span class="name">volume-off-outlined</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:volume-up-filled')" title="Click to copy">
+            <hd-icon icon="weui:volume-up-filled"></hd-icon>
+            <span class="name">volume-up-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('weui:volume-up-outlined')" title="Click to copy">
+            <hd-icon icon="weui:volume-up-outlined"></hd-icon>
+            <span class="name">volume-up-outlined</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

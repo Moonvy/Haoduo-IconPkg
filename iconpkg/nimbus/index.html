@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nimbus - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>nimbus <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(140)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('nimbus:accordion')" title="Click to copy">
+            <hd-icon icon="nimbus:accordion"></hd-icon>
+            <span class="name">accordion</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:align-center')" title="Click to copy">
+            <hd-icon icon="nimbus:align-center"></hd-icon>
+            <span class="name">align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:align-left')" title="Click to copy">
+            <hd-icon icon="nimbus:align-left"></hd-icon>
+            <span class="name">align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:align-right')" title="Click to copy">
+            <hd-icon icon="nimbus:align-right"></hd-icon>
+            <span class="name">align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:apps')" title="Click to copy">
+            <hd-icon icon="nimbus:apps"></hd-icon>
+            <span class="name">apps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:archive')" title="Click to copy">
+            <hd-icon icon="nimbus:archive"></hd-icon>
+            <span class="name">archive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:arrow-left')" title="Click to copy">
+            <hd-icon icon="nimbus:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:arrow-right')" title="Click to copy">
+            <hd-icon icon="nimbus:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:arrows-horizontal')" title="Click to copy">
+            <hd-icon icon="nimbus:arrows-horizontal"></hd-icon>
+            <span class="name">arrows-horizontal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:arrows-vertical')" title="Click to copy">
+            <hd-icon icon="nimbus:arrows-vertical"></hd-icon>
+            <span class="name">arrows-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:backspace')" title="Click to copy">
+            <hd-icon icon="nimbus:backspace"></hd-icon>
+            <span class="name">backspace</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:barcode')" title="Click to copy">
+            <hd-icon icon="nimbus:barcode"></hd-icon>
+            <span class="name">barcode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:bold')" title="Click to copy">
+            <hd-icon icon="nimbus:bold"></hd-icon>
+            <span class="name">bold</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:box-packed')" title="Click to copy">
+            <hd-icon icon="nimbus:box-packed"></hd-icon>
+            <span class="name">box-packed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:box-unpacked')" title="Click to copy">
+            <hd-icon icon="nimbus:box-unpacked"></hd-icon>
+            <span class="name">box-unpacked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:briefcase')" title="Click to copy">
+            <hd-icon icon="nimbus:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:browser')" title="Click to copy">
+            <hd-icon icon="nimbus:browser"></hd-icon>
+            <span class="name">browser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:browser-search')" title="Click to copy">
+            <hd-icon icon="nimbus:browser-search"></hd-icon>
+            <span class="name">browser-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:calendar')" title="Click to copy">
+            <hd-icon icon="nimbus:calendar"></hd-icon>
+            <span class="name">calendar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:calendar-days')" title="Click to copy">
+            <hd-icon icon="nimbus:calendar-days"></hd-icon>
+            <span class="name">calendar-days</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:camera')" title="Click to copy">
+            <hd-icon icon="nimbus:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:cash')" title="Click to copy">
+            <hd-icon icon="nimbus:cash"></hd-icon>
+            <span class="name">cash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:chat-dots')" title="Click to copy">
+            <hd-icon icon="nimbus:chat-dots"></hd-icon>
+            <span class="name">chat-dots</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:check')" title="Click to copy">
+            <hd-icon icon="nimbus:check"></hd-icon>
+            <span class="name">check</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:check-circle')" title="Click to copy">
+            <hd-icon icon="nimbus:check-circle"></hd-icon>
+            <span class="name">check-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:chevron-down')" title="Click to copy">
+            <hd-icon icon="nimbus:chevron-down"></hd-icon>
+            <span class="name">chevron-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:chevron-left')" title="Click to copy">
+            <hd-icon icon="nimbus:chevron-left"></hd-icon>
+            <span class="name">chevron-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:chevron-right')" title="Click to copy">
+            <hd-icon icon="nimbus:chevron-right"></hd-icon>
+            <span class="name">chevron-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:chevron-up')" title="Click to copy">
+            <hd-icon icon="nimbus:chevron-up"></hd-icon>
+            <span class="name">chevron-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:christ')" title="Click to copy">
+            <hd-icon icon="nimbus:christ"></hd-icon>
+            <span class="name">christ</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:clock')" title="Click to copy">
+            <hd-icon icon="nimbus:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:close')" title="Click to copy">
+            <hd-icon icon="nimbus:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:code')" title="Click to copy">
+            <hd-icon icon="nimbus:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:cog')" title="Click to copy">
+            <hd-icon icon="nimbus:cog"></hd-icon>
+            <span class="name">cog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:color-palette')" title="Click to copy">
+            <hd-icon icon="nimbus:color-palette"></hd-icon>
+            <span class="name">color-palette</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:copy')" title="Click to copy">
+            <hd-icon icon="nimbus:copy"></hd-icon>
+            <span class="name">copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:credit-card')" title="Click to copy">
+            <hd-icon icon="nimbus:credit-card"></hd-icon>
+            <span class="name">credit-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:desktop')" title="Click to copy">
+            <hd-icon icon="nimbus:desktop"></hd-icon>
+            <span class="name">desktop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:discount-circle')" title="Click to copy">
+            <hd-icon icon="nimbus:discount-circle"></hd-icon>
+            <span class="name">discount-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:diskette')" title="Click to copy">
+            <hd-icon icon="nimbus:diskette"></hd-icon>
+            <span class="name">diskette</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:download')" title="Click to copy">
+            <hd-icon icon="nimbus:download"></hd-icon>
+            <span class="name">download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:drag')" title="Click to copy">
+            <hd-icon icon="nimbus:drag"></hd-icon>
+            <span class="name">drag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:drag-dots')" title="Click to copy">
+            <hd-icon icon="nimbus:drag-dots"></hd-icon>
+            <span class="name">drag-dots</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:drink')" title="Click to copy">
+            <hd-icon icon="nimbus:drink"></hd-icon>
+            <span class="name">drink</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:drop')" title="Click to copy">
+            <hd-icon icon="nimbus:drop"></hd-icon>
+            <span class="name">drop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:drums')" title="Click to copy">
+            <hd-icon icon="nimbus:drums"></hd-icon>
+            <span class="name">drums</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:duplicate')" title="Click to copy">
+            <hd-icon icon="nimbus:duplicate"></hd-icon>
+            <span class="name">duplicate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:ecosystem')" title="Click to copy">
+            <hd-icon icon="nimbus:ecosystem"></hd-icon>
+            <span class="name">ecosystem</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:edit')" title="Click to copy">
+            <hd-icon icon="nimbus:edit"></hd-icon>
+            <span class="name">edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:ellipsis')" title="Click to copy">
+            <hd-icon icon="nimbus:ellipsis"></hd-icon>
+            <span class="name">ellipsis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:exclamation-circle')" title="Click to copy">
+            <hd-icon icon="nimbus:exclamation-circle"></hd-icon>
+            <span class="name">exclamation-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:exclamation-triangle')" title="Click to copy">
+            <hd-icon icon="nimbus:exclamation-triangle"></hd-icon>
+            <span class="name">exclamation-triangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:external-link')" title="Click to copy">
+            <hd-icon icon="nimbus:external-link"></hd-icon>
+            <span class="name">external-link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:eye')" title="Click to copy">
+            <hd-icon icon="nimbus:eye"></hd-icon>
+            <span class="name">eye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:eye-off')" title="Click to copy">
+            <hd-icon icon="nimbus:eye-off"></hd-icon>
+            <span class="name">eye-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:file')" title="Click to copy">
+            <hd-icon icon="nimbus:file"></hd-icon>
+            <span class="name">file</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:file-alt')" title="Click to copy">
+            <hd-icon icon="nimbus:file-alt"></hd-icon>
+            <span class="name">file-alt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:fingerprint')" title="Click to copy">
+            <hd-icon icon="nimbus:fingerprint"></hd-icon>
+            <span class="name">fingerprint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:fire')" title="Click to copy">
+            <hd-icon icon="nimbus:fire"></hd-icon>
+            <span class="name">fire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:flag')" title="Click to copy">
+            <hd-icon icon="nimbus:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:font')" title="Click to copy">
+            <hd-icon icon="nimbus:font"></hd-icon>
+            <span class="name">font</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:forbidden')" title="Click to copy">
+            <hd-icon icon="nimbus:forbidden"></hd-icon>
+            <span class="name">forbidden</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:gift-box')" title="Click to copy">
+            <hd-icon icon="nimbus:gift-box"></hd-icon>
+            <span class="name">gift-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:gift-card')" title="Click to copy">
+            <hd-icon icon="nimbus:gift-card"></hd-icon>
+            <span class="name">gift-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:glasses')" title="Click to copy">
+            <hd-icon icon="nimbus:glasses"></hd-icon>
+            <span class="name">glasses</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:globe')" title="Click to copy">
+            <hd-icon icon="nimbus:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:guitar')" title="Click to copy">
+            <hd-icon icon="nimbus:guitar"></hd-icon>
+            <span class="name">guitar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:heart')" title="Click to copy">
+            <hd-icon icon="nimbus:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:history')" title="Click to copy">
+            <hd-icon icon="nimbus:history"></hd-icon>
+            <span class="name">history</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:home')" title="Click to copy">
+            <hd-icon icon="nimbus:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:infinite')" title="Click to copy">
+            <hd-icon icon="nimbus:infinite"></hd-icon>
+            <span class="name">infinite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:info-circle')" title="Click to copy">
+            <hd-icon icon="nimbus:info-circle"></hd-icon>
+            <span class="name">info-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:invoice')" title="Click to copy">
+            <hd-icon icon="nimbus:invoice"></hd-icon>
+            <span class="name">invoice</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:italic')" title="Click to copy">
+            <hd-icon icon="nimbus:italic"></hd-icon>
+            <span class="name">italic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:life-ring')" title="Click to copy">
+            <hd-icon icon="nimbus:life-ring"></hd-icon>
+            <span class="name">life-ring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:lightbulb')" title="Click to copy">
+            <hd-icon icon="nimbus:lightbulb"></hd-icon>
+            <span class="name">lightbulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:link')" title="Click to copy">
+            <hd-icon icon="nimbus:link"></hd-icon>
+            <span class="name">link</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:link-off')" title="Click to copy">
+            <hd-icon icon="nimbus:link-off"></hd-icon>
+            <span class="name">link-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:list')" title="Click to copy">
+            <hd-icon icon="nimbus:list"></hd-icon>
+            <span class="name">list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:location')" title="Click to copy">
+            <hd-icon icon="nimbus:location"></hd-icon>
+            <span class="name">location</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:lock')" title="Click to copy">
+            <hd-icon icon="nimbus:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:lock-open')" title="Click to copy">
+            <hd-icon icon="nimbus:lock-open"></hd-icon>
+            <span class="name">lock-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:log-out')" title="Click to copy">
+            <hd-icon icon="nimbus:log-out"></hd-icon>
+            <span class="name">log-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:mail')" title="Click to copy">
+            <hd-icon icon="nimbus:mail"></hd-icon>
+            <span class="name">mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:marketing')" title="Click to copy">
+            <hd-icon icon="nimbus:marketing"></hd-icon>
+            <span class="name">marketing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:mate')" title="Click to copy">
+            <hd-icon icon="nimbus:mate"></hd-icon>
+            <span class="name">mate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:menu')" title="Click to copy">
+            <hd-icon icon="nimbus:menu"></hd-icon>
+            <span class="name">menu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:mobile')" title="Click to copy">
+            <hd-icon icon="nimbus:mobile"></hd-icon>
+            <span class="name">mobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:money')" title="Click to copy">
+            <hd-icon icon="nimbus:money"></hd-icon>
+            <span class="name">money</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:moon')" title="Click to copy">
+            <hd-icon icon="nimbus:moon"></hd-icon>
+            <span class="name">moon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:notification')" title="Click to copy">
+            <hd-icon icon="nimbus:notification"></hd-icon>
+            <span class="name">notification</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:obelisk')" title="Click to copy">
+            <hd-icon icon="nimbus:obelisk"></hd-icon>
+            <span class="name">obelisk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:ordered-list')" title="Click to copy">
+            <hd-icon icon="nimbus:ordered-list"></hd-icon>
+            <span class="name">ordered-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:pencil')" title="Click to copy">
+            <hd-icon icon="nimbus:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:peso')" title="Click to copy">
+            <hd-icon icon="nimbus:peso"></hd-icon>
+            <span class="name">peso</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:picture')" title="Click to copy">
+            <hd-icon icon="nimbus:picture"></hd-icon>
+            <span class="name">picture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:pix')" title="Click to copy">
+            <hd-icon icon="nimbus:pix"></hd-icon>
+            <span class="name">pix</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:planet')" title="Click to copy">
+            <hd-icon icon="nimbus:planet"></hd-icon>
+            <span class="name">planet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:plus-circle')" title="Click to copy">
+            <hd-icon icon="nimbus:plus-circle"></hd-icon>
+            <span class="name">plus-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:printer')" title="Click to copy">
+            <hd-icon icon="nimbus:printer"></hd-icon>
+            <span class="name">printer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:pyramid')" title="Click to copy">
+            <hd-icon icon="nimbus:pyramid"></hd-icon>
+            <span class="name">pyramid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:qr-code')" title="Click to copy">
+            <hd-icon icon="nimbus:qr-code"></hd-icon>
+            <span class="name">qr-code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:question-circle')" title="Click to copy">
+            <hd-icon icon="nimbus:question-circle"></hd-icon>
+            <span class="name">question-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:real')" title="Click to copy">
+            <hd-icon icon="nimbus:real"></hd-icon>
+            <span class="name">real</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:redo')" title="Click to copy">
+            <hd-icon icon="nimbus:redo"></hd-icon>
+            <span class="name">redo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:remove-format')" title="Click to copy">
+            <hd-icon icon="nimbus:remove-format"></hd-icon>
+            <span class="name">remove-format</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:rocket')" title="Click to copy">
+            <hd-icon icon="nimbus:rocket"></hd-icon>
+            <span class="name">rocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:scooter')" title="Click to copy">
+            <hd-icon icon="nimbus:scooter"></hd-icon>
+            <span class="name">scooter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:search')" title="Click to copy">
+            <hd-icon icon="nimbus:search"></hd-icon>
+            <span class="name">search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:share')" title="Click to copy">
+            <hd-icon icon="nimbus:share"></hd-icon>
+            <span class="name">share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:shopping-cart')" title="Click to copy">
+            <hd-icon icon="nimbus:shopping-cart"></hd-icon>
+            <span class="name">shopping-cart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:shot')" title="Click to copy">
+            <hd-icon icon="nimbus:shot"></hd-icon>
+            <span class="name">shot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:size-height')" title="Click to copy">
+            <hd-icon icon="nimbus:size-height"></hd-icon>
+            <span class="name">size-height</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:size-width')" title="Click to copy">
+            <hd-icon icon="nimbus:size-width"></hd-icon>
+            <span class="name">size-width</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:sliders')" title="Click to copy">
+            <hd-icon icon="nimbus:sliders"></hd-icon>
+            <span class="name">sliders</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:star')" title="Click to copy">
+            <hd-icon icon="nimbus:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:stats')" title="Click to copy">
+            <hd-icon icon="nimbus:stats"></hd-icon>
+            <span class="name">stats</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:sticky-note')" title="Click to copy">
+            <hd-icon icon="nimbus:sticky-note"></hd-icon>
+            <span class="name">sticky-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:stop')" title="Click to copy">
+            <hd-icon icon="nimbus:stop"></hd-icon>
+            <span class="name">stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:store')" title="Click to copy">
+            <hd-icon icon="nimbus:store"></hd-icon>
+            <span class="name">store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:sun')" title="Click to copy">
+            <hd-icon icon="nimbus:sun"></hd-icon>
+            <span class="name">sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:tag')" title="Click to copy">
+            <hd-icon icon="nimbus:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:telephone')" title="Click to copy">
+            <hd-icon icon="nimbus:telephone"></hd-icon>
+            <span class="name">telephone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:text-size')" title="Click to copy">
+            <hd-icon icon="nimbus:text-size"></hd-icon>
+            <span class="name">text-size</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:tiendanube')" title="Click to copy">
+            <hd-icon icon="nimbus:tiendanube"></hd-icon>
+            <span class="name">tiendanube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:tools')" title="Click to copy">
+            <hd-icon icon="nimbus:tools"></hd-icon>
+            <span class="name">tools</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:transfer-peso')" title="Click to copy">
+            <hd-icon icon="nimbus:transfer-peso"></hd-icon>
+            <span class="name">transfer-peso</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:transfer-real')" title="Click to copy">
+            <hd-icon icon="nimbus:transfer-real"></hd-icon>
+            <span class="name">transfer-real</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:trash')" title="Click to copy">
+            <hd-icon icon="nimbus:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:truck')" title="Click to copy">
+            <hd-icon icon="nimbus:truck"></hd-icon>
+            <span class="name">truck</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:undo')" title="Click to copy">
+            <hd-icon icon="nimbus:undo"></hd-icon>
+            <span class="name">undo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:university')" title="Click to copy">
+            <hd-icon icon="nimbus:university"></hd-icon>
+            <span class="name">university</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:upload')" title="Click to copy">
+            <hd-icon icon="nimbus:upload"></hd-icon>
+            <span class="name">upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:user')" title="Click to copy">
+            <hd-icon icon="nimbus:user"></hd-icon>
+            <span class="name">user</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:user-circle')" title="Click to copy">
+            <hd-icon icon="nimbus:user-circle"></hd-icon>
+            <span class="name">user-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:user-group')" title="Click to copy">
+            <hd-icon icon="nimbus:user-group"></hd-icon>
+            <span class="name">user-group</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:vertical-stacks')" title="Click to copy">
+            <hd-icon icon="nimbus:vertical-stacks"></hd-icon>
+            <span class="name">vertical-stacks</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:volume')" title="Click to copy">
+            <hd-icon icon="nimbus:volume"></hd-icon>
+            <span class="name">volume</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:wallet')" title="Click to copy">
+            <hd-icon icon="nimbus:wallet"></hd-icon>
+            <span class="name">wallet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('nimbus:whatsapp')" title="Click to copy">
+            <hd-icon icon="nimbus:whatsapp"></hd-icon>
+            <span class="name">whatsapp</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

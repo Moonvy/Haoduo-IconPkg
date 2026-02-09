@@ -1,0 +1,15 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAACF4kZAYMYThr8IrJbWCdVJzljNURFRTJENEY4d2WGJjNkp1dJVHKFU3aEU1ZlNmWGNEJzFHRYTi8+ugMkAQEhBAEJESADDwMDAQEBIVYFXAHfAcABMiVNvwYTAQkWGPwNDjPLBQMQImtE9wI4N3oC0QMBGRcvmwEmAQk0H2sBAg4DqgEDCQJZAYOQduWleqtmhj+6lQ9eBECS5BivnP1lrIVdFw/FnGQHSPKDaPu9/ZACT1nI6smODSxYk7BzqUAQldDXs4cQo9GLseFRlgmVYP7FO0Et4qE7gfNpTnwfawX3fnO+LxYhEWkyHH3B7dVsAaCBX/IDtpbFDuYyj49yFrpRYu+P4ioX2fLGUnKpHDbBv513GZVslUbPv4J/F/b9cqOIRb++shUWDOhB1r7COYzMaVYlbB4vwyy7r1WnZYUh28zrbIKM5bXRPQIVUZBQGclK67sZpo3+II62lJdErSL95pkvKkmVqVgzw1v7vxyXpLmePYW+bS75Y6ybjlQwkhyfdXQPjh4O5mdoMHoN1lCnUpKpn4/M6jMfumEm2+yCsQWdVRug8rZ1irNgrDqprzjTVVzPZPDWP+YKgWrLXlFCtEKtrJgQSaL0vYjkFutKPo/jPtMH7G0i5M9CuXLyS4ubxO1/e0kJbAXSejAUA+6YVcRrMRJf284Fyhdc/kfBsDsHCTmsYF6oHrdKCAAgAAZABAIQGAAAAAACAAAAFmhlcm9pY29ucy1zb2xpZC0wMS5zdmcAAAAWaGVyb2ljb25zLXNvbGlkLTAyLnN2Z/////8AAAACAAAAYUABUFFFVBAVVEEAQFUFVFAEAUAVEAQBRAQEAUBVAEFQQUURBURARQVQEUQQFBEBUFQAFFRQFQURRQRQBQAVFRRFFFUBERQUEVFVERQEABUURAFRUQBBQEARRVBABBFVBRAAAAAA";
+
+const chunks = {
+  "heroicons-solid-01.svg": new URL("./heroicons-solid-01.svg", import.meta.url).href,
+  "heroicons-solid-02.svg": new URL("./heroicons-solid-02.svg", import.meta.url).href
+};
+
+register('heroicons-solid', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

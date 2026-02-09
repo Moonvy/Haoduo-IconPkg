@@ -1,0 +1,3036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lsicon - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>lsicon <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(716)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('lsicon:add-chat-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:add-chat-filled"></hd-icon>
+            <span class="name">add-chat-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:add-chat-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:add-chat-outline"></hd-icon>
+            <span class="name">add-chat-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:add-chat-two-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:add-chat-two-filled"></hd-icon>
+            <span class="name">add-chat-two-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:add-chat-two-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:add-chat-two-outline"></hd-icon>
+            <span class="name">add-chat-two-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:add-one-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:add-one-filled"></hd-icon>
+            <span class="name">add-one-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:add-one-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:add-one-outline"></hd-icon>
+            <span class="name">add-one-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:adjust-hight-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:adjust-hight-filled"></hd-icon>
+            <span class="name">adjust-hight-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:adjust-hight-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:adjust-hight-outline"></hd-icon>
+            <span class="name">adjust-hight-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:adjust-width-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:adjust-width-filled"></hd-icon>
+            <span class="name">adjust-width-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:adjust-width-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:adjust-width-outline"></hd-icon>
+            <span class="name">adjust-width-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:align-txt-both-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:align-txt-both-filled"></hd-icon>
+            <span class="name">align-txt-both-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:align-txt-both-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:align-txt-both-outline"></hd-icon>
+            <span class="name">align-txt-both-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:align-txt-center-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:align-txt-center-filled"></hd-icon>
+            <span class="name">align-txt-center-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:align-txt-center-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:align-txt-center-outline"></hd-icon>
+            <span class="name">align-txt-center-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:align-txt-left-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:align-txt-left-filled"></hd-icon>
+            <span class="name">align-txt-left-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:align-txt-left-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:align-txt-left-outline"></hd-icon>
+            <span class="name">align-txt-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:align-txt-right-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:align-txt-right-filled"></hd-icon>
+            <span class="name">align-txt-right-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:align-txt-right-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:align-txt-right-outline"></hd-icon>
+            <span class="name">align-txt-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-dollar-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-dollar-filled"></hd-icon>
+            <span class="name">amount-dollar-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-dollar-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-dollar-outline"></hd-icon>
+            <span class="name">amount-dollar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-down-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-down-filled"></hd-icon>
+            <span class="name">amount-down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-down-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-down-outline"></hd-icon>
+            <span class="name">amount-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-down-two-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-down-two-filled"></hd-icon>
+            <span class="name">amount-down-two-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-down-two-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-down-two-outline"></hd-icon>
+            <span class="name">amount-down-two-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-up-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-up-filled"></hd-icon>
+            <span class="name">amount-up-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-up-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-up-outline"></hd-icon>
+            <span class="name">amount-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-up-two-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-up-two-filled"></hd-icon>
+            <span class="name">amount-up-two-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-up-two-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-up-two-outline"></hd-icon>
+            <span class="name">amount-up-two-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-yuan-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-yuan-filled"></hd-icon>
+            <span class="name">amount-yuan-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:amount-yuan-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:amount-yuan-outline"></hd-icon>
+            <span class="name">amount-yuan-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:annular-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:annular-filled"></hd-icon>
+            <span class="name">annular-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:annular-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:annular-outline"></hd-icon>
+            <span class="name">annular-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:anticlockwise-90-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:anticlockwise-90-filled"></hd-icon>
+            <span class="name">anticlockwise-90-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:anticlockwise-90-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:anticlockwise-90-outline"></hd-icon>
+            <span class="name">anticlockwise-90-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:apps-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:apps-filled"></hd-icon>
+            <span class="name">apps-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:apps-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:apps-outline"></hd-icon>
+            <span class="name">apps-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:area-chart-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:area-chart-filled"></hd-icon>
+            <span class="name">area-chart-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:area-chart-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:area-chart-outline"></hd-icon>
+            <span class="name">area-chart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:arrow-down-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:arrow-down-filled"></hd-icon>
+            <span class="name">arrow-down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:arrow-down-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:arrow-down-outline"></hd-icon>
+            <span class="name">arrow-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:arrow-left-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:arrow-left-filled"></hd-icon>
+            <span class="name">arrow-left-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:arrow-left-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:arrow-left-outline"></hd-icon>
+            <span class="name">arrow-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:arrow-right-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:arrow-right-filled"></hd-icon>
+            <span class="name">arrow-right-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:arrow-right-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:arrow-right-outline"></hd-icon>
+            <span class="name">arrow-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:arrow-up-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:arrow-up-filled"></hd-icon>
+            <span class="name">arrow-up-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:arrow-up-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:arrow-up-outline"></hd-icon>
+            <span class="name">arrow-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:attachments-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:attachments-filled"></hd-icon>
+            <span class="name">attachments-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:attachments-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:attachments-outline"></hd-icon>
+            <span class="name">attachments-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:back-square-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:back-square-filled"></hd-icon>
+            <span class="name">back-square-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:back-square-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:back-square-outline"></hd-icon>
+            <span class="name">back-square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:badge-new-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:badge-new-filled"></hd-icon>
+            <span class="name">badge-new-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:badge-new-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:badge-new-outline"></hd-icon>
+            <span class="name">badge-new-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:badge-promotion-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:badge-promotion-filled"></hd-icon>
+            <span class="name">badge-promotion-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:badge-promotion-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:badge-promotion-outline"></hd-icon>
+            <span class="name">badge-promotion-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:bar-code-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:bar-code-filled"></hd-icon>
+            <span class="name">bar-code-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:bar-code-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:bar-code-outline"></hd-icon>
+            <span class="name">bar-code-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:bar-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:bar-filled"></hd-icon>
+            <span class="name">bar-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:bar-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:bar-outline"></hd-icon>
+            <span class="name">bar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:basket-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:basket-filled"></hd-icon>
+            <span class="name">basket-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:basket-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:basket-outline"></hd-icon>
+            <span class="name">basket-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:batch-add-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:batch-add-filled"></hd-icon>
+            <span class="name">batch-add-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:batch-add-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:batch-add-outline"></hd-icon>
+            <span class="name">batch-add-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:batch-check-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:batch-check-filled"></hd-icon>
+            <span class="name">batch-check-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:batch-check-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:batch-check-outline"></hd-icon>
+            <span class="name">batch-check-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:bbq-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:bbq-filled"></hd-icon>
+            <span class="name">bbq-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:bbq-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:bbq-outline"></hd-icon>
+            <span class="name">bbq-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:bed-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:bed-filled"></hd-icon>
+            <span class="name">bed-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:bed-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:bed-outline"></hd-icon>
+            <span class="name">bed-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:bottom-align-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:bottom-align-filled"></hd-icon>
+            <span class="name">bottom-align-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:bottom-align-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:bottom-align-outline"></hd-icon>
+            <span class="name">bottom-align-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:building-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:building-filled"></hd-icon>
+            <span class="name">building-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:building-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:building-outline"></hd-icon>
+            <span class="name">building-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:calculator-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:calculator-filled"></hd-icon>
+            <span class="name">calculator-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:calculator-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:calculator-outline"></hd-icon>
+            <span class="name">calculator-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:calendar-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:calendar-filled"></hd-icon>
+            <span class="name">calendar-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:calendar-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:calendar-outline"></hd-icon>
+            <span class="name">calendar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:camera-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:camera-filled"></hd-icon>
+            <span class="name">camera-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:camera-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:camera-outline"></hd-icon>
+            <span class="name">camera-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:center-horizontally-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:center-horizontally-filled"></hd-icon>
+            <span class="name">center-horizontally-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:center-horizontally-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:center-horizontally-outline"></hd-icon>
+            <span class="name">center-horizontally-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:check-correct-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:check-correct-filled"></hd-icon>
+            <span class="name">check-correct-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:check-correct-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:check-correct-outline"></hd-icon>
+            <span class="name">check-correct-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:check-disabled-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:check-disabled-filled"></hd-icon>
+            <span class="name">check-disabled-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:check-disabled-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:check-disabled-outline"></hd-icon>
+            <span class="name">check-disabled-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:check-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:check-filled"></hd-icon>
+            <span class="name">check-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:check-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:check-outline"></hd-icon>
+            <span class="name">check-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:check-stand-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:check-stand-filled"></hd-icon>
+            <span class="name">check-stand-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:check-stand-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:check-stand-outline"></hd-icon>
+            <span class="name">check-stand-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:checkbox-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:checkbox-filled"></hd-icon>
+            <span class="name">checkbox-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:checkbox-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:checkbox-outline"></hd-icon>
+            <span class="name">checkbox-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:chef-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:chef-filled"></hd-icon>
+            <span class="name">chef-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:chef-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:chef-outline"></hd-icon>
+            <span class="name">chef-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:chips-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:chips-filled"></hd-icon>
+            <span class="name">chips-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:chips-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:chips-outline"></hd-icon>
+            <span class="name">chips-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-add-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-add-filled"></hd-icon>
+            <span class="name">circle-add-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-add-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-add-outline"></hd-icon>
+            <span class="name">circle-add-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-close-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-close-filled"></hd-icon>
+            <span class="name">circle-close-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-close-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-close-outline"></hd-icon>
+            <span class="name">circle-close-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-help-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-help-filled"></hd-icon>
+            <span class="name">circle-help-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-help-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-help-outline"></hd-icon>
+            <span class="name">circle-help-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-information-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-information-filled"></hd-icon>
+            <span class="name">circle-information-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-information-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-information-outline"></hd-icon>
+            <span class="name">circle-information-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-more-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-more-filled"></hd-icon>
+            <span class="name">circle-more-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-more-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-more-outline"></hd-icon>
+            <span class="name">circle-more-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-star-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-star-filled"></hd-icon>
+            <span class="name">circle-star-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-star-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-star-outline"></hd-icon>
+            <span class="name">circle-star-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-succeed-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-succeed-filled"></hd-icon>
+            <span class="name">circle-succeed-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-succeed-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-succeed-outline"></hd-icon>
+            <span class="name">circle-succeed-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-warning-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-warning-filled"></hd-icon>
+            <span class="name">circle-warning-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:circle-warning-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:circle-warning-outline"></hd-icon>
+            <span class="name">circle-warning-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:clear-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:clear-filled"></hd-icon>
+            <span class="name">clear-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:clear-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:clear-outline"></hd-icon>
+            <span class="name">clear-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:clockwise-90-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:clockwise-90-filled"></hd-icon>
+            <span class="name">clockwise-90-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:clockwise-90-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:clockwise-90-outline"></hd-icon>
+            <span class="name">clockwise-90-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:close-small-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:close-small-filled"></hd-icon>
+            <span class="name">close-small-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:close-small-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:close-small-outline"></hd-icon>
+            <span class="name">close-small-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:clothes-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:clothes-filled"></hd-icon>
+            <span class="name">clothes-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:clothes-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:clothes-outline"></hd-icon>
+            <span class="name">clothes-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:cloudy-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:cloudy-filled"></hd-icon>
+            <span class="name">cloudy-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:cloudy-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:cloudy-outline"></hd-icon>
+            <span class="name">cloudy-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:column-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:column-filled"></hd-icon>
+            <span class="name">column-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:column-line-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:column-line-filled"></hd-icon>
+            <span class="name">column-line-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:column-line-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:column-line-outline"></hd-icon>
+            <span class="name">column-line-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:column-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:column-outline"></hd-icon>
+            <span class="name">column-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:comments-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:comments-filled"></hd-icon>
+            <span class="name">comments-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:comments-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:comments-outline"></hd-icon>
+            <span class="name">comments-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:compiling-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:compiling-filled"></hd-icon>
+            <span class="name">compiling-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:compiling-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:compiling-outline"></hd-icon>
+            <span class="name">compiling-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:computer-across-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:computer-across-filled"></hd-icon>
+            <span class="name">computer-across-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:computer-across-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:computer-across-outline"></hd-icon>
+            <span class="name">computer-across-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:computer-exclamation-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:computer-exclamation-filled"></hd-icon>
+            <span class="name">computer-exclamation-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:computer-exclamation-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:computer-exclamation-outline"></hd-icon>
+            <span class="name">computer-exclamation-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:computer-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:computer-filled"></hd-icon>
+            <span class="name">computer-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:computer-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:computer-outline"></hd-icon>
+            <span class="name">computer-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:constitute-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:constitute-filled"></hd-icon>
+            <span class="name">constitute-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:constitute-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:constitute-outline"></hd-icon>
+            <span class="name">constitute-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:consume-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:consume-filled"></hd-icon>
+            <span class="name">consume-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:consume-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:consume-outline"></hd-icon>
+            <span class="name">consume-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:contract-across-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:contract-across-filled"></hd-icon>
+            <span class="name">contract-across-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:contract-across-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:contract-across-outline"></hd-icon>
+            <span class="name">contract-across-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:contract-exclamation-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:contract-exclamation-filled"></hd-icon>
+            <span class="name">contract-exclamation-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:contract-exclamation-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:contract-exclamation-outline"></hd-icon>
+            <span class="name">contract-exclamation-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:contract-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:contract-filled"></hd-icon>
+            <span class="name">contract-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:contract-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:contract-outline"></hd-icon>
+            <span class="name">contract-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:control-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:control-filled"></hd-icon>
+            <span class="name">control-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:control-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:control-outline"></hd-icon>
+            <span class="name">control-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:copy-one-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:copy-one-filled"></hd-icon>
+            <span class="name">copy-one-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:copy-one-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:copy-one-outline"></hd-icon>
+            <span class="name">copy-one-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:copy-two-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:copy-two-filled"></hd-icon>
+            <span class="name">copy-two-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:copy-two-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:copy-two-outline"></hd-icon>
+            <span class="name">copy-two-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:coupon-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:coupon-filled"></hd-icon>
+            <span class="name">coupon-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:coupon-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:coupon-outline"></hd-icon>
+            <span class="name">coupon-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:coverage-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:coverage-filled"></hd-icon>
+            <span class="name">coverage-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:coverage-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:coverage-outline"></hd-icon>
+            <span class="name">coverage-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:data-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:data-filled"></hd-icon>
+            <span class="name">data-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:data-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:data-outline"></hd-icon>
+            <span class="name">data-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:data-screen-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:data-screen-filled"></hd-icon>
+            <span class="name">data-screen-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:data-screen-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:data-screen-outline"></hd-icon>
+            <span class="name">data-screen-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:database-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:database-filled"></hd-icon>
+            <span class="name">database-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:database-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:database-outline"></hd-icon>
+            <span class="name">database-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:deal-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:deal-filled"></hd-icon>
+            <span class="name">deal-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:deal-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:deal-outline"></hd-icon>
+            <span class="name">deal-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:decimal-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:decimal-filled"></hd-icon>
+            <span class="name">decimal-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:decimal-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:decimal-outline"></hd-icon>
+            <span class="name">decimal-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:decorate-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:decorate-filled"></hd-icon>
+            <span class="name">decorate-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:decorate-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:decorate-outline"></hd-icon>
+            <span class="name">decorate-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:delete-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:delete-filled"></hd-icon>
+            <span class="name">delete-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:delete-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:delete-outline"></hd-icon>
+            <span class="name">delete-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:density-l-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:density-l-filled"></hd-icon>
+            <span class="name">density-l-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:density-l-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:density-l-outline"></hd-icon>
+            <span class="name">density-l-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:density-m-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:density-m-filled"></hd-icon>
+            <span class="name">density-m-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:density-m-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:density-m-outline"></hd-icon>
+            <span class="name">density-m-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:density-s-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:density-s-filled"></hd-icon>
+            <span class="name">density-s-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:density-s-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:density-s-outline"></hd-icon>
+            <span class="name">density-s-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:disable-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:disable-filled"></hd-icon>
+            <span class="name">disable-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:disable-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:disable-outline"></hd-icon>
+            <span class="name">disable-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:distribution-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:distribution-filled"></hd-icon>
+            <span class="name">distribution-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:distribution-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:distribution-outline"></hd-icon>
+            <span class="name">distribution-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:double-arrow-down-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:double-arrow-down-filled"></hd-icon>
+            <span class="name">double-arrow-down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:double-arrow-down-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:double-arrow-down-outline"></hd-icon>
+            <span class="name">double-arrow-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:double-arrow-left-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:double-arrow-left-filled"></hd-icon>
+            <span class="name">double-arrow-left-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:double-arrow-left-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:double-arrow-left-outline"></hd-icon>
+            <span class="name">double-arrow-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:double-arrow-right-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:double-arrow-right-filled"></hd-icon>
+            <span class="name">double-arrow-right-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:double-arrow-right-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:double-arrow-right-outline"></hd-icon>
+            <span class="name">double-arrow-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:double-arrow-up-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:double-arrow-up-filled"></hd-icon>
+            <span class="name">double-arrow-up-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:double-arrow-up-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:double-arrow-up-outline"></hd-icon>
+            <span class="name">double-arrow-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:down-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:down-filled"></hd-icon>
+            <span class="name">down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:down-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:down-outline"></hd-icon>
+            <span class="name">down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:download-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:download-filled"></hd-icon>
+            <span class="name">download-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:download-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:download-outline"></hd-icon>
+            <span class="name">download-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:drag-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:drag-filled"></hd-icon>
+            <span class="name">drag-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:drag-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:drag-outline"></hd-icon>
+            <span class="name">drag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:earth-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:earth-filled"></hd-icon>
+            <span class="name">earth-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:earth-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:earth-outline"></hd-icon>
+            <span class="name">earth-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:edit-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:edit-filled"></hd-icon>
+            <span class="name">edit-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:edit-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:edit-outline"></hd-icon>
+            <span class="name">edit-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:education-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:education-filled"></hd-icon>
+            <span class="name">education-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:education-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:education-outline"></hd-icon>
+            <span class="name">education-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:email-send-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:email-send-filled"></hd-icon>
+            <span class="name">email-send-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:email-send-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:email-send-outline"></hd-icon>
+            <span class="name">email-send-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:equipment-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:equipment-filled"></hd-icon>
+            <span class="name">equipment-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:equipment-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:equipment-outline"></hd-icon>
+            <span class="name">equipment-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:exclamation-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:exclamation-filled"></hd-icon>
+            <span class="name">exclamation-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:exclamation-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:exclamation-outline"></hd-icon>
+            <span class="name">exclamation-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:export-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:export-filled"></hd-icon>
+            <span class="name">export-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:export-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:export-outline"></hd-icon>
+            <span class="name">export-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-avi-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-avi-filled"></hd-icon>
+            <span class="name">file-avi-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-avi-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-avi-outline"></hd-icon>
+            <span class="name">file-avi-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-cdr-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-cdr-filled"></hd-icon>
+            <span class="name">file-cdr-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-cdr-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-cdr-outline"></hd-icon>
+            <span class="name">file-cdr-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-csv-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-csv-filled"></hd-icon>
+            <span class="name">file-csv-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-csv-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-csv-outline"></hd-icon>
+            <span class="name">file-csv-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-doc-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-doc-filled"></hd-icon>
+            <span class="name">file-doc-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-doc-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-doc-outline"></hd-icon>
+            <span class="name">file-doc-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-export-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-export-filled"></hd-icon>
+            <span class="name">file-export-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-export-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-export-outline"></hd-icon>
+            <span class="name">file-export-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-import-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-import-filled"></hd-icon>
+            <span class="name">file-import-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-import-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-import-outline"></hd-icon>
+            <span class="name">file-import-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-jpg-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-jpg-filled"></hd-icon>
+            <span class="name">file-jpg-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-jpg-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-jpg-outline"></hd-icon>
+            <span class="name">file-jpg-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-mov-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-mov-filled"></hd-icon>
+            <span class="name">file-mov-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-mov-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-mov-outline"></hd-icon>
+            <span class="name">file-mov-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-movie-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-movie-filled"></hd-icon>
+            <span class="name">file-movie-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-movie-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-movie-outline"></hd-icon>
+            <span class="name">file-movie-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-mp3-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-mp3-filled"></hd-icon>
+            <span class="name">file-mp3-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-mp3-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-mp3-outline"></hd-icon>
+            <span class="name">file-mp3-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-mp4-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-mp4-filled"></hd-icon>
+            <span class="name">file-mp4-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-mp4-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-mp4-outline"></hd-icon>
+            <span class="name">file-mp4-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-pdf-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-pdf-filled"></hd-icon>
+            <span class="name">file-pdf-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-pdf-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-pdf-outline"></hd-icon>
+            <span class="name">file-pdf-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-png-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-png-filled"></hd-icon>
+            <span class="name">file-png-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-png-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-png-outline"></hd-icon>
+            <span class="name">file-png-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-ppt-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-ppt-filled"></hd-icon>
+            <span class="name">file-ppt-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-ppt-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-ppt-outline"></hd-icon>
+            <span class="name">file-ppt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-rar-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-rar-filled"></hd-icon>
+            <span class="name">file-rar-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-rar-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-rar-outline"></hd-icon>
+            <span class="name">file-rar-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-txt-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-txt-filled"></hd-icon>
+            <span class="name">file-txt-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-txt-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-txt-outline"></hd-icon>
+            <span class="name">file-txt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-xls-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-xls-filled"></hd-icon>
+            <span class="name">file-xls-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-xls-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-xls-outline"></hd-icon>
+            <span class="name">file-xls-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-zip-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:file-zip-filled"></hd-icon>
+            <span class="name">file-zip-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:file-zip-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:file-zip-outline"></hd-icon>
+            <span class="name">file-zip-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:filter-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:filter-filled"></hd-icon>
+            <span class="name">filter-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:filter-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:filter-outline"></hd-icon>
+            <span class="name">filter-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:find-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:find-filled"></hd-icon>
+            <span class="name">find-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:find-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:find-outline"></hd-icon>
+            <span class="name">find-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:fire-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:fire-filled"></hd-icon>
+            <span class="name">fire-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:fire-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:fire-outline"></hd-icon>
+            <span class="name">fire-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:fit-screen-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:fit-screen-filled"></hd-icon>
+            <span class="name">fit-screen-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:fit-screen-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:fit-screen-outline"></hd-icon>
+            <span class="name">fit-screen-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:flag-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:flag-filled"></hd-icon>
+            <span class="name">flag-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:flag-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:flag-outline"></hd-icon>
+            <span class="name">flag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:folder-files-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:folder-files-filled"></hd-icon>
+            <span class="name">folder-files-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:folder-files-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:folder-files-outline"></hd-icon>
+            <span class="name">folder-files-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:folder-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:folder-filled"></hd-icon>
+            <span class="name">folder-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:folder-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:folder-outline"></hd-icon>
+            <span class="name">folder-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:format-painter-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:format-painter-filled"></hd-icon>
+            <span class="name">format-painter-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:format-painter-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:format-painter-outline"></hd-icon>
+            <span class="name">format-painter-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:front-square-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:front-square-filled"></hd-icon>
+            <span class="name">front-square-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:front-square-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:front-square-outline"></hd-icon>
+            <span class="name">front-square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:gather-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:gather-filled"></hd-icon>
+            <span class="name">gather-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:gather-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:gather-outline"></hd-icon>
+            <span class="name">gather-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:gift-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:gift-filled"></hd-icon>
+            <span class="name">gift-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:gift-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:gift-outline"></hd-icon>
+            <span class="name">gift-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:goods-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:goods-filled"></hd-icon>
+            <span class="name">goods-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:goods-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:goods-outline"></hd-icon>
+            <span class="name">goods-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:goods-search-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:goods-search-filled"></hd-icon>
+            <span class="name">goods-search-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:goods-search-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:goods-search-outline"></hd-icon>
+            <span class="name">goods-search-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:goto-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:goto-filled"></hd-icon>
+            <span class="name">goto-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:goto-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:goto-outline"></hd-icon>
+            <span class="name">goto-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:hand-shake-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:hand-shake-filled"></hd-icon>
+            <span class="name">hand-shake-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:hand-shake-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:hand-shake-outline"></hd-icon>
+            <span class="name">hand-shake-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:haze-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:haze-filled"></hd-icon>
+            <span class="name">haze-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:haze-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:haze-outline"></hd-icon>
+            <span class="name">haze-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:heavy-rain-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:heavy-rain-filled"></hd-icon>
+            <span class="name">heavy-rain-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:heavy-rain-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:heavy-rain-outline"></hd-icon>
+            <span class="name">heavy-rain-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:heavy-snow-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:heavy-snow-filled"></hd-icon>
+            <span class="name">heavy-snow-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:heavy-snow-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:heavy-snow-outline"></hd-icon>
+            <span class="name">heavy-snow-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:hight-lessen-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:hight-lessen-filled"></hd-icon>
+            <span class="name">hight-lessen-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:hight-lessen-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:hight-lessen-outline"></hd-icon>
+            <span class="name">hight-lessen-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:home-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:home-filled"></hd-icon>
+            <span class="name">home-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:home-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:home-outline"></hd-icon>
+            <span class="name">home-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:hospital-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:hospital-filled"></hd-icon>
+            <span class="name">hospital-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:hospital-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:hospital-outline"></hd-icon>
+            <span class="name">hospital-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:house-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:house-filled"></hd-icon>
+            <span class="name">house-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:house-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:house-outline"></hd-icon>
+            <span class="name">house-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:incubator-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:incubator-filled"></hd-icon>
+            <span class="name">incubator-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:incubator-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:incubator-outline"></hd-icon>
+            <span class="name">incubator-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:infuse-one-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:infuse-one-filled"></hd-icon>
+            <span class="name">infuse-one-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:infuse-one-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:infuse-one-outline"></hd-icon>
+            <span class="name">infuse-one-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:infuse-two-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:infuse-two-filled"></hd-icon>
+            <span class="name">infuse-two-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:infuse-two-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:infuse-two-outline"></hd-icon>
+            <span class="name">infuse-two-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:integral-distribute-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:integral-distribute-filled"></hd-icon>
+            <span class="name">integral-distribute-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:integral-distribute-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:integral-distribute-outline"></hd-icon>
+            <span class="name">integral-distribute-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:integral-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:integral-filled"></hd-icon>
+            <span class="name">integral-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:integral-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:integral-outline"></hd-icon>
+            <span class="name">integral-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:inventory-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:inventory-filled"></hd-icon>
+            <span class="name">inventory-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:inventory-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:inventory-outline"></hd-icon>
+            <span class="name">inventory-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:keyboard-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:keyboard-filled"></hd-icon>
+            <span class="name">keyboard-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:keyboard-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:keyboard-outline"></hd-icon>
+            <span class="name">keyboard-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:label-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:label-filled"></hd-icon>
+            <span class="name">label-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:label-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:label-outline"></hd-icon>
+            <span class="name">label-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:leaf-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:leaf-filled"></hd-icon>
+            <span class="name">leaf-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:leaf-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:leaf-outline"></hd-icon>
+            <span class="name">leaf-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:left-align-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:left-align-filled"></hd-icon>
+            <span class="name">left-align-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:left-align-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:left-align-outline"></hd-icon>
+            <span class="name">left-align-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:left-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:left-filled"></hd-icon>
+            <span class="name">left-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:left-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:left-outline"></hd-icon>
+            <span class="name">left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:left-square-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:left-square-filled"></hd-icon>
+            <span class="name">left-square-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:left-square-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:left-square-outline"></hd-icon>
+            <span class="name">left-square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:light-rain-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:light-rain-filled"></hd-icon>
+            <span class="name">light-rain-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:light-rain-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:light-rain-outline"></hd-icon>
+            <span class="name">light-rain-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:light-snow-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:light-snow-filled"></hd-icon>
+            <span class="name">light-snow-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:light-snow-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:light-snow-outline"></hd-icon>
+            <span class="name">light-snow-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:lightning-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:lightning-filled"></hd-icon>
+            <span class="name">lightning-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:lightning-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:lightning-outline"></hd-icon>
+            <span class="name">lightning-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:line-chart-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:line-chart-filled"></hd-icon>
+            <span class="name">line-chart-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:line-chart-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:line-chart-outline"></hd-icon>
+            <span class="name">line-chart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linecap-butt-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:linecap-butt-filled"></hd-icon>
+            <span class="name">linecap-butt-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linecap-butt-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:linecap-butt-outline"></hd-icon>
+            <span class="name">linecap-butt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linecap-round-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:linecap-round-filled"></hd-icon>
+            <span class="name">linecap-round-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linecap-round-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:linecap-round-outline"></hd-icon>
+            <span class="name">linecap-round-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linecap-square-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:linecap-square-filled"></hd-icon>
+            <span class="name">linecap-square-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linecap-square-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:linecap-square-outline"></hd-icon>
+            <span class="name">linecap-square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linejoin-bevel-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:linejoin-bevel-filled"></hd-icon>
+            <span class="name">linejoin-bevel-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linejoin-bevel-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:linejoin-bevel-outline"></hd-icon>
+            <span class="name">linejoin-bevel-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linejoin-miter-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:linejoin-miter-filled"></hd-icon>
+            <span class="name">linejoin-miter-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linejoin-miter-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:linejoin-miter-outline"></hd-icon>
+            <span class="name">linejoin-miter-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linejoin-round-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:linejoin-round-filled"></hd-icon>
+            <span class="name">linejoin-round-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:linejoin-round-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:linejoin-round-outline"></hd-icon>
+            <span class="name">linejoin-round-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:link-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:link-filled"></hd-icon>
+            <span class="name">link-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:link-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:link-outline"></hd-icon>
+            <span class="name">link-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:list-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:list-filled"></hd-icon>
+            <span class="name">list-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:list-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:list-outline"></hd-icon>
+            <span class="name">list-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:location-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:location-filled"></hd-icon>
+            <span class="name">location-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:location-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:location-outline"></hd-icon>
+            <span class="name">location-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:lock-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:lock-filled"></hd-icon>
+            <span class="name">lock-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:lock-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:lock-outline"></hd-icon>
+            <span class="name">lock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:management-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:management-filled"></hd-icon>
+            <span class="name">management-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:management-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:management-outline"></hd-icon>
+            <span class="name">management-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:management-stockout-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:management-stockout-filled"></hd-icon>
+            <span class="name">management-stockout-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:management-stockout-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:management-stockout-outline"></hd-icon>
+            <span class="name">management-stockout-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:map-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:map-filled"></hd-icon>
+            <span class="name">map-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:map-location-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:map-location-filled"></hd-icon>
+            <span class="name">map-location-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:map-location-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:map-location-outline"></hd-icon>
+            <span class="name">map-location-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:map-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:map-outline"></hd-icon>
+            <span class="name">map-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:marketing-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:marketing-filled"></hd-icon>
+            <span class="name">marketing-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:marketing-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:marketing-outline"></hd-icon>
+            <span class="name">marketing-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:marketplace-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:marketplace-filled"></hd-icon>
+            <span class="name">marketplace-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:marketplace-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:marketplace-outline"></hd-icon>
+            <span class="name">marketplace-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:measure-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:measure-filled"></hd-icon>
+            <span class="name">measure-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:measure-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:measure-outline"></hd-icon>
+            <span class="name">measure-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:menu-endways-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:menu-endways-filled"></hd-icon>
+            <span class="name">menu-endways-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:menu-endways-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:menu-endways-outline"></hd-icon>
+            <span class="name">menu-endways-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:menu-thwartwise-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:menu-thwartwise-filled"></hd-icon>
+            <span class="name">menu-thwartwise-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:menu-thwartwise-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:menu-thwartwise-outline"></hd-icon>
+            <span class="name">menu-thwartwise-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:menu2-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:menu2-filled"></hd-icon>
+            <span class="name">menu2-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:menu2-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:menu2-outline"></hd-icon>
+            <span class="name">menu2-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:microphone-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:microphone-filled"></hd-icon>
+            <span class="name">microphone-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:microphone-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:microphone-outline"></hd-icon>
+            <span class="name">microphone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:minus-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:minus-filled"></hd-icon>
+            <span class="name">minus-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:minus-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:minus-outline"></hd-icon>
+            <span class="name">minus-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:mobile-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:mobile-filled"></hd-icon>
+            <span class="name">mobile-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:mobile-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:mobile-outline"></hd-icon>
+            <span class="name">mobile-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:monitoring-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:monitoring-filled"></hd-icon>
+            <span class="name">monitoring-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:monitoring-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:monitoring-outline"></hd-icon>
+            <span class="name">monitoring-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:more-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:more-filled"></hd-icon>
+            <span class="name">more-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:more-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:more-outline"></hd-icon>
+            <span class="name">more-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:motorcycle-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:motorcycle-filled"></hd-icon>
+            <span class="name">motorcycle-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:motorcycle-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:motorcycle-outline"></hd-icon>
+            <span class="name">motorcycle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:move-down-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:move-down-filled"></hd-icon>
+            <span class="name">move-down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:move-down-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:move-down-outline"></hd-icon>
+            <span class="name">move-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:move-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:move-filled"></hd-icon>
+            <span class="name">move-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:move-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:move-outline"></hd-icon>
+            <span class="name">move-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:move-up-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:move-up-filled"></hd-icon>
+            <span class="name">move-up-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:move-up-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:move-up-outline"></hd-icon>
+            <span class="name">move-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:music-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:music-filled"></hd-icon>
+            <span class="name">music-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:music-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:music-outline"></hd-icon>
+            <span class="name">music-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:number-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:number-filled"></hd-icon>
+            <span class="name">number-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:number-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:number-outline"></hd-icon>
+            <span class="name">number-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:oclock-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:oclock-filled"></hd-icon>
+            <span class="name">oclock-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:oclock-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:oclock-outline"></hd-icon>
+            <span class="name">oclock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:offline-gateway-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:offline-gateway-filled"></hd-icon>
+            <span class="name">offline-gateway-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:offline-gateway-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:offline-gateway-outline"></hd-icon>
+            <span class="name">offline-gateway-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:one-to-one-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:one-to-one-filled"></hd-icon>
+            <span class="name">one-to-one-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:one-to-one-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:one-to-one-outline"></hd-icon>
+            <span class="name">one-to-one-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:online-gateway-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:online-gateway-filled"></hd-icon>
+            <span class="name">online-gateway-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:online-gateway-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:online-gateway-outline"></hd-icon>
+            <span class="name">online-gateway-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:open-new-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:open-new-filled"></hd-icon>
+            <span class="name">open-new-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:open-new-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:open-new-outline"></hd-icon>
+            <span class="name">open-new-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:operation-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:operation-filled"></hd-icon>
+            <span class="name">operation-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:operation-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:operation-outline"></hd-icon>
+            <span class="name">operation-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-abnormal-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:order-abnormal-filled"></hd-icon>
+            <span class="name">order-abnormal-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-abnormal-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:order-abnormal-outline"></hd-icon>
+            <span class="name">order-abnormal-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-close-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:order-close-filled"></hd-icon>
+            <span class="name">order-close-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-close-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:order-close-outline"></hd-icon>
+            <span class="name">order-close-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-done-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:order-done-filled"></hd-icon>
+            <span class="name">order-done-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-done-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:order-done-outline"></hd-icon>
+            <span class="name">order-done-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-edit-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:order-edit-filled"></hd-icon>
+            <span class="name">order-edit-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-edit-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:order-edit-outline"></hd-icon>
+            <span class="name">order-edit-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:order-filled"></hd-icon>
+            <span class="name">order-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-integral-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:order-integral-filled"></hd-icon>
+            <span class="name">order-integral-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-integral-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:order-integral-outline"></hd-icon>
+            <span class="name">order-integral-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:order-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:order-outline"></hd-icon>
+            <span class="name">order-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:out-of-warehouse-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:out-of-warehouse-filled"></hd-icon>
+            <span class="name">out-of-warehouse-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:out-of-warehouse-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:out-of-warehouse-outline"></hd-icon>
+            <span class="name">out-of-warehouse-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:overtime-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:overtime-filled"></hd-icon>
+            <span class="name">overtime-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:overtime-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:overtime-outline"></hd-icon>
+            <span class="name">overtime-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:packing-box-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:packing-box-filled"></hd-icon>
+            <span class="name">packing-box-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:packing-box-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:packing-box-outline"></hd-icon>
+            <span class="name">packing-box-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pad-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:pad-filled"></hd-icon>
+            <span class="name">pad-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pad-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:pad-outline"></hd-icon>
+            <span class="name">pad-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:park-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:park-filled"></hd-icon>
+            <span class="name">park-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:park-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:park-outline"></hd-icon>
+            <span class="name">park-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:paste-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:paste-filled"></hd-icon>
+            <span class="name">paste-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:paste-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:paste-outline"></hd-icon>
+            <span class="name">paste-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:path-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:path-filled"></hd-icon>
+            <span class="name">path-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:path-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:path-outline"></hd-icon>
+            <span class="name">path-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:percent-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:percent-filled"></hd-icon>
+            <span class="name">percent-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:percent-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:percent-outline"></hd-icon>
+            <span class="name">percent-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:phone-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:phone-filled"></hd-icon>
+            <span class="name">phone-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:phone-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:phone-outline"></hd-icon>
+            <span class="name">phone-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:picking-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:picking-filled"></hd-icon>
+            <span class="name">picking-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:picking-guidance-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:picking-guidance-filled"></hd-icon>
+            <span class="name">picking-guidance-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:picking-guidance-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:picking-guidance-outline"></hd-icon>
+            <span class="name">picking-guidance-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:picking-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:picking-outline"></hd-icon>
+            <span class="name">picking-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:picking-path-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:picking-path-filled"></hd-icon>
+            <span class="name">picking-path-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:picking-path-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:picking-path-outline"></hd-icon>
+            <span class="name">picking-path-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:picture-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:picture-filled"></hd-icon>
+            <span class="name">picture-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:picture-off-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:picture-off-filled"></hd-icon>
+            <span class="name">picture-off-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:picture-off-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:picture-off-outline"></hd-icon>
+            <span class="name">picture-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:picture-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:picture-outline"></hd-icon>
+            <span class="name">picture-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pie-one-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:pie-one-filled"></hd-icon>
+            <span class="name">pie-one-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pie-one-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:pie-one-outline"></hd-icon>
+            <span class="name">pie-one-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pie-two-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:pie-two-filled"></hd-icon>
+            <span class="name">pie-two-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pie-two-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:pie-two-outline"></hd-icon>
+            <span class="name">pie-two-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pin-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:pin-filled"></hd-icon>
+            <span class="name">pin-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pin-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:pin-outline"></hd-icon>
+            <span class="name">pin-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pin-pre-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:pin-pre-filled"></hd-icon>
+            <span class="name">pin-pre-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pin-pre-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:pin-pre-outline"></hd-icon>
+            <span class="name">pin-pre-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:place-order-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:place-order-filled"></hd-icon>
+            <span class="name">place-order-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:place-order-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:place-order-outline"></hd-icon>
+            <span class="name">place-order-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:play-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:play-filled"></hd-icon>
+            <span class="name">play-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:play-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:play-outline"></hd-icon>
+            <span class="name">play-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pointer-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:pointer-filled"></hd-icon>
+            <span class="name">pointer-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:pointer-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:pointer-outline"></hd-icon>
+            <span class="name">pointer-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:power-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:power-filled"></hd-icon>
+            <span class="name">power-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:power-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:power-outline"></hd-icon>
+            <span class="name">power-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:print-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:print-filled"></hd-icon>
+            <span class="name">print-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:print-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:print-outline"></hd-icon>
+            <span class="name">print-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:process-mode-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:process-mode-filled"></hd-icon>
+            <span class="name">process-mode-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:process-mode-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:process-mode-outline"></hd-icon>
+            <span class="name">process-mode-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:purse-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:purse-filled"></hd-icon>
+            <span class="name">purse-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:purse-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:purse-outline"></hd-icon>
+            <span class="name">purse-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:push-mgt-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:push-mgt-filled"></hd-icon>
+            <span class="name">push-mgt-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:push-mgt-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:push-mgt-outline"></hd-icon>
+            <span class="name">push-mgt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:puzzle-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:puzzle-filled"></hd-icon>
+            <span class="name">puzzle-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:puzzle-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:puzzle-outline"></hd-icon>
+            <span class="name">puzzle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:qr-code-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:qr-code-filled"></hd-icon>
+            <span class="name">qr-code-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:qr-code-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:qr-code-outline"></hd-icon>
+            <span class="name">qr-code-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:question-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:question-filled"></hd-icon>
+            <span class="name">question-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:question-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:question-outline"></hd-icon>
+            <span class="name">question-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:radar-chart-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:radar-chart-filled"></hd-icon>
+            <span class="name">radar-chart-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:radar-chart-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:radar-chart-outline"></hd-icon>
+            <span class="name">radar-chart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:radio-selected-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:radio-selected-filled"></hd-icon>
+            <span class="name">radio-selected-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:radio-selected-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:radio-selected-outline"></hd-icon>
+            <span class="name">radio-selected-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:radio-unselected-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:radio-unselected-filled"></hd-icon>
+            <span class="name">radio-unselected-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:radio-unselected-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:radio-unselected-outline"></hd-icon>
+            <span class="name">radio-unselected-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:rail-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:rail-filled"></hd-icon>
+            <span class="name">rail-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:rail-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:rail-outline"></hd-icon>
+            <span class="name">rail-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:receipt-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:receipt-filled"></hd-icon>
+            <span class="name">receipt-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:receipt-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:receipt-outline"></hd-icon>
+            <span class="name">receipt-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:refresh-doing-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:refresh-doing-filled"></hd-icon>
+            <span class="name">refresh-doing-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:refresh-doing-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:refresh-doing-outline"></hd-icon>
+            <span class="name">refresh-doing-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:refresh-done-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:refresh-done-filled"></hd-icon>
+            <span class="name">refresh-done-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:refresh-done-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:refresh-done-outline"></hd-icon>
+            <span class="name">refresh-done-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:refresh-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:refresh-filled"></hd-icon>
+            <span class="name">refresh-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:refresh-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:refresh-outline"></hd-icon>
+            <span class="name">refresh-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:remind-close-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:remind-close-filled"></hd-icon>
+            <span class="name">remind-close-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:remind-close-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:remind-close-outline"></hd-icon>
+            <span class="name">remind-close-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:remind-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:remind-filled"></hd-icon>
+            <span class="name">remind-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:remind-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:remind-outline"></hd-icon>
+            <span class="name">remind-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:replenishment-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:replenishment-filled"></hd-icon>
+            <span class="name">replenishment-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:replenishment-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:replenishment-outline"></hd-icon>
+            <span class="name">replenishment-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:report-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:report-filled"></hd-icon>
+            <span class="name">report-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:report-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:report-outline"></hd-icon>
+            <span class="name">report-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:rice-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:rice-filled"></hd-icon>
+            <span class="name">rice-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:rice-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:rice-outline"></hd-icon>
+            <span class="name">rice-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:right-align-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:right-align-filled"></hd-icon>
+            <span class="name">right-align-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:right-align-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:right-align-outline"></hd-icon>
+            <span class="name">right-align-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:right-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:right-filled"></hd-icon>
+            <span class="name">right-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:right-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:right-outline"></hd-icon>
+            <span class="name">right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:right-square-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:right-square-filled"></hd-icon>
+            <span class="name">right-square-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:right-square-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:right-square-outline"></hd-icon>
+            <span class="name">right-square-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:rollback-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:rollback-filled"></hd-icon>
+            <span class="name">rollback-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:rollback-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:rollback-outline"></hd-icon>
+            <span class="name">rollback-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:rotation-left-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:rotation-left-filled"></hd-icon>
+            <span class="name">rotation-left-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:rotation-left-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:rotation-left-outline"></hd-icon>
+            <span class="name">rotation-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:rotation-right-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:rotation-right-filled"></hd-icon>
+            <span class="name">rotation-right-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:rotation-right-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:rotation-right-outline"></hd-icon>
+            <span class="name">rotation-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:row-height-l-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:row-height-l-filled"></hd-icon>
+            <span class="name">row-height-l-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:row-height-l-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:row-height-l-outline"></hd-icon>
+            <span class="name">row-height-l-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:row-height-m-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:row-height-m-filled"></hd-icon>
+            <span class="name">row-height-m-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:row-height-m-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:row-height-m-outline"></hd-icon>
+            <span class="name">row-height-m-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:row-height-s-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:row-height-s-filled"></hd-icon>
+            <span class="name">row-height-s-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:row-height-s-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:row-height-s-outline"></hd-icon>
+            <span class="name">row-height-s-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sales-return-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:sales-return-filled"></hd-icon>
+            <span class="name">sales-return-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sales-return-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:sales-return-outline"></hd-icon>
+            <span class="name">sales-return-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sand-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:sand-filled"></hd-icon>
+            <span class="name">sand-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sand-glass-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:sand-glass-filled"></hd-icon>
+            <span class="name">sand-glass-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sand-glass-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:sand-glass-outline"></hd-icon>
+            <span class="name">sand-glass-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sand-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:sand-outline"></hd-icon>
+            <span class="name">sand-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:save-as-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:save-as-filled"></hd-icon>
+            <span class="name">save-as-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:save-as-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:save-as-outline"></hd-icon>
+            <span class="name">save-as-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:save-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:save-filled"></hd-icon>
+            <span class="name">save-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:save-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:save-outline"></hd-icon>
+            <span class="name">save-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:scale-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:scale-filled"></hd-icon>
+            <span class="name">scale-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:scale-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:scale-outline"></hd-icon>
+            <span class="name">scale-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:scan-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:scan-filled"></hd-icon>
+            <span class="name">scan-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:scan-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:scan-outline"></hd-icon>
+            <span class="name">scan-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:scatter-diagram-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:scatter-diagram-filled"></hd-icon>
+            <span class="name">scatter-diagram-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:scatter-diagram-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:scatter-diagram-outline"></hd-icon>
+            <span class="name">scatter-diagram-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:screen-full-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:screen-full-filled"></hd-icon>
+            <span class="name">screen-full-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:screen-full-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:screen-full-outline"></hd-icon>
+            <span class="name">screen-full-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:screen-off-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:screen-off-filled"></hd-icon>
+            <span class="name">screen-off-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:screen-off-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:screen-off-outline"></hd-icon>
+            <span class="name">screen-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:search-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:search-filled"></hd-icon>
+            <span class="name">search-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:search-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:search-outline"></hd-icon>
+            <span class="name">search-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:send-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:send-filled"></hd-icon>
+            <span class="name">send-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:send-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:send-outline"></hd-icon>
+            <span class="name">send-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:service-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:service-filled"></hd-icon>
+            <span class="name">service-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:service-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:service-outline"></hd-icon>
+            <span class="name">service-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:setting-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:setting-filled"></hd-icon>
+            <span class="name">setting-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:setting-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:setting-outline"></hd-icon>
+            <span class="name">setting-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:setting-search-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:setting-search-filled"></hd-icon>
+            <span class="name">setting-search-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:setting-search-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:setting-search-outline"></hd-icon>
+            <span class="name">setting-search-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:share-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:share-filled"></hd-icon>
+            <span class="name">share-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:share-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:share-outline"></hd-icon>
+            <span class="name">share-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shelf-down-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:shelf-down-filled"></hd-icon>
+            <span class="name">shelf-down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shelf-down-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:shelf-down-outline"></hd-icon>
+            <span class="name">shelf-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shelf-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:shelf-filled"></hd-icon>
+            <span class="name">shelf-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shelf-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:shelf-outline"></hd-icon>
+            <span class="name">shelf-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shelf-up-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:shelf-up-filled"></hd-icon>
+            <span class="name">shelf-up-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shelf-up-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:shelf-up-outline"></hd-icon>
+            <span class="name">shelf-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shell-window-maximize-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:shell-window-maximize-filled"></hd-icon>
+            <span class="name">shell-window-maximize-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shell-window-maximize-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:shell-window-maximize-outline"></hd-icon>
+            <span class="name">shell-window-maximize-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shell-window-minimize-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:shell-window-minimize-filled"></hd-icon>
+            <span class="name">shell-window-minimize-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shell-window-minimize-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:shell-window-minimize-outline"></hd-icon>
+            <span class="name">shell-window-minimize-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shield-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:shield-filled"></hd-icon>
+            <span class="name">shield-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shield-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:shield-outline"></hd-icon>
+            <span class="name">shield-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shopping-bag-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:shopping-bag-filled"></hd-icon>
+            <span class="name">shopping-bag-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shopping-bag-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:shopping-bag-outline"></hd-icon>
+            <span class="name">shopping-bag-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shopping-cart-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:shopping-cart-filled"></hd-icon>
+            <span class="name">shopping-cart-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:shopping-cart-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:shopping-cart-outline"></hd-icon>
+            <span class="name">shopping-cart-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sort-a-to-z-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:sort-a-to-z-filled"></hd-icon>
+            <span class="name">sort-a-to-z-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sort-a-to-z-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:sort-a-to-z-outline"></hd-icon>
+            <span class="name">sort-a-to-z-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sort-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:sort-filled"></hd-icon>
+            <span class="name">sort-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sort-filter-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:sort-filter-filled"></hd-icon>
+            <span class="name">sort-filter-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sort-filter-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:sort-filter-outline"></hd-icon>
+            <span class="name">sort-filter-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sort-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:sort-outline"></hd-icon>
+            <span class="name">sort-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sort-z-to-a-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:sort-z-to-a-filled"></hd-icon>
+            <span class="name">sort-z-to-a-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sort-z-to-a-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:sort-z-to-a-outline"></hd-icon>
+            <span class="name">sort-z-to-a-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:soup-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:soup-filled"></hd-icon>
+            <span class="name">soup-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:soup-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:soup-outline"></hd-icon>
+            <span class="name">soup-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:stamp-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:stamp-filled"></hd-icon>
+            <span class="name">stamp-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:stamp-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:stamp-outline"></hd-icon>
+            <span class="name">stamp-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:star-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:star-filled"></hd-icon>
+            <span class="name">star-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:star-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:star-outline"></hd-icon>
+            <span class="name">star-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:stop-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:stop-filled"></hd-icon>
+            <span class="name">stop-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:stop-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:stop-outline"></hd-icon>
+            <span class="name">stop-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:store-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:store-filled"></hd-icon>
+            <span class="name">store-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:store-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:store-outline"></hd-icon>
+            <span class="name">store-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:submit-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:submit-filled"></hd-icon>
+            <span class="name">submit-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:submit-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:submit-outline"></hd-icon>
+            <span class="name">submit-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sunny-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:sunny-filled"></hd-icon>
+            <span class="name">sunny-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:sunny-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:sunny-outline"></hd-icon>
+            <span class="name">sunny-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:surface-front-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:surface-front-filled"></hd-icon>
+            <span class="name">surface-front-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:surface-front-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:surface-front-outline"></hd-icon>
+            <span class="name">surface-front-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:surface-left-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:surface-left-filled"></hd-icon>
+            <span class="name">surface-left-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:surface-left-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:surface-left-outline"></hd-icon>
+            <span class="name">surface-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:surface-right-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:surface-right-filled"></hd-icon>
+            <span class="name">surface-right-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:surface-right-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:surface-right-outline"></hd-icon>
+            <span class="name">surface-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:surface-top-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:surface-top-filled"></hd-icon>
+            <span class="name">surface-top-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:surface-top-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:surface-top-outline"></hd-icon>
+            <span class="name">surface-top-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:suspend-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:suspend-filled"></hd-icon>
+            <span class="name">suspend-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:suspend-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:suspend-outline"></hd-icon>
+            <span class="name">suspend-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:swerve-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:swerve-filled"></hd-icon>
+            <span class="name">swerve-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:swerve-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:swerve-outline"></hd-icon>
+            <span class="name">swerve-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:switch-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:switch-filled"></hd-icon>
+            <span class="name">switch-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:switch-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:switch-outline"></hd-icon>
+            <span class="name">switch-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:table-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:table-filled"></hd-icon>
+            <span class="name">table-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:table-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:table-outline"></hd-icon>
+            <span class="name">table-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:text-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:text-filled"></hd-icon>
+            <span class="name">text-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:text-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:text-outline"></hd-icon>
+            <span class="name">text-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:thermo-dynamic-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:thermo-dynamic-filled"></hd-icon>
+            <span class="name">thermo-dynamic-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:thermo-dynamic-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:thermo-dynamic-outline"></hd-icon>
+            <span class="name">thermo-dynamic-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:thumb-down-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:thumb-down-filled"></hd-icon>
+            <span class="name">thumb-down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:thumb-down-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:thumb-down-outline"></hd-icon>
+            <span class="name">thumb-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:thumb-up-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:thumb-up-filled"></hd-icon>
+            <span class="name">thumb-up-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:thumb-up-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:thumb-up-outline"></hd-icon>
+            <span class="name">thumb-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:time-one-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:time-one-filled"></hd-icon>
+            <span class="name">time-one-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:time-one-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:time-one-outline"></hd-icon>
+            <span class="name">time-one-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:time-two-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:time-two-filled"></hd-icon>
+            <span class="name">time-two-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:time-two-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:time-two-outline"></hd-icon>
+            <span class="name">time-two-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:timing-shelf-down-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:timing-shelf-down-filled"></hd-icon>
+            <span class="name">timing-shelf-down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:timing-shelf-down-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:timing-shelf-down-outline"></hd-icon>
+            <span class="name">timing-shelf-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:to-bottom-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:to-bottom-filled"></hd-icon>
+            <span class="name">to-bottom-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:to-bottom-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:to-bottom-outline"></hd-icon>
+            <span class="name">to-bottom-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:to-top-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:to-top-filled"></hd-icon>
+            <span class="name">to-top-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:to-top-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:to-top-outline"></hd-icon>
+            <span class="name">to-top-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:toggle-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:toggle-filled"></hd-icon>
+            <span class="name">toggle-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:toggle-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:toggle-outline"></hd-icon>
+            <span class="name">toggle-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:toggle-warehouse-x-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:toggle-warehouse-x-filled"></hd-icon>
+            <span class="name">toggle-warehouse-x-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:toggle-warehouse-x-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:toggle-warehouse-x-outline"></hd-icon>
+            <span class="name">toggle-warehouse-x-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:toggle-warehouse-y-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:toggle-warehouse-y-filled"></hd-icon>
+            <span class="name">toggle-warehouse-y-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:toggle-warehouse-y-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:toggle-warehouse-y-outline"></hd-icon>
+            <span class="name">toggle-warehouse-y-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:top-align-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:top-align-filled"></hd-icon>
+            <span class="name">top-align-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:top-align-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:top-align-outline"></hd-icon>
+            <span class="name">top-align-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:top-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:top-filled"></hd-icon>
+            <span class="name">top-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:top-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:top-outline"></hd-icon>
+            <span class="name">top-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:translate-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:translate-filled"></hd-icon>
+            <span class="name">translate-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:translate-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:translate-outline"></hd-icon>
+            <span class="name">translate-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:tree-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:tree-filled"></hd-icon>
+            <span class="name">tree-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:tree-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:tree-outline"></hd-icon>
+            <span class="name">tree-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:triangle-down-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:triangle-down-filled"></hd-icon>
+            <span class="name">triangle-down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:triangle-down-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:triangle-down-outline"></hd-icon>
+            <span class="name">triangle-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:triangle-left-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:triangle-left-filled"></hd-icon>
+            <span class="name">triangle-left-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:triangle-left-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:triangle-left-outline"></hd-icon>
+            <span class="name">triangle-left-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:triangle-right-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:triangle-right-filled"></hd-icon>
+            <span class="name">triangle-right-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:triangle-right-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:triangle-right-outline"></hd-icon>
+            <span class="name">triangle-right-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:triangle-up-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:triangle-up-filled"></hd-icon>
+            <span class="name">triangle-up-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:triangle-up-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:triangle-up-outline"></hd-icon>
+            <span class="name">triangle-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:triangle-warning-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:triangle-warning-filled"></hd-icon>
+            <span class="name">triangle-warning-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:triangle-warning-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:triangle-warning-outline"></hd-icon>
+            <span class="name">triangle-warning-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:undo-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:undo-filled"></hd-icon>
+            <span class="name">undo-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:undo-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:undo-outline"></hd-icon>
+            <span class="name">undo-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:unlink-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:unlink-filled"></hd-icon>
+            <span class="name">unlink-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:unlink-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:unlink-outline"></hd-icon>
+            <span class="name">unlink-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:unlock-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:unlock-filled"></hd-icon>
+            <span class="name">unlock-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:unlock-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:unlock-outline"></hd-icon>
+            <span class="name">unlock-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:up-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:up-filled"></hd-icon>
+            <span class="name">up-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:up-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:up-outline"></hd-icon>
+            <span class="name">up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:uploading-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:uploading-filled"></hd-icon>
+            <span class="name">uploading-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:uploading-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:uploading-outline"></hd-icon>
+            <span class="name">uploading-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:urgency-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:urgency-filled"></hd-icon>
+            <span class="name">urgency-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:urgency-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:urgency-outline"></hd-icon>
+            <span class="name">urgency-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-all-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:user-all-filled"></hd-icon>
+            <span class="name">user-all-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-all-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:user-all-outline"></hd-icon>
+            <span class="name">user-all-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-black-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:user-black-filled"></hd-icon>
+            <span class="name">user-black-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-black-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:user-black-outline"></hd-icon>
+            <span class="name">user-black-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-crowd-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:user-crowd-filled"></hd-icon>
+            <span class="name">user-crowd-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-crowd-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:user-crowd-outline"></hd-icon>
+            <span class="name">user-crowd-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:user-filled"></hd-icon>
+            <span class="name">user-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-leave-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:user-leave-filled"></hd-icon>
+            <span class="name">user-leave-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-leave-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:user-leave-outline"></hd-icon>
+            <span class="name">user-leave-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-like-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:user-like-filled"></hd-icon>
+            <span class="name">user-like-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-like-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:user-like-outline"></hd-icon>
+            <span class="name">user-like-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-new-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:user-new-filled"></hd-icon>
+            <span class="name">user-new-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-new-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:user-new-outline"></hd-icon>
+            <span class="name">user-new-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:user-outline"></hd-icon>
+            <span class="name">user-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-portrayal-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:user-portrayal-filled"></hd-icon>
+            <span class="name">user-portrayal-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-portrayal-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:user-portrayal-outline"></hd-icon>
+            <span class="name">user-portrayal-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-silence-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:user-silence-filled"></hd-icon>
+            <span class="name">user-silence-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-silence-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:user-silence-outline"></hd-icon>
+            <span class="name">user-silence-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-white-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:user-white-filled"></hd-icon>
+            <span class="name">user-white-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:user-white-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:user-white-outline"></hd-icon>
+            <span class="name">user-white-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:vertical-center-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:vertical-center-filled"></hd-icon>
+            <span class="name">vertical-center-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:vertical-center-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:vertical-center-outline"></hd-icon>
+            <span class="name">vertical-center-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:vertical-split-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:vertical-split-filled"></hd-icon>
+            <span class="name">vertical-split-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:vertical-split-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:vertical-split-outline"></hd-icon>
+            <span class="name">vertical-split-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:view-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:view-filled"></hd-icon>
+            <span class="name">view-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:view-off-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:view-off-filled"></hd-icon>
+            <span class="name">view-off-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:view-off-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:view-off-outline"></hd-icon>
+            <span class="name">view-off-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:view-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:view-outline"></hd-icon>
+            <span class="name">view-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:vip-consume-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:vip-consume-filled"></hd-icon>
+            <span class="name">vip-consume-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:vip-consume-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:vip-consume-outline"></hd-icon>
+            <span class="name">vip-consume-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:vip-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:vip-filled"></hd-icon>
+            <span class="name">vip-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:vip-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:vip-outline"></hd-icon>
+            <span class="name">vip-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:volume-down-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:volume-down-filled"></hd-icon>
+            <span class="name">volume-down-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:volume-down-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:volume-down-outline"></hd-icon>
+            <span class="name">volume-down-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:volume-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:volume-filled"></hd-icon>
+            <span class="name">volume-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:volume-mute-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:volume-mute-filled"></hd-icon>
+            <span class="name">volume-mute-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:volume-mute-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:volume-mute-outline"></hd-icon>
+            <span class="name">volume-mute-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:volume-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:volume-outline"></hd-icon>
+            <span class="name">volume-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:volume-up-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:volume-up-filled"></hd-icon>
+            <span class="name">volume-up-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:volume-up-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:volume-up-outline"></hd-icon>
+            <span class="name">volume-up-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:warehouse-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:warehouse-filled"></hd-icon>
+            <span class="name">warehouse-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:warehouse-into-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:warehouse-into-filled"></hd-icon>
+            <span class="name">warehouse-into-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:warehouse-into-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:warehouse-into-outline"></hd-icon>
+            <span class="name">warehouse-into-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:warehouse-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:warehouse-outline"></hd-icon>
+            <span class="name">warehouse-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:warehouse-pre-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:warehouse-pre-filled"></hd-icon>
+            <span class="name">warehouse-pre-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:warehouse-pre-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:warehouse-pre-outline"></hd-icon>
+            <span class="name">warehouse-pre-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:wifi-abnormal-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:wifi-abnormal-filled"></hd-icon>
+            <span class="name">wifi-abnormal-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:wifi-abnormal-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:wifi-abnormal-outline"></hd-icon>
+            <span class="name">wifi-abnormal-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:wifi-close-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:wifi-close-filled"></hd-icon>
+            <span class="name">wifi-close-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:wifi-close-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:wifi-close-outline"></hd-icon>
+            <span class="name">wifi-close-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:wifi-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:wifi-filled"></hd-icon>
+            <span class="name">wifi-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:wifi-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:wifi-outline"></hd-icon>
+            <span class="name">wifi-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:word-cloud-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:word-cloud-filled"></hd-icon>
+            <span class="name">word-cloud-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:word-cloud-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:word-cloud-outline"></hd-icon>
+            <span class="name">word-cloud-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:work-order-abnormal-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:work-order-abnormal-filled"></hd-icon>
+            <span class="name">work-order-abnormal-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:work-order-abnormal-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:work-order-abnormal-outline"></hd-icon>
+            <span class="name">work-order-abnormal-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:work-order-appointment-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:work-order-appointment-filled"></hd-icon>
+            <span class="name">work-order-appointment-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:work-order-appointment-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:work-order-appointment-outline"></hd-icon>
+            <span class="name">work-order-appointment-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:work-order-check-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:work-order-check-filled"></hd-icon>
+            <span class="name">work-order-check-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:work-order-check-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:work-order-check-outline"></hd-icon>
+            <span class="name">work-order-check-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:work-order-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:work-order-filled"></hd-icon>
+            <span class="name">work-order-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:work-order-info-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:work-order-info-filled"></hd-icon>
+            <span class="name">work-order-info-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:work-order-info-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:work-order-info-outline"></hd-icon>
+            <span class="name">work-order-info-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:work-order-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:work-order-outline"></hd-icon>
+            <span class="name">work-order-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:working-odd-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:working-odd-filled"></hd-icon>
+            <span class="name">working-odd-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:working-odd-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:working-odd-outline"></hd-icon>
+            <span class="name">working-odd-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:zoom-in-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:zoom-in-filled"></hd-icon>
+            <span class="name">zoom-in-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:zoom-in-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:zoom-in-outline"></hd-icon>
+            <span class="name">zoom-in-outline</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:zoom-out-filled')" title="Click to copy">
+            <hd-icon icon="lsicon:zoom-out-filled"></hd-icon>
+            <span class="name">zoom-out-filled</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('lsicon:zoom-out-outline')" title="Click to copy">
+            <hd-icon icon="lsicon:zoom-out-outline"></hd-icon>
+            <span class="name">zoom-out-outline</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

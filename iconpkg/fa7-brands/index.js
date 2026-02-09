@@ -1,0 +1,16 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAAC8okZAiQYbhpeGJ8pWDeIhWaFuoUjVEY0d0E2VnMxCFUzcyU2JotURkVEo3YmQSVmJmI4IyO0VTZzODVLJkZXVGZFg2YlWHSuATMGngEQPA38ArUGn2oIrgEDAQUKaAQOArcCMRE8AvcBMAH2AQRdEDUFBhRHKAE5AUMB6DhWCRJdAQ0SBxbHAUwICAkQAfkBBhAFA8wNBgUCD/UTAi3BAwIBkAIeAQgGyBcLLGsKVygDFj13AgHsAid8NgJZAiRqR+viAgFxmCjMLqS1erwhDsMVXLVxbBKAIaFlU86bX7G52A+f0UBBurZRVjqU9+4qQSJck139HhsP0M6iiUgwruasztbY5QLfPHnnGNCnGjwx8MJmobmh7iqORCSttlFX0LrassnnFbahbCPpOrQ6coxVrXHihtxQEvmxOLK3gty5j492I0B/hgSWDiVhZRCjV6+rbZEFUXOy/rN2YSc8tzfjU3LFF2BvPIhIHeRzlJtRyi9ltleNufKudbXvxhJTMDKw384ql3reaG9HgAt1+23X4lpwgcaJPhE0q+3HW4V6l4yRkxMhUj3R2ZwBIc2AyY9JaihQkcJcSE7DDIVpo/ZIr/lFwXh+6SoiY9Vat9xGQOjyOfQf+IHQQWFQz5iIrJcv8vw97X9fMFgitT/tbWeU2PI062YLMRqw7Y+dPezB3W/TyriHh6nQRRCWNkC7XtdGaalxd6fGfK087zyLECrOCR+sckUVt+6U+brbW4nJ9mejpF2EtZlv2rIlytZkdB70tWdWeYjk9cN+g8vjw7vmsc8ZuGXRYCquwp2vQgT9Q4fjTSac15I5ce3nR6VNI30jNKIx9wZYABNVMp1hV0IfbUH2G+uDEspIQMtEn4gbRsK3H8h7EM39ifHCf8GbQTC8GjKOsl8xA449kEKIuzZRsq3Y6O7rgxG25m0SvhMyOFHv8/akq3d4y62NppOHCWDrdtRcwV69S5uDrlEzmAgHzU4AAEBAAgAAYUAMACAAIQAAAAADAAAAEWZhNy1icmFuZHMtMDEuc3ZnAAAAEWZhNy1icmFuZHMtMDIuc3ZnAAAAEWZhNy1icmFuZHMtMDMuc3Zn/////wAAAAIAAACJFAWUUUUoJShFJZYlBklUUWWhkUgJSZGIJJYQkoVZlkKgWoEWZBglSAiBQABhVJhVWBJgQEEiCBCZSVAJZYEVAIRiCSpaEBQAmREEhlhZWiEiIpSFCmiQJKYEYAZWmZiQalqYEaFIikIRRYoEIiRlmqZFYJBERBhZYEaCShBSYGkRVGEKSoQFAlQAAAAA";
+
+const chunks = {
+  "fa7-brands-01.svg": new URL("./fa7-brands-01.svg", import.meta.url).href,
+  "fa7-brands-02.svg": new URL("./fa7-brands-02.svg", import.meta.url).href,
+  "fa7-brands-03.svg": new URL("./fa7-brands-03.svg", import.meta.url).href
+};
+
+register('fa7-brands', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

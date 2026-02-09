@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>maki - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>maki <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(215)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('maki:aerialway')" title="Click to copy">
+            <hd-icon icon="maki:aerialway"></hd-icon>
+            <span class="name">aerialway</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:airfield')" title="Click to copy">
+            <hd-icon icon="maki:airfield"></hd-icon>
+            <span class="name">airfield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:airport')" title="Click to copy">
+            <hd-icon icon="maki:airport"></hd-icon>
+            <span class="name">airport</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:alcohol-shop')" title="Click to copy">
+            <hd-icon icon="maki:alcohol-shop"></hd-icon>
+            <span class="name">alcohol-shop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:american-football')" title="Click to copy">
+            <hd-icon icon="maki:american-football"></hd-icon>
+            <span class="name">american-football</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:amusement-park')" title="Click to copy">
+            <hd-icon icon="maki:amusement-park"></hd-icon>
+            <span class="name">amusement-park</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:animal-shelter')" title="Click to copy">
+            <hd-icon icon="maki:animal-shelter"></hd-icon>
+            <span class="name">animal-shelter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:aquarium')" title="Click to copy">
+            <hd-icon icon="maki:aquarium"></hd-icon>
+            <span class="name">aquarium</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:arrow')" title="Click to copy">
+            <hd-icon icon="maki:arrow"></hd-icon>
+            <span class="name">arrow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:art-gallery')" title="Click to copy">
+            <hd-icon icon="maki:art-gallery"></hd-icon>
+            <span class="name">art-gallery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:attraction')" title="Click to copy">
+            <hd-icon icon="maki:attraction"></hd-icon>
+            <span class="name">attraction</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:bakery')" title="Click to copy">
+            <hd-icon icon="maki:bakery"></hd-icon>
+            <span class="name">bakery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:bank')" title="Click to copy">
+            <hd-icon icon="maki:bank"></hd-icon>
+            <span class="name">bank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:bank-jp')" title="Click to copy">
+            <hd-icon icon="maki:bank-jp"></hd-icon>
+            <span class="name">bank-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:bar')" title="Click to copy">
+            <hd-icon icon="maki:bar"></hd-icon>
+            <span class="name">bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:barrier')" title="Click to copy">
+            <hd-icon icon="maki:barrier"></hd-icon>
+            <span class="name">barrier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:baseball')" title="Click to copy">
+            <hd-icon icon="maki:baseball"></hd-icon>
+            <span class="name">baseball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:basketball')" title="Click to copy">
+            <hd-icon icon="maki:basketball"></hd-icon>
+            <span class="name">basketball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:bbq')" title="Click to copy">
+            <hd-icon icon="maki:bbq"></hd-icon>
+            <span class="name">bbq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:beach')" title="Click to copy">
+            <hd-icon icon="maki:beach"></hd-icon>
+            <span class="name">beach</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:beer')" title="Click to copy">
+            <hd-icon icon="maki:beer"></hd-icon>
+            <span class="name">beer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:bicycle')" title="Click to copy">
+            <hd-icon icon="maki:bicycle"></hd-icon>
+            <span class="name">bicycle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:bicycle-share')" title="Click to copy">
+            <hd-icon icon="maki:bicycle-share"></hd-icon>
+            <span class="name">bicycle-share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:blood-bank')" title="Click to copy">
+            <hd-icon icon="maki:blood-bank"></hd-icon>
+            <span class="name">blood-bank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:bowling-alley')" title="Click to copy">
+            <hd-icon icon="maki:bowling-alley"></hd-icon>
+            <span class="name">bowling-alley</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:bridge')" title="Click to copy">
+            <hd-icon icon="maki:bridge"></hd-icon>
+            <span class="name">bridge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:building')" title="Click to copy">
+            <hd-icon icon="maki:building"></hd-icon>
+            <span class="name">building</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:building-alt1')" title="Click to copy">
+            <hd-icon icon="maki:building-alt1"></hd-icon>
+            <span class="name">building-alt1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:bus')" title="Click to copy">
+            <hd-icon icon="maki:bus"></hd-icon>
+            <span class="name">bus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:cafe')" title="Click to copy">
+            <hd-icon icon="maki:cafe"></hd-icon>
+            <span class="name">cafe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:campsite')" title="Click to copy">
+            <hd-icon icon="maki:campsite"></hd-icon>
+            <span class="name">campsite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:car')" title="Click to copy">
+            <hd-icon icon="maki:car"></hd-icon>
+            <span class="name">car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:car-rental')" title="Click to copy">
+            <hd-icon icon="maki:car-rental"></hd-icon>
+            <span class="name">car-rental</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:car-repair')" title="Click to copy">
+            <hd-icon icon="maki:car-repair"></hd-icon>
+            <span class="name">car-repair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:casino')" title="Click to copy">
+            <hd-icon icon="maki:casino"></hd-icon>
+            <span class="name">casino</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:castle')" title="Click to copy">
+            <hd-icon icon="maki:castle"></hd-icon>
+            <span class="name">castle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:castle-jp')" title="Click to copy">
+            <hd-icon icon="maki:castle-jp"></hd-icon>
+            <span class="name">castle-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:caution')" title="Click to copy">
+            <hd-icon icon="maki:caution"></hd-icon>
+            <span class="name">caution</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:cemetery')" title="Click to copy">
+            <hd-icon icon="maki:cemetery"></hd-icon>
+            <span class="name">cemetery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:cemetery-jp')" title="Click to copy">
+            <hd-icon icon="maki:cemetery-jp"></hd-icon>
+            <span class="name">cemetery-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:charging-station')" title="Click to copy">
+            <hd-icon icon="maki:charging-station"></hd-icon>
+            <span class="name">charging-station</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:cinema')" title="Click to copy">
+            <hd-icon icon="maki:cinema"></hd-icon>
+            <span class="name">cinema</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:circle')" title="Click to copy">
+            <hd-icon icon="maki:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:circle-stroked')" title="Click to copy">
+            <hd-icon icon="maki:circle-stroked"></hd-icon>
+            <span class="name">circle-stroked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:city')" title="Click to copy">
+            <hd-icon icon="maki:city"></hd-icon>
+            <span class="name">city</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:clothing-store')" title="Click to copy">
+            <hd-icon icon="maki:clothing-store"></hd-icon>
+            <span class="name">clothing-store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:college')" title="Click to copy">
+            <hd-icon icon="maki:college"></hd-icon>
+            <span class="name">college</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:college-jp')" title="Click to copy">
+            <hd-icon icon="maki:college-jp"></hd-icon>
+            <span class="name">college-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:commercial')" title="Click to copy">
+            <hd-icon icon="maki:commercial"></hd-icon>
+            <span class="name">commercial</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:communications-tower')" title="Click to copy">
+            <hd-icon icon="maki:communications-tower"></hd-icon>
+            <span class="name">communications-tower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:confectionery')" title="Click to copy">
+            <hd-icon icon="maki:confectionery"></hd-icon>
+            <span class="name">confectionery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:construction')" title="Click to copy">
+            <hd-icon icon="maki:construction"></hd-icon>
+            <span class="name">construction</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:convenience')" title="Click to copy">
+            <hd-icon icon="maki:convenience"></hd-icon>
+            <span class="name">convenience</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:cricket')" title="Click to copy">
+            <hd-icon icon="maki:cricket"></hd-icon>
+            <span class="name">cricket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:cross')" title="Click to copy">
+            <hd-icon icon="maki:cross"></hd-icon>
+            <span class="name">cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:dam')" title="Click to copy">
+            <hd-icon icon="maki:dam"></hd-icon>
+            <span class="name">dam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:danger')" title="Click to copy">
+            <hd-icon icon="maki:danger"></hd-icon>
+            <span class="name">danger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:defibrillator')" title="Click to copy">
+            <hd-icon icon="maki:defibrillator"></hd-icon>
+            <span class="name">defibrillator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:dentist')" title="Click to copy">
+            <hd-icon icon="maki:dentist"></hd-icon>
+            <span class="name">dentist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:diamond')" title="Click to copy">
+            <hd-icon icon="maki:diamond"></hd-icon>
+            <span class="name">diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:doctor')" title="Click to copy">
+            <hd-icon icon="maki:doctor"></hd-icon>
+            <span class="name">doctor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:dog-park')" title="Click to copy">
+            <hd-icon icon="maki:dog-park"></hd-icon>
+            <span class="name">dog-park</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:drinking-water')" title="Click to copy">
+            <hd-icon icon="maki:drinking-water"></hd-icon>
+            <span class="name">drinking-water</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:elevator')" title="Click to copy">
+            <hd-icon icon="maki:elevator"></hd-icon>
+            <span class="name">elevator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:embassy')" title="Click to copy">
+            <hd-icon icon="maki:embassy"></hd-icon>
+            <span class="name">embassy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:emergency-phone')" title="Click to copy">
+            <hd-icon icon="maki:emergency-phone"></hd-icon>
+            <span class="name">emergency-phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:entrance')" title="Click to copy">
+            <hd-icon icon="maki:entrance"></hd-icon>
+            <span class="name">entrance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:entrance-alt1')" title="Click to copy">
+            <hd-icon icon="maki:entrance-alt1"></hd-icon>
+            <span class="name">entrance-alt1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:farm')" title="Click to copy">
+            <hd-icon icon="maki:farm"></hd-icon>
+            <span class="name">farm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:fast-food')" title="Click to copy">
+            <hd-icon icon="maki:fast-food"></hd-icon>
+            <span class="name">fast-food</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:fence')" title="Click to copy">
+            <hd-icon icon="maki:fence"></hd-icon>
+            <span class="name">fence</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:ferry')" title="Click to copy">
+            <hd-icon icon="maki:ferry"></hd-icon>
+            <span class="name">ferry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:ferry-jp')" title="Click to copy">
+            <hd-icon icon="maki:ferry-jp"></hd-icon>
+            <span class="name">ferry-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:fire-station')" title="Click to copy">
+            <hd-icon icon="maki:fire-station"></hd-icon>
+            <span class="name">fire-station</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:fire-station-jp')" title="Click to copy">
+            <hd-icon icon="maki:fire-station-jp"></hd-icon>
+            <span class="name">fire-station-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:fitness-centre')" title="Click to copy">
+            <hd-icon icon="maki:fitness-centre"></hd-icon>
+            <span class="name">fitness-centre</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:florist')" title="Click to copy">
+            <hd-icon icon="maki:florist"></hd-icon>
+            <span class="name">florist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:fuel')" title="Click to copy">
+            <hd-icon icon="maki:fuel"></hd-icon>
+            <span class="name">fuel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:furniture')" title="Click to copy">
+            <hd-icon icon="maki:furniture"></hd-icon>
+            <span class="name">furniture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:gaming')" title="Click to copy">
+            <hd-icon icon="maki:gaming"></hd-icon>
+            <span class="name">gaming</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:garden')" title="Click to copy">
+            <hd-icon icon="maki:garden"></hd-icon>
+            <span class="name">garden</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:garden-centre')" title="Click to copy">
+            <hd-icon icon="maki:garden-centre"></hd-icon>
+            <span class="name">garden-centre</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:gate')" title="Click to copy">
+            <hd-icon icon="maki:gate"></hd-icon>
+            <span class="name">gate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:gift')" title="Click to copy">
+            <hd-icon icon="maki:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:globe')" title="Click to copy">
+            <hd-icon icon="maki:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:golf')" title="Click to copy">
+            <hd-icon icon="maki:golf"></hd-icon>
+            <span class="name">golf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:grocery')" title="Click to copy">
+            <hd-icon icon="maki:grocery"></hd-icon>
+            <span class="name">grocery</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:hairdresser')" title="Click to copy">
+            <hd-icon icon="maki:hairdresser"></hd-icon>
+            <span class="name">hairdresser</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:harbor')" title="Click to copy">
+            <hd-icon icon="maki:harbor"></hd-icon>
+            <span class="name">harbor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:hardware')" title="Click to copy">
+            <hd-icon icon="maki:hardware"></hd-icon>
+            <span class="name">hardware</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:heart')" title="Click to copy">
+            <hd-icon icon="maki:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:heliport')" title="Click to copy">
+            <hd-icon icon="maki:heliport"></hd-icon>
+            <span class="name">heliport</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:highway-rest-area')" title="Click to copy">
+            <hd-icon icon="maki:highway-rest-area"></hd-icon>
+            <span class="name">highway-rest-area</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:historic')" title="Click to copy">
+            <hd-icon icon="maki:historic"></hd-icon>
+            <span class="name">historic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:home')" title="Click to copy">
+            <hd-icon icon="maki:home"></hd-icon>
+            <span class="name">home</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:horse-riding')" title="Click to copy">
+            <hd-icon icon="maki:horse-riding"></hd-icon>
+            <span class="name">horse-riding</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:hospital')" title="Click to copy">
+            <hd-icon icon="maki:hospital"></hd-icon>
+            <span class="name">hospital</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:hospital-jp')" title="Click to copy">
+            <hd-icon icon="maki:hospital-jp"></hd-icon>
+            <span class="name">hospital-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:hot-spring')" title="Click to copy">
+            <hd-icon icon="maki:hot-spring"></hd-icon>
+            <span class="name">hot-spring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:ice-cream')" title="Click to copy">
+            <hd-icon icon="maki:ice-cream"></hd-icon>
+            <span class="name">ice-cream</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:industry')" title="Click to copy">
+            <hd-icon icon="maki:industry"></hd-icon>
+            <span class="name">industry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:information')" title="Click to copy">
+            <hd-icon icon="maki:information"></hd-icon>
+            <span class="name">information</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:jewelry-store')" title="Click to copy">
+            <hd-icon icon="maki:jewelry-store"></hd-icon>
+            <span class="name">jewelry-store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:karaoke')" title="Click to copy">
+            <hd-icon icon="maki:karaoke"></hd-icon>
+            <span class="name">karaoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:landmark')" title="Click to copy">
+            <hd-icon icon="maki:landmark"></hd-icon>
+            <span class="name">landmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:landmark-jp')" title="Click to copy">
+            <hd-icon icon="maki:landmark-jp"></hd-icon>
+            <span class="name">landmark-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:landuse')" title="Click to copy">
+            <hd-icon icon="maki:landuse"></hd-icon>
+            <span class="name">landuse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:laundry')" title="Click to copy">
+            <hd-icon icon="maki:laundry"></hd-icon>
+            <span class="name">laundry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:library')" title="Click to copy">
+            <hd-icon icon="maki:library"></hd-icon>
+            <span class="name">library</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:lift-gate')" title="Click to copy">
+            <hd-icon icon="maki:lift-gate"></hd-icon>
+            <span class="name">lift-gate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:lighthouse')" title="Click to copy">
+            <hd-icon icon="maki:lighthouse"></hd-icon>
+            <span class="name">lighthouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:lighthouse-jp')" title="Click to copy">
+            <hd-icon icon="maki:lighthouse-jp"></hd-icon>
+            <span class="name">lighthouse-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:lodging')" title="Click to copy">
+            <hd-icon icon="maki:lodging"></hd-icon>
+            <span class="name">lodging</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:logging')" title="Click to copy">
+            <hd-icon icon="maki:logging"></hd-icon>
+            <span class="name">logging</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:marae')" title="Click to copy">
+            <hd-icon icon="maki:marae"></hd-icon>
+            <span class="name">marae</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:marker')" title="Click to copy">
+            <hd-icon icon="maki:marker"></hd-icon>
+            <span class="name">marker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:marker-stroked')" title="Click to copy">
+            <hd-icon icon="maki:marker-stroked"></hd-icon>
+            <span class="name">marker-stroked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:mobile-phone')" title="Click to copy">
+            <hd-icon icon="maki:mobile-phone"></hd-icon>
+            <span class="name">mobile-phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:monument')" title="Click to copy">
+            <hd-icon icon="maki:monument"></hd-icon>
+            <span class="name">monument</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:monument-jp')" title="Click to copy">
+            <hd-icon icon="maki:monument-jp"></hd-icon>
+            <span class="name">monument-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:mountain')" title="Click to copy">
+            <hd-icon icon="maki:mountain"></hd-icon>
+            <span class="name">mountain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:museum')" title="Click to copy">
+            <hd-icon icon="maki:museum"></hd-icon>
+            <span class="name">museum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:music')" title="Click to copy">
+            <hd-icon icon="maki:music"></hd-icon>
+            <span class="name">music</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:natural')" title="Click to copy">
+            <hd-icon icon="maki:natural"></hd-icon>
+            <span class="name">natural</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:nightclub')" title="Click to copy">
+            <hd-icon icon="maki:nightclub"></hd-icon>
+            <span class="name">nightclub</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:observation-tower')" title="Click to copy">
+            <hd-icon icon="maki:observation-tower"></hd-icon>
+            <span class="name">observation-tower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:optician')" title="Click to copy">
+            <hd-icon icon="maki:optician"></hd-icon>
+            <span class="name">optician</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:paint')" title="Click to copy">
+            <hd-icon icon="maki:paint"></hd-icon>
+            <span class="name">paint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:park')" title="Click to copy">
+            <hd-icon icon="maki:park"></hd-icon>
+            <span class="name">park</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:park-alt1')" title="Click to copy">
+            <hd-icon icon="maki:park-alt1"></hd-icon>
+            <span class="name">park-alt1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:parking')" title="Click to copy">
+            <hd-icon icon="maki:parking"></hd-icon>
+            <span class="name">parking</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:parking-garage')" title="Click to copy">
+            <hd-icon icon="maki:parking-garage"></hd-icon>
+            <span class="name">parking-garage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:parking-paid')" title="Click to copy">
+            <hd-icon icon="maki:parking-paid"></hd-icon>
+            <span class="name">parking-paid</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:pharmacy')" title="Click to copy">
+            <hd-icon icon="maki:pharmacy"></hd-icon>
+            <span class="name">pharmacy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:picnic-site')" title="Click to copy">
+            <hd-icon icon="maki:picnic-site"></hd-icon>
+            <span class="name">picnic-site</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:pitch')" title="Click to copy">
+            <hd-icon icon="maki:pitch"></hd-icon>
+            <span class="name">pitch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:place-of-worship')" title="Click to copy">
+            <hd-icon icon="maki:place-of-worship"></hd-icon>
+            <span class="name">place-of-worship</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:playground')" title="Click to copy">
+            <hd-icon icon="maki:playground"></hd-icon>
+            <span class="name">playground</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:police')" title="Click to copy">
+            <hd-icon icon="maki:police"></hd-icon>
+            <span class="name">police</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:police-jp')" title="Click to copy">
+            <hd-icon icon="maki:police-jp"></hd-icon>
+            <span class="name">police-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:post')" title="Click to copy">
+            <hd-icon icon="maki:post"></hd-icon>
+            <span class="name">post</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:post-jp')" title="Click to copy">
+            <hd-icon icon="maki:post-jp"></hd-icon>
+            <span class="name">post-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:prison')" title="Click to copy">
+            <hd-icon icon="maki:prison"></hd-icon>
+            <span class="name">prison</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:racetrack')" title="Click to copy">
+            <hd-icon icon="maki:racetrack"></hd-icon>
+            <span class="name">racetrack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:racetrack-boat')" title="Click to copy">
+            <hd-icon icon="maki:racetrack-boat"></hd-icon>
+            <span class="name">racetrack-boat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:racetrack-cycling')" title="Click to copy">
+            <hd-icon icon="maki:racetrack-cycling"></hd-icon>
+            <span class="name">racetrack-cycling</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:racetrack-horse')" title="Click to copy">
+            <hd-icon icon="maki:racetrack-horse"></hd-icon>
+            <span class="name">racetrack-horse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:rail')" title="Click to copy">
+            <hd-icon icon="maki:rail"></hd-icon>
+            <span class="name">rail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:rail-light')" title="Click to copy">
+            <hd-icon icon="maki:rail-light"></hd-icon>
+            <span class="name">rail-light</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:rail-metro')" title="Click to copy">
+            <hd-icon icon="maki:rail-metro"></hd-icon>
+            <span class="name">rail-metro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:ranger-station')" title="Click to copy">
+            <hd-icon icon="maki:ranger-station"></hd-icon>
+            <span class="name">ranger-station</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:recycling')" title="Click to copy">
+            <hd-icon icon="maki:recycling"></hd-icon>
+            <span class="name">recycling</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:religious-buddhist')" title="Click to copy">
+            <hd-icon icon="maki:religious-buddhist"></hd-icon>
+            <span class="name">religious-buddhist</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:religious-christian')" title="Click to copy">
+            <hd-icon icon="maki:religious-christian"></hd-icon>
+            <span class="name">religious-christian</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:religious-jewish')" title="Click to copy">
+            <hd-icon icon="maki:religious-jewish"></hd-icon>
+            <span class="name">religious-jewish</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:religious-muslim')" title="Click to copy">
+            <hd-icon icon="maki:religious-muslim"></hd-icon>
+            <span class="name">religious-muslim</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:religious-shinto')" title="Click to copy">
+            <hd-icon icon="maki:religious-shinto"></hd-icon>
+            <span class="name">religious-shinto</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:residential-community')" title="Click to copy">
+            <hd-icon icon="maki:residential-community"></hd-icon>
+            <span class="name">residential-community</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:restaurant')" title="Click to copy">
+            <hd-icon icon="maki:restaurant"></hd-icon>
+            <span class="name">restaurant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:restaurant-bbq')" title="Click to copy">
+            <hd-icon icon="maki:restaurant-bbq"></hd-icon>
+            <span class="name">restaurant-bbq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:restaurant-noodle')" title="Click to copy">
+            <hd-icon icon="maki:restaurant-noodle"></hd-icon>
+            <span class="name">restaurant-noodle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:restaurant-pizza')" title="Click to copy">
+            <hd-icon icon="maki:restaurant-pizza"></hd-icon>
+            <span class="name">restaurant-pizza</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:restaurant-seafood')" title="Click to copy">
+            <hd-icon icon="maki:restaurant-seafood"></hd-icon>
+            <span class="name">restaurant-seafood</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:restaurant-sushi')" title="Click to copy">
+            <hd-icon icon="maki:restaurant-sushi"></hd-icon>
+            <span class="name">restaurant-sushi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:road-accident')" title="Click to copy">
+            <hd-icon icon="maki:road-accident"></hd-icon>
+            <span class="name">road-accident</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:roadblock')" title="Click to copy">
+            <hd-icon icon="maki:roadblock"></hd-icon>
+            <span class="name">roadblock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:rocket')" title="Click to copy">
+            <hd-icon icon="maki:rocket"></hd-icon>
+            <span class="name">rocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:school')" title="Click to copy">
+            <hd-icon icon="maki:school"></hd-icon>
+            <span class="name">school</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:school-jp')" title="Click to copy">
+            <hd-icon icon="maki:school-jp"></hd-icon>
+            <span class="name">school-jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:scooter')" title="Click to copy">
+            <hd-icon icon="maki:scooter"></hd-icon>
+            <span class="name">scooter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:shelter')" title="Click to copy">
+            <hd-icon icon="maki:shelter"></hd-icon>
+            <span class="name">shelter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:shoe')" title="Click to copy">
+            <hd-icon icon="maki:shoe"></hd-icon>
+            <span class="name">shoe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:shop')" title="Click to copy">
+            <hd-icon icon="maki:shop"></hd-icon>
+            <span class="name">shop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:skateboard')" title="Click to copy">
+            <hd-icon icon="maki:skateboard"></hd-icon>
+            <span class="name">skateboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:skiing')" title="Click to copy">
+            <hd-icon icon="maki:skiing"></hd-icon>
+            <span class="name">skiing</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:slaughterhouse')" title="Click to copy">
+            <hd-icon icon="maki:slaughterhouse"></hd-icon>
+            <span class="name">slaughterhouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:slipway')" title="Click to copy">
+            <hd-icon icon="maki:slipway"></hd-icon>
+            <span class="name">slipway</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:snowmobile')" title="Click to copy">
+            <hd-icon icon="maki:snowmobile"></hd-icon>
+            <span class="name">snowmobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:soccer')" title="Click to copy">
+            <hd-icon icon="maki:soccer"></hd-icon>
+            <span class="name">soccer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:square')" title="Click to copy">
+            <hd-icon icon="maki:square"></hd-icon>
+            <span class="name">square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:square-stroked')" title="Click to copy">
+            <hd-icon icon="maki:square-stroked"></hd-icon>
+            <span class="name">square-stroked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:stadium')" title="Click to copy">
+            <hd-icon icon="maki:stadium"></hd-icon>
+            <span class="name">stadium</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:star')" title="Click to copy">
+            <hd-icon icon="maki:star"></hd-icon>
+            <span class="name">star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:star-stroked')" title="Click to copy">
+            <hd-icon icon="maki:star-stroked"></hd-icon>
+            <span class="name">star-stroked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:suitcase')" title="Click to copy">
+            <hd-icon icon="maki:suitcase"></hd-icon>
+            <span class="name">suitcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:swimming')" title="Click to copy">
+            <hd-icon icon="maki:swimming"></hd-icon>
+            <span class="name">swimming</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:table-tennis')" title="Click to copy">
+            <hd-icon icon="maki:table-tennis"></hd-icon>
+            <span class="name">table-tennis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:taxi')" title="Click to copy">
+            <hd-icon icon="maki:taxi"></hd-icon>
+            <span class="name">taxi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:teahouse')" title="Click to copy">
+            <hd-icon icon="maki:teahouse"></hd-icon>
+            <span class="name">teahouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:telephone')" title="Click to copy">
+            <hd-icon icon="maki:telephone"></hd-icon>
+            <span class="name">telephone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:tennis')" title="Click to copy">
+            <hd-icon icon="maki:tennis"></hd-icon>
+            <span class="name">tennis</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:terminal')" title="Click to copy">
+            <hd-icon icon="maki:terminal"></hd-icon>
+            <span class="name">terminal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:theatre')" title="Click to copy">
+            <hd-icon icon="maki:theatre"></hd-icon>
+            <span class="name">theatre</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:toilet')" title="Click to copy">
+            <hd-icon icon="maki:toilet"></hd-icon>
+            <span class="name">toilet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:toll')" title="Click to copy">
+            <hd-icon icon="maki:toll"></hd-icon>
+            <span class="name">toll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:town')" title="Click to copy">
+            <hd-icon icon="maki:town"></hd-icon>
+            <span class="name">town</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:town-hall')" title="Click to copy">
+            <hd-icon icon="maki:town-hall"></hd-icon>
+            <span class="name">town-hall</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:triangle')" title="Click to copy">
+            <hd-icon icon="maki:triangle"></hd-icon>
+            <span class="name">triangle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:triangle-stroked')" title="Click to copy">
+            <hd-icon icon="maki:triangle-stroked"></hd-icon>
+            <span class="name">triangle-stroked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:tunnel')" title="Click to copy">
+            <hd-icon icon="maki:tunnel"></hd-icon>
+            <span class="name">tunnel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:veterinary')" title="Click to copy">
+            <hd-icon icon="maki:veterinary"></hd-icon>
+            <span class="name">veterinary</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:viewpoint')" title="Click to copy">
+            <hd-icon icon="maki:viewpoint"></hd-icon>
+            <span class="name">viewpoint</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:village')" title="Click to copy">
+            <hd-icon icon="maki:village"></hd-icon>
+            <span class="name">village</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:volcano')" title="Click to copy">
+            <hd-icon icon="maki:volcano"></hd-icon>
+            <span class="name">volcano</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:volleyball')" title="Click to copy">
+            <hd-icon icon="maki:volleyball"></hd-icon>
+            <span class="name">volleyball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:warehouse')" title="Click to copy">
+            <hd-icon icon="maki:warehouse"></hd-icon>
+            <span class="name">warehouse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:waste-basket')" title="Click to copy">
+            <hd-icon icon="maki:waste-basket"></hd-icon>
+            <span class="name">waste-basket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:watch')" title="Click to copy">
+            <hd-icon icon="maki:watch"></hd-icon>
+            <span class="name">watch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:water')" title="Click to copy">
+            <hd-icon icon="maki:water"></hd-icon>
+            <span class="name">water</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:waterfall')" title="Click to copy">
+            <hd-icon icon="maki:waterfall"></hd-icon>
+            <span class="name">waterfall</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:watermill')" title="Click to copy">
+            <hd-icon icon="maki:watermill"></hd-icon>
+            <span class="name">watermill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:wetland')" title="Click to copy">
+            <hd-icon icon="maki:wetland"></hd-icon>
+            <span class="name">wetland</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:wheelchair')" title="Click to copy">
+            <hd-icon icon="maki:wheelchair"></hd-icon>
+            <span class="name">wheelchair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:windmill')" title="Click to copy">
+            <hd-icon icon="maki:windmill"></hd-icon>
+            <span class="name">windmill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('maki:zoo')" title="Click to copy">
+            <hd-icon icon="maki:zoo"></hd-icon>
+            <span class="name">zoo</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

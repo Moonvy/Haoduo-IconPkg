@@ -1,0 +1,15 @@
+
+import { register } from '../core.js';
+
+const lookup = "AAACJ4kZAZAYUBrIKVThWChIZHMjVHZlRXd4dnxAiHQVY1RZSjZGRCQINEFUY1syckVYM5M0VlY0WFBiFwwNCSYCIydMFEUiJAiLAQ/UCxSYAnnStwJKBZ0R5wIHIQYBNQMaDgGUARM0AVMBAwkByQYQBwcYMgMF8yULAQS0AhLhAQLoBhcECFIuAQJZAZCQ1HQ08L2M5rAov/s+aCZ6eA1c2B1ufXNBoU2czNuE183mpDJqRzwdWrnqKoYSD0Od+PB36SXZdgwsJ4SvMg+TyHKgf9qxjLk6bXELy2l9b/qf+yfXXxdGOfLJM1zpwJ0KecDsn5twS2GSZVMl6O4kEG6T7yYioicSHCkwlh0wVD7RQxWtI2o4CRqK9MmxdTu0OazbcsFUtVSLbSm0/ujptYnNmsXUHuV7hMqnXBWsU5Jc18tZu9GieTWqL+VD6XD2Q/lCSRZRr21Ura0dNCbD5x0GHPTf2ya2gQ9bBuJUjJaTWYvaBdx6R898HkxyJU3/UcT7rMyirtLxGOAHCviJXf9Wz6PEHyfflFjM1L5MYUFvY0HM1gS15hZxYc+GD/V/q1b1kxZPyGBTRVHd6pEmKI0+0167MQByWgOXDgNNYtVRP7QNLQz1enrCSo1znBPblmfgrNblsjHhwNhPcBh5WPXt3kVdhkzoqPDHplc2osixRdsnREsKJE73WDZVqTZQhAsQZTG3M6ZrDwkjqHGgSoAAAIEAIBIgaYQAAAAAAgAAACBzdHJlYW1saW5lLWthbWVsZW9uLWNvbG9yLTAxLnN2ZwAAACBzdHJlYW1saW5lLWthbWVsZW9uLWNvbG9yLTAyLnN2Z/////8AAAACAAAAZFUREBQFRQRFUBAQAQBBRERQFBQQQURRBAUUVAAUVUBFBRRVQVRREFFVRVBEQBAUUAFQVUFBBBAVBUAAUFFUBBRQUQUQQAEEFREQUFUEFARQRBFEVBFRREUBRVVUAQBVQURAAVAAAAAA";
+
+const chunks = {
+  "streamline-kameleon-color-01.svg": new URL("./streamline-kameleon-color-01.svg", import.meta.url).href,
+  "streamline-kameleon-color-02.svg": new URL("./streamline-kameleon-color-02.svg", import.meta.url).href
+};
+
+register('streamline-kameleon-color', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});

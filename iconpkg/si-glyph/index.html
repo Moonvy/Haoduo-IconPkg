@@ -1,0 +1,3368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>si-glyph - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>si-glyph <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(799)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:abacus')" title="Click to copy">
+            <hd-icon icon="si-glyph:abacus"></hd-icon>
+            <span class="name">abacus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:adjustment-horizon')" title="Click to copy">
+            <hd-icon icon="si-glyph:adjustment-horizon"></hd-icon>
+            <span class="name">adjustment-horizon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:adjustment-vertical')" title="Click to copy">
+            <hd-icon icon="si-glyph:adjustment-vertical"></hd-icon>
+            <span class="name">adjustment-vertical</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:air-balloon')" title="Click to copy">
+            <hd-icon icon="si-glyph:air-balloon"></hd-icon>
+            <span class="name">air-balloon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:airplane')" title="Click to copy">
+            <hd-icon icon="si-glyph:airplane"></hd-icon>
+            <span class="name">airplane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:airplane-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:airplane-2"></hd-icon>
+            <span class="name">airplane-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:alarm-clock')" title="Click to copy">
+            <hd-icon icon="si-glyph:alarm-clock"></hd-icon>
+            <span class="name">alarm-clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:alien')" title="Click to copy">
+            <hd-icon icon="si-glyph:alien"></hd-icon>
+            <span class="name">alien</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:aligh-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:aligh-left"></hd-icon>
+            <span class="name">aligh-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:align-center')" title="Click to copy">
+            <hd-icon icon="si-glyph:align-center"></hd-icon>
+            <span class="name">align-center</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:align-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:align-left"></hd-icon>
+            <span class="name">align-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:align-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:align-right"></hd-icon>
+            <span class="name">align-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:ambulance')" title="Click to copy">
+            <hd-icon icon="si-glyph:ambulance"></hd-icon>
+            <span class="name">ambulance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:anchor')" title="Click to copy">
+            <hd-icon icon="si-glyph:anchor"></hd-icon>
+            <span class="name">anchor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:android')" title="Click to copy">
+            <hd-icon icon="si-glyph:android"></hd-icon>
+            <span class="name">android</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:angle-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:angle-1"></hd-icon>
+            <span class="name">angle-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:angle-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:angle-2"></hd-icon>
+            <span class="name">angle-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:antenna-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:antenna-1"></hd-icon>
+            <span class="name">antenna-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:apron')" title="Click to copy">
+            <hd-icon icon="si-glyph:apron"></hd-icon>
+            <span class="name">apron</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-backward')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-backward"></hd-icon>
+            <span class="name">arrow-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-change')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-change"></hd-icon>
+            <span class="name">arrow-change</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-circle-rycycle')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-circle-rycycle"></hd-icon>
+            <span class="name">arrow-circle-rycycle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-down"></hd-icon>
+            <span class="name">arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-forward')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-forward"></hd-icon>
+            <span class="name">arrow-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-four-way')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-four-way"></hd-icon>
+            <span class="name">arrow-four-way</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-fullscreen')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-fullscreen"></hd-icon>
+            <span class="name">arrow-fullscreen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-fullscreen-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-fullscreen-2"></hd-icon>
+            <span class="name">arrow-fullscreen-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-left"></hd-icon>
+            <span class="name">arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-left-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-left-right"></hd-icon>
+            <span class="name">arrow-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-move')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-move"></hd-icon>
+            <span class="name">arrow-move</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-reload')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-reload"></hd-icon>
+            <span class="name">arrow-reload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-resize-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-resize-1"></hd-icon>
+            <span class="name">arrow-resize-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-resize-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-resize-2"></hd-icon>
+            <span class="name">arrow-resize-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-resize-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-resize-3"></hd-icon>
+            <span class="name">arrow-resize-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-resize-4')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-resize-4"></hd-icon>
+            <span class="name">arrow-resize-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-resize-5')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-resize-5"></hd-icon>
+            <span class="name">arrow-resize-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-resize-6')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-resize-6"></hd-icon>
+            <span class="name">arrow-resize-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-right"></hd-icon>
+            <span class="name">arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-shuffle')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-shuffle"></hd-icon>
+            <span class="name">arrow-shuffle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thick-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thick-down"></hd-icon>
+            <span class="name">arrow-thick-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thick-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thick-left"></hd-icon>
+            <span class="name">arrow-thick-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thick-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thick-right"></hd-icon>
+            <span class="name">arrow-thick-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thick-thin-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thick-thin-down"></hd-icon>
+            <span class="name">arrow-thick-thin-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thick-thin-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thick-thin-up"></hd-icon>
+            <span class="name">arrow-thick-thin-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thick-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thick-up"></hd-icon>
+            <span class="name">arrow-thick-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thin-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thin-down"></hd-icon>
+            <span class="name">arrow-thin-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thin-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thin-left"></hd-icon>
+            <span class="name">arrow-thin-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thin-left-bottom')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thin-left-bottom"></hd-icon>
+            <span class="name">arrow-thin-left-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thin-left-top')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thin-left-top"></hd-icon>
+            <span class="name">arrow-thin-left-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thin-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thin-right"></hd-icon>
+            <span class="name">arrow-thin-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thin-right-bottom')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thin-right-bottom"></hd-icon>
+            <span class="name">arrow-thin-right-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thin-right-top')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thin-right-top"></hd-icon>
+            <span class="name">arrow-thin-right-top</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-thin-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-thin-up"></hd-icon>
+            <span class="name">arrow-thin-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-three-way-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-three-way-1"></hd-icon>
+            <span class="name">arrow-three-way-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-three-way-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-three-way-2"></hd-icon>
+            <span class="name">arrow-three-way-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-triangle-recycle')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-triangle-recycle"></hd-icon>
+            <span class="name">arrow-triangle-recycle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-two-left-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-two-left-right"></hd-icon>
+            <span class="name">arrow-two-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-two-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-two-up"></hd-icon>
+            <span class="name">arrow-two-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-two-way')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-two-way"></hd-icon>
+            <span class="name">arrow-two-way</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-two-way-left-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-two-way-left-right"></hd-icon>
+            <span class="name">arrow-two-way-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-two-way-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-two-way-right"></hd-icon>
+            <span class="name">arrow-two-way-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-two-way-right-bottom')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-two-way-right-bottom"></hd-icon>
+            <span class="name">arrow-two-way-right-bottom</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-up"></hd-icon>
+            <span class="name">arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-up-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-up-down"></hd-icon>
+            <span class="name">arrow-up-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:arrow-wave')" title="Click to copy">
+            <hd-icon icon="si-glyph:arrow-wave"></hd-icon>
+            <span class="name">arrow-wave</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:art-board')" title="Click to copy">
+            <hd-icon icon="si-glyph:art-board"></hd-icon>
+            <span class="name">art-board</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:askterisk')" title="Click to copy">
+            <hd-icon icon="si-glyph:askterisk"></hd-icon>
+            <span class="name">askterisk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:atm-card')" title="Click to copy">
+            <hd-icon icon="si-glyph:atm-card"></hd-icon>
+            <span class="name">atm-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:axe')" title="Click to copy">
+            <hd-icon icon="si-glyph:axe"></hd-icon>
+            <span class="name">axe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:baby')" title="Click to copy">
+            <hd-icon icon="si-glyph:baby"></hd-icon>
+            <span class="name">baby</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:baby-milk-botl')" title="Click to copy">
+            <hd-icon icon="si-glyph:baby-milk-botl"></hd-icon>
+            <span class="name">baby-milk-botl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:baby-stroller')" title="Click to copy">
+            <hd-icon icon="si-glyph:baby-stroller"></hd-icon>
+            <span class="name">baby-stroller</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:baby-troller')" title="Click to copy">
+            <hd-icon icon="si-glyph:baby-troller"></hd-icon>
+            <span class="name">baby-troller</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:back-pack')" title="Click to copy">
+            <hd-icon icon="si-glyph:back-pack"></hd-icon>
+            <span class="name">back-pack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:backward-page')" title="Click to copy">
+            <hd-icon icon="si-glyph:backward-page"></hd-icon>
+            <span class="name">backward-page</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:badge-name')" title="Click to copy">
+            <hd-icon icon="si-glyph:badge-name"></hd-icon>
+            <span class="name">badge-name</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bag')" title="Click to copy">
+            <hd-icon icon="si-glyph:bag"></hd-icon>
+            <span class="name">bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bag-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:bag-plus"></hd-icon>
+            <span class="name">bag-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bag-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:bag-remove"></hd-icon>
+            <span class="name">bag-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:balance')" title="Click to copy">
+            <hd-icon icon="si-glyph:balance"></hd-icon>
+            <span class="name">balance</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:balloon')" title="Click to copy">
+            <hd-icon icon="si-glyph:balloon"></hd-icon>
+            <span class="name">balloon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bandage')" title="Click to copy">
+            <hd-icon icon="si-glyph:bandage"></hd-icon>
+            <span class="name">bandage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bank')" title="Click to copy">
+            <hd-icon icon="si-glyph:bank"></hd-icon>
+            <span class="name">bank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:barcode')" title="Click to copy">
+            <hd-icon icon="si-glyph:barcode"></hd-icon>
+            <span class="name">barcode</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:barrier')" title="Click to copy">
+            <hd-icon icon="si-glyph:barrier"></hd-icon>
+            <span class="name">barrier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:baseball')" title="Click to copy">
+            <hd-icon icon="si-glyph:baseball"></hd-icon>
+            <span class="name">baseball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:baseball-stick')" title="Click to copy">
+            <hd-icon icon="si-glyph:baseball-stick"></hd-icon>
+            <span class="name">baseball-stick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:basket')" title="Click to copy">
+            <hd-icon icon="si-glyph:basket"></hd-icon>
+            <span class="name">basket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:basket-arrow-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:basket-arrow-down"></hd-icon>
+            <span class="name">basket-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:basket-arrow-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:basket-arrow-left"></hd-icon>
+            <span class="name">basket-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:basket-arrow-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:basket-arrow-right"></hd-icon>
+            <span class="name">basket-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:basket-arrow-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:basket-arrow-up"></hd-icon>
+            <span class="name">basket-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:basket-checked')" title="Click to copy">
+            <hd-icon icon="si-glyph:basket-checked"></hd-icon>
+            <span class="name">basket-checked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:basket-error')" title="Click to copy">
+            <hd-icon icon="si-glyph:basket-error"></hd-icon>
+            <span class="name">basket-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:basket-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:basket-plus"></hd-icon>
+            <span class="name">basket-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:basket-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:basket-remove"></hd-icon>
+            <span class="name">basket-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:basketball')" title="Click to copy">
+            <hd-icon icon="si-glyph:basketball"></hd-icon>
+            <span class="name">basketball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:battery-charging')" title="Click to copy">
+            <hd-icon icon="si-glyph:battery-charging"></hd-icon>
+            <span class="name">battery-charging</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:battery-empty')" title="Click to copy">
+            <hd-icon icon="si-glyph:battery-empty"></hd-icon>
+            <span class="name">battery-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:battery-full')" title="Click to copy">
+            <hd-icon icon="si-glyph:battery-full"></hd-icon>
+            <span class="name">battery-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:battery-half')" title="Click to copy">
+            <hd-icon icon="si-glyph:battery-half"></hd-icon>
+            <span class="name">battery-half</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:battery-half-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:battery-half-2"></hd-icon>
+            <span class="name">battery-half-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:battery-low')" title="Click to copy">
+            <hd-icon icon="si-glyph:battery-low"></hd-icon>
+            <span class="name">battery-low</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bed')" title="Click to copy">
+            <hd-icon icon="si-glyph:bed"></hd-icon>
+            <span class="name">bed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bell')" title="Click to copy">
+            <hd-icon icon="si-glyph:bell"></hd-icon>
+            <span class="name">bell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bicycle-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:bicycle-1"></hd-icon>
+            <span class="name">bicycle-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bicycle-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:bicycle-3"></hd-icon>
+            <span class="name">bicycle-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bicycle-man')" title="Click to copy">
+            <hd-icon icon="si-glyph:bicycle-man"></hd-icon>
+            <span class="name">bicycle-man</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bikini')" title="Click to copy">
+            <hd-icon icon="si-glyph:bikini"></hd-icon>
+            <span class="name">bikini</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:billiard-ball')" title="Click to copy">
+            <hd-icon icon="si-glyph:billiard-ball"></hd-icon>
+            <span class="name">billiard-ball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:binocular')" title="Click to copy">
+            <hd-icon icon="si-glyph:binocular"></hd-icon>
+            <span class="name">binocular</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:birthday-cake')" title="Click to copy">
+            <hd-icon icon="si-glyph:birthday-cake"></hd-icon>
+            <span class="name">birthday-cake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:biscuit')" title="Click to copy">
+            <hd-icon icon="si-glyph:biscuit"></hd-icon>
+            <span class="name">biscuit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:blender')" title="Click to copy">
+            <hd-icon icon="si-glyph:blender"></hd-icon>
+            <span class="name">blender</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:blood-bag')" title="Click to copy">
+            <hd-icon icon="si-glyph:blood-bag"></hd-icon>
+            <span class="name">blood-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bluetooth')" title="Click to copy">
+            <hd-icon icon="si-glyph:bluetooth"></hd-icon>
+            <span class="name">bluetooth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:board')" title="Click to copy">
+            <hd-icon icon="si-glyph:board"></hd-icon>
+            <span class="name">board</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:boat')" title="Click to copy">
+            <hd-icon icon="si-glyph:boat"></hd-icon>
+            <span class="name">boat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bolt')" title="Click to copy">
+            <hd-icon icon="si-glyph:bolt"></hd-icon>
+            <span class="name">bolt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bomb-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:bomb-1"></hd-icon>
+            <span class="name">bomb-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bomb-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:bomb-2"></hd-icon>
+            <span class="name">bomb-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bone')" title="Click to copy">
+            <hd-icon icon="si-glyph:bone"></hd-icon>
+            <span class="name">bone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:book')" title="Click to copy">
+            <hd-icon icon="si-glyph:book"></hd-icon>
+            <span class="name">book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:book-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:book-1"></hd-icon>
+            <span class="name">book-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:book-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:book-3"></hd-icon>
+            <span class="name">book-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:book-4')" title="Click to copy">
+            <hd-icon icon="si-glyph:book-4"></hd-icon>
+            <span class="name">book-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:book-open')" title="Click to copy">
+            <hd-icon icon="si-glyph:book-open"></hd-icon>
+            <span class="name">book-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:book-person')" title="Click to copy">
+            <hd-icon icon="si-glyph:book-person"></hd-icon>
+            <span class="name">book-person</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bookcase')" title="Click to copy">
+            <hd-icon icon="si-glyph:bookcase"></hd-icon>
+            <span class="name">bookcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bookmark')" title="Click to copy">
+            <hd-icon icon="si-glyph:bookmark"></hd-icon>
+            <span class="name">bookmark</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:botl-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:botl-2"></hd-icon>
+            <span class="name">botl-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:botl-milk')" title="Click to copy">
+            <hd-icon icon="si-glyph:botl-milk"></hd-icon>
+            <span class="name">botl-milk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bow-tie')" title="Click to copy">
+            <hd-icon icon="si-glyph:bow-tie"></hd-icon>
+            <span class="name">bow-tie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:box')" title="Click to copy">
+            <hd-icon icon="si-glyph:box"></hd-icon>
+            <span class="name">box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:box-download')" title="Click to copy">
+            <hd-icon icon="si-glyph:box-download"></hd-icon>
+            <span class="name">box-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:box-upload')" title="Click to copy">
+            <hd-icon icon="si-glyph:box-upload"></hd-icon>
+            <span class="name">box-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bread')" title="Click to copy">
+            <hd-icon icon="si-glyph:bread"></hd-icon>
+            <span class="name">bread</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:briefcase')" title="Click to copy">
+            <hd-icon icon="si-glyph:briefcase"></hd-icon>
+            <span class="name">briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:briefcase-person')" title="Click to copy">
+            <hd-icon icon="si-glyph:briefcase-person"></hd-icon>
+            <span class="name">briefcase-person</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:brightness')" title="Click to copy">
+            <hd-icon icon="si-glyph:brightness"></hd-icon>
+            <span class="name">brightness</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:brush-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:brush-1"></hd-icon>
+            <span class="name">brush-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:brush-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:brush-2"></hd-icon>
+            <span class="name">brush-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:brush-and-pencil')" title="Click to copy">
+            <hd-icon icon="si-glyph:brush-and-pencil"></hd-icon>
+            <span class="name">brush-and-pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bubble-chat')" title="Click to copy">
+            <hd-icon icon="si-glyph:bubble-chat"></hd-icon>
+            <span class="name">bubble-chat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bubble-message')" title="Click to copy">
+            <hd-icon icon="si-glyph:bubble-message"></hd-icon>
+            <span class="name">bubble-message</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bubble-message-dot')" title="Click to copy">
+            <hd-icon icon="si-glyph:bubble-message-dot"></hd-icon>
+            <span class="name">bubble-message-dot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bubble-message-dot-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:bubble-message-dot-2"></hd-icon>
+            <span class="name">bubble-message-dot-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bubble-message-hi')" title="Click to copy">
+            <hd-icon icon="si-glyph:bubble-message-hi"></hd-icon>
+            <span class="name">bubble-message-hi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bubble-message-quote')" title="Click to copy">
+            <hd-icon icon="si-glyph:bubble-message-quote"></hd-icon>
+            <span class="name">bubble-message-quote</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bubble-message-talk')" title="Click to copy">
+            <hd-icon icon="si-glyph:bubble-message-talk"></hd-icon>
+            <span class="name">bubble-message-talk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bubble-message-text')" title="Click to copy">
+            <hd-icon icon="si-glyph:bubble-message-text"></hd-icon>
+            <span class="name">bubble-message-text</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bucket')" title="Click to copy">
+            <hd-icon icon="si-glyph:bucket"></hd-icon>
+            <span class="name">bucket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bug')" title="Click to copy">
+            <hd-icon icon="si-glyph:bug"></hd-icon>
+            <span class="name">bug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:building')" title="Click to copy">
+            <hd-icon icon="si-glyph:building"></hd-icon>
+            <span class="name">building</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bullet-checked-list')" title="Click to copy">
+            <hd-icon icon="si-glyph:bullet-checked-list"></hd-icon>
+            <span class="name">bullet-checked-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bullet-list')" title="Click to copy">
+            <hd-icon icon="si-glyph:bullet-list"></hd-icon>
+            <span class="name">bullet-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bullet-list-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:bullet-list-2"></hd-icon>
+            <span class="name">bullet-list-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:bus')" title="Click to copy">
+            <hd-icon icon="si-glyph:bus"></hd-icon>
+            <span class="name">bus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-arrow-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-arrow-down"></hd-icon>
+            <span class="name">button-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-arrow-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-arrow-left"></hd-icon>
+            <span class="name">button-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-arrow-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-arrow-right"></hd-icon>
+            <span class="name">button-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-arrow-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-arrow-up"></hd-icon>
+            <span class="name">button-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-buy')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-buy"></hd-icon>
+            <span class="name">button-buy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-error')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-error"></hd-icon>
+            <span class="name">button-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-hd')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-hd"></hd-icon>
+            <span class="name">button-hd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-play')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-play"></hd-icon>
+            <span class="name">button-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-plus"></hd-icon>
+            <span class="name">button-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-remove"></hd-icon>
+            <span class="name">button-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-sale')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-sale"></hd-icon>
+            <span class="name">button-sale</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-sell')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-sell"></hd-icon>
+            <span class="name">button-sell</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-starburst')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-starburst"></hd-icon>
+            <span class="name">button-starburst</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-triangle-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-triangle-up"></hd-icon>
+            <span class="name">button-triangle-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:button-tv')" title="Click to copy">
+            <hd-icon icon="si-glyph:button-tv"></hd-icon>
+            <span class="name">button-tv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cabin-cable')" title="Click to copy">
+            <hd-icon icon="si-glyph:cabin-cable"></hd-icon>
+            <span class="name">cabin-cable</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cabinet')" title="Click to copy">
+            <hd-icon icon="si-glyph:cabinet"></hd-icon>
+            <span class="name">cabinet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:calculator')" title="Click to copy">
+            <hd-icon icon="si-glyph:calculator"></hd-icon>
+            <span class="name">calculator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:calculator-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:calculator-2"></hd-icon>
+            <span class="name">calculator-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:calendar-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:calendar-1"></hd-icon>
+            <span class="name">calendar-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:calendar-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:calendar-3"></hd-icon>
+            <span class="name">calendar-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:calendar-empty')" title="Click to copy">
+            <hd-icon icon="si-glyph:calendar-empty"></hd-icon>
+            <span class="name">calendar-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:call')" title="Click to copy">
+            <hd-icon icon="si-glyph:call"></hd-icon>
+            <span class="name">call</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:call-forward')" title="Click to copy">
+            <hd-icon icon="si-glyph:call-forward"></hd-icon>
+            <span class="name">call-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:call-reply')" title="Click to copy">
+            <hd-icon icon="si-glyph:call-reply"></hd-icon>
+            <span class="name">call-reply</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:camera')" title="Click to copy">
+            <hd-icon icon="si-glyph:camera"></hd-icon>
+            <span class="name">camera</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:camera-projector')" title="Click to copy">
+            <hd-icon icon="si-glyph:camera-projector"></hd-icon>
+            <span class="name">camera-projector</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:camera-security')" title="Click to copy">
+            <hd-icon icon="si-glyph:camera-security"></hd-icon>
+            <span class="name">camera-security</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:can-water')" title="Click to copy">
+            <hd-icon icon="si-glyph:can-water"></hd-icon>
+            <span class="name">can-water</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:candle')" title="Click to copy">
+            <hd-icon icon="si-glyph:candle"></hd-icon>
+            <span class="name">candle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:candy')" title="Click to copy">
+            <hd-icon icon="si-glyph:candy"></hd-icon>
+            <span class="name">candy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:candy-stick')" title="Click to copy">
+            <hd-icon icon="si-glyph:candy-stick"></hd-icon>
+            <span class="name">candy-stick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:car')" title="Click to copy">
+            <hd-icon icon="si-glyph:car"></hd-icon>
+            <span class="name">car</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:car-garage')" title="Click to copy">
+            <hd-icon icon="si-glyph:car-garage"></hd-icon>
+            <span class="name">car-garage</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:casette')" title="Click to copy">
+            <hd-icon icon="si-glyph:casette"></hd-icon>
+            <span class="name">casette</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cashier-machine')" title="Click to copy">
+            <hd-icon icon="si-glyph:cashier-machine"></hd-icon>
+            <span class="name">cashier-machine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:castle')" title="Click to copy">
+            <hd-icon icon="si-glyph:castle"></hd-icon>
+            <span class="name">castle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:caterpillar-machine')" title="Click to copy">
+            <hd-icon icon="si-glyph:caterpillar-machine"></hd-icon>
+            <span class="name">caterpillar-machine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cente-justify')" title="Click to copy">
+            <hd-icon icon="si-glyph:cente-justify"></hd-icon>
+            <span class="name">cente-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:chair-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:chair-1"></hd-icon>
+            <span class="name">chair-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:chair-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:chair-2"></hd-icon>
+            <span class="name">chair-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:champion-cup')" title="Click to copy">
+            <hd-icon icon="si-glyph:champion-cup"></hd-icon>
+            <span class="name">champion-cup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:chart-column')" title="Click to copy">
+            <hd-icon icon="si-glyph:chart-column"></hd-icon>
+            <span class="name">chart-column</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:chart-column-decrease')" title="Click to copy">
+            <hd-icon icon="si-glyph:chart-column-decrease"></hd-icon>
+            <span class="name">chart-column-decrease</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:chart-column-increase')" title="Click to copy">
+            <hd-icon icon="si-glyph:chart-column-increase"></hd-icon>
+            <span class="name">chart-column-increase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:chart-decrease')" title="Click to copy">
+            <hd-icon icon="si-glyph:chart-decrease"></hd-icon>
+            <span class="name">chart-decrease</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:chart-piece')" title="Click to copy">
+            <hd-icon icon="si-glyph:chart-piece"></hd-icon>
+            <span class="name">chart-piece</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:checked')" title="Click to copy">
+            <hd-icon icon="si-glyph:checked"></hd-icon>
+            <span class="name">checked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cheese')" title="Click to copy">
+            <hd-icon icon="si-glyph:cheese"></hd-icon>
+            <span class="name">cheese</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cherry')" title="Click to copy">
+            <hd-icon icon="si-glyph:cherry"></hd-icon>
+            <span class="name">cherry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:christmas-mistletoe')" title="Click to copy">
+            <hd-icon icon="si-glyph:christmas-mistletoe"></hd-icon>
+            <span class="name">christmas-mistletoe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:christmass-ball')" title="Click to copy">
+            <hd-icon icon="si-glyph:christmass-ball"></hd-icon>
+            <span class="name">christmass-ball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:christmass-egg')" title="Click to copy">
+            <hd-icon icon="si-glyph:christmass-egg"></hd-icon>
+            <span class="name">christmass-egg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:christmass-hat')" title="Click to copy">
+            <hd-icon icon="si-glyph:christmass-hat"></hd-icon>
+            <span class="name">christmass-hat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:christmass-tree')" title="Click to copy">
+            <hd-icon icon="si-glyph:christmass-tree"></hd-icon>
+            <span class="name">christmass-tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle"></hd-icon>
+            <span class="name">circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-backward')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-backward"></hd-icon>
+            <span class="name">circle-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-control-pad')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-control-pad"></hd-icon>
+            <span class="name">circle-control-pad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-drashed')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-drashed"></hd-icon>
+            <span class="name">circle-drashed</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-error')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-error"></hd-icon>
+            <span class="name">circle-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-forward')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-forward"></hd-icon>
+            <span class="name">circle-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-help')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-help"></hd-icon>
+            <span class="name">circle-help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-info')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-info"></hd-icon>
+            <span class="name">circle-info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-load-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-load-left"></hd-icon>
+            <span class="name">circle-load-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-load-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-load-right"></hd-icon>
+            <span class="name">circle-load-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-plus"></hd-icon>
+            <span class="name">circle-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-remove"></hd-icon>
+            <span class="name">circle-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-star')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-star"></hd-icon>
+            <span class="name">circle-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-triangle-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-triangle-down"></hd-icon>
+            <span class="name">circle-triangle-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-triangle-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-triangle-left"></hd-icon>
+            <span class="name">circle-triangle-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:circle-triangle-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:circle-triangle-right"></hd-icon>
+            <span class="name">circle-triangle-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:city')" title="Click to copy">
+            <hd-icon icon="si-glyph:city"></hd-icon>
+            <span class="name">city</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:clamp')" title="Click to copy">
+            <hd-icon icon="si-glyph:clamp"></hd-icon>
+            <span class="name">clamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:clapboard')" title="Click to copy">
+            <hd-icon icon="si-glyph:clapboard"></hd-icon>
+            <span class="name">clapboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:clapboard-play')" title="Click to copy">
+            <hd-icon icon="si-glyph:clapboard-play"></hd-icon>
+            <span class="name">clapboard-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:clip')" title="Click to copy">
+            <hd-icon icon="si-glyph:clip"></hd-icon>
+            <span class="name">clip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:clipboard')" title="Click to copy">
+            <hd-icon icon="si-glyph:clipboard"></hd-icon>
+            <span class="name">clipboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:clipboard-checked')" title="Click to copy">
+            <hd-icon icon="si-glyph:clipboard-checked"></hd-icon>
+            <span class="name">clipboard-checked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:clock')" title="Click to copy">
+            <hd-icon icon="si-glyph:clock"></hd-icon>
+            <span class="name">clock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:close')" title="Click to copy">
+            <hd-icon icon="si-glyph:close"></hd-icon>
+            <span class="name">close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud"></hd-icon>
+            <span class="name">cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud-cloud')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud-cloud"></hd-icon>
+            <span class="name">cloud-cloud</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud-download')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud-download"></hd-icon>
+            <span class="name">cloud-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud-heavy-rain')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud-heavy-rain"></hd-icon>
+            <span class="name">cloud-heavy-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud-plus"></hd-icon>
+            <span class="name">cloud-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud-rain-heavy-rain')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud-rain-heavy-rain"></hd-icon>
+            <span class="name">cloud-rain-heavy-rain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud-remove"></hd-icon>
+            <span class="name">cloud-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud-snow')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud-snow"></hd-icon>
+            <span class="name">cloud-snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud-sun')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud-sun"></hd-icon>
+            <span class="name">cloud-sun</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud-thunder')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud-thunder"></hd-icon>
+            <span class="name">cloud-thunder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cloud-upload')" title="Click to copy">
+            <hd-icon icon="si-glyph:cloud-upload"></hd-icon>
+            <span class="name">cloud-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:clover')" title="Click to copy">
+            <hd-icon icon="si-glyph:clover"></hd-icon>
+            <span class="name">clover</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cock-pot')" title="Click to copy">
+            <hd-icon icon="si-glyph:cock-pot"></hd-icon>
+            <span class="name">cock-pot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cocktail')" title="Click to copy">
+            <hd-icon icon="si-glyph:cocktail"></hd-icon>
+            <span class="name">cocktail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:coconut')" title="Click to copy">
+            <hd-icon icon="si-glyph:coconut"></hd-icon>
+            <span class="name">coconut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:code')" title="Click to copy">
+            <hd-icon icon="si-glyph:code"></hd-icon>
+            <span class="name">code</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:coffee-machine')" title="Click to copy">
+            <hd-icon icon="si-glyph:coffee-machine"></hd-icon>
+            <span class="name">coffee-machine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:color-picker')" title="Click to copy">
+            <hd-icon icon="si-glyph:color-picker"></hd-icon>
+            <span class="name">color-picker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:column-decrease')" title="Click to copy">
+            <hd-icon icon="si-glyph:column-decrease"></hd-icon>
+            <span class="name">column-decrease</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:column-increase')" title="Click to copy">
+            <hd-icon icon="si-glyph:column-increase"></hd-icon>
+            <span class="name">column-increase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:column-wave')" title="Click to copy">
+            <hd-icon icon="si-glyph:column-wave"></hd-icon>
+            <span class="name">column-wave</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:comb')" title="Click to copy">
+            <hd-icon icon="si-glyph:comb"></hd-icon>
+            <span class="name">comb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:compass')" title="Click to copy">
+            <hd-icon icon="si-glyph:compass"></hd-icon>
+            <span class="name">compass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cone')" title="Click to copy">
+            <hd-icon icon="si-glyph:cone"></hd-icon>
+            <span class="name">cone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:congratulation-hat')" title="Click to copy">
+            <hd-icon icon="si-glyph:congratulation-hat"></hd-icon>
+            <span class="name">congratulation-hat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:connect-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:connect-1"></hd-icon>
+            <span class="name">connect-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:connect-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:connect-2"></hd-icon>
+            <span class="name">connect-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:contact-book')" title="Click to copy">
+            <hd-icon icon="si-glyph:contact-book"></hd-icon>
+            <span class="name">contact-book</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:contacter')" title="Click to copy">
+            <hd-icon icon="si-glyph:contacter"></hd-icon>
+            <span class="name">contacter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:contrast')" title="Click to copy">
+            <hd-icon icon="si-glyph:contrast"></hd-icon>
+            <span class="name">contrast</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:control-pad')" title="Click to copy">
+            <hd-icon icon="si-glyph:control-pad"></hd-icon>
+            <span class="name">control-pad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:corkscrew')" title="Click to copy">
+            <hd-icon icon="si-glyph:corkscrew"></hd-icon>
+            <span class="name">corkscrew</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:corner-flag')" title="Click to copy">
+            <hd-icon icon="si-glyph:corner-flag"></hd-icon>
+            <span class="name">corner-flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cover-flow')" title="Click to copy">
+            <hd-icon icon="si-glyph:cover-flow"></hd-icon>
+            <span class="name">cover-flow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cover-food')" title="Click to copy">
+            <hd-icon icon="si-glyph:cover-food"></hd-icon>
+            <span class="name">cover-food</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cow')" title="Click to copy">
+            <hd-icon icon="si-glyph:cow"></hd-icon>
+            <span class="name">cow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cpu')" title="Click to copy">
+            <hd-icon icon="si-glyph:cpu"></hd-icon>
+            <span class="name">cpu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cran')" title="Click to copy">
+            <hd-icon icon="si-glyph:cran"></hd-icon>
+            <span class="name">cran</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:crop')" title="Click to copy">
+            <hd-icon icon="si-glyph:crop"></hd-icon>
+            <span class="name">crop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cross-hair')" title="Click to copy">
+            <hd-icon icon="si-glyph:cross-hair"></hd-icon>
+            <span class="name">cross-hair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cross-hair-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:cross-hair-2"></hd-icon>
+            <span class="name">cross-hair-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:crown')" title="Click to copy">
+            <hd-icon icon="si-glyph:crown"></hd-icon>
+            <span class="name">crown</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cruise')" title="Click to copy">
+            <hd-icon icon="si-glyph:cruise"></hd-icon>
+            <span class="name">cruise</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cubic')" title="Click to copy">
+            <hd-icon icon="si-glyph:cubic"></hd-icon>
+            <span class="name">cubic</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:cup-cake')" title="Click to copy">
+            <hd-icon icon="si-glyph:cup-cake"></hd-icon>
+            <span class="name">cup-cake</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:curtain')" title="Click to copy">
+            <hd-icon icon="si-glyph:curtain"></hd-icon>
+            <span class="name">curtain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:customer-support')" title="Click to copy">
+            <hd-icon icon="si-glyph:customer-support"></hd-icon>
+            <span class="name">customer-support</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dashboard')" title="Click to copy">
+            <hd-icon icon="si-glyph:dashboard"></hd-icon>
+            <span class="name">dashboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:data-arrow-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:data-arrow-down"></hd-icon>
+            <span class="name">data-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:database')" title="Click to copy">
+            <hd-icon icon="si-glyph:database"></hd-icon>
+            <span class="name">database</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:database-download')" title="Click to copy">
+            <hd-icon icon="si-glyph:database-download"></hd-icon>
+            <span class="name">database-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:database-error')" title="Click to copy">
+            <hd-icon icon="si-glyph:database-error"></hd-icon>
+            <span class="name">database-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:database-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:database-plus"></hd-icon>
+            <span class="name">database-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:database-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:database-remove"></hd-icon>
+            <span class="name">database-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:database-share')" title="Click to copy">
+            <hd-icon icon="si-glyph:database-share"></hd-icon>
+            <span class="name">database-share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:database-upload')" title="Click to copy">
+            <hd-icon icon="si-glyph:database-upload"></hd-icon>
+            <span class="name">database-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:delete')" title="Click to copy">
+            <hd-icon icon="si-glyph:delete"></hd-icon>
+            <span class="name">delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:delicious-circle')" title="Click to copy">
+            <hd-icon icon="si-glyph:delicious-circle"></hd-icon>
+            <span class="name">delicious-circle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:deny')" title="Click to copy">
+            <hd-icon icon="si-glyph:deny"></hd-icon>
+            <span class="name">deny</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:desktop')" title="Click to copy">
+            <hd-icon icon="si-glyph:desktop"></hd-icon>
+            <span class="name">desktop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dial-number')" title="Click to copy">
+            <hd-icon icon="si-glyph:dial-number"></hd-icon>
+            <span class="name">dial-number</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dial-number-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:dial-number-1"></hd-icon>
+            <span class="name">dial-number-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:diamond')" title="Click to copy">
+            <hd-icon icon="si-glyph:diamond"></hd-icon>
+            <span class="name">diamond</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dice-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:dice-1"></hd-icon>
+            <span class="name">dice-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dice-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:dice-2"></hd-icon>
+            <span class="name">dice-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dice-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:dice-3"></hd-icon>
+            <span class="name">dice-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dice-5')" title="Click to copy">
+            <hd-icon icon="si-glyph:dice-5"></hd-icon>
+            <span class="name">dice-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dice-6')" title="Click to copy">
+            <hd-icon icon="si-glyph:dice-6"></hd-icon>
+            <span class="name">dice-6</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc"></hd-icon>
+            <span class="name">disc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc-add')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc-add"></hd-icon>
+            <span class="name">disc-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc-deny')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc-deny"></hd-icon>
+            <span class="name">disc-deny</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc-download')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc-download"></hd-icon>
+            <span class="name">disc-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc-error')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc-error"></hd-icon>
+            <span class="name">disc-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc-pause')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc-pause"></hd-icon>
+            <span class="name">disc-pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc-play')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc-play"></hd-icon>
+            <span class="name">disc-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc-play-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc-play-2"></hd-icon>
+            <span class="name">disc-play-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc-remove"></hd-icon>
+            <span class="name">disc-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc-stop')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc-stop"></hd-icon>
+            <span class="name">disc-stop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disc-upload')" title="Click to copy">
+            <hd-icon icon="si-glyph:disc-upload"></hd-icon>
+            <span class="name">disc-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dish')" title="Click to copy">
+            <hd-icon icon="si-glyph:dish"></hd-icon>
+            <span class="name">dish</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:disk-antenna')" title="Click to copy">
+            <hd-icon icon="si-glyph:disk-antenna"></hd-icon>
+            <span class="name">disk-antenna</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dna')" title="Click to copy">
+            <hd-icon icon="si-glyph:dna"></hd-icon>
+            <span class="name">dna</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document')" title="Click to copy">
+            <hd-icon icon="si-glyph:document"></hd-icon>
+            <span class="name">document</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-arrow-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-arrow-down"></hd-icon>
+            <span class="name">document-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-arrow-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-arrow-left"></hd-icon>
+            <span class="name">document-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-arrow-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-arrow-right"></hd-icon>
+            <span class="name">document-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-arrow-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-arrow-up"></hd-icon>
+            <span class="name">document-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-backward')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-backward"></hd-icon>
+            <span class="name">document-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-bullet-list')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-bullet-list"></hd-icon>
+            <span class="name">document-bullet-list</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-checked')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-checked"></hd-icon>
+            <span class="name">document-checked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-copy')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-copy"></hd-icon>
+            <span class="name">document-copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-doc')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-doc"></hd-icon>
+            <span class="name">document-doc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-edit')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-edit"></hd-icon>
+            <span class="name">document-edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-error')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-error"></hd-icon>
+            <span class="name">document-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-forward')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-forward"></hd-icon>
+            <span class="name">document-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-help')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-help"></hd-icon>
+            <span class="name">document-help</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-music')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-music"></hd-icon>
+            <span class="name">document-music</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-pdf')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-pdf"></hd-icon>
+            <span class="name">document-pdf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-plus"></hd-icon>
+            <span class="name">document-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-remove"></hd-icon>
+            <span class="name">document-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-rss')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-rss"></hd-icon>
+            <span class="name">document-rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-search')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-search"></hd-icon>
+            <span class="name">document-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-star')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-star"></hd-icon>
+            <span class="name">document-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:document-warning')" title="Click to copy">
+            <hd-icon icon="si-glyph:document-warning"></hd-icon>
+            <span class="name">document-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dog')" title="Click to copy">
+            <hd-icon icon="si-glyph:dog"></hd-icon>
+            <span class="name">dog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:door')" title="Click to copy">
+            <hd-icon icon="si-glyph:door"></hd-icon>
+            <span class="name">door</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:downstair')" title="Click to copy">
+            <hd-icon icon="si-glyph:downstair"></hd-icon>
+            <span class="name">downstair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:downwards-arrow-to-bar')" title="Click to copy">
+            <hd-icon icon="si-glyph:downwards-arrow-to-bar"></hd-icon>
+            <span class="name">downwards-arrow-to-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:drill')" title="Click to copy">
+            <hd-icon icon="si-glyph:drill"></hd-icon>
+            <span class="name">drill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:drop-water')" title="Click to copy">
+            <hd-icon icon="si-glyph:drop-water"></hd-icon>
+            <span class="name">drop-water</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:dropbox')" title="Click to copy">
+            <hd-icon icon="si-glyph:dropbox"></hd-icon>
+            <span class="name">dropbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:drum')" title="Click to copy">
+            <hd-icon icon="si-glyph:drum"></hd-icon>
+            <span class="name">drum</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:easal')" title="Click to copy">
+            <hd-icon icon="si-glyph:easal"></hd-icon>
+            <span class="name">easal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:edit')" title="Click to copy">
+            <hd-icon icon="si-glyph:edit"></hd-icon>
+            <span class="name">edit</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:egg')" title="Click to copy">
+            <hd-icon icon="si-glyph:egg"></hd-icon>
+            <span class="name">egg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:eject')" title="Click to copy">
+            <hd-icon icon="si-glyph:eject"></hd-icon>
+            <span class="name">eject</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:electron')" title="Click to copy">
+            <hd-icon icon="si-glyph:electron"></hd-icon>
+            <span class="name">electron</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:elevator-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:elevator-down"></hd-icon>
+            <span class="name">elevator-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:elevator-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:elevator-up"></hd-icon>
+            <span class="name">elevator-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:emoticon')" title="Click to copy">
+            <hd-icon icon="si-glyph:emoticon"></hd-icon>
+            <span class="name">emoticon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:end-page')" title="Click to copy">
+            <hd-icon icon="si-glyph:end-page"></hd-icon>
+            <span class="name">end-page</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:erase')" title="Click to copy">
+            <hd-icon icon="si-glyph:erase"></hd-icon>
+            <span class="name">erase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:euro')" title="Click to copy">
+            <hd-icon icon="si-glyph:euro"></hd-icon>
+            <span class="name">euro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:excavator')" title="Click to copy">
+            <hd-icon icon="si-glyph:excavator"></hd-icon>
+            <span class="name">excavator</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:extinguisher')" title="Click to copy">
+            <hd-icon icon="si-glyph:extinguisher"></hd-icon>
+            <span class="name">extinguisher</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:eye-drop')" title="Click to copy">
+            <hd-icon icon="si-glyph:eye-drop"></hd-icon>
+            <span class="name">eye-drop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:eye-glass')" title="Click to copy">
+            <hd-icon icon="si-glyph:eye-glass"></hd-icon>
+            <span class="name">eye-glass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:factory')" title="Click to copy">
+            <hd-icon icon="si-glyph:factory"></hd-icon>
+            <span class="name">factory</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:faucet')" title="Click to copy">
+            <hd-icon icon="si-glyph:faucet"></hd-icon>
+            <span class="name">faucet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:feather')" title="Click to copy">
+            <hd-icon icon="si-glyph:feather"></hd-icon>
+            <span class="name">feather</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:female')" title="Click to copy">
+            <hd-icon icon="si-glyph:female"></hd-icon>
+            <span class="name">female</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:fence')" title="Click to copy">
+            <hd-icon icon="si-glyph:fence"></hd-icon>
+            <span class="name">fence</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:fence-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:fence-2"></hd-icon>
+            <span class="name">fence-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:file-box')" title="Click to copy">
+            <hd-icon icon="si-glyph:file-box"></hd-icon>
+            <span class="name">file-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:file-download')" title="Click to copy">
+            <hd-icon icon="si-glyph:file-download"></hd-icon>
+            <span class="name">file-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:file-upload')" title="Click to copy">
+            <hd-icon icon="si-glyph:file-upload"></hd-icon>
+            <span class="name">file-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:film')" title="Click to copy">
+            <hd-icon icon="si-glyph:film"></hd-icon>
+            <span class="name">film</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:film-35mm')" title="Click to copy">
+            <hd-icon icon="si-glyph:film-35mm"></hd-icon>
+            <span class="name">film-35mm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:finder')" title="Click to copy">
+            <hd-icon icon="si-glyph:finder"></hd-icon>
+            <span class="name">finder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:finger-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:finger-up"></hd-icon>
+            <span class="name">finger-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:fire')" title="Click to copy">
+            <hd-icon icon="si-glyph:fire"></hd-icon>
+            <span class="name">fire</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:fire-alarm')" title="Click to copy">
+            <hd-icon icon="si-glyph:fire-alarm"></hd-icon>
+            <span class="name">fire-alarm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:fire-hydrant')" title="Click to copy">
+            <hd-icon icon="si-glyph:fire-hydrant"></hd-icon>
+            <span class="name">fire-hydrant</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:fire-wood')" title="Click to copy">
+            <hd-icon icon="si-glyph:fire-wood"></hd-icon>
+            <span class="name">fire-wood</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:first-aid-briefcase')" title="Click to copy">
+            <hd-icon icon="si-glyph:first-aid-briefcase"></hd-icon>
+            <span class="name">first-aid-briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:fish')" title="Click to copy">
+            <hd-icon icon="si-glyph:fish"></hd-icon>
+            <span class="name">fish</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:flag')" title="Click to copy">
+            <hd-icon icon="si-glyph:flag"></hd-icon>
+            <span class="name">flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:float')" title="Click to copy">
+            <hd-icon icon="si-glyph:float"></hd-icon>
+            <span class="name">float</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:floppy-disk')" title="Click to copy">
+            <hd-icon icon="si-glyph:floppy-disk"></hd-icon>
+            <span class="name">floppy-disk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:flower')" title="Click to copy">
+            <hd-icon icon="si-glyph:flower"></hd-icon>
+            <span class="name">flower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:flower-pot')" title="Click to copy">
+            <hd-icon icon="si-glyph:flower-pot"></hd-icon>
+            <span class="name">flower-pot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder"></hd-icon>
+            <span class="name">folder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder-contact')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder-contact"></hd-icon>
+            <span class="name">folder-contact</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder-error')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder-error"></hd-icon>
+            <span class="name">folder-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder-music')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder-music"></hd-icon>
+            <span class="name">folder-music</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder-open')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder-open"></hd-icon>
+            <span class="name">folder-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder-plus"></hd-icon>
+            <span class="name">folder-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder-remove"></hd-icon>
+            <span class="name">folder-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder-rss')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder-rss"></hd-icon>
+            <span class="name">folder-rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder-search')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder-search"></hd-icon>
+            <span class="name">folder-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder-share')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder-share"></hd-icon>
+            <span class="name">folder-share</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:folder-warning')" title="Click to copy">
+            <hd-icon icon="si-glyph:folder-warning"></hd-icon>
+            <span class="name">folder-warning</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:foot-sign')" title="Click to copy">
+            <hd-icon icon="si-glyph:foot-sign"></hd-icon>
+            <span class="name">foot-sign</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:forcus')" title="Click to copy">
+            <hd-icon icon="si-glyph:forcus"></hd-icon>
+            <span class="name">forcus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:forklift')" title="Click to copy">
+            <hd-icon icon="si-glyph:forklift"></hd-icon>
+            <span class="name">forklift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:forward-page')" title="Click to copy">
+            <hd-icon icon="si-glyph:forward-page"></hd-icon>
+            <span class="name">forward-page</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:fridge')" title="Click to copy">
+            <hd-icon icon="si-glyph:fridge"></hd-icon>
+            <span class="name">fridge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:fullscreen')" title="Click to copy">
+            <hd-icon icon="si-glyph:fullscreen"></hd-icon>
+            <span class="name">fullscreen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:game-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:game-1"></hd-icon>
+            <span class="name">game-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:game-controll')" title="Click to copy">
+            <hd-icon icon="si-glyph:game-controll"></hd-icon>
+            <span class="name">game-controll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:gas-station')" title="Click to copy">
+            <hd-icon icon="si-glyph:gas-station"></hd-icon>
+            <span class="name">gas-station</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:gate')" title="Click to copy">
+            <hd-icon icon="si-glyph:gate"></hd-icon>
+            <span class="name">gate</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:gear')" title="Click to copy">
+            <hd-icon icon="si-glyph:gear"></hd-icon>
+            <span class="name">gear</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:gear-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:gear-1"></hd-icon>
+            <span class="name">gear-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:ghost')" title="Click to copy">
+            <hd-icon icon="si-glyph:ghost"></hd-icon>
+            <span class="name">ghost</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:gift')" title="Click to copy">
+            <hd-icon icon="si-glyph:gift"></hd-icon>
+            <span class="name">gift</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:glass-water')" title="Click to copy">
+            <hd-icon icon="si-glyph:glass-water"></hd-icon>
+            <span class="name">glass-water</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:global')" title="Click to copy">
+            <hd-icon icon="si-glyph:global"></hd-icon>
+            <span class="name">global</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:globe')" title="Click to copy">
+            <hd-icon icon="si-glyph:globe"></hd-icon>
+            <span class="name">globe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:glove')" title="Click to copy">
+            <hd-icon icon="si-glyph:glove"></hd-icon>
+            <span class="name">glove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:golf-ball')" title="Click to copy">
+            <hd-icon icon="si-glyph:golf-ball"></hd-icon>
+            <span class="name">golf-ball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:golf-flag')" title="Click to copy">
+            <hd-icon icon="si-glyph:golf-flag"></hd-icon>
+            <span class="name">golf-flag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:guitar')" title="Click to copy">
+            <hd-icon icon="si-glyph:guitar"></hd-icon>
+            <span class="name">guitar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hamburger')" title="Click to copy">
+            <hd-icon icon="si-glyph:hamburger"></hd-icon>
+            <span class="name">hamburger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hammer')" title="Click to copy">
+            <hd-icon icon="si-glyph:hammer"></hd-icon>
+            <span class="name">hammer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hammer-and-wrench')" title="Click to copy">
+            <hd-icon icon="si-glyph:hammer-and-wrench"></hd-icon>
+            <span class="name">hammer-and-wrench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hand')" title="Click to copy">
+            <hd-icon icon="si-glyph:hand"></hd-icon>
+            <span class="name">hand</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hand-lamp')" title="Click to copy">
+            <hd-icon icon="si-glyph:hand-lamp"></hd-icon>
+            <span class="name">hand-lamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hand-switch')" title="Click to copy">
+            <hd-icon icon="si-glyph:hand-switch"></hd-icon>
+            <span class="name">hand-switch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:handcuff')" title="Click to copy">
+            <hd-icon icon="si-glyph:handcuff"></hd-icon>
+            <span class="name">handcuff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hanger')" title="Click to copy">
+            <hd-icon icon="si-glyph:hanger"></hd-icon>
+            <span class="name">hanger</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hardware')" title="Click to copy">
+            <hd-icon icon="si-glyph:hardware"></hd-icon>
+            <span class="name">hardware</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hat')" title="Click to copy">
+            <hd-icon icon="si-glyph:hat"></hd-icon>
+            <span class="name">hat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hat-chef')" title="Click to copy">
+            <hd-icon icon="si-glyph:hat-chef"></hd-icon>
+            <span class="name">hat-chef</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:head')" title="Click to copy">
+            <hd-icon icon="si-glyph:head"></hd-icon>
+            <span class="name">head</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:head-set')" title="Click to copy">
+            <hd-icon icon="si-glyph:head-set"></hd-icon>
+            <span class="name">head-set</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:heart')" title="Click to copy">
+            <hd-icon icon="si-glyph:heart"></hd-icon>
+            <span class="name">heart</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:heart-delete')" title="Click to copy">
+            <hd-icon icon="si-glyph:heart-delete"></hd-icon>
+            <span class="name">heart-delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:heart-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:heart-plus"></hd-icon>
+            <span class="name">heart-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:heart-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:heart-remove"></hd-icon>
+            <span class="name">heart-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:heart-signal')" title="Click to copy">
+            <hd-icon icon="si-glyph:heart-signal"></hd-icon>
+            <span class="name">heart-signal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:helicopter')" title="Click to copy">
+            <hd-icon icon="si-glyph:helicopter"></hd-icon>
+            <span class="name">helicopter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:helicopter-pad')" title="Click to copy">
+            <hd-icon icon="si-glyph:helicopter-pad"></hd-icon>
+            <span class="name">helicopter-pad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:helm-wheel')" title="Click to copy">
+            <hd-icon icon="si-glyph:helm-wheel"></hd-icon>
+            <span class="name">helm-wheel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:helmet')" title="Click to copy">
+            <hd-icon icon="si-glyph:helmet"></hd-icon>
+            <span class="name">helmet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hightheel')" title="Click to copy">
+            <hd-icon icon="si-glyph:hightheel"></hd-icon>
+            <span class="name">hightheel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:history')" title="Click to copy">
+            <hd-icon icon="si-glyph:history"></hd-icon>
+            <span class="name">history</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hockey')" title="Click to copy">
+            <hd-icon icon="si-glyph:hockey"></hd-icon>
+            <span class="name">hockey</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:home-page')" title="Click to copy">
+            <hd-icon icon="si-glyph:home-page"></hd-icon>
+            <span class="name">home-page</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:horse')" title="Click to copy">
+            <hd-icon icon="si-glyph:horse"></hd-icon>
+            <span class="name">horse</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:horse-shoe')" title="Click to copy">
+            <hd-icon icon="si-glyph:horse-shoe"></hd-icon>
+            <span class="name">horse-shoe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:hospital')" title="Click to copy">
+            <hd-icon icon="si-glyph:hospital"></hd-icon>
+            <span class="name">hospital</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:house')" title="Click to copy">
+            <hd-icon icon="si-glyph:house"></hd-icon>
+            <span class="name">house</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:ice-cream')" title="Click to copy">
+            <hd-icon icon="si-glyph:ice-cream"></hd-icon>
+            <span class="name">ice-cream</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:id-badge')" title="Click to copy">
+            <hd-icon icon="si-glyph:id-badge"></hd-icon>
+            <span class="name">id-badge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:image')" title="Click to copy">
+            <hd-icon icon="si-glyph:image"></hd-icon>
+            <span class="name">image</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:in-columns')" title="Click to copy">
+            <hd-icon icon="si-glyph:in-columns"></hd-icon>
+            <span class="name">in-columns</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:inbox-download')" title="Click to copy">
+            <hd-icon icon="si-glyph:inbox-download"></hd-icon>
+            <span class="name">inbox-download</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:inbox-upload')" title="Click to copy">
+            <hd-icon icon="si-glyph:inbox-upload"></hd-icon>
+            <span class="name">inbox-upload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:infinity')" title="Click to copy">
+            <hd-icon icon="si-glyph:infinity"></hd-icon>
+            <span class="name">infinity</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:infinity-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:infinity-2"></hd-icon>
+            <span class="name">infinity-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:info')" title="Click to copy">
+            <hd-icon icon="si-glyph:info"></hd-icon>
+            <span class="name">info</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:ipod')" title="Click to copy">
+            <hd-icon icon="si-glyph:ipod"></hd-icon>
+            <span class="name">ipod</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:iron')" title="Click to copy">
+            <hd-icon icon="si-glyph:iron"></hd-icon>
+            <span class="name">iron</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:jump-backward')" title="Click to copy">
+            <hd-icon icon="si-glyph:jump-backward"></hd-icon>
+            <span class="name">jump-backward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:jump-double-page-left-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:jump-double-page-left-right"></hd-icon>
+            <span class="name">jump-double-page-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:jump-forward')" title="Click to copy">
+            <hd-icon icon="si-glyph:jump-forward"></hd-icon>
+            <span class="name">jump-forward</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:jump-page-left-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:jump-page-left-right"></hd-icon>
+            <span class="name">jump-page-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:jump-page-up-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:jump-page-up-down"></hd-icon>
+            <span class="name">jump-page-up-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:kette')" title="Click to copy">
+            <hd-icon icon="si-glyph:kette"></hd-icon>
+            <span class="name">kette</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:key')" title="Click to copy">
+            <hd-icon icon="si-glyph:key"></hd-icon>
+            <span class="name">key</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:key-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:key-2"></hd-icon>
+            <span class="name">key-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:keyboard')" title="Click to copy">
+            <hd-icon icon="si-glyph:keyboard"></hd-icon>
+            <span class="name">keyboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:knife')" title="Click to copy">
+            <hd-icon icon="si-glyph:knife"></hd-icon>
+            <span class="name">knife</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:ladder-pool')" title="Click to copy">
+            <hd-icon icon="si-glyph:ladder-pool"></hd-icon>
+            <span class="name">ladder-pool</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:lamp')" title="Click to copy">
+            <hd-icon icon="si-glyph:lamp"></hd-icon>
+            <span class="name">lamp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:lamp-desk')" title="Click to copy">
+            <hd-icon icon="si-glyph:lamp-desk"></hd-icon>
+            <span class="name">lamp-desk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:lavabo')" title="Click to copy">
+            <hd-icon icon="si-glyph:lavabo"></hd-icon>
+            <span class="name">lavabo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:law-hammer')" title="Click to copy">
+            <hd-icon icon="si-glyph:law-hammer"></hd-icon>
+            <span class="name">law-hammer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:layout-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:layout-1"></hd-icon>
+            <span class="name">layout-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:layout-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:layout-2"></hd-icon>
+            <span class="name">layout-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:layout-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:layout-3"></hd-icon>
+            <span class="name">layout-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:layout-4')" title="Click to copy">
+            <hd-icon icon="si-glyph:layout-4"></hd-icon>
+            <span class="name">layout-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:leaf')" title="Click to copy">
+            <hd-icon icon="si-glyph:leaf"></hd-icon>
+            <span class="name">leaf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:left-justify')" title="Click to copy">
+            <hd-icon icon="si-glyph:left-justify"></hd-icon>
+            <span class="name">left-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:leftwards-arrow-to-bar')" title="Click to copy">
+            <hd-icon icon="si-glyph:leftwards-arrow-to-bar"></hd-icon>
+            <span class="name">leftwards-arrow-to-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:light-alarm')" title="Click to copy">
+            <hd-icon icon="si-glyph:light-alarm"></hd-icon>
+            <span class="name">light-alarm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:light-bulb')" title="Click to copy">
+            <hd-icon icon="si-glyph:light-bulb"></hd-icon>
+            <span class="name">light-bulb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:light-house')" title="Click to copy">
+            <hd-icon icon="si-glyph:light-house"></hd-icon>
+            <span class="name">light-house</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:like')" title="Click to copy">
+            <hd-icon icon="si-glyph:like"></hd-icon>
+            <span class="name">like</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:like-unlike')" title="Click to copy">
+            <hd-icon icon="si-glyph:like-unlike"></hd-icon>
+            <span class="name">like-unlike</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:line-two-angle-point')" title="Click to copy">
+            <hd-icon icon="si-glyph:line-two-angle-point"></hd-icon>
+            <span class="name">line-two-angle-point</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:link-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:link-1"></hd-icon>
+            <span class="name">link-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:link-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:link-2"></hd-icon>
+            <span class="name">link-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:link-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:link-3"></hd-icon>
+            <span class="name">link-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:load')" title="Click to copy">
+            <hd-icon icon="si-glyph:load"></hd-icon>
+            <span class="name">load</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:lock')" title="Click to copy">
+            <hd-icon icon="si-glyph:lock"></hd-icon>
+            <span class="name">lock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:lock-unlock')" title="Click to copy">
+            <hd-icon icon="si-glyph:lock-unlock"></hd-icon>
+            <span class="name">lock-unlock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:louder-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:louder-2"></hd-icon>
+            <span class="name">louder-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:louder-speaker')" title="Click to copy">
+            <hd-icon icon="si-glyph:louder-speaker"></hd-icon>
+            <span class="name">louder-speaker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:magnet')" title="Click to copy">
+            <hd-icon icon="si-glyph:magnet"></hd-icon>
+            <span class="name">magnet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:magnifier')" title="Click to copy">
+            <hd-icon icon="si-glyph:magnifier"></hd-icon>
+            <span class="name">magnifier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:magnifier-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:magnifier-2"></hd-icon>
+            <span class="name">magnifier-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mail')" title="Click to copy">
+            <hd-icon icon="si-glyph:mail"></hd-icon>
+            <span class="name">mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mail-box')" title="Click to copy">
+            <hd-icon icon="si-glyph:mail-box"></hd-icon>
+            <span class="name">mail-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mail-empty')" title="Click to copy">
+            <hd-icon icon="si-glyph:mail-empty"></hd-icon>
+            <span class="name">mail-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mail-has-mail')" title="Click to copy">
+            <hd-icon icon="si-glyph:mail-has-mail"></hd-icon>
+            <span class="name">mail-has-mail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mail-inbox')" title="Click to copy">
+            <hd-icon icon="si-glyph:mail-inbox"></hd-icon>
+            <span class="name">mail-inbox</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mail-send')" title="Click to copy">
+            <hd-icon icon="si-glyph:mail-send"></hd-icon>
+            <span class="name">mail-send</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:male')" title="Click to copy">
+            <hd-icon icon="si-glyph:male"></hd-icon>
+            <span class="name">male</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:man-doctor')" title="Click to copy">
+            <hd-icon icon="si-glyph:man-doctor"></hd-icon>
+            <span class="name">man-doctor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:map-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:map-3"></hd-icon>
+            <span class="name">map-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:map-square')" title="Click to copy">
+            <hd-icon icon="si-glyph:map-square"></hd-icon>
+            <span class="name">map-square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mark-snorker')" title="Click to copy">
+            <hd-icon icon="si-glyph:mark-snorker"></hd-icon>
+            <span class="name">mark-snorker</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mask-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:mask-1"></hd-icon>
+            <span class="name">mask-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mask-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:mask-2"></hd-icon>
+            <span class="name">mask-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:medal-star')" title="Click to copy">
+            <hd-icon icon="si-glyph:medal-star"></hd-icon>
+            <span class="name">medal-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:microphone-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:microphone-1"></hd-icon>
+            <span class="name">microphone-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:microphone-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:microphone-2"></hd-icon>
+            <span class="name">microphone-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:microscope')" title="Click to copy">
+            <hd-icon icon="si-glyph:microscope"></hd-icon>
+            <span class="name">microscope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mobile')" title="Click to copy">
+            <hd-icon icon="si-glyph:mobile"></hd-icon>
+            <span class="name">mobile</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mocule')" title="Click to copy">
+            <hd-icon icon="si-glyph:mocule"></hd-icon>
+            <span class="name">mocule</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:money')" title="Click to copy">
+            <hd-icon icon="si-glyph:money"></hd-icon>
+            <span class="name">money</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:money-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:money-3"></hd-icon>
+            <span class="name">money-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:money-bag')" title="Click to copy">
+            <hd-icon icon="si-glyph:money-bag"></hd-icon>
+            <span class="name">money-bag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:money-coin')" title="Click to copy">
+            <hd-icon icon="si-glyph:money-coin"></hd-icon>
+            <span class="name">money-coin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:moon-star')" title="Click to copy">
+            <hd-icon icon="si-glyph:moon-star"></hd-icon>
+            <span class="name">moon-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:motobike')" title="Click to copy">
+            <hd-icon icon="si-glyph:motobike"></hd-icon>
+            <span class="name">motobike</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mountain')" title="Click to copy">
+            <hd-icon icon="si-glyph:mountain"></hd-icon>
+            <span class="name">mountain</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:movie-play')" title="Click to copy">
+            <hd-icon icon="si-glyph:movie-play"></hd-icon>
+            <span class="name">movie-play</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:movie-projector')" title="Click to copy">
+            <hd-icon icon="si-glyph:movie-projector"></hd-icon>
+            <span class="name">movie-projector</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:multifunction-knife')" title="Click to copy">
+            <hd-icon icon="si-glyph:multifunction-knife"></hd-icon>
+            <span class="name">multifunction-knife</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mushrooms')" title="Click to copy">
+            <hd-icon icon="si-glyph:mushrooms"></hd-icon>
+            <span class="name">mushrooms</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:music')" title="Click to copy">
+            <hd-icon icon="si-glyph:music"></hd-icon>
+            <span class="name">music</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:music-note')" title="Click to copy">
+            <hd-icon icon="si-glyph:music-note"></hd-icon>
+            <span class="name">music-note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:mustache')" title="Click to copy">
+            <hd-icon icon="si-glyph:mustache"></hd-icon>
+            <span class="name">mustache</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:network')" title="Click to copy">
+            <hd-icon icon="si-glyph:network"></hd-icon>
+            <span class="name">network</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:network-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:network-2"></hd-icon>
+            <span class="name">network-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:newspaper')" title="Click to copy">
+            <hd-icon icon="si-glyph:newspaper"></hd-icon>
+            <span class="name">newspaper</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:no-dog')" title="Click to copy">
+            <hd-icon icon="si-glyph:no-dog"></hd-icon>
+            <span class="name">no-dog</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:no-smoke')" title="Click to copy">
+            <hd-icon icon="si-glyph:no-smoke"></hd-icon>
+            <span class="name">no-smoke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:note')" title="Click to copy">
+            <hd-icon icon="si-glyph:note"></hd-icon>
+            <span class="name">note</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:note-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:note-2"></hd-icon>
+            <span class="name">note-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:old-phone')" title="Click to copy">
+            <hd-icon icon="si-glyph:old-phone"></hd-icon>
+            <span class="name">old-phone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:open')" title="Click to copy">
+            <hd-icon icon="si-glyph:open"></hd-icon>
+            <span class="name">open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pallette')" title="Click to copy">
+            <hd-icon icon="si-glyph:pallette"></hd-icon>
+            <span class="name">pallette</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:paper-clip')" title="Click to copy">
+            <hd-icon icon="si-glyph:paper-clip"></hd-icon>
+            <span class="name">paper-clip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:paper-plane')" title="Click to copy">
+            <hd-icon icon="si-glyph:paper-plane"></hd-icon>
+            <span class="name">paper-plane</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:paper-roll')" title="Click to copy">
+            <hd-icon icon="si-glyph:paper-roll"></hd-icon>
+            <span class="name">paper-roll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:paper-shredder')" title="Click to copy">
+            <hd-icon icon="si-glyph:paper-shredder"></hd-icon>
+            <span class="name">paper-shredder</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pause')" title="Click to copy">
+            <hd-icon icon="si-glyph:pause"></hd-icon>
+            <span class="name">pause</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pawn')" title="Click to copy">
+            <hd-icon icon="si-glyph:pawn"></hd-icon>
+            <span class="name">pawn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:paypal')" title="Click to copy">
+            <hd-icon icon="si-glyph:paypal"></hd-icon>
+            <span class="name">paypal</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pen')" title="Click to copy">
+            <hd-icon icon="si-glyph:pen"></hd-icon>
+            <span class="name">pen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pen-nib')" title="Click to copy">
+            <hd-icon icon="si-glyph:pen-nib"></hd-icon>
+            <span class="name">pen-nib</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pencil')" title="Click to copy">
+            <hd-icon icon="si-glyph:pencil"></hd-icon>
+            <span class="name">pencil</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:percent')" title="Click to copy">
+            <hd-icon icon="si-glyph:percent"></hd-icon>
+            <span class="name">percent</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person')" title="Click to copy">
+            <hd-icon icon="si-glyph:person"></hd-icon>
+            <span class="name">person</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-2"></hd-icon>
+            <span class="name">person-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-checked')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-checked"></hd-icon>
+            <span class="name">person-checked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-door-man')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-door-man"></hd-icon>
+            <span class="name">person-door-man</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-error')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-error"></hd-icon>
+            <span class="name">person-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-man')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-man"></hd-icon>
+            <span class="name">person-man</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-people')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-people"></hd-icon>
+            <span class="name">person-people</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-plus"></hd-icon>
+            <span class="name">person-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-prison')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-prison"></hd-icon>
+            <span class="name">person-prison</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-public')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-public"></hd-icon>
+            <span class="name">person-public</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-remove"></hd-icon>
+            <span class="name">person-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-talk')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-talk"></hd-icon>
+            <span class="name">person-talk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:person-woman')" title="Click to copy">
+            <hd-icon icon="si-glyph:person-woman"></hd-icon>
+            <span class="name">person-woman</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pet-carrier')" title="Click to copy">
+            <hd-icon icon="si-glyph:pet-carrier"></hd-icon>
+            <span class="name">pet-carrier</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:phone-fax')" title="Click to copy">
+            <hd-icon icon="si-glyph:phone-fax"></hd-icon>
+            <span class="name">phone-fax</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:phone-number')" title="Click to copy">
+            <hd-icon icon="si-glyph:phone-number"></hd-icon>
+            <span class="name">phone-number</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:piano')" title="Click to copy">
+            <hd-icon icon="si-glyph:piano"></hd-icon>
+            <span class="name">piano</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pick')" title="Click to copy">
+            <hd-icon icon="si-glyph:pick"></hd-icon>
+            <span class="name">pick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:picture')" title="Click to copy">
+            <hd-icon icon="si-glyph:picture"></hd-icon>
+            <span class="name">picture</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:picture-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:picture-2"></hd-icon>
+            <span class="name">picture-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:picture-copy')" title="Click to copy">
+            <hd-icon icon="si-glyph:picture-copy"></hd-icon>
+            <span class="name">picture-copy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:piggy-bank')" title="Click to copy">
+            <hd-icon icon="si-glyph:piggy-bank"></hd-icon>
+            <span class="name">piggy-bank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pill')" title="Click to copy">
+            <hd-icon icon="si-glyph:pill"></hd-icon>
+            <span class="name">pill</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pin-location')" title="Click to copy">
+            <hd-icon icon="si-glyph:pin-location"></hd-icon>
+            <span class="name">pin-location</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pin-location-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:pin-location-1"></hd-icon>
+            <span class="name">pin-location-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pin-location-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:pin-location-2"></hd-icon>
+            <span class="name">pin-location-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pin-location-add')" title="Click to copy">
+            <hd-icon icon="si-glyph:pin-location-add"></hd-icon>
+            <span class="name">pin-location-add</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pin-location-delete')" title="Click to copy">
+            <hd-icon icon="si-glyph:pin-location-delete"></hd-icon>
+            <span class="name">pin-location-delete</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pin-location-love')" title="Click to copy">
+            <hd-icon icon="si-glyph:pin-location-love"></hd-icon>
+            <span class="name">pin-location-love</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pin-location-map')" title="Click to copy">
+            <hd-icon icon="si-glyph:pin-location-map"></hd-icon>
+            <span class="name">pin-location-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pin-location-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:pin-location-remove"></hd-icon>
+            <span class="name">pin-location-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pin-map')" title="Click to copy">
+            <hd-icon icon="si-glyph:pin-map"></hd-icon>
+            <span class="name">pin-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:ping-pong-racket')" title="Click to copy">
+            <hd-icon icon="si-glyph:ping-pong-racket"></hd-icon>
+            <span class="name">ping-pong-racket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pipe')" title="Click to copy">
+            <hd-icon icon="si-glyph:pipe"></hd-icon>
+            <span class="name">pipe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:pizza')" title="Click to copy">
+            <hd-icon icon="si-glyph:pizza"></hd-icon>
+            <span class="name">pizza</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:plugin')" title="Click to copy">
+            <hd-icon icon="si-glyph:plugin"></hd-icon>
+            <span class="name">plugin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:plus"></hd-icon>
+            <span class="name">plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:podium')" title="Click to copy">
+            <hd-icon icon="si-glyph:podium"></hd-icon>
+            <span class="name">podium</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:poker-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:poker-1"></hd-icon>
+            <span class="name">poker-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:poker-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:poker-2"></hd-icon>
+            <span class="name">poker-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:poker-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:poker-3"></hd-icon>
+            <span class="name">poker-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:poker-4')" title="Click to copy">
+            <hd-icon icon="si-glyph:poker-4"></hd-icon>
+            <span class="name">poker-4</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:print')" title="Click to copy">
+            <hd-icon icon="si-glyph:print"></hd-icon>
+            <span class="name">print</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:puzzle')" title="Click to copy">
+            <hd-icon icon="si-glyph:puzzle"></hd-icon>
+            <span class="name">puzzle</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:quote-close')" title="Click to copy">
+            <hd-icon icon="si-glyph:quote-close"></hd-icon>
+            <span class="name">quote-close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:quote-open')" title="Click to copy">
+            <hd-icon icon="si-glyph:quote-open"></hd-icon>
+            <span class="name">quote-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:radio')" title="Click to copy">
+            <hd-icon icon="si-glyph:radio"></hd-icon>
+            <span class="name">radio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:radioactive')" title="Click to copy">
+            <hd-icon icon="si-glyph:radioactive"></hd-icon>
+            <span class="name">radioactive</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:record')" title="Click to copy">
+            <hd-icon icon="si-glyph:record"></hd-icon>
+            <span class="name">record</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:reduce')" title="Click to copy">
+            <hd-icon icon="si-glyph:reduce"></hd-icon>
+            <span class="name">reduce</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:reel-audio')" title="Click to copy">
+            <hd-icon icon="si-glyph:reel-audio"></hd-icon>
+            <span class="name">reel-audio</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:reel-film')" title="Click to copy">
+            <hd-icon icon="si-glyph:reel-film"></hd-icon>
+            <span class="name">reel-film</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:remove"></hd-icon>
+            <span class="name">remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:repeat')" title="Click to copy">
+            <hd-icon icon="si-glyph:repeat"></hd-icon>
+            <span class="name">repeat</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:resize-in-frame')" title="Click to copy">
+            <hd-icon icon="si-glyph:resize-in-frame"></hd-icon>
+            <span class="name">resize-in-frame</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:resize-out-frame')" title="Click to copy">
+            <hd-icon icon="si-glyph:resize-out-frame"></hd-icon>
+            <span class="name">resize-out-frame</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:retroeexcavadora')" title="Click to copy">
+            <hd-icon icon="si-glyph:retroeexcavadora"></hd-icon>
+            <span class="name">retroeexcavadora</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:ribbon')" title="Click to copy">
+            <hd-icon icon="si-glyph:ribbon"></hd-icon>
+            <span class="name">ribbon</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:right-justify')" title="Click to copy">
+            <hd-icon icon="si-glyph:right-justify"></hd-icon>
+            <span class="name">right-justify</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:rightwards-arrow-to-bar')" title="Click to copy">
+            <hd-icon icon="si-glyph:rightwards-arrow-to-bar"></hd-icon>
+            <span class="name">rightwards-arrow-to-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:ring')" title="Click to copy">
+            <hd-icon icon="si-glyph:ring"></hd-icon>
+            <span class="name">ring</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:road')" title="Click to copy">
+            <hd-icon icon="si-glyph:road"></hd-icon>
+            <span class="name">road</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:rocket')" title="Click to copy">
+            <hd-icon icon="si-glyph:rocket"></hd-icon>
+            <span class="name">rocket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:roller')" title="Click to copy">
+            <hd-icon icon="si-glyph:roller"></hd-icon>
+            <span class="name">roller</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:rss')" title="Click to copy">
+            <hd-icon icon="si-glyph:rss"></hd-icon>
+            <span class="name">rss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:rugby-ball')" title="Click to copy">
+            <hd-icon icon="si-glyph:rugby-ball"></hd-icon>
+            <span class="name">rugby-ball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:ruler')" title="Click to copy">
+            <hd-icon icon="si-glyph:ruler"></hd-icon>
+            <span class="name">ruler</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:safe-box')" title="Click to copy">
+            <hd-icon icon="si-glyph:safe-box"></hd-icon>
+            <span class="name">safe-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:safe-pin')" title="Click to copy">
+            <hd-icon icon="si-glyph:safe-pin"></hd-icon>
+            <span class="name">safe-pin</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:satellite')" title="Click to copy">
+            <hd-icon icon="si-glyph:satellite"></hd-icon>
+            <span class="name">satellite</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:saw')" title="Click to copy">
+            <hd-icon icon="si-glyph:saw"></hd-icon>
+            <span class="name">saw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:scissor')" title="Click to copy">
+            <hd-icon icon="si-glyph:scissor"></hd-icon>
+            <span class="name">scissor</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:scissor-line-cut')" title="Click to copy">
+            <hd-icon icon="si-glyph:scissor-line-cut"></hd-icon>
+            <span class="name">scissor-line-cut</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:screen-ful')" title="Click to copy">
+            <hd-icon icon="si-glyph:screen-ful"></hd-icon>
+            <span class="name">screen-ful</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:screen-scale')" title="Click to copy">
+            <hd-icon icon="si-glyph:screen-scale"></hd-icon>
+            <span class="name">screen-scale</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:screw')" title="Click to copy">
+            <hd-icon icon="si-glyph:screw"></hd-icon>
+            <span class="name">screw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:screw-driver')" title="Click to copy">
+            <hd-icon icon="si-glyph:screw-driver"></hd-icon>
+            <span class="name">screw-driver</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sd-card')" title="Click to copy">
+            <hd-icon icon="si-glyph:sd-card"></hd-icon>
+            <span class="name">sd-card</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:seriff')" title="Click to copy">
+            <hd-icon icon="si-glyph:seriff"></hd-icon>
+            <span class="name">seriff</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sewing-machine')" title="Click to copy">
+            <hd-icon icon="si-glyph:sewing-machine"></hd-icon>
+            <span class="name">sewing-machine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sewing-roll')" title="Click to copy">
+            <hd-icon icon="si-glyph:sewing-roll"></hd-icon>
+            <span class="name">sewing-roll</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:share-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:share-1"></hd-icon>
+            <span class="name">share-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:share-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:share-2"></hd-icon>
+            <span class="name">share-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:share-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:share-3"></hd-icon>
+            <span class="name">share-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:share-5')" title="Click to copy">
+            <hd-icon icon="si-glyph:share-5"></hd-icon>
+            <span class="name">share-5</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sheep')" title="Click to copy">
+            <hd-icon icon="si-glyph:sheep"></hd-icon>
+            <span class="name">sheep</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:shield')" title="Click to copy">
+            <hd-icon icon="si-glyph:shield"></hd-icon>
+            <span class="name">shield</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:shield-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:shield-2"></hd-icon>
+            <span class="name">shield-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:shield-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:shield-plus"></hd-icon>
+            <span class="name">shield-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:shield-star')" title="Click to copy">
+            <hd-icon icon="si-glyph:shield-star"></hd-icon>
+            <span class="name">shield-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:shovel')" title="Click to copy">
+            <hd-icon icon="si-glyph:shovel"></hd-icon>
+            <span class="name">shovel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:shower')" title="Click to copy">
+            <hd-icon icon="si-glyph:shower"></hd-icon>
+            <span class="name">shower</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sign-board')" title="Click to copy">
+            <hd-icon icon="si-glyph:sign-board"></hd-icon>
+            <span class="name">sign-board</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sign-foot')" title="Click to copy">
+            <hd-icon icon="si-glyph:sign-foot"></hd-icon>
+            <span class="name">sign-foot</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sign-in')" title="Click to copy">
+            <hd-icon icon="si-glyph:sign-in"></hd-icon>
+            <span class="name">sign-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sign-out')" title="Click to copy">
+            <hd-icon icon="si-glyph:sign-out"></hd-icon>
+            <span class="name">sign-out</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sign-p')" title="Click to copy">
+            <hd-icon icon="si-glyph:sign-p"></hd-icon>
+            <span class="name">sign-p</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sign-road-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:sign-road-1"></hd-icon>
+            <span class="name">sign-road-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sign-road-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:sign-road-2"></hd-icon>
+            <span class="name">sign-road-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:signal-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:signal-1"></hd-icon>
+            <span class="name">signal-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:signal-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:signal-2"></hd-icon>
+            <span class="name">signal-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:signal-3')" title="Click to copy">
+            <hd-icon icon="si-glyph:signal-3"></hd-icon>
+            <span class="name">signal-3</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:site-map')" title="Click to copy">
+            <hd-icon icon="si-glyph:site-map"></hd-icon>
+            <span class="name">site-map</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:site-map-revert')" title="Click to copy">
+            <hd-icon icon="si-glyph:site-map-revert"></hd-icon>
+            <span class="name">site-map-revert</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:skateboard')" title="Click to copy">
+            <hd-icon icon="si-glyph:skateboard"></hd-icon>
+            <span class="name">skateboard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:skull')" title="Click to copy">
+            <hd-icon icon="si-glyph:skull"></hd-icon>
+            <span class="name">skull</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sleep')" title="Click to copy">
+            <hd-icon icon="si-glyph:sleep"></hd-icon>
+            <span class="name">sleep</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:slide-show')" title="Click to copy">
+            <hd-icon icon="si-glyph:slide-show"></hd-icon>
+            <span class="name">slide-show</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:smartphone')" title="Click to copy">
+            <hd-icon icon="si-glyph:smartphone"></hd-icon>
+            <span class="name">smartphone</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sms')" title="Click to copy">
+            <hd-icon icon="si-glyph:sms"></hd-icon>
+            <span class="name">sms</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:snow')" title="Click to copy">
+            <hd-icon icon="si-glyph:snow"></hd-icon>
+            <span class="name">snow</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:soccer-yard')" title="Click to copy">
+            <hd-icon icon="si-glyph:soccer-yard"></hd-icon>
+            <span class="name">soccer-yard</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sock')" title="Click to copy">
+            <hd-icon icon="si-glyph:sock"></hd-icon>
+            <span class="name">sock</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:socket')" title="Click to copy">
+            <hd-icon icon="si-glyph:socket"></hd-icon>
+            <span class="name">socket</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:solar-blind')" title="Click to copy">
+            <hd-icon icon="si-glyph:solar-blind"></hd-icon>
+            <span class="name">solar-blind</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sos')" title="Click to copy">
+            <hd-icon icon="si-glyph:sos"></hd-icon>
+            <span class="name">sos</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sound')" title="Click to copy">
+            <hd-icon icon="si-glyph:sound"></hd-icon>
+            <span class="name">sound</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:sound-mute')" title="Click to copy">
+            <hd-icon icon="si-glyph:sound-mute"></hd-icon>
+            <span class="name">sound-mute</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:space-ship')" title="Click to copy">
+            <hd-icon icon="si-glyph:space-ship"></hd-icon>
+            <span class="name">space-ship</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:spanner')" title="Click to copy">
+            <hd-icon icon="si-glyph:spanner"></hd-icon>
+            <span class="name">spanner</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:spoon-fork')" title="Click to copy">
+            <hd-icon icon="si-glyph:spoon-fork"></hd-icon>
+            <span class="name">spoon-fork</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:spray')" title="Click to copy">
+            <hd-icon icon="si-glyph:spray"></hd-icon>
+            <span class="name">spray</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:square')" title="Click to copy">
+            <hd-icon icon="si-glyph:square"></hd-icon>
+            <span class="name">square</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:square-checked')" title="Click to copy">
+            <hd-icon icon="si-glyph:square-checked"></hd-icon>
+            <span class="name">square-checked</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:square-dashed-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:square-dashed-1"></hd-icon>
+            <span class="name">square-dashed-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:square-dashed-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:square-dashed-2"></hd-icon>
+            <span class="name">square-dashed-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:square-delicious')" title="Click to copy">
+            <hd-icon icon="si-glyph:square-delicious"></hd-icon>
+            <span class="name">square-delicious</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:square-eight-angle-point')" title="Click to copy">
+            <hd-icon icon="si-glyph:square-eight-angle-point"></hd-icon>
+            <span class="name">square-eight-angle-point</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:square-four')" title="Click to copy">
+            <hd-icon icon="si-glyph:square-four"></hd-icon>
+            <span class="name">square-four</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:square-four-angle-point')" title="Click to copy">
+            <hd-icon icon="si-glyph:square-four-angle-point"></hd-icon>
+            <span class="name">square-four-angle-point</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:square-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:square-plus"></hd-icon>
+            <span class="name">square-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:square-star')" title="Click to copy">
+            <hd-icon icon="si-glyph:square-star"></hd-icon>
+            <span class="name">square-star</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:stamps')" title="Click to copy">
+            <hd-icon icon="si-glyph:stamps"></hd-icon>
+            <span class="name">stamps</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:star-cross')" title="Click to copy">
+            <hd-icon icon="si-glyph:star-cross"></hd-icon>
+            <span class="name">star-cross</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:star-stick')" title="Click to copy">
+            <hd-icon icon="si-glyph:star-stick"></hd-icon>
+            <span class="name">star-stick</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:stele')" title="Click to copy">
+            <hd-icon icon="si-glyph:stele"></hd-icon>
+            <span class="name">stele</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:stelescope')" title="Click to copy">
+            <hd-icon icon="si-glyph:stelescope"></hd-icon>
+            <span class="name">stelescope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:stereo-jack')" title="Click to copy">
+            <hd-icon icon="si-glyph:stereo-jack"></hd-icon>
+            <span class="name">stereo-jack</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:stethoscope')" title="Click to copy">
+            <hd-icon icon="si-glyph:stethoscope"></hd-icon>
+            <span class="name">stethoscope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:store')" title="Click to copy">
+            <hd-icon icon="si-glyph:store"></hd-icon>
+            <span class="name">store</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:stove')" title="Click to copy">
+            <hd-icon icon="si-glyph:stove"></hd-icon>
+            <span class="name">stove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:strawberry')" title="Click to copy">
+            <hd-icon icon="si-glyph:strawberry"></hd-icon>
+            <span class="name">strawberry</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:street-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:street-2"></hd-icon>
+            <span class="name">street-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:strolley')" title="Click to copy">
+            <hd-icon icon="si-glyph:strolley"></hd-icon>
+            <span class="name">strolley</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:strolley-arrow-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:strolley-arrow-down"></hd-icon>
+            <span class="name">strolley-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:strolley-arrow-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:strolley-arrow-up"></hd-icon>
+            <span class="name">strolley-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:strolley-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:strolley-plus"></hd-icon>
+            <span class="name">strolley-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:strolley-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:strolley-remove"></hd-icon>
+            <span class="name">strolley-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:subway')" title="Click to copy">
+            <hd-icon icon="si-glyph:subway"></hd-icon>
+            <span class="name">subway</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:suitcase')" title="Click to copy">
+            <hd-icon icon="si-glyph:suitcase"></hd-icon>
+            <span class="name">suitcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:suitcase-person')" title="Click to copy">
+            <hd-icon icon="si-glyph:suitcase-person"></hd-icon>
+            <span class="name">suitcase-person</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:syringe')" title="Click to copy">
+            <hd-icon icon="si-glyph:syringe"></hd-icon>
+            <span class="name">syringe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:t-shirt')" title="Click to copy">
+            <hd-icon icon="si-glyph:t-shirt"></hd-icon>
+            <span class="name">t-shirt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tablet')" title="Click to copy">
+            <hd-icon icon="si-glyph:tablet"></hd-icon>
+            <span class="name">tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tag')" title="Click to copy">
+            <hd-icon icon="si-glyph:tag"></hd-icon>
+            <span class="name">tag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tag-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:tag-1"></hd-icon>
+            <span class="name">tag-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tag-one-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:tag-one-plus"></hd-icon>
+            <span class="name">tag-one-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tag-price')" title="Click to copy">
+            <hd-icon icon="si-glyph:tag-price"></hd-icon>
+            <span class="name">tag-price</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tank')" title="Click to copy">
+            <hd-icon icon="si-glyph:tank"></hd-icon>
+            <span class="name">tank</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:targer')" title="Click to copy">
+            <hd-icon icon="si-glyph:targer"></hd-icon>
+            <span class="name">targer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tea-cup')" title="Click to copy">
+            <hd-icon icon="si-glyph:tea-cup"></hd-icon>
+            <span class="name">tea-cup</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:teeth')" title="Click to copy">
+            <hd-icon icon="si-glyph:teeth"></hd-icon>
+            <span class="name">teeth</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:telephone-box')" title="Click to copy">
+            <hd-icon icon="si-glyph:telephone-box"></hd-icon>
+            <span class="name">telephone-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:telescope')" title="Click to copy">
+            <hd-icon icon="si-glyph:telescope"></hd-icon>
+            <span class="name">telescope</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:television')" title="Click to copy">
+            <hd-icon icon="si-glyph:television"></hd-icon>
+            <span class="name">television</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tennis-racket-ball')" title="Click to copy">
+            <hd-icon icon="si-glyph:tennis-racket-ball"></hd-icon>
+            <span class="name">tennis-racket-ball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tent-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:tent-1"></hd-icon>
+            <span class="name">tent-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tent-camp')" title="Click to copy">
+            <hd-icon icon="si-glyph:tent-camp"></hd-icon>
+            <span class="name">tent-camp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:test-tube')" title="Click to copy">
+            <hd-icon icon="si-glyph:test-tube"></hd-icon>
+            <span class="name">test-tube</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:test-tube-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:test-tube-2"></hd-icon>
+            <span class="name">test-tube-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:test-tube-empty')" title="Click to copy">
+            <hd-icon icon="si-glyph:test-tube-empty"></hd-icon>
+            <span class="name">test-tube-empty</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:text-search')" title="Click to copy">
+            <hd-icon icon="si-glyph:text-search"></hd-icon>
+            <span class="name">text-search</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:thermometer')" title="Click to copy">
+            <hd-icon icon="si-glyph:thermometer"></hd-icon>
+            <span class="name">thermometer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:three-ball')" title="Click to copy">
+            <hd-icon icon="si-glyph:three-ball"></hd-icon>
+            <span class="name">three-ball</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tic-tac-toe')" title="Click to copy">
+            <hd-icon icon="si-glyph:tic-tac-toe"></hd-icon>
+            <span class="name">tic-tac-toe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:time-glass')" title="Click to copy">
+            <hd-icon icon="si-glyph:time-glass"></hd-icon>
+            <span class="name">time-glass</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:time-reload')" title="Click to copy">
+            <hd-icon icon="si-glyph:time-reload"></hd-icon>
+            <span class="name">time-reload</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:timer')" title="Click to copy">
+            <hd-icon icon="si-glyph:timer"></hd-icon>
+            <span class="name">timer</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:toilet')" title="Click to copy">
+            <hd-icon icon="si-glyph:toilet"></hd-icon>
+            <span class="name">toilet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tool-box')" title="Click to copy">
+            <hd-icon icon="si-glyph:tool-box"></hd-icon>
+            <span class="name">tool-box</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:traffic-light')" title="Click to copy">
+            <hd-icon icon="si-glyph:traffic-light"></hd-icon>
+            <span class="name">traffic-light</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:train')" title="Click to copy">
+            <hd-icon icon="si-glyph:train"></hd-icon>
+            <span class="name">train</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:train-rail')" title="Click to copy">
+            <hd-icon icon="si-glyph:train-rail"></hd-icon>
+            <span class="name">train-rail</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trash')" title="Click to copy">
+            <hd-icon icon="si-glyph:trash"></hd-icon>
+            <span class="name">trash</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:tree')" title="Click to copy">
+            <hd-icon icon="si-glyph:tree"></hd-icon>
+            <span class="name">tree</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trees')" title="Click to copy">
+            <hd-icon icon="si-glyph:trees"></hd-icon>
+            <span class="name">trees</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:triangle-double-arrow-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:triangle-double-arrow-down"></hd-icon>
+            <span class="name">triangle-double-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:triangle-double-arrow-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:triangle-double-arrow-left"></hd-icon>
+            <span class="name">triangle-double-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:triangle-double-arrow-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:triangle-double-arrow-right"></hd-icon>
+            <span class="name">triangle-double-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:triangle-double-arrow-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:triangle-double-arrow-up"></hd-icon>
+            <span class="name">triangle-double-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:triangle-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:triangle-down"></hd-icon>
+            <span class="name">triangle-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:triangle-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:triangle-left"></hd-icon>
+            <span class="name">triangle-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:triangle-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:triangle-right"></hd-icon>
+            <span class="name">triangle-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:triangle-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:triangle-up"></hd-icon>
+            <span class="name">triangle-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trolley-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:trolley-2"></hd-icon>
+            <span class="name">trolley-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trolley-arrow-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:trolley-arrow-down"></hd-icon>
+            <span class="name">trolley-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trolley-arrow-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:trolley-arrow-up"></hd-icon>
+            <span class="name">trolley-arrow-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trolley-briefcase')" title="Click to copy">
+            <hd-icon icon="si-glyph:trolley-briefcase"></hd-icon>
+            <span class="name">trolley-briefcase</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trolley-error')" title="Click to copy">
+            <hd-icon icon="si-glyph:trolley-error"></hd-icon>
+            <span class="name">trolley-error</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trolley-full')" title="Click to copy">
+            <hd-icon icon="si-glyph:trolley-full"></hd-icon>
+            <span class="name">trolley-full</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trolley-plus')" title="Click to copy">
+            <hd-icon icon="si-glyph:trolley-plus"></hd-icon>
+            <span class="name">trolley-plus</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trolley-remove')" title="Click to copy">
+            <hd-icon icon="si-glyph:trolley-remove"></hd-icon>
+            <span class="name">trolley-remove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:truck')" title="Click to copy">
+            <hd-icon icon="si-glyph:truck"></hd-icon>
+            <span class="name">truck</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:trumpet')" title="Click to copy">
+            <hd-icon icon="si-glyph:trumpet"></hd-icon>
+            <span class="name">trumpet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:turn-off')" title="Click to copy">
+            <hd-icon icon="si-glyph:turn-off"></hd-icon>
+            <span class="name">turn-off</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:two-arrow-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:two-arrow-down"></hd-icon>
+            <span class="name">two-arrow-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:two-arrow-in-down-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:two-arrow-in-down-up"></hd-icon>
+            <span class="name">two-arrow-in-down-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:two-arrow-in-left-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:two-arrow-in-left-right"></hd-icon>
+            <span class="name">two-arrow-in-left-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:two-arrow-left')" title="Click to copy">
+            <hd-icon icon="si-glyph:two-arrow-left"></hd-icon>
+            <span class="name">two-arrow-left</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:two-arrow-right')" title="Click to copy">
+            <hd-icon icon="si-glyph:two-arrow-right"></hd-icon>
+            <span class="name">two-arrow-right</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:typewriter')" title="Click to copy">
+            <hd-icon icon="si-glyph:typewriter"></hd-icon>
+            <span class="name">typewriter</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:umberlla-chair')" title="Click to copy">
+            <hd-icon icon="si-glyph:umberlla-chair"></hd-icon>
+            <span class="name">umberlla-chair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:umbrella-close')" title="Click to copy">
+            <hd-icon icon="si-glyph:umbrella-close"></hd-icon>
+            <span class="name">umbrella-close</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:umbrella-open')" title="Click to copy">
+            <hd-icon icon="si-glyph:umbrella-open"></hd-icon>
+            <span class="name">umbrella-open</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:umbrella-sea')" title="Click to copy">
+            <hd-icon icon="si-glyph:umbrella-sea"></hd-icon>
+            <span class="name">umbrella-sea</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:upstair')" title="Click to copy">
+            <hd-icon icon="si-glyph:upstair"></hd-icon>
+            <span class="name">upstair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:upwards-arrow-to-bar')" title="Click to copy">
+            <hd-icon icon="si-glyph:upwards-arrow-to-bar"></hd-icon>
+            <span class="name">upwards-arrow-to-bar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:upwards-arrow-with-loop')" title="Click to copy">
+            <hd-icon icon="si-glyph:upwards-arrow-with-loop"></hd-icon>
+            <span class="name">upwards-arrow-with-loop</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:usb')" title="Click to copy">
+            <hd-icon icon="si-glyph:usb"></hd-icon>
+            <span class="name">usb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:view')" title="Click to copy">
+            <hd-icon icon="si-glyph:view"></hd-icon>
+            <span class="name">view</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wacom-tablet')" title="Click to copy">
+            <hd-icon icon="si-glyph:wacom-tablet"></hd-icon>
+            <span class="name">wacom-tablet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wall')" title="Click to copy">
+            <hd-icon icon="si-glyph:wall"></hd-icon>
+            <span class="name">wall</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wallet')" title="Click to copy">
+            <hd-icon icon="si-glyph:wallet"></hd-icon>
+            <span class="name">wallet</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wash-machine')" title="Click to copy">
+            <hd-icon icon="si-glyph:wash-machine"></hd-icon>
+            <span class="name">wash-machine</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wash-machine-2')" title="Click to copy">
+            <hd-icon icon="si-glyph:wash-machine-2"></hd-icon>
+            <span class="name">wash-machine-2</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:watch')" title="Click to copy">
+            <hd-icon icon="si-glyph:watch"></hd-icon>
+            <span class="name">watch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:webcam')" title="Click to copy">
+            <hd-icon icon="si-glyph:webcam"></hd-icon>
+            <span class="name">webcam</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:weight-down')" title="Click to copy">
+            <hd-icon icon="si-glyph:weight-down"></hd-icon>
+            <span class="name">weight-down</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:weight-kilograms')" title="Click to copy">
+            <hd-icon icon="si-glyph:weight-kilograms"></hd-icon>
+            <span class="name">weight-kilograms</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:weight-up')" title="Click to copy">
+            <hd-icon icon="si-glyph:weight-up"></hd-icon>
+            <span class="name">weight-up</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wheel-chair')" title="Click to copy">
+            <hd-icon icon="si-glyph:wheel-chair"></hd-icon>
+            <span class="name">wheel-chair</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wheel-steel')" title="Click to copy">
+            <hd-icon icon="si-glyph:wheel-steel"></hd-icon>
+            <span class="name">wheel-steel</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wieght')" title="Click to copy">
+            <hd-icon icon="si-glyph:wieght"></hd-icon>
+            <span class="name">wieght</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wifi-1')" title="Click to copy">
+            <hd-icon icon="si-glyph:wifi-1"></hd-icon>
+            <span class="name">wifi-1</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wind-turbines')" title="Click to copy">
+            <hd-icon icon="si-glyph:wind-turbines"></hd-icon>
+            <span class="name">wind-turbines</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:window')" title="Click to copy">
+            <hd-icon icon="si-glyph:window"></hd-icon>
+            <span class="name">window</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wood-stove')" title="Click to copy">
+            <hd-icon icon="si-glyph:wood-stove"></hd-icon>
+            <span class="name">wood-stove</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wrench')" title="Click to copy">
+            <hd-icon icon="si-glyph:wrench"></hd-icon>
+            <span class="name">wrench</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:wrench-screwdriver')" title="Click to copy">
+            <hd-icon icon="si-glyph:wrench-screwdriver"></hd-icon>
+            <span class="name">wrench-screwdriver</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:yen')" title="Click to copy">
+            <hd-icon icon="si-glyph:yen"></hd-icon>
+            <span class="name">yen</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:ying-yang')" title="Click to copy">
+            <hd-icon icon="si-glyph:ying-yang"></hd-icon>
+            <span class="name">ying-yang</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:zip')" title="Click to copy">
+            <hd-icon icon="si-glyph:zip"></hd-icon>
+            <span class="name">zip</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:zoom-in')" title="Click to copy">
+            <hd-icon icon="si-glyph:zoom-in"></hd-icon>
+            <span class="name">zoom-in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('si-glyph:zoom-out')" title="Click to copy">
+            <hd-icon icon="si-glyph:zoom-out"></hd-icon>
+            <span class="name">zoom-out</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>

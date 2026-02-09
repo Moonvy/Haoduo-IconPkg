@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cif - Icon Preview</title>
+    <style>
+        :root {
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --hover-bg: #f3f4f6;
+            --accent-color: #3b82f6;
+        }
+        body {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            box-sizing: border-box;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            ring: 2px solid var(--accent-color);
+        }
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px; /* Optional rounded */
+            overflow: hidden;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .icon-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .icon-item:active {
+            transform: translateY(0);
+        }
+        hd-icon {
+            font-size: 32px;
+            margin-bottom: 0.75rem;
+            color: var(--icon-color, var(--text-primary));
+            transition: color 0.2s ease;
+        }
+        .name {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+            word-break: break-all;
+        }
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1f2937;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+            z-index: 100;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <h1>cif <span style="font-weight:normal; font-size: 0.6em; color: var(--text-secondary)">(199)</span></h1>
+    
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search icons..." oninput="filterIcons()">
+        <input type="color" id="colorPicker" value="#111827" oninput="changeColor(this.value)" title="Change icon color">
+    </div>
+
+    <div class="grid" id="iconGrid">
+        
+        <div class="icon-item" onclick="copyToClipboard('cif:ad')" title="Click to copy">
+            <hd-icon icon="cif:ad"></hd-icon>
+            <span class="name">ad</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ae')" title="Click to copy">
+            <hd-icon icon="cif:ae"></hd-icon>
+            <span class="name">ae</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:af')" title="Click to copy">
+            <hd-icon icon="cif:af"></hd-icon>
+            <span class="name">af</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ag')" title="Click to copy">
+            <hd-icon icon="cif:ag"></hd-icon>
+            <span class="name">ag</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:al')" title="Click to copy">
+            <hd-icon icon="cif:al"></hd-icon>
+            <span class="name">al</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:am')" title="Click to copy">
+            <hd-icon icon="cif:am"></hd-icon>
+            <span class="name">am</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ao')" title="Click to copy">
+            <hd-icon icon="cif:ao"></hd-icon>
+            <span class="name">ao</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ar')" title="Click to copy">
+            <hd-icon icon="cif:ar"></hd-icon>
+            <span class="name">ar</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:at')" title="Click to copy">
+            <hd-icon icon="cif:at"></hd-icon>
+            <span class="name">at</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:au')" title="Click to copy">
+            <hd-icon icon="cif:au"></hd-icon>
+            <span class="name">au</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:az')" title="Click to copy">
+            <hd-icon icon="cif:az"></hd-icon>
+            <span class="name">az</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ba')" title="Click to copy">
+            <hd-icon icon="cif:ba"></hd-icon>
+            <span class="name">ba</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bb')" title="Click to copy">
+            <hd-icon icon="cif:bb"></hd-icon>
+            <span class="name">bb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bd')" title="Click to copy">
+            <hd-icon icon="cif:bd"></hd-icon>
+            <span class="name">bd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:be')" title="Click to copy">
+            <hd-icon icon="cif:be"></hd-icon>
+            <span class="name">be</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bf')" title="Click to copy">
+            <hd-icon icon="cif:bf"></hd-icon>
+            <span class="name">bf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bg')" title="Click to copy">
+            <hd-icon icon="cif:bg"></hd-icon>
+            <span class="name">bg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bh')" title="Click to copy">
+            <hd-icon icon="cif:bh"></hd-icon>
+            <span class="name">bh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bi')" title="Click to copy">
+            <hd-icon icon="cif:bi"></hd-icon>
+            <span class="name">bi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bj')" title="Click to copy">
+            <hd-icon icon="cif:bj"></hd-icon>
+            <span class="name">bj</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bn')" title="Click to copy">
+            <hd-icon icon="cif:bn"></hd-icon>
+            <span class="name">bn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bo')" title="Click to copy">
+            <hd-icon icon="cif:bo"></hd-icon>
+            <span class="name">bo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:br')" title="Click to copy">
+            <hd-icon icon="cif:br"></hd-icon>
+            <span class="name">br</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bs')" title="Click to copy">
+            <hd-icon icon="cif:bs"></hd-icon>
+            <span class="name">bs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bt')" title="Click to copy">
+            <hd-icon icon="cif:bt"></hd-icon>
+            <span class="name">bt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bw')" title="Click to copy">
+            <hd-icon icon="cif:bw"></hd-icon>
+            <span class="name">bw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:by')" title="Click to copy">
+            <hd-icon icon="cif:by"></hd-icon>
+            <span class="name">by</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:bz')" title="Click to copy">
+            <hd-icon icon="cif:bz"></hd-icon>
+            <span class="name">bz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ca')" title="Click to copy">
+            <hd-icon icon="cif:ca"></hd-icon>
+            <span class="name">ca</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cd')" title="Click to copy">
+            <hd-icon icon="cif:cd"></hd-icon>
+            <span class="name">cd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cf')" title="Click to copy">
+            <hd-icon icon="cif:cf"></hd-icon>
+            <span class="name">cf</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cg')" title="Click to copy">
+            <hd-icon icon="cif:cg"></hd-icon>
+            <span class="name">cg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ch')" title="Click to copy">
+            <hd-icon icon="cif:ch"></hd-icon>
+            <span class="name">ch</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ci')" title="Click to copy">
+            <hd-icon icon="cif:ci"></hd-icon>
+            <span class="name">ci</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ck')" title="Click to copy">
+            <hd-icon icon="cif:ck"></hd-icon>
+            <span class="name">ck</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cl')" title="Click to copy">
+            <hd-icon icon="cif:cl"></hd-icon>
+            <span class="name">cl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cm')" title="Click to copy">
+            <hd-icon icon="cif:cm"></hd-icon>
+            <span class="name">cm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cn')" title="Click to copy">
+            <hd-icon icon="cif:cn"></hd-icon>
+            <span class="name">cn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:co')" title="Click to copy">
+            <hd-icon icon="cif:co"></hd-icon>
+            <span class="name">co</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cr')" title="Click to copy">
+            <hd-icon icon="cif:cr"></hd-icon>
+            <span class="name">cr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cu')" title="Click to copy">
+            <hd-icon icon="cif:cu"></hd-icon>
+            <span class="name">cu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cv')" title="Click to copy">
+            <hd-icon icon="cif:cv"></hd-icon>
+            <span class="name">cv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cy')" title="Click to copy">
+            <hd-icon icon="cif:cy"></hd-icon>
+            <span class="name">cy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:cz')" title="Click to copy">
+            <hd-icon icon="cif:cz"></hd-icon>
+            <span class="name">cz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:de')" title="Click to copy">
+            <hd-icon icon="cif:de"></hd-icon>
+            <span class="name">de</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:dj')" title="Click to copy">
+            <hd-icon icon="cif:dj"></hd-icon>
+            <span class="name">dj</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:dk')" title="Click to copy">
+            <hd-icon icon="cif:dk"></hd-icon>
+            <span class="name">dk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:dm')" title="Click to copy">
+            <hd-icon icon="cif:dm"></hd-icon>
+            <span class="name">dm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:do')" title="Click to copy">
+            <hd-icon icon="cif:do"></hd-icon>
+            <span class="name">do</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:dz')" title="Click to copy">
+            <hd-icon icon="cif:dz"></hd-icon>
+            <span class="name">dz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ec')" title="Click to copy">
+            <hd-icon icon="cif:ec"></hd-icon>
+            <span class="name">ec</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ee')" title="Click to copy">
+            <hd-icon icon="cif:ee"></hd-icon>
+            <span class="name">ee</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:eg')" title="Click to copy">
+            <hd-icon icon="cif:eg"></hd-icon>
+            <span class="name">eg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:er')" title="Click to copy">
+            <hd-icon icon="cif:er"></hd-icon>
+            <span class="name">er</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:es')" title="Click to copy">
+            <hd-icon icon="cif:es"></hd-icon>
+            <span class="name">es</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:et')" title="Click to copy">
+            <hd-icon icon="cif:et"></hd-icon>
+            <span class="name">et</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:fi')" title="Click to copy">
+            <hd-icon icon="cif:fi"></hd-icon>
+            <span class="name">fi</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:fj')" title="Click to copy">
+            <hd-icon icon="cif:fj"></hd-icon>
+            <span class="name">fj</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:fm')" title="Click to copy">
+            <hd-icon icon="cif:fm"></hd-icon>
+            <span class="name">fm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:fr')" title="Click to copy">
+            <hd-icon icon="cif:fr"></hd-icon>
+            <span class="name">fr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ga')" title="Click to copy">
+            <hd-icon icon="cif:ga"></hd-icon>
+            <span class="name">ga</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:gb')" title="Click to copy">
+            <hd-icon icon="cif:gb"></hd-icon>
+            <span class="name">gb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:gd')" title="Click to copy">
+            <hd-icon icon="cif:gd"></hd-icon>
+            <span class="name">gd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ge')" title="Click to copy">
+            <hd-icon icon="cif:ge"></hd-icon>
+            <span class="name">ge</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:gh')" title="Click to copy">
+            <hd-icon icon="cif:gh"></hd-icon>
+            <span class="name">gh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:gm')" title="Click to copy">
+            <hd-icon icon="cif:gm"></hd-icon>
+            <span class="name">gm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:gn')" title="Click to copy">
+            <hd-icon icon="cif:gn"></hd-icon>
+            <span class="name">gn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:gq')" title="Click to copy">
+            <hd-icon icon="cif:gq"></hd-icon>
+            <span class="name">gq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:gr')" title="Click to copy">
+            <hd-icon icon="cif:gr"></hd-icon>
+            <span class="name">gr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:gt')" title="Click to copy">
+            <hd-icon icon="cif:gt"></hd-icon>
+            <span class="name">gt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:gw')" title="Click to copy">
+            <hd-icon icon="cif:gw"></hd-icon>
+            <span class="name">gw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:gy')" title="Click to copy">
+            <hd-icon icon="cif:gy"></hd-icon>
+            <span class="name">gy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:hk')" title="Click to copy">
+            <hd-icon icon="cif:hk"></hd-icon>
+            <span class="name">hk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:hn')" title="Click to copy">
+            <hd-icon icon="cif:hn"></hd-icon>
+            <span class="name">hn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:hr')" title="Click to copy">
+            <hd-icon icon="cif:hr"></hd-icon>
+            <span class="name">hr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ht')" title="Click to copy">
+            <hd-icon icon="cif:ht"></hd-icon>
+            <span class="name">ht</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:hu')" title="Click to copy">
+            <hd-icon icon="cif:hu"></hd-icon>
+            <span class="name">hu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:id')" title="Click to copy">
+            <hd-icon icon="cif:id"></hd-icon>
+            <span class="name">id</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ie')" title="Click to copy">
+            <hd-icon icon="cif:ie"></hd-icon>
+            <span class="name">ie</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:il')" title="Click to copy">
+            <hd-icon icon="cif:il"></hd-icon>
+            <span class="name">il</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:in')" title="Click to copy">
+            <hd-icon icon="cif:in"></hd-icon>
+            <span class="name">in</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:iq')" title="Click to copy">
+            <hd-icon icon="cif:iq"></hd-icon>
+            <span class="name">iq</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ir')" title="Click to copy">
+            <hd-icon icon="cif:ir"></hd-icon>
+            <span class="name">ir</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:is')" title="Click to copy">
+            <hd-icon icon="cif:is"></hd-icon>
+            <span class="name">is</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:it')" title="Click to copy">
+            <hd-icon icon="cif:it"></hd-icon>
+            <span class="name">it</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:jm')" title="Click to copy">
+            <hd-icon icon="cif:jm"></hd-icon>
+            <span class="name">jm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:jo')" title="Click to copy">
+            <hd-icon icon="cif:jo"></hd-icon>
+            <span class="name">jo</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:jp')" title="Click to copy">
+            <hd-icon icon="cif:jp"></hd-icon>
+            <span class="name">jp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ke')" title="Click to copy">
+            <hd-icon icon="cif:ke"></hd-icon>
+            <span class="name">ke</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:kg')" title="Click to copy">
+            <hd-icon icon="cif:kg"></hd-icon>
+            <span class="name">kg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:kh')" title="Click to copy">
+            <hd-icon icon="cif:kh"></hd-icon>
+            <span class="name">kh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ki')" title="Click to copy">
+            <hd-icon icon="cif:ki"></hd-icon>
+            <span class="name">ki</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:km')" title="Click to copy">
+            <hd-icon icon="cif:km"></hd-icon>
+            <span class="name">km</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:kn')" title="Click to copy">
+            <hd-icon icon="cif:kn"></hd-icon>
+            <span class="name">kn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:kp')" title="Click to copy">
+            <hd-icon icon="cif:kp"></hd-icon>
+            <span class="name">kp</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:kr')" title="Click to copy">
+            <hd-icon icon="cif:kr"></hd-icon>
+            <span class="name">kr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:kw')" title="Click to copy">
+            <hd-icon icon="cif:kw"></hd-icon>
+            <span class="name">kw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:kz')" title="Click to copy">
+            <hd-icon icon="cif:kz"></hd-icon>
+            <span class="name">kz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:la')" title="Click to copy">
+            <hd-icon icon="cif:la"></hd-icon>
+            <span class="name">la</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:lb')" title="Click to copy">
+            <hd-icon icon="cif:lb"></hd-icon>
+            <span class="name">lb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:lc')" title="Click to copy">
+            <hd-icon icon="cif:lc"></hd-icon>
+            <span class="name">lc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:li')" title="Click to copy">
+            <hd-icon icon="cif:li"></hd-icon>
+            <span class="name">li</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:lk')" title="Click to copy">
+            <hd-icon icon="cif:lk"></hd-icon>
+            <span class="name">lk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:lr')" title="Click to copy">
+            <hd-icon icon="cif:lr"></hd-icon>
+            <span class="name">lr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ls')" title="Click to copy">
+            <hd-icon icon="cif:ls"></hd-icon>
+            <span class="name">ls</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:lt')" title="Click to copy">
+            <hd-icon icon="cif:lt"></hd-icon>
+            <span class="name">lt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:lu')" title="Click to copy">
+            <hd-icon icon="cif:lu"></hd-icon>
+            <span class="name">lu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:lv')" title="Click to copy">
+            <hd-icon icon="cif:lv"></hd-icon>
+            <span class="name">lv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ly')" title="Click to copy">
+            <hd-icon icon="cif:ly"></hd-icon>
+            <span class="name">ly</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ma')" title="Click to copy">
+            <hd-icon icon="cif:ma"></hd-icon>
+            <span class="name">ma</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mc')" title="Click to copy">
+            <hd-icon icon="cif:mc"></hd-icon>
+            <span class="name">mc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:md')" title="Click to copy">
+            <hd-icon icon="cif:md"></hd-icon>
+            <span class="name">md</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:me')" title="Click to copy">
+            <hd-icon icon="cif:me"></hd-icon>
+            <span class="name">me</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mg')" title="Click to copy">
+            <hd-icon icon="cif:mg"></hd-icon>
+            <span class="name">mg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mh')" title="Click to copy">
+            <hd-icon icon="cif:mh"></hd-icon>
+            <span class="name">mh</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mk')" title="Click to copy">
+            <hd-icon icon="cif:mk"></hd-icon>
+            <span class="name">mk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ml')" title="Click to copy">
+            <hd-icon icon="cif:ml"></hd-icon>
+            <span class="name">ml</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mm')" title="Click to copy">
+            <hd-icon icon="cif:mm"></hd-icon>
+            <span class="name">mm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mn')" title="Click to copy">
+            <hd-icon icon="cif:mn"></hd-icon>
+            <span class="name">mn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mr')" title="Click to copy">
+            <hd-icon icon="cif:mr"></hd-icon>
+            <span class="name">mr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mt')" title="Click to copy">
+            <hd-icon icon="cif:mt"></hd-icon>
+            <span class="name">mt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mu')" title="Click to copy">
+            <hd-icon icon="cif:mu"></hd-icon>
+            <span class="name">mu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mv')" title="Click to copy">
+            <hd-icon icon="cif:mv"></hd-icon>
+            <span class="name">mv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mw')" title="Click to copy">
+            <hd-icon icon="cif:mw"></hd-icon>
+            <span class="name">mw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mx')" title="Click to copy">
+            <hd-icon icon="cif:mx"></hd-icon>
+            <span class="name">mx</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:my')" title="Click to copy">
+            <hd-icon icon="cif:my"></hd-icon>
+            <span class="name">my</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:mz')" title="Click to copy">
+            <hd-icon icon="cif:mz"></hd-icon>
+            <span class="name">mz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:na')" title="Click to copy">
+            <hd-icon icon="cif:na"></hd-icon>
+            <span class="name">na</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ne')" title="Click to copy">
+            <hd-icon icon="cif:ne"></hd-icon>
+            <span class="name">ne</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ng')" title="Click to copy">
+            <hd-icon icon="cif:ng"></hd-icon>
+            <span class="name">ng</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ni')" title="Click to copy">
+            <hd-icon icon="cif:ni"></hd-icon>
+            <span class="name">ni</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:nl')" title="Click to copy">
+            <hd-icon icon="cif:nl"></hd-icon>
+            <span class="name">nl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:no')" title="Click to copy">
+            <hd-icon icon="cif:no"></hd-icon>
+            <span class="name">no</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:np')" title="Click to copy">
+            <hd-icon icon="cif:np"></hd-icon>
+            <span class="name">np</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:nr')" title="Click to copy">
+            <hd-icon icon="cif:nr"></hd-icon>
+            <span class="name">nr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:nu')" title="Click to copy">
+            <hd-icon icon="cif:nu"></hd-icon>
+            <span class="name">nu</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:nz')" title="Click to copy">
+            <hd-icon icon="cif:nz"></hd-icon>
+            <span class="name">nz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:om')" title="Click to copy">
+            <hd-icon icon="cif:om"></hd-icon>
+            <span class="name">om</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:pa')" title="Click to copy">
+            <hd-icon icon="cif:pa"></hd-icon>
+            <span class="name">pa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:pe')" title="Click to copy">
+            <hd-icon icon="cif:pe"></hd-icon>
+            <span class="name">pe</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:pg')" title="Click to copy">
+            <hd-icon icon="cif:pg"></hd-icon>
+            <span class="name">pg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ph')" title="Click to copy">
+            <hd-icon icon="cif:ph"></hd-icon>
+            <span class="name">ph</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:pk')" title="Click to copy">
+            <hd-icon icon="cif:pk"></hd-icon>
+            <span class="name">pk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:pl')" title="Click to copy">
+            <hd-icon icon="cif:pl"></hd-icon>
+            <span class="name">pl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:pt')" title="Click to copy">
+            <hd-icon icon="cif:pt"></hd-icon>
+            <span class="name">pt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:pw')" title="Click to copy">
+            <hd-icon icon="cif:pw"></hd-icon>
+            <span class="name">pw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:py')" title="Click to copy">
+            <hd-icon icon="cif:py"></hd-icon>
+            <span class="name">py</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:qa')" title="Click to copy">
+            <hd-icon icon="cif:qa"></hd-icon>
+            <span class="name">qa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ro')" title="Click to copy">
+            <hd-icon icon="cif:ro"></hd-icon>
+            <span class="name">ro</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:rs')" title="Click to copy">
+            <hd-icon icon="cif:rs"></hd-icon>
+            <span class="name">rs</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ru')" title="Click to copy">
+            <hd-icon icon="cif:ru"></hd-icon>
+            <span class="name">ru</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:rw')" title="Click to copy">
+            <hd-icon icon="cif:rw"></hd-icon>
+            <span class="name">rw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sa')" title="Click to copy">
+            <hd-icon icon="cif:sa"></hd-icon>
+            <span class="name">sa</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sb')" title="Click to copy">
+            <hd-icon icon="cif:sb"></hd-icon>
+            <span class="name">sb</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sc')" title="Click to copy">
+            <hd-icon icon="cif:sc"></hd-icon>
+            <span class="name">sc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sd')" title="Click to copy">
+            <hd-icon icon="cif:sd"></hd-icon>
+            <span class="name">sd</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:se')" title="Click to copy">
+            <hd-icon icon="cif:se"></hd-icon>
+            <span class="name">se</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sg')" title="Click to copy">
+            <hd-icon icon="cif:sg"></hd-icon>
+            <span class="name">sg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:si')" title="Click to copy">
+            <hd-icon icon="cif:si"></hd-icon>
+            <span class="name">si</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sk')" title="Click to copy">
+            <hd-icon icon="cif:sk"></hd-icon>
+            <span class="name">sk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sl')" title="Click to copy">
+            <hd-icon icon="cif:sl"></hd-icon>
+            <span class="name">sl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sm')" title="Click to copy">
+            <hd-icon icon="cif:sm"></hd-icon>
+            <span class="name">sm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sn')" title="Click to copy">
+            <hd-icon icon="cif:sn"></hd-icon>
+            <span class="name">sn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:so')" title="Click to copy">
+            <hd-icon icon="cif:so"></hd-icon>
+            <span class="name">so</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sr')" title="Click to copy">
+            <hd-icon icon="cif:sr"></hd-icon>
+            <span class="name">sr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ss')" title="Click to copy">
+            <hd-icon icon="cif:ss"></hd-icon>
+            <span class="name">ss</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:st')" title="Click to copy">
+            <hd-icon icon="cif:st"></hd-icon>
+            <span class="name">st</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sv')" title="Click to copy">
+            <hd-icon icon="cif:sv"></hd-icon>
+            <span class="name">sv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sy')" title="Click to copy">
+            <hd-icon icon="cif:sy"></hd-icon>
+            <span class="name">sy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:sz')" title="Click to copy">
+            <hd-icon icon="cif:sz"></hd-icon>
+            <span class="name">sz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:td')" title="Click to copy">
+            <hd-icon icon="cif:td"></hd-icon>
+            <span class="name">td</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:tg')" title="Click to copy">
+            <hd-icon icon="cif:tg"></hd-icon>
+            <span class="name">tg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:th')" title="Click to copy">
+            <hd-icon icon="cif:th"></hd-icon>
+            <span class="name">th</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:tj')" title="Click to copy">
+            <hd-icon icon="cif:tj"></hd-icon>
+            <span class="name">tj</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:tl')" title="Click to copy">
+            <hd-icon icon="cif:tl"></hd-icon>
+            <span class="name">tl</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:tm')" title="Click to copy">
+            <hd-icon icon="cif:tm"></hd-icon>
+            <span class="name">tm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:tn')" title="Click to copy">
+            <hd-icon icon="cif:tn"></hd-icon>
+            <span class="name">tn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:to')" title="Click to copy">
+            <hd-icon icon="cif:to"></hd-icon>
+            <span class="name">to</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:tr')" title="Click to copy">
+            <hd-icon icon="cif:tr"></hd-icon>
+            <span class="name">tr</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:tt')" title="Click to copy">
+            <hd-icon icon="cif:tt"></hd-icon>
+            <span class="name">tt</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:tv')" title="Click to copy">
+            <hd-icon icon="cif:tv"></hd-icon>
+            <span class="name">tv</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:tw')" title="Click to copy">
+            <hd-icon icon="cif:tw"></hd-icon>
+            <span class="name">tw</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:tz')" title="Click to copy">
+            <hd-icon icon="cif:tz"></hd-icon>
+            <span class="name">tz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ua')" title="Click to copy">
+            <hd-icon icon="cif:ua"></hd-icon>
+            <span class="name">ua</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ug')" title="Click to copy">
+            <hd-icon icon="cif:ug"></hd-icon>
+            <span class="name">ug</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:us')" title="Click to copy">
+            <hd-icon icon="cif:us"></hd-icon>
+            <span class="name">us</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:uy')" title="Click to copy">
+            <hd-icon icon="cif:uy"></hd-icon>
+            <span class="name">uy</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:uz')" title="Click to copy">
+            <hd-icon icon="cif:uz"></hd-icon>
+            <span class="name">uz</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:va')" title="Click to copy">
+            <hd-icon icon="cif:va"></hd-icon>
+            <span class="name">va</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:vc')" title="Click to copy">
+            <hd-icon icon="cif:vc"></hd-icon>
+            <span class="name">vc</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ve')" title="Click to copy">
+            <hd-icon icon="cif:ve"></hd-icon>
+            <span class="name">ve</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:vg')" title="Click to copy">
+            <hd-icon icon="cif:vg"></hd-icon>
+            <span class="name">vg</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:vn')" title="Click to copy">
+            <hd-icon icon="cif:vn"></hd-icon>
+            <span class="name">vn</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ws')" title="Click to copy">
+            <hd-icon icon="cif:ws"></hd-icon>
+            <span class="name">ws</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:xk')" title="Click to copy">
+            <hd-icon icon="cif:xk"></hd-icon>
+            <span class="name">xk</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:ye')" title="Click to copy">
+            <hd-icon icon="cif:ye"></hd-icon>
+            <span class="name">ye</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:za')" title="Click to copy">
+            <hd-icon icon="cif:za"></hd-icon>
+            <span class="name">za</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:zm')" title="Click to copy">
+            <hd-icon icon="cif:zm"></hd-icon>
+            <span class="name">zm</span>
+        </div>
+        <div class="icon-item" onclick="copyToClipboard('cif:zw')" title="Click to copy">
+            <hd-icon icon="cif:zw"></hd-icon>
+            <span class="name">zw</span>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <!-- External Registration Script -->
+    <script type="module" src="./index.js"></script>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText('<hd-icon icon="' + text + '"></hd-icon>').then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = 'Copied: ' + text;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+
+        function filterIcons() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('iconGrid');
+            const items = grid.getElementsByClassName('icon-item');
+
+            for (let i = 0; i < items.length; i++) {
+                const span = items[i].getElementsByTagName("span")[0];
+                const txtValue = span.textContent || span.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    items[i].style.display = "";
+                } else {
+                    items[i].style.display = "none";
+                }
+            }
+        }
+
+        function changeColor(color) {
+            document.documentElement.style.setProperty('--icon-color', color);
+        }
+    </script>
+</body>
+</html>
