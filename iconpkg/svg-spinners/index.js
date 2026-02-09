@@ -1,7 +1,7 @@
 
 import { register } from '../core.js';
 
-const lookup = "AAAAT4kYLgoa+3+SdkUyViNXZ0oCXksBAW4JkgErAlgu5ssMq0iKVieZDW5IhVpeDzlebrzZxZP76t6sj0aN4vXzCuJLaPIjK4DJTe7OBEIBAAAAAAABAAAAE3N2Zy1zcGlubmVycy0wMS5zdmf/////AAAAAQAAAAYAAAAAAAAAAAAA";
+const lookup = "AAAAUIkYLgoaFIB+ZEWURVNFNEsQ2QQJBwIkCAYRAgJYLsUjgG7y5t7Zy+Ink/VIXrwMD/OKj14KrCsNzo1GOU2Fbkto4upaq8n7BEjumVZCAAAAAAAAAQAAABNzdmctc3Bpbm5lcnMtMDEuc3Zn/////wAAAAEAAAAGAAAAAAAAAAAAAA==";
 
 const chunks = {
   "svg-spinners-01.svg": new URL("./svg-spinners-01.svg", import.meta.url).href

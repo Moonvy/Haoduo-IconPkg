@@ -1,8 +1,16 @@
 # Haoduo IconPkg
 
+[Iconify](https://iconify.design/) Icon Web Components based SVG Symbols
+
+---
+
 [Iconify](https://iconify.design/) 图标包 IconPkg SVG Symbols 格式
 
-作为 Web Component 简单的调用 iconify 的图标包，跨框架（Vue, React, Angular, Svelte 等）使用 iconify 的图标包。
+通过 Web Component 简单的调用 iconify 的图标包，跨框架（Vue, React, Angular, Svelte 等）使用 iconify 的图标包。
+
+- SVG Symbols 多个 SVG 图标合并成在一个 SVG 文件中，可以避免大量小文件带来的存储问题
+- SVG Symbols 分片，使用一个图标只会加载对应的 SVG Symbols 分片文件，避免大型图标包，使用一个图标就要加载全部图标的窘境
+- Web Component 跨框架使用，无论使用 Vue, React, Angular, Svelte 等框架或者不使用任何框架，都可以使用 `<hd-icon name="fluent-color:alert-20"></hd-icon>` 标签来调用图标
 
 ## 安装
 

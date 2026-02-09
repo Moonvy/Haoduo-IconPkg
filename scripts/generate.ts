@@ -266,7 +266,7 @@ class IconPackageGenerator {
   }
 
   /**
-   * 第二步：生成代码 (index.js, icons.json)
+   * 第二步：生成代码 (pkg-index.js, package.json, icons.json)
    */
   async generateCode(manifest: PackageManifest) {
     const { pkg, icons, lookupMap } = manifest;
@@ -294,18 +294,63 @@ class IconPackageGenerator {
       .map((key) => `  "${key}": new URL("./${key}", import.meta.url).href`)
       .join(",\n");
 
-    // 4. 读取模板并替换变量
-    const template = await fs.readFile(
-      path.join(TEMPLATE_DIR, "register.js.tpl"),
-      "utf-8",
-    );
-    const indexJsContent = template
-      .replace("{{lookupDataB64}}", lookupDataB64)
-      .replace("{{chunksMapCode}}", chunksMapCode)
-      .replace("{{pkgName}}", pkg);
+    // 4. 生成临时入口文件 src-index.ts
+    const tempEntryFile = path.join(pkgDir, "src-index.ts");
+    const srcContent = `
+import { register, HdIcon } from "../../scripts/core.ts";
 
-    await fs.writeFile(path.join(pkgDir, "index.js"), indexJsContent);
-    // console.log(chalk.green(`   ✓ 生成 index.js`));
+const lookup = "${lookupDataB64}";
+
+const chunks = {
+${chunksMapCode}
+};
+
+register('${pkg}', {
+  lookup,
+  chunks,
+  baseUrl: import.meta.url
+});
+
+export { HdIcon };
+`;
+    await fs.writeFile(tempEntryFile, srcContent);
+
+    // 5. 使用 Bun.build 打包为 pkg-index.js
+    await Bun.build({
+      entrypoints: [tempEntryFile],
+      outdir: pkgDir,
+      target: "browser",
+      format: "esm",
+      minify: false,
+      naming: "pkg-index.js", // 指定输出文件名
+    });
+
+    // 6. 清理临时文件
+    await fs.rm(tempEntryFile);
+
+    // 7. 生成 package.json
+    const packageJson = {
+      name: `@haoduo-icon/${pkg}`,
+      version: "1.0.0",
+      description: `Icon package for ${pkg}`,
+      type: "module",
+      main: "./pkg-index.js",
+      module: "./pkg-index.js",
+      files: ["pkg-index.js", "*.svg", "manifest.json", "icons.json"],
+      sideEffects: true,
+      license: "MIT",
+      publishConfig: {
+        access: "public",
+        registry: "https://registry.npmjs.org/",
+      },
+    };
+
+    await fs.writeFile(
+      path.join(pkgDir, "package.json"),
+      JSON.stringify(packageJson, null, 2),
+    );
+
+    // console.log(chalk.green(`   ✓ 生成 pkg-index.js & package.json`));
   }
 
   /**
@@ -330,13 +375,16 @@ class IconPackageGenerator {
       path.join(TEMPLATE_DIR, "package.html"),
       "utf-8",
     );
+    // 需要更新 package.html 模板中的 import 路径，或者确保模板使用了 {{mainScript}} 变量
+    // 这里我们假设模板中写死了 ./index.js，我们需要替换它
     const htmlContent = template
-      .replace("{{pkgName}}", pkg)
-      .replace("{{iconCount}}", icons.length.toString())
-      .replace("{{iconItems}}", iconItems);
+      .replaceAll("{{pkgName}}", pkg)
+      .replaceAll("{{iconCount}}", icons.length.toString())
+      .replaceAll("{{iconItems}}", iconItems)
+      .replaceAll("./index.js", "./pkg-index.js"); // 替换引用的脚本
 
     await fs.writeFile(path.join(pkgDir, "index.html"), htmlContent);
-    console.log(chalk.green(`   ✓ 生成预览 index.html`));
+    console.log(chalk.green(`   ✓ 生成预览 ${pkgDir}/index.html`));
   }
 
   /**
@@ -378,16 +426,17 @@ class IconPackageGenerator {
       .join("");
 
     const importScripts = `
-    <script type="module" src="./core.js"></script>
-    ${packageNames.map((pkg) => `<script type="module" src="./${pkg}/index.js"></script>`).join("\n    ")}`;
+    <!-- core.js is bundled into each package, so we don't strictly need it globally if we load packages -->
+    <!-- But for the global index, we are loading multiple packages. Global registry handles this. -->
+    ${packageNames.map((pkg) => `<script type="module" src="./${pkg}/pkg-index.js"></script>`).join("\n    ")}`;
 
     const template = await fs.readFile(
       path.join(TEMPLATE_DIR, "index.html"),
       "utf-8",
     );
     const htmlContent = template
-      .replace("{{packageCards}}", packageCards)
-      .replace("{{importScripts}}", importScripts);
+      .replaceAll("{{packageCards}}", packageCards)
+      .replaceAll("{{importScripts}}", importScripts);
 
     await fs.writeFile(path.join(OUTPUT_DIR, "index.html"), htmlContent);
   }

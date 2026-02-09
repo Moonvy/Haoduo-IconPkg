@@ -548,10 +548,24 @@ class MinMPLookup {
 }
 
 // scripts/core.ts
-var packageRegistry = new Map;
+var GLOBAL_REGISTRY_KEY = "__HD_ICONS_REGISTRY__";
+function getRegistry() {
+  if (typeof window !== "undefined") {
+    if (!window[GLOBAL_REGISTRY_KEY]) {
+      window[GLOBAL_REGISTRY_KEY] = new Map;
+    }
+    return window[GLOBAL_REGISTRY_KEY];
+  } else {
+    if (!globalThis[GLOBAL_REGISTRY_KEY]) {
+      globalThis[GLOBAL_REGISTRY_KEY] = new Map;
+    }
+    return globalThis[GLOBAL_REGISTRY_KEY];
+  }
+}
 function register(pkg, data) {
-  if (!packageRegistry.has(pkg)) {
-    packageRegistry.set(pkg, {
+  const registry = getRegistry();
+  if (!registry.has(pkg)) {
+    registry.set(pkg, {
       lookupData: data.lookup,
       baseUrl: data.baseUrl,
       chunks: data.chunks
@@ -604,7 +618,7 @@ class HdIcon extends HTMLElement {
       console.warn(`[hd-icon] Invalid icon format: "${iconKey}". Expected "pkg:name".`);
       return;
     }
-    const registry = packageRegistry.get(pkg);
+    const registry = getRegistry().get(pkg);
     if (!registry) {
       return;
     }

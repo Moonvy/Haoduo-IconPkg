@@ -7,7 +7,27 @@ interface RegistryData {
   _lookupInstance?: MinMPLookup;
 }
 
-const packageRegistry = new Map<string, RegistryData>();
+// Global registry to support multiple standalone packages on one page
+const GLOBAL_REGISTRY_KEY = "__HD_ICONS_REGISTRY__";
+
+function getRegistry(): Map<string, RegistryData> {
+  if (typeof window !== "undefined") {
+    if (!(window as any)[GLOBAL_REGISTRY_KEY]) {
+      (window as any)[GLOBAL_REGISTRY_KEY] = new Map<string, RegistryData>();
+    }
+    return (window as any)[GLOBAL_REGISTRY_KEY];
+  } else {
+    // Fallback for SSR or non-browser environments (module-scoped)
+    // Note: This won't share state across modules in Node, but that's expected for SSR usually.
+    if (!(globalThis as any)[GLOBAL_REGISTRY_KEY]) {
+      (globalThis as any)[GLOBAL_REGISTRY_KEY] = new Map<
+        string,
+        RegistryData
+      >();
+    }
+    return (globalThis as any)[GLOBAL_REGISTRY_KEY];
+  }
+}
 
 export function register(
   pkg: string,
@@ -17,8 +37,9 @@ export function register(
     chunks?: Record<string, string>;
   },
 ) {
-  if (!packageRegistry.has(pkg)) {
-    packageRegistry.set(pkg, {
+  const registry = getRegistry();
+  if (!registry.has(pkg)) {
+    registry.set(pkg, {
       lookupData: data.lookup,
       baseUrl: data.baseUrl,
       chunks: data.chunks,
@@ -85,7 +106,7 @@ export class HdIcon extends HTMLElement {
       return;
     }
 
-    const registry = packageRegistry.get(pkg);
+    const registry = getRegistry().get(pkg);
     if (!registry) {
       // Package not loaded yet.
       return;

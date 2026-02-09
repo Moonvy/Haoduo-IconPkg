@@ -1,7 +1,7 @@
 
 import { register } from '../core.js';
 
-const lookup = "AAAAT4kYLQka7JPmUEVZZWZCAkuZEhQIJ9oCDwIBAwJYLbBWQh1Amk7EUaavIQCNrbXo/H12Hm9SZBTwDHNBzQGUfn64Js+hp7dB3Zw5B0IAAAAAAAABAAAAD2JyYW5kaWNvLTAxLnN2Z/////8AAAABAAAABgAAAAAAAAAAAAA=";
+const lookup = "AAAATYkYLQkaqmMR0kVkYzSCCUkNXgEaAY0CmQYCWC2tOXNOdkJvVt3ojbB9nAenQR4MIbWUUX5kQfCmr8QBz7h+/M0mQJodAKFStxRCYAAAAAAAAQAAAA9icmFuZGljby0wMS5zdmf/////AAAAAQAAAAYAAAAAAAAAAAAA";
 
 const chunks = {
   "brandico-01.svg": new URL("./brandico-01.svg", import.meta.url).href

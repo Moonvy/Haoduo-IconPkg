@@ -1,7 +1,7 @@
 
 import { register } from '../core.js';
 
-const lookup = "AAAAPYkYIgcaTza3g0RkMYUHRgMVAQotMgJYIixdyhS4F9I8+RsyNiL/XJeq7+Vxvo0thBsEof03EhKdxkBBBAAAAAABAAAAEGZvbnRlbGljby0wMS5zdmf/////AAAAAQAAAAUAAAAAAAAAAAA=";
+const lookup = "AAAAPokYIgcawEZ4TkSERkUDRw+IAXQGFQQCWCKhInEEPLjKN/8S+ZcXLBKEMhudLRTGvhs2je9c0l3l/UCqQSAAAAAAAQAAABBmb250ZWxpY28tMDEuc3Zn/////wAAAAEAAAAFAAAAAAAAAAAA";
 
 const chunks = {
   "fontelico-01.svg": new URL("./fontelico-01.svg", import.meta.url).href
