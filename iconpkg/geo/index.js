@@ -1,7 +1,7 @@
 
 import { register } from '../core.js';
 
-const lookup = "AAAAOYkYHgYaOPKzHEMkVmdHBB8UjwG5AgJYHkdI3waeMWtjIkktAsCXehk0q59r+S9BPVMI9UFxLkECAAAAAAEAAAAKZ2VvLTAxLnN2Z/////8AAAABAAAABAAAAAAAAAAA";
+const lookup = "AAAAOIkYHgYa845a10OgVVVG/QcCBUICAlgenwh63zQuay1TnvkZcUFr9ZciR8AvBj2rSWNBSDECQQEAAAAAAQAAAApnZW8tMDEuc3Zn/////wAAAAEAAAAEAAAAAAAAAAA=";
 
 const chunks = {
   "geo-01.svg": new URL("./geo-01.svg", import.meta.url).href
