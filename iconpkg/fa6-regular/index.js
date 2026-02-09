@@ -1,7 +1,7 @@
 
 import { register } from '../core.js';
 
-const lookup = "AAAA7IkYpBghGig0AmlRhkVWSYZCRChXRDUyJnaEhQBYIHa0AwYGASItBQLaCCsk/gEgSwYGBggCGRUOC94CAc8IAlikltrTrXYtqNCp25srquTZJAqKQ2B7WpVECv7zB8W/ivKHPRInDweMpnF80OwIdCbLlYyUQVNrpzvmheSvTRiwSKuigod15ae8FjSqC7bi5suLYrqcJA+e5dZ0N5Xejx304Kd+hLPyfwRxCUqg3NcyohkcUtGE8gNtST/xRCzbrbnsXf9pa1nUMY4u5/O+c5scuxM/le0+gCGxaf19pL45VdK+5CVFAIyAAgEAAAAAAQAAABJmYTYtcmVndWxhci0wMS5zdmf/////AAAAAQAAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+const lookup = "AAAA74kYpBghGgBpzqVRY3NiRDiVY2dlNIU1UUGbZAJYIwJLARsBIwkCwAIWrgcBEWFCB5UBBQQBnggFAyIGq0eWAxUPAliky+UtWpXSvkmr1JtSHLF0Q4S8Lj8cVSztJOevBNwrsL+bhPOW5dl1N9dIgmnslf4/ouQTlYzm9DJt5gmmuiUPhacd8eJ8IQprTdA70bnTrV1pgHHzdn09jqTk2xh02kSoRPKpBzSHorunlXuLoL5Z3nO2QYeM1jmzcQPkxZ7y7BKt4Eo+nBmPlAp/fgj9Yv/Qy4pTp2tgJqqq8tsWDwu+JzEkB4pFAAIABQEAAAAAAQAAABJmYTYtcmVndWxhci0wMS5zdmf/////AAAAAQAAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
 const chunks = {
   "fa6-regular-01.svg": new URL("./fa6-regular-01.svg", import.meta.url).href

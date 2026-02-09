@@ -1,7 +1,7 @@
 
 import { register } from '../core.js';
 
-const lookup = "AAAAgYkYVREauwokuUlklldINEZSVANQAxYVxRlQC2YSA50BBBgEFAJYVauc2W+kAMizOQeUfmxrhwxAobd+NfOwmk+cdiA0NRgmgUMBG23yPGq0lxnVoqu2BOaYsNZbs+66B9aaFFiW9zXs12sxBxS5vgEHN6Mc8dGDUlESDqZDABIBAAAAAAEAAAAQd2Vic3ltYm9sLTAxLnN2Z/////8AAAABAAAACwAAAAAAAAAAAAAAAAAAAA==";
+const lookup = "AAAAhokYVREas0LUGEmXQ2M3dSSDUgdV4gGPDAkCG6cBARz4ARoBAtcDASkzAlhVa6sbtqPzbAfZnIOkszlbJn5DmtbWs4ewa1IBNTSrbUA8Eg6iGZd+nFiBFOyY8tEUugC+GHahNQdvIJpqB7cElDXxpjfVUQHX5rAcT8iWMQe0DO6590MIAAAAAAAAAQAAABB3ZWJzeW1ib2wtMDEuc3Zn/////wAAAAEAAAALAAAAAAAAAAAAAAAAAAAA";
 
 const chunks = {
   "websymbol-01.svg": new URL("./websymbol-01.svg", import.meta.url).href

@@ -1,7 +1,7 @@
 
 import { register } from '../core.js';
 
-const lookup = "AAAAjYkYWxMa+wFUdEpDMWp0ZlI2VnIFVQQGAcwJlwEHuAFoswEEFxYFAQMWQwJYW7aNUamjwWltN63X1vPth35tZVk5vhbR/XrcWttwd1NStjgJQtBS2ZqbdcVToIdGFubdcJnbk8uVjYfWnD03I75/B0J1mMeVojiJbBEzsSRx+D7CDeiLt6x2jQ9DBAQAAAAAAAEAAAAQZHVvLWljb25zLTAxLnN2Z/////8AAAABAAAADAAAAAAAAAAAAAAAAAAAAAA=";
+const lookup = "AAAAjIkYWxMa2w3Ov0pkRTZ3RUFzdFEIVAwUAQtLBc4DVTACBAZYCJIBBukIAlhblVJRN9u+cNZlaZxCjZiaPm0kcHZTDdEPm1KtPTNCjYd3tmyLo8I4k4f980YHCejcy1OgtuYWNyPdWn9ZOcU4wZl12db4qcesiddxh23b0KJ+jbexvu11FpV6EUMABAEAAAAAAQAAABBkdW8taWNvbnMtMDEuc3Zn/////wAAAAEAAAAMAAAAAAAAAAAAAAAAAAAAAA==";
 
 const chunks = {
   "duo-icons-01.svg": new URL("./duo-icons-01.svg", import.meta.url).href

@@ -1,7 +1,7 @@
 
 import { register } from '../core.js';
 
-const lookup = "AAAAlIkYZBQazvmpjEqEpzUYhHYlNDRiUwZ4vgLgDAkByQEFAy8sBQkCBAQCWGQgllQ2gzX+jG8ONP/5qwev+fSs5khzLUrk/ZB1kLzIR6ZQRLq86zSircWjvw+olQJHJpJp1OJdsvLEbE4G0SrzjG2oJeVmJDK2t/mTbs/skv+XpznL9Oo5DWce9Ncla07b1xvmQ4AgBQAAAAABAAAADmZsYXQtdWktMDEuc3Zn/////wAAAAEAAAANAAAAAAAAAAAAAAAAAAAAAAA=";
+const lookup = "AAAAl4kYZBQaBh/EhkqGNaRVZXczJTM3VkS3AQIItgofCAkDuwEdAgkEBg2XAQECWGREuq0NZzkbB9GD6zbbq0oOxfQG9OVvLaxUObJ1JSAyqIxpqDSQZuqSc/9r18Ru88/y/1CjlpO2opKV+cj95LcCjOzmHg/5TjT+JfRH1Gxdl+Ztpiok+a+Q10jiyzVHJk6nvL+8QwhAAAAAAAABAAAADmZsYXQtdWktMDEuc3Zn/////wAAAAEAAAANAAAAAAAAAAAAAAAAAAAAAAA=";
 
 const chunks = {
   "flat-ui-01.svg": new URL("./flat-ui-01.svg", import.meta.url).href
