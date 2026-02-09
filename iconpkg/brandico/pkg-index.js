@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/brandico/src-index.ts
-var lookup = "AAAATYkYLQkaiJrxvEVFc2lDBEkHEQr8AtQEIgICWC3Pr1J2fq0UxKdBHkFA8H4h3fzNc7imAVZvlFEdQrWhTjnosH1kJgCatwecjQxCgAEAAAAAAQAAAA9icmFuZGljby0wMS5zdmf/////AAAAAQAAAAYAAAAAAAAAAAAA";
+var lookup = "AAAATIkYLQkaJplwQkW0QVZEBkjQGQs8BwMBSQJYLRTPrVamjQeaAZxC/H6vJh3NuABR3U5SQLVzoUG3b37oDGSwQX12xDmn8CEelEIFAAAAAAABAAAAD2JyYW5kaWNvLTAxLnN2Z/////8AAAABAAAABgAAAAAAAAAAAAA=";
 var chunks = {
   "brandico-01.svg": new URL("./brandico-01.svg", import.meta.url).href
 };

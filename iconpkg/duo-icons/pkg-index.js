@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/duo-icons/src-index.ts
-var lookup = "AAAAjIkYWxMarLcTEkpmV0VDQ1VFNGQIVDlfYAMICgMeBRYUCSsLAgcSF7MCAlhbvjPZNz2NQod2wcLW+KCpOe3bZYl1U2ybo3WNbbeVDw03caJaJCPonG3W5su2B9yTFraLCdGxx0bXvsVTOH44aX9CUnqscK2N/d1Zh1IW25nQPvN3mBGaUYdwlUMAAAAAAAAAAQAAABBkdW8taWNvbnMtMDEuc3Zn/////wAAAAEAAAAMAAAAAAAAAAAAAAAAAAAAAA==";
+var lookup = "AAAAjYkYWxMatrw03kqGLFYlRjQ2MicFVc8BsQHW+gQCIAwGARQIAhoEBAkFFQJYW9aTODnB8z6VoqPdh5xtmnrZZct1xdu2cCRxFphpftvmlYncwqlSjdd2+P1T0XeHRouHI62gN1JCDZm+Cb5t6Nbt0HC3rBYRWTNCjbG2OJt1f403U2w9UQ9axwdDAEgAAAAAAAEAAAAQZHVvLWljb25zLTAxLnN2Z/////8AAAABAAAADAAAAAAAAAAAAAAAAAAAAAA=";
 var chunks = {
   "duo-icons-01.svg": new URL("./duo-icons-01.svg", import.meta.url).href
 };

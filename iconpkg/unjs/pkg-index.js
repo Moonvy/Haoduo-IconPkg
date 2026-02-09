@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/unjs/src-index.ts
-var lookup = "AAAAZ4kYPw0awtBWIEd0lEhCY0MFTxOjAh7PCucDDAcCDwEDLQJYP8vMxGWxfPREV7/J4vKAizsN3NEybPndFSdkVAetsjIKPTYju6Hux4LFMSygxFfWEncVdyto5Ekau44ykmR/VkJAAAAAAAABAAAAC3VuanMtMDEuc3Zn/////wAAAAEAAAAIAAAAAAAAAAAAAAAA";
+var lookup = "AAAAZIkYPw0aB+geTUdjZDcUYbQHTIIBDELiAQtZA54mEQJYP0QxZMWCxAd3VhU2f8ss1jsy8sfRfBLdoWXuJxqtSRVobKDJgPSyV+R3V8zEjmRUI5IyMg2/PeLcu/mxK7sKi0KhAQAAAAABAAAAC3VuanMtMDEuc3Zn/////wAAAAEAAAAIAAAAAAAAAAAAAAAA";
 var chunks = {
   "unjs-01.svg": new URL("./unjs-01.svg", import.meta.url).href
 };

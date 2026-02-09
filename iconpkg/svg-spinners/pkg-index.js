@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/svg-spinners/src-index.ts
-var lookup = "AAAAT4kYLgoa+Ubga0VzIjZFlUoDuAEBGQkDBANwAlguim7izitemQrFRkhuXpMNSCfLjaxLgLz1qzkM+9nq7ubiTfNoDyPy3lrJjwRWhUIIAAAAAAABAAAAE3N2Zy1zcGlubmVycy0wMS5zdmf/////AAAAAQAAAAYAAAAAAAAAAAAA";
+var lookup = "AAAAT4kYLgoaZCc7yEVkSENCkkoGCsUBBAYBIP4FAlgu4o1aIzmABPLmXssM+4/zig3iJ0arK8mZ2UuFSO68TUjqCg+sk/VoblZezm7F3kIIAQAAAAABAAAAE3N2Zy1zcGlubmVycy0wMS5zdmf/////AAAAAQAAAAYAAAAAAAAAAAAA";
 var chunks = {
   "svg-spinners-01.svg": new URL("./svg-spinners-01.svg", import.meta.url).href
 };

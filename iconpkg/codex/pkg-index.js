@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/codex/src-index.ts
-var lookup = "AAAAd4kYThAaIlSyR0hlVCRWVBs1dU8EBwkZAhkDBwerHwILDmICWE6AUdrmlofGix4plXFwHAKuI/NBFAdCvGV+Bqbouh6SeqT9lMvXC3LMHm9wrclSbALye9M+8B5ErAcbMVnPua8kP/9zsvTOkyCCWJ/i7dVCEAgAAAAAAQAAAAxjb2RleC0wMS5zdmf/////AAAAAQAAAAoAAAAAAAAAAAAAAAAAAA==";
+var lookup = "AAAAeokYThAaxH0hukgpIyV4REqSYVIfAwIXBfEBogEBA/gdBQHRAQsCWE4CHoDy7QbJ8wJSJMYHcP/0zJJ6MW9y5nuTG4IHssuscLwec+iuPxzXHqTTI2yfWNqvUUJ+poe6znHPuT5ErSmU8B5l1VmV/QtB4paLFCBCBEAAAAAAAQAAAAxjb2RleC0wMS5zdmf/////AAAAAQAAAAoAAAAAAAAAAAAAAAAAAA==";
 var chunks = {
   "codex-01.svg": new URL("./codex-01.svg", import.meta.url).href
 };

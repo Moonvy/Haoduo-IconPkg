@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/topcoat/src-index.ts
-var lookup = "AAAAiokYWRIandA+HkkUNyRzZ2Y1c3hVBYIDBAECA5gBeQe8AQEOAgH8B40BAlhZYEcTLNqFye4blUFsMGzRsEKdba2rvQvNr6Fa7lChFqxpYILo8CmQz4NrI1FRHr9BOhVOfvLe7758pteHhhghmAPOXz9d/zVtmPgbmFL4ejMCJAAhtUZC+b5DAoAAAAAAAAEAAAAOdG9wY29hdC0wMS5zdmf/////AAAAAQAAAAwAAAAAAAAAAAAAAAAAAAAA";
+var lookup = "AAAAh4kYWRIa5/FtekkBJTWDSYlrRkFSLQEqAdUD+QQNBugB2wkUBw4PAlhZ7vlsrUc1ehtGtW0sOviHAqsYmJDvrEFrUWBf8G2+fhUTXdd8QpiGHoPOAEGwIaH4hSEpFs8wmL5OQmmC7mxSoT8jUFqdr2Azyd5R2pXoJBu/pgP/C9Hyvc1DQwABAAAAAAEAAAAOdG9wY29hdC0wMS5zdmf/////AAAAAQAAAAwAAAAAAAAAAAAAAAAAAAAA";
 var chunks = {
   "topcoat-01.svg": new URL("./topcoat-01.svg", import.meta.url).href
 };

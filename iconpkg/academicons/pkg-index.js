@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/academicons/src-index.ts
-var lookup = "AAAA6IkYnhggGkHYWRRQWkZWMldkRzNlOFYzVFgkdFgk0wVMUgFCBwEFUgkBmQGGAgcIAxVTgQEFIyoCCQmxASwDARAbAlienaQ7Hv5DRtmL9569/ruDhuiZhsccUEcmeQYVtE/Izt2hiO882AJfpg4yVPdGw1UQaX3p/o4FMT27DumyAeLxyn4G1EEd6qz4r4Us+fgdh1sIAE0I6gjs6ZH7KNyvjug5bsa8PPsX+JZYRr7/Di6U7ZttlaPhQuBlN956GOGPGpiCqciLpLcG2JXCuIlaM1B6s92a8ZqOreJ2s3Yt8kFEAABAAAAAAAABAAAAEmFjYWRlbWljb25zLTAxLnN2Z/////8AAAABAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==";
+var lookup = "AAAA5okYnhggGg4posVQVVRXRYOIQzRVcmdlRCOVNFgiFwIgEd8Beh4CArYExAJCAgILAxAfSp4CLxB9BQEW3QIKAwJYnke7u/tUWn34AVW0O9wmjth2+feLmPiO8QgGzrx6hoXx3aSvT4ah/pYy6LMoCE2Ri27qh4jGj3ae6a3Yx51BLRialeoCHCyVpi6+DgWjsulGCB3ipH6aBhpfPEIG4t7p2cgAs6+ZiT3oQWlQHqzd4UYxlOyDMw7gvfJG1MhYwoL+be8XejdlqeEdUHmOOffKPEO4W5v/w/77t+0VDhD4RAAABAMAAAAAAQAAABJhY2FkZW1pY29ucy0wMS5zdmf/////AAAAAQAAABQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 var chunks = {
   "academicons-01.svg": new URL("./academicons-01.svg", import.meta.url).href
 };

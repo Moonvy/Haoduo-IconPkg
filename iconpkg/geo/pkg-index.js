@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/geo/src-index.ts
-var lookup = "AAAAN4kYHgYa9M+uukNldUNFJwsLcAECWB6eCAKrGUFJL9+Xay0xUzRIcfl6a0HA9WM9Bi5HIp9BIAAAAAABAAAACmdlby0wMS5zdmf/////AAAAAQAAAAQAAAAAAAAAAA==";
+var lookup = "AAAAN4kYHgYaP1uStkODcnNFCG8BAygCWB4tq2tHl/U9SRlTNEjfLnFBMWsGekECIp+eCGMvwPlBEAAAAAABAAAACmdlby0wMS5zdmf/////AAAAAQAAAAQAAAAAAAAAAA==";
 var chunks = {
   "geo-01.svg": new URL("./geo-01.svg", import.meta.url).href
 };

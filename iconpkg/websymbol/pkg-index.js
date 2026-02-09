@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/websymbol/src-index.ts
-var lookup = "AAAAg4kYVREaVXX7S0lQNWJYZIRjeQRSFwEJGcMFHhcsARYKKYECsgELAlhV7BSiqxQMa2/IOfO+nPdAIFGaBGrWg4cBN201l6G6uYF+UqvmAAcH0bM1TxI81aZ+GA4ZAWzWdu6WG5xYHAdb1zWkt5q2sDS0QzFr8QfylNmws6MmmEMFAAAAAAAAAQAAABB3ZWJzeW1ib2wtMDEuc3Zn/////wAAAAEAAAALAAAAAAAAAAAAAAAAAAAA";
+var lookup = "AAAAgYkYVREa1Y/oV0m1U0lURGM4IwZQCK4YB19TBQIEDAc3FgEBAwJYVUMHPIfzo7AgvpaYbzQHuQ4BupzRNRwHWDnX1bbINSbmszHyFBQZnJeaUbDxppQEBzcAmlKkt0/s1jWBfrSig2ttDLNsavfuElt2q6EY1n4BQKtr2RtDACQAAAAAAAEAAAAQd2Vic3ltYm9sLTAxLnN2Z/////8AAAABAAAACwAAAAAAAAAAAAAAAAAAAA==";
 var chunks = {
   "websymbol-01.svg": new URL("./websymbol-01.svg", import.meta.url).href
 };

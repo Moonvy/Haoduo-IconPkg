@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/il/src-index.ts
-var lookup = "AAAAg4kYVBEaAhVqO0lXhYJGSVQXIwRT1AILBKMB2wNEA9EFBhYILgQBAwJYVLFptPD4UozxQhkYYBu9QS3+XzaHGP8e+PNzyH4xOjABHaeY+KBbDbnpKzJt0zAVP/Ik/f55OTO+omwpmzSV2Szy/vNgrKa9ot89fnWKrboOf06MtUMQIAAAAAAAAQAAAAlpbC0wMS5zdmf/////AAAAAQAAAAsAAAAAAAAAAAAAAAAAAAA=";
+var lookup = "AAAAgokYVBEaiPZ0zUlVKVFlM2hXVAVSDkK1BQEFAx4BB8EDHDEXCwgBAlhU8xtByPAs321/FaZpOaz/KZv+uqK92X5sDQFgHV8Yp+kyQoeMMzFOJLS+fvj4K4pgtT+gvRn+rZgtuf51PYzyOrF5ovKVUvNz0zYwNB4O8Rj4W/0wQxAAAAAAAAABAAAACWlsLTAxLnN2Z/////8AAAABAAAACwAAAAAAAAAAAAAAAAAAAA==";
 var chunks = {
   "il-01.svg": new URL("./il-01.svg", import.meta.url).href
 };

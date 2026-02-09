@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/entypo-social/src-index.ts
-var lookup = "AAAAdokYTBAar6ys70g6gpNFQ4UzQlCjGwIBxQICtQIhAgMO8wIGAlhM80KIIZmY1fAliU44WrbhHe9qxjqFZbfolYCDj7ZTYQxBKlmrUX0Twm/1pBB20YtAtLIFLvxvus25mFxC7KKh8q/DEkcLopsDHvfMMEKAcAAAAAABAAAAFGVudHlwby1zb2NpYWwtMDEuc3Zn/////wAAAAEAAAAKAAAAAAAAAAAAAAAAAAA=";
+var lookup = "AAAAdokYTBAa1UoljEhEmGJYM2JERFASHqAZByfWAwIHARAOEBEXAlhMA0D1EPe2E4uhtuhqIVNOR7pBsqR9ojh2Zc2P4fMM1Ztc76/80TCZg8a5Oi6iwh6YUexat8MLb2+YlUIdzCWr8CqA8olCtBKIYVmFBUICAgAAAAABAAAAFGVudHlwby1zb2NpYWwtMDEuc3Zn/////wAAAAEAAAAKAAAAAAAAAAAAAAAAAAA=";
 var chunks = {
   "entypo-social-01.svg": new URL("./entypo-social-01.svg", import.meta.url).href
 };

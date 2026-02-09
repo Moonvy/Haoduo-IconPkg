@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/gala/src-index.ts
-var lookup = "AAAAVokYMwsauQ7Dt0ZENmJEgwdLBQIiAzoLFwLFAicCWDPCOjjKdCq8Yd9hvlj5oKvs+aa0OlOy/d6VAXqARLQbS4MjCq6S+IImQAnevW1p89c/liRCCAAAAAAAAQAAAAtnYWxhLTAxLnN2Z/////8AAAABAAAABwAAAAAAAAAAAAAA";
+var lookup = "AAAAWIkYMwsaXXXW9EZIUyhFVANN4QEDBAH4AwItBwUOAQJYM2lApvmrtDiC823eg6A6I3rXJJbftP2V+USuG5JhKoBLP7IB7MK8U/gKYQl0Ot5YJsq+vUIAAAAAAAABAAAAC2dhbGEtMDEuc3Zn/////wAAAAEAAAAHAAAAAAAAAAAAAAA=";
 var chunks = {
   "gala-01.svg": new URL("./gala-01.svg", import.meta.url).href
 };

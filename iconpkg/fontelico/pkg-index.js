@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/fontelico/src-index.ts
-var lookup = "AAAAPokYIgcadR26SURIc1IFR4MSswEBMj8CWCKq0hRAEi3/MjaEEgQbvhvv/V2NPFxx5ZfKoSI3+ca4nSwXQQYAAAAAAQAAABBmb250ZWxpY28tMDEuc3Zn/////wAAAAEAAAAFAAAAAAAAAAAA";
+var lookup = "AAAAPIkYIgca1uUzBUSHNTYCRXQSAkkBAlgiG4QiLKHlFED/XZeq0hu+jTw3EnE2LcoEuBcS+Z1cMu/9xkEiAAAAAAEAAAAQZm9udGVsaWNvLTAxLnN2Z/////8AAAABAAAABQAAAAAAAAAAAA==";
 var chunks = {
   "fontelico-01.svg": new URL("./fontelico-01.svg", import.meta.url).href
 };

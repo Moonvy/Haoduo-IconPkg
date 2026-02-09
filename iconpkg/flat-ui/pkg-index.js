@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/flat-ui/src-index.ts
-var lookup = "AAAAm4kYZBQaACJsykpZZUh1aUJlJSQzWBmJCAwYSqoCGR4FzAICAweIAZ4BQQEBAwgEAlhkJW0bjPn5qAa2kCX/4vTUR045a5fE16LkHqaSq882Z2+TdTLlVPRE/rw5unO8JpICJJb0ssuDr+YNow7m8/KsjNf5lWxH227R/U6QSOoHUK3FD6g0NGkg7OunZjX/Lchdtyq/SkMAAAAAAAAAAQAAAA5mbGF0LXVpLTAxLnN2Z/////8AAAABAAAADQAAAAAAAAAAAAAAAAAAAAAA";
+var lookup = "AAAAlIkYZBQa4uiQz0ojM1dXV2hlRZFyUwMCDK0BA68BL70CJm8KBg+YCH0CWGRr7FT0aRuQvDSsRNfIDx5Ig8X5qJVOupJtNpcldUfmSs/94ubbq/SWJdFz8tT/JP/LZmcG+a+/jDkCTvNvp+qMt62SOVCjprai6yA09GxHDbwyk13k5ZDEbrKoKgcmLdf5Nf4OQwJIBQAAAAABAAAADmZsYXQtdWktMDEuc3Zn/////wAAAAEAAAANAAAAAAAAAAAAAAAAAAAAAAA=";
 var chunks = {
   "flat-ui-01.svg": new URL("./flat-ui-01.svg", import.meta.url).href
 };

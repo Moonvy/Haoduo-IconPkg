@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/iwwa/src-index.ts
-var lookup = "AAAAm4kYaRUazRNGRUtzRWeWWjWEUUIDCFQBChkLOQozSvwCDgsBAYMLCwYCYAJYaYeB2lPsOh7cmxtlOYFrEwdOmksCaSyt5jPrSAALaGd4YOUftf1pbYJQ14KDv67fIPvR5Eql1cechPJtrmcHpwr2fpBeOr3HAkRfK2zllc5GKqBSiL4Qhs2+LLyJMOHXWqb+FV0AcCnXNEMAQAkAAAAAAQAAAAtpd3dhLTAxLnN2Z/////8AAAABAAAADgAAAAAAAAAAAAAAAAAAAAAAAA==";
+var lookup = "AAAAnYkYaRUawYiUYktyNVSCk0lRinI2AlYCPg0GAQsB1RgB8AOECAwmqhZZLBMCAlhpaVA0pddIg6f2lXCcCuzyEwcLAv2QUkuB62C8OmyuvpqgbWvcgsfXKRBpIIiJgQLhOdEAhNoeruTmU79ezUaCMOW9fl8sKnhEAFrO36abH10ztdfVbb5l/gdnLGdorTrlFYaH+05KxxsrQwAQEQAAAAABAAAAC2l3d2EtMDEuc3Zn/////wAAAAEAAAAOAAAAAAAAAAAAAAAAAAAAAAAA";
 var chunks = {
   "iwwa-01.svg": new URL("./iwwa-01.svg", import.meta.url).href
 };

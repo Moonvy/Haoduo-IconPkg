@@ -662,7 +662,7 @@ if (typeof window !== "undefined") {
 }
 
 // iconpkg/nonicons/src-index.ts
-var lookup = "AAAAa4kYRQ4aM4vtLUdkNGVKcyRWTQMNHQEWCMYSAS0GHw0CWEXIKrsFpcN9C4PsrMF2/0zF7mGm5UAZKS0/DipV+W3bwKMOkxWH5QUQfY5/eQkro7Sydee4Ocg6EzkSUa+JpeRAJ82F5uJCgAgAAAAAAQAAAA9ub25pY29ucy0wMS5zdmf/////AAAAAQAAAAkAAAAAAAAAAAAAAAAA";
+var lookup = "AAAAbYkYRQ4aBLNrEEdFN1UxpVZzT2QB1AIBCBAC9wMGCwH3AQJYRXb5OeInplUFQA7Bu6N/KgUTORLb5bKjw83I7Dqsh8UL5hA/K+cp5SoJyLSJYf9M5KV9LbgVg3V9ea+lQMDuUYVtDpOOGULAAAAAAAABAAAAD25vbmljb25zLTAxLnN2Z/////8AAAABAAAACQAAAAAAAAAAAAAAAAA=";
 var chunks = {
   "nonicons-01.svg": new URL("./nonicons-01.svg", import.meta.url).href
 };
