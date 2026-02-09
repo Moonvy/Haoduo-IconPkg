@@ -2,7 +2,7 @@
 
 [Iconify](https://iconify.design/) Icon Web Components based SVG Symbols
 
----
+**[Preview | 立即预览](https://moonvy.github.io/Haoduo-IconPkg/iconpkg/)**
 
 [Iconify](https://iconify.design/) 图标包 IconPkg SVG Symbols 格式
 
